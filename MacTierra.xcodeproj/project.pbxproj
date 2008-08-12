@@ -1,0 +1,424 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0FAC2F940E4F761C00CB068B /* MacTierraDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */; };
+		0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
+		0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
+		0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */; };
+		0FAC31070E4F983200CB068B /* mt_executionUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */; };
+		0FAC31270E4F99BC00CB068B /* mt_executionUnit0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */; };
+		0FFF620F0E4FC0C300404828 /* mt_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF620E0E4FC0C300404828 /* mt_world.cpp */; };
+		0FFF632E0E4FC95700404828 /* mt_reaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF632D0E4FC95700404828 /* mt_reaper.cpp */; };
+		0FFF63590E4FCE9C00404828 /* mt_timeslicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */; };
+		0FFF642B0E4FD7DE00404828 /* mt_random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF642A0E4FD7DE00404828 /* mt_random.cpp */; };
+		0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
+		1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */; };
+		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
+		8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */; };
+		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
+		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
+		0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacTierraDocument.m; sourceTree = "<group>"; };
+		0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cpu.h; sourceTree = "<group>"; };
+		0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_cpu.cpp; sourceTree = "<group>"; };
+		0FAC30750E4F797B00CB068B /* mt_engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_engine.h; sourceTree = "<group>"; };
+		0FAC30990E4F7B3F00CB068B /* mt_creature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_creature.h; sourceTree = "<group>"; };
+		0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_creature.cpp; sourceTree = "<group>"; };
+		0FAC30AF0E4F7C5500CB068B /* mt_soup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_soup.h; sourceTree = "<group>"; };
+		0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_soup.cpp; sourceTree = "<group>"; };
+		0FAC30F60E4F968700CB068B /* mt_instructionSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_instructionSet.h; sourceTree = "<group>"; };
+		0FAC31050E4F983200CB068B /* mt_executionUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_executionUnit.h; sourceTree = "<group>"; };
+		0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_executionUnit.cpp; sourceTree = "<group>"; };
+		0FAC31250E4F99BC00CB068B /* mt_executionUnit0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_executionUnit0.h; sourceTree = "<group>"; };
+		0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_executionUnit0.cpp; sourceTree = "<group>"; };
+		0FFF5CDA0E4F9B1A00404828 /* mt_isa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_isa.h; sourceTree = "<group>"; };
+		0FFF620D0E4FC0C300404828 /* mt_world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_world.h; sourceTree = "<group>"; };
+		0FFF620E0E4FC0C300404828 /* mt_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_world.cpp; sourceTree = "<group>"; };
+		0FFF632C0E4FC95700404828 /* mt_reaper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_reaper.h; sourceTree = "<group>"; };
+		0FFF632D0E4FC95700404828 /* mt_reaper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_reaper.cpp; sourceTree = "<group>"; };
+		0FFF63570E4FCE9C00404828 /* mt_timeslicer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_timeslicer.h; sourceTree = "<group>"; };
+		0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_timeslicer.cpp; sourceTree = "<group>"; };
+		0FFF64290E4FD7DE00404828 /* mt_random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_random.h; sourceTree = "<group>"; };
+		0FFF642A0E4FD7DE00404828 /* mt_random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_random.cpp; sourceTree = "<group>"; };
+		0FFF64490E4FE38E00404828 /* RandomSelect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomSelect.hpp; sourceTree = "<group>"; };
+		0FFF644A0E4FE38E00404828 /* RandomMixer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomMixer.hpp; sourceTree = "<group>"; };
+		0FFF644B0E4FE38E00404828 /* RandomEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomEngine.hpp; sourceTree = "<group>"; };
+		0FFF644C0E4FE38E00404828 /* RandomPower2.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomPower2.hpp; sourceTree = "<group>"; };
+		0FFF644D0E4FE38E00404828 /* ExactExponential.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExactExponential.hpp; sourceTree = "<group>"; };
+		0FFF644F0E4FE38E00404828 /* RandomAlgorithm.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomAlgorithm.hpp; sourceTree = "<group>"; };
+		0FFF64500E4FE38E00404828 /* Random.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Random.hpp; sourceTree = "<group>"; };
+		0FFF64510E4FE38E00404828 /* LeadingZeros.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = LeadingZeros.hpp; sourceTree = "<group>"; };
+		0FFF64520E4FE38E00404828 /* ExponentialProb.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExponentialProb.hpp; sourceTree = "<group>"; };
+		0FFF64530E4FE38E00404828 /* RandomNumber.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomNumber.hpp; sourceTree = "<group>"; };
+		0FFF64550E4FE38E00404828 /* NormalDistribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = NormalDistribution.hpp; sourceTree = "<group>"; };
+		0FFF64560E4FE38E00404828 /* ExactPower.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExactPower.hpp; sourceTree = "<group>"; };
+		0FFF64570E4FE38E00404828 /* ExponentialDistribution.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ExponentialDistribution.hpp; sourceTree = "<group>"; };
+		0FFF64580E4FE38E00404828 /* RandomType.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomType.hpp; sourceTree = "<group>"; };
+		0FFF64590E4FE38E00404828 /* Random.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Random.cpp; sourceTree = "<group>"; };
+		0FFF645A0E4FE38E00404828 /* RandomSeed.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomSeed.hpp; sourceTree = "<group>"; };
+		0FFF645B0E4FE38E00404828 /* RandomCanonical.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomCanonical.hpp; sourceTree = "<group>"; };
+		0FFF671F0E5011D700404828 /* list.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = list.hpp; path = intrusive/list.hpp; sourceTree = "<group>"; };
+		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		1DDD58290DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MacTierraDocument.xib; sourceTree = "<group>"; };
+		1DDD582B0DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		2A37F4BAFDCFA73011CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = English; path = English.lproj/Credits.rtf; sourceTree = "<group>"; };
+		2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32DBCF750370BD2300C91783 /* MacTierra_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierra_Prefix.pch; sourceTree = "<group>"; };
+		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D15AC370486D014006FF6A4 /* MacTierra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTierra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D15AC330486D014006FF6A4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0FAC2F910E4F75FE00CB068B /* engine */ = {
+			isa = PBXGroup;
+			children = (
+				0FFF64290E4FD7DE00404828 /* mt_random.h */,
+				0FFF642A0E4FD7DE00404828 /* mt_random.cpp */,
+				0FAC30750E4F797B00CB068B /* mt_engine.h */,
+				0FAC30F60E4F968700CB068B /* mt_instructionSet.h */,
+				0FFF5CDA0E4F9B1A00404828 /* mt_isa.h */,
+				0FAC31050E4F983200CB068B /* mt_executionUnit.h */,
+				0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */,
+				0FAC31250E4F99BC00CB068B /* mt_executionUnit0.h */,
+				0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */,
+				0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */,
+				0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */,
+				0FAC30990E4F7B3F00CB068B /* mt_creature.h */,
+				0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */,
+				0FAC30AF0E4F7C5500CB068B /* mt_soup.h */,
+				0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */,
+				0FFF632C0E4FC95700404828 /* mt_reaper.h */,
+				0FFF632D0E4FC95700404828 /* mt_reaper.cpp */,
+				0FFF63570E4FCE9C00404828 /* mt_timeslicer.h */,
+				0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */,
+				0FFF620D0E4FC0C300404828 /* mt_world.h */,
+				0FFF620E0E4FC0C300404828 /* mt_world.cpp */,
+			);
+			name = engine;
+			path = Source/engine;
+			sourceTree = SOURCE_ROOT;
+		};
+		0FFF64300E4FE34C00404828 /* RandomLib */ = {
+			isa = PBXGroup;
+			children = (
+				0FFF644D0E4FE38E00404828 /* ExactExponential.hpp */,
+				0FFF64560E4FE38E00404828 /* ExactPower.hpp */,
+				0FFF64570E4FE38E00404828 /* ExponentialDistribution.hpp */,
+				0FFF64520E4FE38E00404828 /* ExponentialProb.hpp */,
+				0FFF64510E4FE38E00404828 /* LeadingZeros.hpp */,
+				0FFF64550E4FE38E00404828 /* NormalDistribution.hpp */,
+				0FFF644F0E4FE38E00404828 /* RandomAlgorithm.hpp */,
+				0FFF645B0E4FE38E00404828 /* RandomCanonical.hpp */,
+				0FFF644B0E4FE38E00404828 /* RandomEngine.hpp */,
+				0FFF644A0E4FE38E00404828 /* RandomMixer.hpp */,
+				0FFF64530E4FE38E00404828 /* RandomNumber.hpp */,
+				0FFF644C0E4FE38E00404828 /* RandomPower2.hpp */,
+				0FFF645A0E4FE38E00404828 /* RandomSeed.hpp */,
+				0FFF64490E4FE38E00404828 /* RandomSelect.hpp */,
+				0FFF64580E4FE38E00404828 /* RandomType.hpp */,
+				0FFF64590E4FE38E00404828 /* Random.cpp */,
+				0FFF64500E4FE38E00404828 /* Random.hpp */,
+			);
+			name = RandomLib;
+			path = Source/RandomLib;
+			sourceTree = "<group>";
+		};
+		0FFF671C0E50117700404828 /* boost */ = {
+			isa = PBXGroup;
+			children = (
+				0FFF671F0E5011D700404828 /* list.hpp */,
+			);
+			name = boost;
+			path = Source/boost;
+			sourceTree = "<group>";
+		};
+		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A8FEA54F5311CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4C4FDCFA73011CA2CEA /* AppKit.framework */,
+				2A37F4C5FDCFA73011CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FB0FE9D524F11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D15AC370486D014006FF6A4 /* MacTierra.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2A37F4AAFDCFA73011CA2CEA /* MacTierra */ = {
+			isa = PBXGroup;
+			children = (
+				0FFF671C0E50117700404828 /* boost */,
+				0FFF64300E4FE34C00404828 /* RandomLib */,
+				0FAC2F910E4F75FE00CB068B /* engine */,
+				2A37F4AFFDCFA73011CA2CEA /* cocoa */,
+				2A37F4B8FDCFA73011CA2CEA /* Resources */,
+				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
+				19C28FB0FE9D524F11CA2CBB /* Products */,
+			);
+			name = MacTierra;
+			sourceTree = "<group>";
+		};
+		2A37F4AFFDCFA73011CA2CEA /* cocoa */ = {
+			isa = PBXGroup;
+			children = (
+				32DBCF750370BD2300C91783 /* MacTierra_Prefix.pch */,
+				2A37F4B0FDCFA73011CA2CEA /* main.m */,
+				0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */,
+				0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */,
+			);
+			name = cocoa;
+			path = Source/userinterface/cocoa;
+			sourceTree = "<group>";
+		};
+		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
+				8D15AC360486D014006FF6A4 /* Info.plist */,
+				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
+				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
+				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
+				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D15AC270486D014006FF6A4 /* MacTierra */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "MacTierra" */;
+			buildPhases = (
+				8D15AC2B0486D014006FF6A4 /* Resources */,
+				8D15AC300486D014006FF6A4 /* Sources */,
+				8D15AC330486D014006FF6A4 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MacTierra;
+			productInstallPath = "$(HOME)/Applications";
+			productName = MacTierra;
+			productReference = 8D15AC370486D014006FF6A4 /* MacTierra.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "MacTierra" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* MacTierra */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D15AC270486D014006FF6A4 /* MacTierra */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D15AC2B0486D014006FF6A4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC2C0486D014006FF6A4 /* Credits.rtf in Resources */,
+				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
+				1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */,
+				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D15AC300486D014006FF6A4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D15AC320486D014006FF6A4 /* main.m in Sources */,
+				0FAC2F940E4F761C00CB068B /* MacTierraDocument.m in Sources */,
+				0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */,
+				0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */,
+				0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */,
+				0FAC31070E4F983200CB068B /* mt_executionUnit.cpp in Sources */,
+				0FAC31270E4F99BC00CB068B /* mt_executionUnit0.cpp in Sources */,
+				0FFF620F0E4FC0C300404828 /* mt_world.cpp in Sources */,
+				0FFF632E0E4FC95700404828 /* mt_reaper.cpp in Sources */,
+				0FFF63590E4FCE9C00404828 /* mt_timeslicer.cpp in Sources */,
+				0FFF642B0E4FD7DE00404828 /* mt_random.cpp in Sources */,
+				0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C1660FE840EACC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD58290DA1D0D100B32029 /* English */,
+			);
+			name = MacTierraDocument.xib;
+			sourceTree = "<group>";
+		};
+		1DDD582A0DA1D0D100B32029 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1DDD582B0DA1D0D100B32029 /* English */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				2A37F4BAFDCFA73011CA2CEA /* English */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C05733C808A9546B00998B17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
+				INFOPLIST_FILE = Resources/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = MacTierra;
+			};
+			name = Debug;
+		};
+		C05733C908A9546B00998B17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = MacTierra;
+			};
+			name = Release;
+		};
+		C05733CC08A9546B00998B17 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		C05733CD08A9546B00998B17 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = Source;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "MacTierra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C05733C808A9546B00998B17 /* Debug */,
+				C05733C908A9546B00998B17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "MacTierra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C05733CC08A9546B00998B17 /* Debug */,
+				C05733CD08A9546B00998B17 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+}
