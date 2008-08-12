@@ -35,7 +35,12 @@ Reaper::removeCreature(Creature& inCreature)
 bool
 Reaper::conditionalMoveUp(Creature& inCreature)
 {
+	if (!inCreature.mReaperListHook.is_linked())
+		return false;
+
 	ReaperList::iterator entryIt = mReaperList.iterator_to(inCreature);
+	if (&(*entryIt) != &inCreature)
+		return false;
 	if (entryIt != mReaperList.begin())
 	{
 		ReaperList::iterator prevItem = entryIt;
@@ -56,6 +61,9 @@ Reaper::conditionalMoveUp(Creature& inCreature)
 bool
 Reaper::conditionalMoveDown(Creature& inCreature)
 {
+	if (!inCreature.mReaperListHook.is_linked())
+		return false;
+
 	ReaperList::iterator entryIt = mReaperList.iterator_to(inCreature);
 	ReaperList::iterator endIt = mReaperList.end();
 	--endIt;
@@ -63,11 +71,12 @@ Reaper::conditionalMoveDown(Creature& inCreature)
 	{
 		ReaperList::iterator nextItem = entryIt;
 		++nextItem;
-		Creature&	nextCreature = *entryIt;
+		Creature&	nextCreature = *nextItem;
 		if (inCreature.numErrors() < nextCreature.numErrors())
 		{
 			// swap them
-			mReaperList.erase(nextItem);
+			mReaperList.erase(entryIt);
+			++nextItem;
 			mReaperList.insert(nextItem, inCreature);
 			return true;
 		}
@@ -76,6 +85,15 @@ Reaper::conditionalMoveDown(Creature& inCreature)
 	return false;
 }
 
+Creature*
+Reaper::headCreature()
+{
+	if (mReaperList.empty())
+		return NULL;
+
+	Creature& firstCreature = *(mReaperList.begin());
+	return &firstCreature;
+}
 
 
 } // namespace MacTierra

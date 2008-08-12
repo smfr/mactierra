@@ -13,6 +13,10 @@
 
 #include "TestRunner.h"
 
+namespace MacTierra {
+class Soup;
+class Reaper;
+}
 
 class ReaperTests : public TestCase
 {
@@ -25,7 +29,12 @@ public:
 
 	// tests
 	void runTest();
-	
+
+protected:
+
+	MacTierra::Soup*		mSoup;
+	MacTierra::Reaper*		mReaper;
+
 };
 
 

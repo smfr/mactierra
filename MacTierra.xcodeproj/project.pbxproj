@@ -44,7 +44,7 @@
 		0F0C948A0E514A8800B233E8 /* ReaperTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReaperTests.h; sourceTree = "<group>"; };
 		0F0C948B0E514A8800B233E8 /* TestRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestRunner.cpp; sourceTree = "<group>"; };
 		0F0C948C0E514A8800B233E8 /* TestRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestRunner.h; sourceTree = "<group>"; };
-		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; name = TestRunner; path = build/Debug/TestRunner; sourceTree = "<group>"; };
+		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
 		0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacTierraDocument.m; sourceTree = "<group>"; };
 		0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cpu.h; sourceTree = "<group>"; };
@@ -496,6 +496,10 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = Source;
+				OTHER_CPLUSPLUSFLAGS = (
+					"$(OTHER_CFLAGS)",
+					"-DBOOST_DISABLE_ASSERTS",
+				);
 				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};

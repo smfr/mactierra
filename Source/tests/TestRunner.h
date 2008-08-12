@@ -23,9 +23,14 @@ public:
 	virtual void setUp() {}
 	virtual void tearDown() {}
 
+	// required method
 	virtual void runTest() = 0;
 
+	void reportFailure(std::string message);
+	
 };
+
+#define TEST_CONDITION(c, m) if (!(c)) reportFailure(m);
 
 class TestRegistrar
 {

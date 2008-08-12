@@ -13,6 +13,35 @@
 
 using namespace std;
 
+class TestException : public exception
+{
+public:
+	TestException(std::string message) throw()
+	: mMessage(message)
+	{
+	}
+
+	virtual ~TestException() throw()
+	{
+	}
+	
+	void log() { cout << mMessage << endl; }
+
+	const char* what() const throw()
+	{
+		return mMessage.data();
+	}
+
+protected:
+	std::string mMessage;
+};
+
+void
+TestCase::reportFailure(std::string message)
+{
+	throw TestException(message);
+}
+
 TestRegistrar* TestRegistrar::gRegistrar = NULL;
 
 TestRegistrar::TestRegistrar()

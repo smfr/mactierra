@@ -39,7 +39,10 @@ public:
 	bool conditionalMoveUp(Creature& inCreature);
 	bool conditionalMoveDown(Creature& inCreature);
 	
+	Creature* headCreature();
 	
+	size_t		numberOfCreatures() const { return mReaperList.size(); }
+
 protected:
 
 	ReaperList	mReaperList;

@@ -75,6 +75,8 @@ public:
 
 	void			noteErrors()				{ if (mCPU.mFlag) ++mNumErrors; }
 	int32_t			numErrors() const			{ return mNumErrors; }
+	// for testing
+	void			setNumErrors(int32_t inErrors) { mNumErrors = inErrors; }
 
 	void			executedInstruction(instruction_t inInst)
 					{
