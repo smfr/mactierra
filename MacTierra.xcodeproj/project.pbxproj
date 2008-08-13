@@ -19,12 +19,15 @@
 		0F0C94A70E514AEC00B233E8 /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
 		0F0C94A80E514AEC00B233E8 /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
 		0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
+		0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C963E0E51620100B233E8 /* SlicerTests.cpp */; };
 		0FAC2F940E4F761C00CB068B /* MacTierraDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */; };
 		0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
 		0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
 		0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */; };
 		0FAC31070E4F983200CB068B /* mt_executionUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */; };
 		0FAC31270E4F99BC00CB068B /* mt_executionUnit0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */; };
+		0FB90C680E5292BF00449CC6 /* mt_cellmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */; };
+		0FB90C690E5292BF00449CC6 /* mt_cellmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */; };
 		0FFF620F0E4FC0C300404828 /* mt_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF620E0E4FC0C300404828 /* mt_world.cpp */; };
 		0FFF632E0E4FC95700404828 /* mt_reaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF632D0E4FC95700404828 /* mt_reaper.cpp */; };
 		0FFF63590E4FCE9C00404828 /* mt_timeslicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */; };
@@ -45,6 +48,8 @@
 		0F0C948B0E514A8800B233E8 /* TestRunner.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TestRunner.cpp; sourceTree = "<group>"; };
 		0F0C948C0E514A8800B233E8 /* TestRunner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestRunner.h; sourceTree = "<group>"; };
 		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
+		0F0C963D0E51620100B233E8 /* SlicerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlicerTests.h; sourceTree = "<group>"; };
+		0F0C963E0E51620100B233E8 /* SlicerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlicerTests.cpp; sourceTree = "<group>"; };
 		0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
 		0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacTierraDocument.m; sourceTree = "<group>"; };
 		0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cpu.h; sourceTree = "<group>"; };
@@ -59,6 +64,8 @@
 		0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_executionUnit.cpp; sourceTree = "<group>"; };
 		0FAC31250E4F99BC00CB068B /* mt_executionUnit0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_executionUnit0.h; sourceTree = "<group>"; };
 		0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_executionUnit0.cpp; sourceTree = "<group>"; };
+		0FB90C660E5292BF00449CC6 /* mt_cellmap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cellmap.h; sourceTree = "<group>"; };
+		0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_cellmap.cpp; sourceTree = "<group>"; };
 		0FFF5CDA0E4F9B1A00404828 /* mt_isa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_isa.h; sourceTree = "<group>"; };
 		0FFF620D0E4FC0C300404828 /* mt_world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_world.h; sourceTree = "<group>"; };
 		0FFF620E0E4FC0C300404828 /* mt_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_world.cpp; sourceTree = "<group>"; };
@@ -120,8 +127,10 @@
 		0F0C945E0E51486200B233E8 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				0F0C94890E514A8800B233E8 /* ReaperTests.cpp */,
 				0F0C948A0E514A8800B233E8 /* ReaperTests.h */,
+				0F0C94890E514A8800B233E8 /* ReaperTests.cpp */,
+				0F0C963D0E51620100B233E8 /* SlicerTests.h */,
+				0F0C963E0E51620100B233E8 /* SlicerTests.cpp */,
 				0F0C948C0E514A8800B233E8 /* TestRunner.h */,
 				0F0C948B0E514A8800B233E8 /* TestRunner.cpp */,
 			);
@@ -141,6 +150,8 @@
 				0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */,
 				0FAC31250E4F99BC00CB068B /* mt_executionUnit0.h */,
 				0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */,
+				0FB90C660E5292BF00449CC6 /* mt_cellmap.h */,
+				0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */,
 				0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */,
 				0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */,
 				0FAC30990E4F7B3F00CB068B /* mt_creature.h */,
@@ -352,6 +363,8 @@
 				0F0C94A70E514AEC00B233E8 /* mt_creature.cpp in Sources */,
 				0F0C94A80E514AEC00B233E8 /* mt_cpu.cpp in Sources */,
 				0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */,
+				0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */,
+				0FB90C680E5292BF00449CC6 /* mt_cellmap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +384,7 @@
 				0FFF63590E4FCE9C00404828 /* mt_timeslicer.cpp in Sources */,
 				0FFF642B0E4FD7DE00404828 /* mt_random.cpp in Sources */,
 				0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */,
+				0FB90C690E5292BF00449CC6 /* mt_cellmap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

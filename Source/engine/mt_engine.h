@@ -36,6 +36,8 @@ const int32_t kMaxMalAttempts = 20;
 typedef u_int32_t creature_id;
 typedef u_int8_t instruction_t;
 
+typedef u_int32_t address_t;
+
 
 
 } // namespace MacTierra

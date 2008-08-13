@@ -19,28 +19,28 @@ class Cpu {
 
 public:
 
-	Cpu();
-	
-	void push(int32_t);
-	int32_t pop();
+    Cpu();
+    
+    void push(int32_t);
+    int32_t pop();
 
-	void setFlag()		{ mFlag = true; }
-	void clearFlag()	{ mFlag = false; }
-	bool flag() const	{ return mFlag; }
+    void setFlag()      { mFlag = true; }
+    void clearFlag()    { mFlag = false; }
+    bool flag() const   { return mFlag; }
 
-	void incrementIP(u_int32_t inSoupSize)	{ mInstructionPointer = (mInstructionPointer + 1) % inSoupSize; }
+    void incrementIP(u_int32_t inSoupSize)  { mInstructionPointer = (mInstructionPointer + 1) % inSoupSize; }
 
 public:
 
-	int32_t		mRegisters[kNumRegisters];
+    int32_t     mRegisters[kNumRegisters];
 
-	int32_t		mStack[kStackSize];
-	int32_t		mStackPointer;
+    int32_t     mStack[kStackSize];
+    int32_t     mStackPointer;
 
-	int32_t		mInstructionPointer;
+    int32_t     mInstructionPointer;
 
-	bool		mFlag;
-	
+    bool        mFlag;
+    
 };
 
 

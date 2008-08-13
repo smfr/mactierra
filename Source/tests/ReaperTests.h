@@ -10,7 +10,6 @@
 #ifndef ReaperTests_h
 #define ReaperTests_h
 
-
 #include "TestRunner.h"
 
 namespace MacTierra {
@@ -23,17 +22,17 @@ class ReaperTests : public TestCase
 public:
     ReaperTests();
     ~ReaperTests();
-	
-	void setUp();
-	void tearDown();
+    
+    void setUp();
+    void tearDown();
 
-	// tests
-	void runTest();
+    // tests
+    void runTest();
 
 protected:
 
-	MacTierra::Soup*		mSoup;
-	MacTierra::Reaper*		mReaper;
+    MacTierra::Soup*        mSoup;
+    MacTierra::Reaper*      mReaper;
 
 };
 

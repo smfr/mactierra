@@ -22,13 +22,13 @@ class ExecutionUnit
 {
 public:
 
-	ExecutionUnit();
-	~ExecutionUnit();
-	
-	// flaw is -1, 0, or 1
-	// FIXME: get flaw from soup?
-	// Returns new creature on divide instruction
-	virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw) = 0;
+    ExecutionUnit();
+    ~ExecutionUnit();
+    
+    // flaw is -1, 0, or 1
+    // FIXME: get flaw from soup?
+    // Returns new creature on divide instruction
+    virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw) = 0;
 
 
 protected:

@@ -17,10 +17,10 @@ const int32_t kNumRegisters = 4;
 const int32_t kStackSize = 10;
 
 enum {
-	k_ax = 0,
-	k_bx = 1,
-	k_cx = 2,
-	k_dx = 3
+    k_ax = 0,
+    k_bx = 1,
+    k_cx = 2,
+    k_dx = 3
 };
 
 

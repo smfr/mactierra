@@ -29,23 +29,24 @@ typedef boost::intrusive::list<Creature, ReaperMemberHookOption> ReaperList;
 class Reaper
 {
 public:
-	Reaper();
-	~Reaper();
+    Reaper();
+    ~Reaper();
 
-	void addCreature(Creature& inCreature);
-	void removeCreature(Creature& inCreature);
+    void        addCreature(Creature& inCreature);
+    void        removeCreature(Creature& inCreature);
 
-	// return true if moved
-	bool conditionalMoveUp(Creature& inCreature);
-	bool conditionalMoveDown(Creature& inCreature);
-	
-	Creature* headCreature();
-	
-	size_t		numberOfCreatures() const { return mReaperList.size(); }
+    // return true if moved
+    bool        conditionalMoveUp(Creature& inCreature);
+    bool        conditionalMoveDown(Creature& inCreature);
+    
+    Creature*   headCreature();
+    
+    size_t      numberOfCreatures() const { return mReaperList.size(); }
 
+    void        printCreatures() const;
 protected:
 
-	ReaperList	mReaperList;
+    ReaperList  mReaperList;
 
 };
 

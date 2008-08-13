@@ -25,17 +25,17 @@ class ExecutionUnit0 : public ExecutionUnit
 {
 public:
 
-	ExecutionUnit0();
-	~ExecutionUnit0();
-	
-	virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw);
+    ExecutionUnit0();
+    ~ExecutionUnit0();
+    
+    virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw);
 
 
 protected:
 
-	void jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
-	void call(Creature& inCreature, Soup& inSoup);
-	void address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
+    void jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
+    void call(Creature& inCreature, Soup& inSoup);
+    void address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
 
 };
 

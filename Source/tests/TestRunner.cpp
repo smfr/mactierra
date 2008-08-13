@@ -16,30 +16,30 @@ using namespace std;
 class TestException : public exception
 {
 public:
-	TestException(std::string message) throw()
-	: mMessage(message)
-	{
-	}
+    TestException(std::string message) throw()
+    : mMessage(message)
+    {
+    }
 
-	virtual ~TestException() throw()
-	{
-	}
-	
-	void log() { cout << mMessage << endl; }
+    virtual ~TestException() throw()
+    {
+    }
+    
+    void log() { cout << mMessage << endl; }
 
-	const char* what() const throw()
-	{
-		return mMessage.data();
-	}
+    const char* what() const throw()
+    {
+        return mMessage.data();
+    }
 
 protected:
-	std::string mMessage;
+    std::string mMessage;
 };
 
 void
 TestCase::reportFailure(std::string message)
 {
-	throw TestException(message);
+    throw TestException(message);
 }
 
 TestRegistrar* TestRegistrar::gRegistrar = NULL;
@@ -50,56 +50,56 @@ TestRegistrar::TestRegistrar()
 
 TestRegistrar::~TestRegistrar()
 {
-	for (TestList::iterator it = mTestList.begin(); it != mTestList.end(); ++it)
-		delete (*it);
+    for (TestList::iterator it = mTestList.begin(); it != mTestList.end(); ++it)
+        delete (*it);
 
-	mTestList.clear();
+    mTestList.clear();
 }
 
 TestRegistrar::TestList&
 TestRegistrar::testList()
 {
-	return mTestList;
+    return mTestList;
 }
 
 void
 TestRegistrar::addTest(TestCase* inTest)
 {
-	mTestList.push_back(inTest);
+    mTestList.push_back(inTest);
 }
 
 /* static */
 TestRegistrar*
 TestRegistrar::testRegistrar()
 {
-	if (!gRegistrar)
-		gRegistrar = new TestRegistrar();
+    if (!gRegistrar)
+        gRegistrar = new TestRegistrar();
 
-	return gRegistrar;
+    return gRegistrar;
 }
 
 /* static */
 void
 TestRegistrar::deleteRegistrar()
 {
-	delete gRegistrar;
+    delete gRegistrar;
 }
 
 extern "C" int main()
 {
-	cout << "Starting tests..." << endl;
+    cout << "Starting tests..." << endl;
 
 
-	TestRegistrar::TestList& tests = TestRegistrar::testRegistrar()->testList();
+    TestRegistrar::TestList& tests = TestRegistrar::testRegistrar()->testList();
 
-	for (TestRegistrar::TestList::iterator it = tests.begin(); it != tests.end(); ++it)
-	{
-		TestCase*	testCase = (*it);
-		testCase->setUp();
-		testCase->runTest();
-		testCase->tearDown();
-	}
+    for (TestRegistrar::TestList::iterator it = tests.begin(); it != tests.end(); ++it)
+    {
+        TestCase*   testCase = (*it);
+        testCase->setUp();
+        testCase->runTest();
+        testCase->tearDown();
+    }
 
-	cout << "Finished tests" << endl;
-	return 0;
+    cout << "Finished tests" << endl;
+    return 0;
 }

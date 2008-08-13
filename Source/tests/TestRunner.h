@@ -16,18 +16,18 @@ class TestCase
 {
 public:
 
-	TestCase() {}
-	virtual ~TestCase() {}
+    TestCase() {}
+    virtual ~TestCase() {}
 
-	// optional methods
-	virtual void setUp() {}
-	virtual void tearDown() {}
+    // optional methods
+    virtual void setUp() {}
+    virtual void tearDown() {}
 
-	// required method
-	virtual void runTest() = 0;
+    // required method
+    virtual void runTest() = 0;
 
-	void reportFailure(std::string message);
-	
+    void reportFailure(std::string message);
+    
 };
 
 #define TEST_CONDITION(c, m) if (!(c)) reportFailure(m);
@@ -35,33 +35,33 @@ public:
 class TestRegistrar
 {
 public:
-	typedef std::vector<TestCase*>	TestList;
-	
-	TestList& testList();
+    typedef std::vector<TestCase*>  TestList;
+    
+    TestList& testList();
 
-	void addTest(TestCase* inTest);
+    void addTest(TestCase* inTest);
 
-	static TestRegistrar* testRegistrar();
-	static void deleteRegistrar();
-	
+    static TestRegistrar* testRegistrar();
+    static void deleteRegistrar();
+    
 protected:
-	TestRegistrar();
-	~TestRegistrar();
+    TestRegistrar();
+    ~TestRegistrar();
 
-	static TestRegistrar*	gRegistrar;
+    static TestRegistrar*   gRegistrar;
 
-	TestList		mTestList;
+    TestList        mTestList;
 };
 
 
 class TestRegistration
 {
 public:
-	TestRegistration(TestCase* inTest)
-	{
-		TestRegistrar::testRegistrar()->addTest(inTest);
-	}
-	
+    TestRegistration(TestCase* inTest)
+    {
+        TestRegistrar::testRegistrar()->addTest(inTest);
+    }
+    
 };
 
 #endif // TestRunner_h
