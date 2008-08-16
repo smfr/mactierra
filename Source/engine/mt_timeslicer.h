@@ -30,12 +30,12 @@ public:
     TimeSlicer(World& inWorld);
     ~TimeSlicer();
     
-    u_int32_t       defaultSliceSize() const                { return mDefaultSliceSize; }
-    void            setDefaultSliceSize(u_int32_t inSize)   { mDefaultSliceSize = inSize; }
+    u_int32_t   defaultSliceSize() const                { return mDefaultSliceSize; }
+    void        setDefaultSliceSize(u_int32_t inSize)   { mDefaultSliceSize = inSize; }
 
     // creature is added before the current item (so it gets time after a full cycle)
-    void insertCreature(Creature& inCreature);
-    void removeCreature(Creature& inCreature);
+    void        insertCreature(Creature& inCreature);
+    void        removeCreature(Creature& inCreature);
 
     Creature*   currentCreature() const;
 

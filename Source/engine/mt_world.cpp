@@ -8,6 +8,7 @@
  */
 
 #include <map>
+#include <iostream>
 
 #include "RandomLib/Random.hpp"
 #include "RandomLib/ExponentialDistribution.hpp"
@@ -22,6 +23,8 @@
 
 namespace MacTierra {
 
+using namespace std;
+
 World::World()
 : mRNG(0)
 , mSoupSize(0)
@@ -33,13 +36,13 @@ World::World()
 , mTimeSlicer(*this)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
-, mCopyErrorRate(0.001)
+, mCopyErrorRate(0.0)
 , mCopyErrorPending(false)
 , mCopiesSinceLastError(0)
 , mNextCopyError(0)
-, mFlawRate(0.001)
+, mFlawRate(0.0)
 , mNextFlawInstruction(0)
-, mCosmicRate(0.001)
+, mCosmicRate(0.0)
 , mCosmicRayInstruction(0)
 , mSizeSelection(1.0)
 , mLeannessSelection(false)
@@ -90,18 +93,26 @@ World::eradicateCreature(Creature* inCreature)
     // remove it from all the lists
 }
 
-void
-World::addCreatureToSoup(Creature* inCreature)
+Creature*
+World::insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength)
 {
-    assert(inCreature->soup() == mSoup);
-    mCreatureIDMap[inCreature->creatureID()] = inCreature;
-}
+    if (!mCellMap->spaceAtAddress(inAddress, inLength))
+        return NULL;
 
-void
-World::removeCreatureFromSoup(Creature* inCreature)
-{
-    assert(inCreature->soup() == mSoup);
-    mCreatureIDMap.erase(inCreature->creatureID());
+    Creature* theCreature = createCreature();
+
+    theCreature->setLocation(inAddress);
+    theCreature->setLength(inLength);
+    
+    mSoup->injectInstructions(inAddress, inInstructions, inLength);
+    
+    bool inserted = mCellMap->insertCreature(theCreature);
+    assert(inserted);
+    
+    // add it to the various queues
+    creatureAdded(theCreature);
+    
+    return theCreature;
 }
 
 void
@@ -161,7 +172,6 @@ World::iterate(u_int32_t inNumCycles)
             
             ++mCurCreatureCycles;
             mTimeSlicer.executedInstruction();
-            
         }
         else        // we are at the end of the slice for one creature
         {
@@ -187,12 +197,14 @@ World::iterate(u_int32_t inNumCycles)
             // track the new creature for tracing
             
             mCurCreatureCycles = 0;
-            mCurCreatureSliceCycles = 0;
+            mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
         }
     
         ++cycles;
     }
     
+    
+    cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
 }
 
 instruction_t
@@ -219,27 +231,6 @@ World::mutateInstruction(instruction_t inInst, EMutationType inMutationType) con
             break;
     }
     return resultInst;
-}
-
-bool
-World::cosmicRay(u_int64_t inInstructionCount)
-{
-    if (mCosmicRate > 0.0 && inInstructionCount == mCosmicRayInstruction)
-    {
-        RandomLib::Random rng(mRNG);
-        address_t   target = rng.Integer(mSoupSize);
-
-        instruction_t inst = mSoup->instructionAtAddress(target);
-        inst = mutateInstruction(inst, mutationType());
-        mSoup->setInstructionAtAddress(target, inst);
-        
-        RandomLib::ExponentialDistribution<double> expDist;
-        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mCosmicRate));
-        assert(cosmicDelay > 0);
-        mCosmicRayInstruction = inInstructionCount + cosmicDelay;
-        return true;
-    }
-    return false;
 }
 
 #pragma mark -
@@ -269,11 +260,9 @@ void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
     inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSizeSelection));
-    // add to slicer
-    
-    
-    // add to reaper
-    mReaper.addCreature(*inChild);
+
+    // add to slicer and reaper
+    creatureAdded(inChild);
     
     // collect metabolic data
     
@@ -290,9 +279,8 @@ World::handleBirth(Creature* inParent, Creature* inChild)
 void
 World::handleDeath(Creature* inCreature)
 {
-
-    mReaper.removeCreature(*inCreature);
-
+    mCellMap->removeCreature(inCreature);
+    creatureRemoved(inCreature);
 }
 
 int32_t
@@ -311,6 +299,49 @@ World::instructionFlaw(u_int64_t inInstructionCount)
         return theFlaw;
     }
     return 0;
+}
+
+bool
+World::cosmicRay(u_int64_t inInstructionCount)
+{
+    if (mCosmicRate > 0.0 && inInstructionCount == mCosmicRayInstruction)
+    {
+        RandomLib::Random rng(mRNG);
+        address_t   target = rng.Integer(mSoupSize);
+
+        instruction_t inst = mSoup->instructionAtAddress(target);
+        inst = mutateInstruction(inst, mutationType());
+        mSoup->setInstructionAtAddress(target, inst);
+        
+        RandomLib::ExponentialDistribution<double> expDist;
+        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mCosmicRate));
+        assert(cosmicDelay > 0);
+        mCosmicRayInstruction = inInstructionCount + cosmicDelay;
+        return true;
+    }
+    return false;
+}
+
+void
+World::creatureAdded(Creature* inCreature)
+{
+    assert(inCreature->soup() == mSoup);
+
+    mCreatureIDMap[inCreature->creatureID()] = inCreature;
+    
+    mTimeSlicer.insertCreature(*inCreature);
+    mReaper.addCreature(*inCreature);
+}
+
+void
+World::creatureRemoved(Creature* inCreature)
+{
+    assert(inCreature && inCreature->soup() == mSoup);
+
+    mReaper.removeCreature(*inCreature);
+    mTimeSlicer.removeCreature(*inCreature);
+
+    mCreatureIDMap.erase(inCreature->creatureID());
 }
 
 #pragma mark -

@@ -8,16 +8,26 @@
 
 #import "MacTierraDocument.h"
 
+#import "MTWorldController.h"
+
 @implementation MacTierraDocument
+
+@synthesize worldController;
 
 - (id)init
 {
-    self = [super init];
-    if (self) {
-    
-        // Add your subclass-specific initialization here.
-        // If an error occurs here, send a [self release] message and return nil.
-    
+    if (self = [super init])
+    {
+
+    }
+    return self;
+}
+
+// new, empty document
+- (id)initWithType:(NSString *)typeName error:(NSError **)outError
+{
+    if (self = [super init])
+    {
     }
     return self;
 }
@@ -29,6 +39,7 @@
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
+    [worldController createSoup:(256 * 1024)];
     [super windowControllerDidLoadNib:aController];
 }
 

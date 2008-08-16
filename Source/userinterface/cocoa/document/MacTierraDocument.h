@@ -9,7 +9,13 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MTWorldController;
+
 @interface MacTierraDocument : NSDocument
 {
+    IBOutlet MTWorldController*      worldController;
 }
+
+@property (retain) MTWorldController*   worldController;
+
 @end

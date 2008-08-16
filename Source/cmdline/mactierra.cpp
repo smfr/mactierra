@@ -10,6 +10,7 @@
 #include "mactierra.h"
 
 #include "mt_world.h"
+#include "mt_ancestor.h"
 
 using namespace MacTierra;
 
@@ -23,6 +24,10 @@ extern "C" int main()
     World*  theWorld = new World();
     theWorld->initializeSoup(kSoupSize);
 
+    // seed the soup
+    theWorld->insertCreature(1024, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    
+    
     for (int32_t i = 0;i < 2000; ++i)
     {
         theWorld->iterate(kCycleCount);

@@ -20,7 +20,14 @@
 		0F0C94A80E514AEC00B233E8 /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
 		0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C963E0E51620100B233E8 /* SlicerTests.cpp */; };
-		0FAC2F940E4F761C00CB068B /* MacTierraDocument.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */; };
+		0F9DE4FA0E5735CB00E86DD6 /* mt_ancestor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE4F90E5735CB00E86DD6 /* mt_ancestor.cpp */; };
+		0F9DE4FB0E5735CB00E86DD6 /* mt_ancestor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE4F90E5735CB00E86DD6 /* mt_ancestor.cpp */; };
+		0F9DE50F0E57361A00E86DD6 /* mt_ancestor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE4F90E5735CB00E86DD6 /* mt_ancestor.cpp */; };
+		0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */; };
+		0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */; };
+		0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */; };
+		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
+		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
 		0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
 		0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */; };
@@ -29,7 +36,19 @@
 		0FB90C680E5292BF00449CC6 /* mt_cellmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */; };
 		0FB90C690E5292BF00449CC6 /* mt_cellmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */; };
 		0FB90D330E52A72900449CC6 /* CellMapTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90D320E52A72900449CC6 /* CellMapTests.cpp */; };
-		0FB90D340E52A72900449CC6 /* CellMapTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90D320E52A72900449CC6 /* CellMapTests.cpp */; };
+		0FBEC0490E56AF8B00ABB516 /* mt_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF620E0E4FC0C300404828 /* mt_world.cpp */; };
+		0FBEC04A0E56AF8C00ABB516 /* mt_timeslicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */; };
+		0FBEC04B0E56AF8D00ABB516 /* mt_soup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */; };
+		0FBEC04C0E56AF8D00ABB516 /* mt_reaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF632D0E4FC95700404828 /* mt_reaper.cpp */; };
+		0FBEC04D0E56AF8E00ABB516 /* mt_random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF642A0E4FD7DE00404828 /* mt_random.cpp */; };
+		0FBEC04E0E56AF8E00ABB516 /* mt_executionUnit0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31260E4F99BC00CB068B /* mt_executionUnit0.cpp */; };
+		0FBEC04F0E56AF8F00ABB516 /* mt_executionUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */; };
+		0FBEC0500E56AF9100ABB516 /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
+		0FBEC0510E56AF9100ABB516 /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
+		0FBEC0520E56AF9200ABB516 /* mt_cellmap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90C670E5292BF00449CC6 /* mt_cellmap.cpp */; };
+		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
+		0FBEC0680E56AFCF00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
+		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FFF620F0E4FC0C300404828 /* mt_world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF620E0E4FC0C300404828 /* mt_world.cpp */; };
 		0FFF632E0E4FC95700404828 /* mt_reaper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF632D0E4FC95700404828 /* mt_reaper.cpp */; };
 		0FFF63590E4FCE9C00404828 /* mt_timeslicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF63580E4FCE9C00404828 /* mt_timeslicer.cpp */; };
@@ -52,8 +71,17 @@
 		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F0C963D0E51620100B233E8 /* SlicerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlicerTests.h; sourceTree = "<group>"; };
 		0F0C963E0E51620100B233E8 /* SlicerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlicerTests.cpp; sourceTree = "<group>"; };
-		0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
-		0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MacTierraDocument.m; sourceTree = "<group>"; };
+		0F9DE4F80E5735CB00E86DD6 /* mt_ancestor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_ancestor.h; sourceTree = "<group>"; };
+		0F9DE4F90E5735CB00E86DD6 /* mt_ancestor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_ancestor.cpp; sourceTree = "<group>"; };
+		0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldController.h; sourceTree = "<group>"; };
+		0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldController.mm; sourceTree = "<group>"; };
+		0F9DE5D80E575DB300E86DD6 /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
+		0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacTierraDocument.mm; sourceTree = "<group>"; };
+		0F9DE5DC0E575DB800E86DD6 /* MTSoupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSoupView.h; sourceTree = "<group>"; };
+		0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTSoupView.mm; sourceTree = "<group>"; };
+		0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCompositedGLView.m; sourceTree = "<group>"; };
+		0F9DE5E50E575FDB00E86DD6 /* MTCompositedGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCompositedGLView.h; sourceTree = "<group>"; };
+		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cpu.h; sourceTree = "<group>"; };
 		0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_cpu.cpp; sourceTree = "<group>"; };
 		0FAC30750E4F797B00CB068B /* mt_engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_engine.h; sourceTree = "<group>"; };
@@ -71,6 +99,9 @@
 		0FB90D310E52A72900449CC6 /* CellMapTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMapTests.h; sourceTree = "<group>"; };
 		0FB90D320E52A72900449CC6 /* CellMapTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CellMapTests.cpp; sourceTree = "<group>"; };
 		0FBB72120E534AFD00469B7C /* flat_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = flat_set.hpp; path = interprocess/containers/flat_set.hpp; sourceTree = "<group>"; };
+		0FBEC0430E56AF7A00ABB516 /* mactierra */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mactierra; sourceTree = BUILT_PRODUCTS_DIR; };
+		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
+		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
 		0FFF5CDA0E4F9B1A00404828 /* mt_isa.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_isa.h; sourceTree = "<group>"; };
 		0FFF620D0E4FC0C300404828 /* mt_world.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_world.h; sourceTree = "<group>"; };
 		0FFF620E0E4FC0C300404828 /* mt_world.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_world.cpp; sourceTree = "<group>"; };
@@ -118,11 +149,19 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0FBEC0410E56AF7A00ABB516 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8D15AC330486D014006FF6A4 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -145,6 +184,35 @@
 			path = Source/tests;
 			sourceTree = "<group>";
 		};
+		0F9DE5D30E575DAD00E86DD6 /* controllers */ = {
+			isa = PBXGroup;
+			children = (
+				0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */,
+				0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */,
+			);
+			path = controllers;
+			sourceTree = "<group>";
+		};
+		0F9DE5D70E575DB300E86DD6 /* document */ = {
+			isa = PBXGroup;
+			children = (
+				0F9DE5D80E575DB300E86DD6 /* MacTierraDocument.h */,
+				0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */,
+			);
+			path = document;
+			sourceTree = "<group>";
+		};
+		0F9DE5DB0E575DB800E86DD6 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				0F9DE5E50E575FDB00E86DD6 /* MTCompositedGLView.h */,
+				0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */,
+				0F9DE5DC0E575DB800E86DD6 /* MTSoupView.h */,
+				0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
 		0FAC2F910E4F75FE00CB068B /* engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +221,8 @@
 				0FAC30750E4F797B00CB068B /* mt_engine.h */,
 				0FAC30F60E4F968700CB068B /* mt_instructionSet.h */,
 				0FFF5CDA0E4F9B1A00404828 /* mt_isa.h */,
+				0F9DE4F80E5735CB00E86DD6 /* mt_ancestor.h */,
+				0F9DE4F90E5735CB00E86DD6 /* mt_ancestor.cpp */,
 				0FAC31050E4F983200CB068B /* mt_executionUnit.h */,
 				0FAC31060E4F983200CB068B /* mt_executionUnit.cpp */,
 				0FAC31250E4F99BC00CB068B /* mt_executionUnit0.h */,
@@ -175,6 +245,15 @@
 			name = engine;
 			path = Source/engine;
 			sourceTree = SOURCE_ROOT;
+		};
+		0FBEC0610E56AFA800ABB516 /* mactierra */ = {
+			isa = PBXGroup;
+			children = (
+				0FBEC0650E56AFCF00ABB516 /* mactierra.h */,
+				0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */,
+			);
+			name = mactierra;
+			sourceTree = "<group>";
 		};
 		0FFF64300E4FE34C00404828 /* RandomLib */ = {
 			isa = PBXGroup;
@@ -215,6 +294,7 @@
 			isa = PBXGroup;
 			children = (
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
+				0F9DE6540E57795B00E86DD6 /* OpenGL.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -233,6 +313,7 @@
 			children = (
 				8D15AC370486D014006FF6A4 /* MacTierra.app */,
 				0F0C94990E514AD700B233E8 /* TestRunner */,
+				0FBEC0430E56AF7A00ABB516 /* mactierra */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -244,6 +325,7 @@
 				0FFF64300E4FE34C00404828 /* RandomLib */,
 				0FAC2F910E4F75FE00CB068B /* engine */,
 				0F0C945E0E51486200B233E8 /* tests */,
+				0FBEC0610E56AFA800ABB516 /* mactierra */,
 				2A37F4AFFDCFA73011CA2CEA /* cocoa */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
@@ -255,10 +337,11 @@
 		2A37F4AFFDCFA73011CA2CEA /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				0F9DE5DB0E575DB800E86DD6 /* views */,
+				0F9DE5D30E575DAD00E86DD6 /* controllers */,
+				0F9DE5D70E575DB300E86DD6 /* document */,
 				32DBCF750370BD2300C91783 /* MacTierra_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
-				0FAC2F920E4F761C00CB068B /* MacTierraDocument.h */,
-				0FAC2F930E4F761C00CB068B /* MacTierraDocument.m */,
 			);
 			name = cocoa;
 			path = Source/userinterface/cocoa;
@@ -304,6 +387,22 @@
 			productReference = 0F0C94990E514AD700B233E8 /* TestRunner */;
 			productType = "com.apple.product-type.tool";
 		};
+		0FBEC0420E56AF7A00ABB516 /* mactierra */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra" */;
+			buildPhases = (
+				0FBEC0400E56AF7A00ABB516 /* Sources */,
+				0FBEC0410E56AF7A00ABB516 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = mactierra;
+			productName = mactierra;
+			productReference = 0FBEC0430E56AF7A00ABB516 /* mactierra */;
+			productType = "com.apple.product-type.tool";
+		};
 		8D15AC270486D014006FF6A4 /* MacTierra */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "MacTierra" */;
@@ -336,6 +435,7 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* MacTierra */,
 				0F0C94980E514AD700B233E8 /* TestRunner */,
+				0FBEC0420E56AF7A00ABB516 /* mactierra */,
 			);
 		};
 /* End PBXProject section */
@@ -374,6 +474,28 @@
 				0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */,
 				0FB90C680E5292BF00449CC6 /* mt_cellmap.cpp in Sources */,
 				0FB90D330E52A72900449CC6 /* CellMapTests.cpp in Sources */,
+				0FBEC0680E56AFCF00ABB516 /* mactierra.cpp in Sources */,
+				0F9DE4FB0E5735CB00E86DD6 /* mt_ancestor.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0FBEC0400E56AF7A00ABB516 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0FBEC0490E56AF8B00ABB516 /* mt_world.cpp in Sources */,
+				0FBEC04A0E56AF8C00ABB516 /* mt_timeslicer.cpp in Sources */,
+				0FBEC04B0E56AF8D00ABB516 /* mt_soup.cpp in Sources */,
+				0FBEC04C0E56AF8D00ABB516 /* mt_reaper.cpp in Sources */,
+				0FBEC04D0E56AF8E00ABB516 /* mt_random.cpp in Sources */,
+				0FBEC04E0E56AF8E00ABB516 /* mt_executionUnit0.cpp in Sources */,
+				0FBEC04F0E56AF8F00ABB516 /* mt_executionUnit.cpp in Sources */,
+				0FBEC0500E56AF9100ABB516 /* mt_creature.cpp in Sources */,
+				0FBEC0510E56AF9100ABB516 /* mt_cpu.cpp in Sources */,
+				0FBEC0520E56AF9200ABB516 /* mt_cellmap.cpp in Sources */,
+				0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */,
+				0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */,
+				0F9DE50F0E57361A00E86DD6 /* mt_ancestor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,7 +504,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
-				0FAC2F940E4F761C00CB068B /* MacTierraDocument.m in Sources */,
 				0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */,
 				0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */,
 				0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */,
@@ -394,7 +515,11 @@
 				0FFF642B0E4FD7DE00404828 /* mt_random.cpp in Sources */,
 				0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */,
 				0FB90C690E5292BF00449CC6 /* mt_cellmap.cpp in Sources */,
-				0FB90D340E52A72900449CC6 /* CellMapTests.cpp in Sources */,
+				0F9DE4FA0E5735CB00E86DD6 /* mt_ancestor.cpp in Sources */,
+				0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */,
+				0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */,
+				0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */,
+				0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -462,6 +587,36 @@
 				INSTALL_PATH = /usr/local/bin;
 				PREBINDING = NO;
 				PRODUCT_NAME = TestRunner;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		0FBEC0450E56AF7A00ABB516 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = mactierra;
+			};
+			name = Debug;
+		};
+		0FBEC0460E56AF7A00ABB516 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/bin;
+				PREBINDING = NO;
+				PRODUCT_NAME = mactierra;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -537,6 +692,15 @@
 			buildConfigurations = (
 				0F0C949B0E514AD800B233E8 /* Debug */,
 				0F0C949C0E514AD800B233E8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0FBEC0450E56AF7A00ABB516 /* Debug */,
+				0FBEC0460E56AF7A00ABB516 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

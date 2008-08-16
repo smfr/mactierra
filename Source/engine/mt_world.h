@@ -42,8 +42,7 @@ public:
     Creature*   createCreature();
     void        eradicateCreature(Creature* inCreature);
     
-    void        addCreatureToSoup(Creature* inCreature);
-    void        removeCreatureFromSoup(Creature* inCreature);
+    Creature*   insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
     
     void        iterate(uint32_t inNumCycles);
     
@@ -94,6 +93,10 @@ protected:
     int32_t         instructionFlaw(u_int64_t inInstructionCount);
     bool            cosmicRay(u_int64_t inInstructionCount);
 
+    // these add and remove from the time slicer and reaper queues.
+    void            creatureAdded(Creature* inCreature);
+    void            creatureRemoved(Creature* inCreature);
+
 protected:
 
     RandomLib::Random   mRNG;
@@ -109,9 +112,6 @@ protected:
     // creatures hashed by ID
     typedef std::map<creature_id, Creature*>    CreatureIDMap;
     CreatureIDMap       mCreatureIDMap;
-    
-    // creature space map
-    
     
     // settings
     double          mSliceSizeVariance; // sigma of normal distribution

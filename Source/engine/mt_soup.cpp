@@ -57,6 +57,13 @@ Soup::setInstructionAtAddress(address_t inAddress, instruction_t inInst)
     }
 }
 
+void
+Soup::injectInstructions(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength)
+{
+    for (u_int32_t i = 0; i < inLength; ++i)
+        setInstructionAtAddress((inAddress + i) % mSoupSize, inInstructions[i]);
+}
+
 
 
 } // namespace MacTierra

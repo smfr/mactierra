@@ -22,7 +22,7 @@ public:
     ~Soup();
 
     u_int32_t       soupSize() const { return mSoupSize; }
-
+    const instruction_t*    soup() const { return mSoup; }
     
     enum ESearchDirection { kBothways, kBackwards, kForwards };
     
@@ -31,6 +31,7 @@ public:
     instruction_t   instructionAtAddress(address_t inAddress) const;
     void            setInstructionAtAddress(address_t inAddress, instruction_t inInst);
 
+    void            injectInstructions(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
 
 protected:
 
