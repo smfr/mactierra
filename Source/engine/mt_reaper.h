@@ -41,13 +41,14 @@ public:
     
     Creature*   headCreature();
     
+    void        reap();
+    
     size_t      numberOfCreatures() const { return mReaperList.size(); }
 
     void        printCreatures() const;
 protected:
 
     ReaperList  mReaperList;
-
 };
 
 } // namespace MacTierra

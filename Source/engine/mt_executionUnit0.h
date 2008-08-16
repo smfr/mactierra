@@ -28,7 +28,7 @@ public:
     ExecutionUnit0();
     ~ExecutionUnit0();
     
-    virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw);
+    virtual Creature* execute(Creature& inCreature, World& inWorld, int32_t inFlaw);
 
 
 protected:

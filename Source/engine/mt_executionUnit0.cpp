@@ -14,6 +14,7 @@
 #include "mt_isa.h"
 #include "mt_instructionSet.h"
 #include "mt_soup.h"
+#include "mt_world.h"
 
 namespace MacTierra {
 
@@ -26,7 +27,7 @@ ExecutionUnit0::~ExecutionUnit0()
 }
 
 Creature*
-ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
+ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
 {
     Creature* resultCreature = NULL;
 
@@ -56,7 +57,7 @@ ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
     
         case k_if_cz:   // If cx=0 execute next instruction
             if (cpu.mRegisters[k_cx + inFlaw] != 0)
-                cpu.incrementIP(inSoup.soupSize());
+                cpu.incrementIP(inWorld.soupSize());
             break;
     
         case k_sub_ab:  // Subtract bx from ax->cx
@@ -143,15 +144,15 @@ ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
             break;
     
         case k_jmp:     // Jump (search for template pointed to by the IP)
-            jump(inCreature, inSoup, Soup::kBothways);
+            jump(inCreature, *inWorld.soup(), Soup::kBothways);
             break;
 
         case k_jumpb:   // Jump backwards
-            jump(inCreature, inSoup, Soup::kBackwards);
+            jump(inCreature, *inWorld.soup(), Soup::kBackwards);
             break;
 
         case k_call:    // Call
-            call(inCreature, inSoup);
+            call(inCreature, *inWorld.soup());
             break;
             
         case k_ret:     // Return
@@ -170,17 +171,17 @@ ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
         case k_mov_iab: // Copy inst at address in bx to address in ax
             {
                 instruction_t   inst = inCreature.getSoupInstruction(cpu.mRegisters[k_bx]);
-                u_int32_t       soupSize = inSoup.soupSize();
+                u_int32_t       soupSize = inWorld.soupSize();
                 address_t       targetAddress = inCreature.addressFromOffset(cpu.mRegisters[k_ax]);
                 
-                if (inSoup.copyErrorPending())
-                    inst = inSoup.mutateInstruction(inst, inSoup.mutationType());
+                if (inWorld.copyErrorPending())
+                    inst = inWorld.mutateInstruction(inst, inWorld.mutationType());
                 
-                if (inSoup.globalWritesAllowed() || 
+                if (inWorld.globalWritesAllowed() || 
                     inCreature.containsAddress(targetAddress, soupSize) || 
                     (inCreature.isDividing() && inCreature.daughterCreature()->containsAddress(targetAddress, soupSize)))
                 {
-                
+                    inWorld.soup()->setInstructionAtAddress(targetAddress, inst);
                     inCreature.noteMoveToOffspring();
                 }
                 else
@@ -189,26 +190,26 @@ ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
             break;
 
         case k_adr:     // Addr
-            address(inCreature, inSoup, Soup::kBothways);
+            address(inCreature, *inWorld.soup(), Soup::kBothways);
             break;
 
         case k_adrb:    // AddrBack
-            address(inCreature, inSoup, Soup::kBackwards);
+            address(inCreature, *inWorld.soup(), Soup::kBackwards);
             break;
 
         case k_adrf:    // AddrFore
-            address(inCreature, inSoup, Soup::kForwards);
+            address(inCreature, *inWorld.soup(), Soup::kForwards);
             break;
             
         case k_mal:     // Allocate
             break;
             
         case k_divide:  // Divide
-            resultCreature = inCreature.divide();
+            resultCreature = inCreature.divide(inWorld);
             break;
     }
 
-    cpu.incrementIP(inSoup.soupSize());
+    cpu.incrementIP(inWorld.soupSize());
 
     // Remember errors for the grim reaper
     inCreature.noteErrors();

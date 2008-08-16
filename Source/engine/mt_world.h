@@ -34,19 +34,53 @@ public:
 
     void        initializeSoup(u_int32_t inSoupSize);
 
+    u_int32_t   soupSize() const    { return mSoupSize; }
+
     Soup*       soup() const        { return mSoup; }
     CellMap*    cellMap() const     { return mCellMap; }
 
     Creature*   createCreature();
-
+    void        eradicateCreature(Creature* inCreature);
+    
     void        addCreatureToSoup(Creature* inCreature);
     void        removeCreatureFromSoup(Creature* inCreature);
-    
     
     void        iterate(uint32_t inNumCycles);
     
     RandomLib::Random&  RNG()   { return mRNG; }
 
+    bool        copyErrorPending() const { return mCopyErrorPending; }
+
+    enum EMutationType {
+        kAddOrDec,
+        kBitFlip,
+        kRandomChoice
+    };
+    instruction_t   mutateInstruction(instruction_t inInst, EMutationType inMutationType) const;
+
+
+    // settings
+
+    EMutationType   mutationType() const    { return mMutationType; }
+
+    enum EDaughterAllocationStrategy {
+        kRandomAlloc,
+        kRandomPackedAlloc,
+        kClosestAlloc,
+        kPreferredAlloc
+    };
+    
+    EDaughterAllocationStrategy daughterAllocationStrategy() const;
+    
+    bool            globalWritesAllowed() const;
+    void            setGlobalWritesAllowed(bool inAllowed);
+
+    bool            transferRegistersToOffspring() const;
+    void            setTransferRegistersToOffspring(bool inTransfer);
+    
+    double          reapThreshold() const { return mReapThreshold; }
+    void            setReapThreshold(double inThreshold) { mReapThreshold = inThreshold; }
+    
 protected:
 
     creature_id     uniqueCreatureID();
@@ -56,9 +90,13 @@ protected:
     void            handleBirth(Creature* inParent, Creature* inChild);
     void            handleDeath(Creature* inCreature);
 
+    int32_t         instructionFlaw(u_int64_t inInstructionCount);
+
 protected:
 
     RandomLib::Random   mRNG;
+
+    u_int32_t           mSoupSize;
 
     Soup*               mSoup;
     CellMap*            mCellMap;
@@ -87,8 +125,26 @@ protected:
     u_int32_t       mCurCreatureCycles;         // fAlive
     u_int32_t       mCurCreatureSliceCycles;    // fCurCpuSliceSize
 
+    // maybe package these up into a "flaws" object?
+    double          mCopyErrorRate;
+    bool            mCopyErrorPending;
+    u_int32_t       mCopiesSinceLastError;
+    u_int32_t       mNextCopyError;
+    
+    double          mFlawRate;
+    u_int64_t       mNextFlawInstruction;
+    
     double          mSizeSelection;             // size selection
     bool            mLeannessSelection;         // select for "lean" creatures
+
+    double          mReapThreshold;     // [0, 1)
+
+    // settings
+    EMutationType   mMutationType;
+    
+    bool            mGlobalWritesAllowed;
+    bool            mTransferRegistersToOffspring;
+
 };
 
 

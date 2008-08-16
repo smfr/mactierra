@@ -18,6 +18,7 @@
 namespace MacTierra {
 
 class Soup;
+class World;
 
 typedef boost::intrusive::list_member_hook<> ReaperListHook;
 typedef boost::intrusive::list_member_hook<> SlicerListHook;
@@ -72,7 +73,7 @@ public:
     bool            startDividing();
 
     // execute the divide instruction. can set cpu flag
-    Creature*       divide();
+    Creature*       divide(World& inWorld);
     
     bool            isDividing() const          { return mDividing; }
     Creature*       daughterCreature() const    { return mDaughter; }

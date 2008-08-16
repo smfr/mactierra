@@ -71,6 +71,8 @@ public:
     enum ESearchDirection { kBothways, kBackwards, kForwards };
     bool        searchForSpace(address_t inAddress, u_int32_t inLength, ESearchDirection inSearchDirection) const;
 
+    double      fullness() const;
+    
     void        printCreatures() const;
 
     // public for testing
@@ -88,6 +90,7 @@ protected:
 protected:
 
     u_int32_t       mSize;
+    u_int32_t       mSpaceUsed;
     
     typedef cell_range<Creature*> CreatureCell;
     typedef std::vector<CreatureCell> CreatureList;

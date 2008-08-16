@@ -15,7 +15,7 @@
 namespace MacTierra {
 
 class Creature;
-class Soup;
+class World;
 
 // This class runs instructions of a particular instruction set.
 class ExecutionUnit
@@ -28,7 +28,7 @@ public:
     // flaw is -1, 0, or 1
     // FIXME: get flaw from soup?
     // Returns new creature on divide instruction
-    virtual Creature* execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw) = 0;
+    virtual Creature* execute(Creature& inCreature, World& inWorld, int32_t inFlaw) = 0;
 
 
 protected:

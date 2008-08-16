@@ -26,42 +26,18 @@ public:
     
     enum ESearchDirection { kBothways, kBackwards, kForwards };
     
-    bool            seachForTemplate(ESearchDirection inDirection, u_int32_t& ioOffset, u_int32_t& outLength);
+    bool            seachForTemplate(ESearchDirection inDirection, address_t& ioOffset, u_int32_t& outLength);
     
-    instruction_t   instructionAtAddress(u_int32_t inAddress) const;
-    
-    enum EMutationType {
-        kAddOrDec,
-        kBitFlip,
-        kRandomChoice
-    };
-    EMutationType   mutationType() const    { return kAddOrDec; } // FIXME
-
-    instruction_t   mutateInstruction(instruction_t inInst, EMutationType inMutationType) const;
-
-    bool            copyErrorPending() const;
-
-    // settings
-    bool            globalWritesAllowed() const;
-    bool            transferRegistersToOffspring() const;
-    
-    enum EDaughterAllocationStrategy {
-        kRandomAlloc,
-        kRandomPackedAlloc,
-        kClosestAlloc,
-        kPreferredAlloc
-    };
-    
-    EDaughterAllocationStrategy daughterAllocationStrategy() const;
-
+    instruction_t   instructionAtAddress(address_t inAddress) const;
+    void            setInstructionAtAddress(address_t inAddress, instruction_t inInst);
 
 
 protected:
 
     
-    u_int32_t   mSoupSize;
+    u_int32_t       mSoupSize;
     
-
+    instruction_t*  mSoup;
 
 };
 

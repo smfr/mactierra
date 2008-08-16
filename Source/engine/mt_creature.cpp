@@ -10,6 +10,7 @@
 #include "mt_creature.h"
 
 #include "mt_soup.h"
+#include "mt_world.h"       // avoid?
 
 namespace MacTierra {
 
@@ -36,7 +37,6 @@ Creature::clearSpace()
 {
 
 }
-
 
 u_int32_t
 Creature::referencedLocation() const
@@ -85,7 +85,7 @@ Creature::startDividing()
 }
 
 Creature*
-Creature::divide()
+Creature::divide(World& inWorld)
 {
     if (mDividing && mMovesToLastOffspring > (kMinPropCopied * mDaughter->length()))
     {
@@ -95,7 +95,7 @@ Creature::divide()
 #else
         offspring->mCPU.mInstructionPointer = offspring->location();
 #endif
-        if (mSoup->transferRegistersToOffspring())
+        if (inWorld.transferRegistersToOffspring())
         {
             for (int32_t i = 0; i < kNumRegisters; ++i)
                 offspring->mCPU.mRegisters[i] = mCPU.mRegisters[i];

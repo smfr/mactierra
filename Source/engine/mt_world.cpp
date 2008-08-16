@@ -8,7 +8,9 @@
  */
 
 #include <map>
-#include "NormalDistribution.hpp"
+
+#include "RandomLib/Random.hpp"
+#include "RandomLib/ExponentialDistribution.hpp"
 
 #include "mt_world.h"
 
@@ -22,6 +24,7 @@ namespace MacTierra {
 
 World::World()
 : mRNG(0)
+, mSoupSize(0)
 , mSoup(NULL)
 , mCellMap(NULL)
 , mNextCreatureID(1)
@@ -30,8 +33,18 @@ World::World()
 , mTimeSlicer(*this)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
+, mCopyErrorRate(0.001)
+, mCopyErrorPending(false)
+, mCopiesSinceLastError(0)
+, mNextCopyError(0)
+, mFlawRate(0.001)
+, mNextFlawInstruction(0)
 , mSizeSelection(1.0)
 , mLeannessSelection(false)
+, mReapThreshold(0.8)
+, mMutationType(kAddOrDec)
+, mGlobalWritesAllowed(false)
+, mTransferRegistersToOffspring(false)
 {
 }
 
@@ -47,6 +60,8 @@ void
 World::initializeSoup(u_int32_t inSoupSize)
 {
     assert(!mSoup && !mCellMap);
+    mSoupSize = inSoupSize;
+    
     mSoup = new Soup(inSoupSize);
     mCellMap = new CellMap(inSoupSize);
 
@@ -65,6 +80,12 @@ World::createCreature()
     Creature*   theCreature = new Creature(uniqueCreatureID(), mSoup);
     
     return theCreature;
+}
+
+void
+World::eradicateCreature(Creature* inCreature)
+{
+    // remove it from all the lists
 }
 
 void
@@ -101,12 +122,11 @@ World::iterate(u_int32_t inNumCycles)
             
             
             // decide whether to throw in a flaw
-            int32_t flaw = 0;
-
+            int32_t flaw = instructionFlaw(mTimeSlicer.instructionsExecuted());
+            
             // track leanness
             
-            
-            Creature* daughterCreature = mExecution->execute(*curCreature, *mSoup, flaw);
+            Creature* daughterCreature = mExecution->execute(*curCreature, *this, flaw);
             if (daughterCreature)
                 handleBirth(curCreature, daughterCreature);
         
@@ -117,6 +137,23 @@ World::iterate(u_int32_t inNumCycles)
                 mReaper.conditionalMoveDown(*curCreature);
 
             // compute next copy error time
+            if  (mCopyErrorRate > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
+            {
+                if (mCopyErrorPending)  // just did one
+                {
+                    RandomLib::ExponentialDistribution<double> expDist;
+                    int32_t copyErrorDelay = expDist(mRNG, mCopyErrorRate);
+                    assert(copyErrorDelay > 0);
+                    mNextCopyError = copyErrorDelay;
+                    mCopiesSinceLastError = 0;
+                    mCopyErrorPending = false;
+                }
+                else
+                {
+                    ++mCopiesSinceLastError;
+                    mCopyErrorPending = (mCopiesSinceLastError == mNextCopyError);
+                }
+            }
             
             ++mCurCreatureCycles;
             mTimeSlicer.executedInstruction();
@@ -126,7 +163,8 @@ World::iterate(u_int32_t inNumCycles)
         {
             
             // maybe reap
-            
+            if (mCellMap->fullness() > mReapThreshold)
+                eradicateCreature(mReaper.headCreature());
             
             // maybe kill off long-lived creatures
             
@@ -137,11 +175,10 @@ World::iterate(u_int32_t inNumCycles)
             {
             }
             
-            // check for no creatures left
-            
-            
             // start on the next creature
             curCreature = mTimeSlicer.currentCreature();
+            if (!curCreature)
+                break;
 
             // track the new creature for tracing
             
@@ -154,6 +191,31 @@ World::iterate(u_int32_t inNumCycles)
     
 }
 
+instruction_t
+World::mutateInstruction(instruction_t inInst, EMutationType inMutationType) const
+{
+    RandomLib::Random rng(mRNG);
+    instruction_t resultInst = inInst;
+
+    switch (inMutationType)
+    {
+        case kAddOrDec:
+            {
+                int32_t delta = rng.Boolean() ? -1 : 1;
+                resultInst = (inInst + kInstructionSetSize + delta) % kInstructionSetSize;
+            }
+            break;
+
+        case kBitFlip:
+            resultInst ^= (1 << rng.Integer(5));
+            break;
+
+        case kRandomChoice:
+            resultInst = rng.Integer(kInstructionSetSize);
+            break;
+    }
+    return resultInst;
+}
 
 #pragma mark -
 
@@ -207,5 +269,59 @@ World::handleDeath(Creature* inCreature)
     mReaper.removeCreature(*inCreature);
 
 }
+
+int32_t
+World::instructionFlaw(u_int64_t inInstructionCount)
+{
+    if (mFlawRate > 0 && inInstructionCount == mNextFlawInstruction)
+    {
+        RandomLib::Random rng(mRNG);
+        int32_t theFlaw = rng.Boolean() ? 1 : -1;
+
+        RandomLib::ExponentialDistribution<double> expDist;
+        int64_t flawDelay = static_cast<int64_t>(expDist(mRNG, mFlawRate));
+        assert(flawDelay > 0);
+        mNextFlawInstruction = inInstructionCount + flawDelay;
+        
+        return theFlaw;
+    }
+    return 0;
+}
+
+#pragma mark -
+
+// Settings
+
+bool
+World::globalWritesAllowed() const
+{
+    return mGlobalWritesAllowed;
+}
+
+void
+World::setGlobalWritesAllowed(bool inAllowed)
+{
+    mGlobalWritesAllowed = inAllowed;
+}
+
+bool
+World::transferRegistersToOffspring() const
+{
+    return mTransferRegistersToOffspring;
+}
+
+void
+World::setTransferRegistersToOffspring(bool inTransfer)
+{
+    mTransferRegistersToOffspring = inTransfer;
+}
+
+World::EDaughterAllocationStrategy
+World::daughterAllocationStrategy() const
+{
+    return kRandomAlloc;
+}
+
+
 
 } // namespace MacTierra

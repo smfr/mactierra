@@ -48,6 +48,7 @@ public:
                     ++mTotalInstructions;
                 }
 
+    u_int64_t   instructionsExecuted() const { return mTotalInstructions; }
 
     enum ETimeSliceStrategy {
         kConstantSize,

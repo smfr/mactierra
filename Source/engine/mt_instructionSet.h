@@ -49,6 +49,8 @@ enum {
 };
 
 
+const int32_t kInstructionSetSize = 32;
+
 
 
 } // namespace MacTierra

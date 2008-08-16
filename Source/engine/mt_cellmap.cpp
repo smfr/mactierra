@@ -19,6 +19,7 @@ using namespace std;
 
 CellMap::CellMap(u_int32_t inSize)
 : mSize(inSize)
+, mSpaceUsed(0)
 {
 }
 
@@ -114,6 +115,9 @@ CellMap::insertCreature(Creature* inCreature)
     // insert at the given index
     CreatureList::iterator insertPos = mCells.begin() + insertionIndex;
     mCells.insert(insertPos, CreatureCell(inCreature->location(), inCreature->length(), inCreature));
+
+    mSpaceUsed += inCreature->length();
+
     return true;
 }
 
@@ -125,6 +129,8 @@ CellMap::removeCreature(Creature* inCreature)
     {
         CreatureList::iterator it = mCells.begin() + index;
         mCells.erase(it);
+        
+        mSpaceUsed -= inCreature->length();
     }
     
     assert(0);
@@ -134,6 +140,12 @@ bool
 CellMap::searchForSpace(address_t inAddress, u_int32_t inLength, ESearchDirection inSearchDirection) const
 {
     return false;
+}
+
+double
+CellMap::fullness() const
+{
+    return (double)mSpaceUsed / mSize;
 }
 
 void
