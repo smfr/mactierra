@@ -39,6 +39,8 @@ World::World()
 , mNextCopyError(0)
 , mFlawRate(0.001)
 , mNextFlawInstruction(0)
+, mCosmicRate(0.001)
+, mCosmicRayInstruction(0)
 , mSizeSelection(1.0)
 , mLeannessSelection(false)
 , mReapThreshold(0.8)
@@ -110,7 +112,9 @@ World::iterate(u_int32_t inNumCycles)
     u_int32_t   numCycles = tracing ? 1 : inNumCycles;      // unless tracing
     
     Creature*   curCreature = mTimeSlicer.currentCreature();
-    
+    if (!curCreature)
+        return;
+
     if (mCurCreatureCycles == 0)
         mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
     
@@ -119,7 +123,7 @@ World::iterate(u_int32_t inNumCycles)
         if (mCurCreatureCycles < mCurCreatureSliceCycles)
         {
             // do cosmic rays
-            
+            cosmicRay(mTimeSlicer.instructionsExecuted());
             
             // decide whether to throw in a flaw
             int32_t flaw = instructionFlaw(mTimeSlicer.instructionsExecuted());
@@ -215,6 +219,27 @@ World::mutateInstruction(instruction_t inInst, EMutationType inMutationType) con
             break;
     }
     return resultInst;
+}
+
+bool
+World::cosmicRay(u_int64_t inInstructionCount)
+{
+    if (mCosmicRate > 0.0 && inInstructionCount == mCosmicRayInstruction)
+    {
+        RandomLib::Random rng(mRNG);
+        address_t   target = rng.Integer(mSoupSize);
+
+        instruction_t inst = mSoup->instructionAtAddress(target);
+        inst = mutateInstruction(inst, mutationType());
+        mSoup->setInstructionAtAddress(target, inst);
+        
+        RandomLib::ExponentialDistribution<double> expDist;
+        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mCosmicRate));
+        assert(cosmicDelay > 0);
+        mCosmicRayInstruction = inInstructionCount + cosmicDelay;
+        return true;
+    }
+    return false;
 }
 
 #pragma mark -

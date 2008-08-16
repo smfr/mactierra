@@ -58,6 +58,7 @@ public:
     };
     instruction_t   mutateInstruction(instruction_t inInst, EMutationType inMutationType) const;
 
+    void            cosmicRay();
 
     // settings
 
@@ -91,6 +92,7 @@ protected:
     void            handleDeath(Creature* inCreature);
 
     int32_t         instructionFlaw(u_int64_t inInstructionCount);
+    bool            cosmicRay(u_int64_t inInstructionCount);
 
 protected:
 
@@ -133,6 +135,9 @@ protected:
     
     double          mFlawRate;
     u_int64_t       mNextFlawInstruction;
+
+    double          mCosmicRate;
+    u_int64_t       mCosmicRayInstruction;
     
     double          mSizeSelection;             // size selection
     bool            mLeannessSelection;         // select for "lean" creatures
