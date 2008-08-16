@@ -12,6 +12,7 @@
 
 #include "mt_world.h"
 
+#include "mt_cellmap.h"
 #include "mt_creature.h"
 #include "mt_executionUnit0.h"
 #include "mt_instructionSet.h"
@@ -22,6 +23,7 @@ namespace MacTierra {
 World::World()
 : mRNG(0)
 , mSoup(NULL)
+, mCellMap(NULL)
 , mNextCreatureID(1)
 , mSliceSizeVariance(0.3)
 , mExecution(NULL)
@@ -37,15 +39,17 @@ World::~World()
 {
     destroyCreatures();
     delete mSoup;
+    delete mCellMap;
     delete mExecution;
 }
 
 void
 World::initializeSoup(u_int32_t inSoupSize)
 {
-    assert(!mSoup);
+    assert(!mSoup && !mCellMap);
     mSoup = new Soup(inSoupSize);
-    
+    mCellMap = new CellMap(inSoupSize);
+
     mExecution = new ExecutionUnit0();
     
     // FIXME get real number

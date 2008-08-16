@@ -45,6 +45,14 @@ public:
     address_t       location() const { return mLocation; }
     void            setLocation(address_t inLocation) { mLocation = inLocation; }
 
+    bool            containsAddress(address_t inAddress, u_int32_t inSoupSize) const
+                    {
+                        // This has to take wrapping into account
+                        address_t endAddress = (mLocation + mLength) % inSoupSize;
+                        return (endAddress > mLocation) ? (inAddress >= mLocation && inAddress < endAddress)
+                                                        : (inAddress >= mLocation || inAddress < endAddress);     // wrapping case
+                    }
+                    
     int32_t         sliceSize() const   { return mSliceSize; }
     void            setSliceSize(int32_t inSize) { mSliceSize = inSize; }
 
@@ -57,8 +65,6 @@ public:
 
     address_t       addressFromOffset(int32_t inOffset) const;
     int32_t         offsetFromAddress(address_t inAddress) const;
-
-    bool            containsAddress(address_t inAddress) const;
     
     instruction_t   getSoupInstruction(int32_t inOffset) const;
 

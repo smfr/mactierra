@@ -71,17 +71,6 @@ Creature::offsetFromAddress(u_int32_t inAddress) const
 #endif
 }
 
-bool
-Creature::containsAddress(u_int32_t inAddress) const
-{
-    const u_int32_t soupSize = mSoup->soupSize();
-    u_int32_t endOffset = (mLocation + mLength) % soupSize;;
-    if (endOffset < mLocation)  // wrapping
-        return (inAddress >= mLocation) || (inAddress < endOffset);
-    
-    return (inAddress >= mLocation) && (inAddress < endOffset);
-}
-
 instruction_t
 Creature::getSoupInstruction(int32_t inOffset) const
 {

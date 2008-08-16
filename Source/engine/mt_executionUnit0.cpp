@@ -170,14 +170,15 @@ ExecutionUnit0::execute(Creature& inCreature, Soup& inSoup, int32_t inFlaw)
         case k_mov_iab: // Copy inst at address in bx to address in ax
             {
                 instruction_t   inst = inCreature.getSoupInstruction(cpu.mRegisters[k_bx]);
-                u_int32_t       targetAddress = inCreature.addressFromOffset(cpu.mRegisters[k_ax]);
+                u_int32_t       soupSize = inSoup.soupSize();
+                address_t       targetAddress = inCreature.addressFromOffset(cpu.mRegisters[k_ax]);
                 
                 if (inSoup.copyErrorPending())
                     inst = inSoup.mutateInstruction(inst, inSoup.mutationType());
                 
                 if (inSoup.globalWritesAllowed() || 
-                    inCreature.containsAddress(targetAddress) || 
-                    (inCreature.isDividing() && inCreature.daughterCreature()->containsAddress(targetAddress)))
+                    inCreature.containsAddress(targetAddress, soupSize) || 
+                    (inCreature.isDividing() && inCreature.daughterCreature()->containsAddress(targetAddress, soupSize)))
                 {
                 
                     inCreature.noteMoveToOffspring();

@@ -30,7 +30,7 @@ public:
     
 };
 
-#define TEST_CONDITION(c, m) if (!(c)) reportFailure(m);
+#define TEST_CONDITION(c) if (!(c)) reportFailure(#c);
 
 class TestRegistrar
 {

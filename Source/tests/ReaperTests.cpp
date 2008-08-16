@@ -58,10 +58,10 @@ ReaperTests::runTest()
     
     // test empty list
     Creature* head = mReaper->headCreature();
-    TEST_CONDITION(!head, "head should be 0");
+    TEST_CONDITION(!head);
     
-    TEST_CONDITION(!mReaper->conditionalMoveUp(*creature1), "should not have been able to move up");
-    TEST_CONDITION(!mReaper->conditionalMoveDown(*creature2), "should not have been able to move down");
+    TEST_CONDITION(!mReaper->conditionalMoveUp(*creature1));
+    TEST_CONDITION(!mReaper->conditionalMoveDown(*creature2));
 
     // add to list
     mReaper->addCreature(*creature1);
@@ -69,21 +69,20 @@ ReaperTests::runTest()
     
     mReaper->printCreatures();
     
-    TEST_CONDITION(mReaper->numberOfCreatures() == 2, "should be 2 creatures in the list");
-    TEST_CONDITION(mReaper->headCreature() == creature1, "creature 1 should be first");
+    TEST_CONDITION(mReaper->numberOfCreatures() == 2);
+    TEST_CONDITION(mReaper->headCreature() == creature1);
     
-    TEST_CONDITION(mReaper->conditionalMoveUp(*creature2), "should have been able to move up creature 2");
-    TEST_CONDITION(mReaper->headCreature() == creature2, "creature 2 should be first");
+    TEST_CONDITION(mReaper->conditionalMoveUp(*creature2));
+    TEST_CONDITION(mReaper->headCreature() == creature2);
 
     creature2->setNumErrors(1);
 
-    TEST_CONDITION(mReaper->conditionalMoveDown(*creature2), "should have been able to move down creature 2");
-    TEST_CONDITION(mReaper->headCreature() == creature1, "creature 1 should be first");
+    TEST_CONDITION(mReaper->conditionalMoveDown(*creature2));
+    TEST_CONDITION(mReaper->headCreature() == creature1);
 
     mReaper->removeCreature(*creature1);
-    TEST_CONDITION(mReaper->headCreature() == creature2, "creature 2 should be first");
+    TEST_CONDITION(mReaper->headCreature() == creature2);
     
 }
-
 
 TestRegistration reaperTestReg(new ReaperTests);

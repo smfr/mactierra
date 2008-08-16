@@ -56,8 +56,8 @@ SlicerTests::runTest()
     Creature*   creature2 = mWorld->createCreature();
     Creature*   creature3 = mWorld->createCreature();
 
-    TEST_CONDITION(creature1 && creature2 && creature3, "should have created creatures");
-    TEST_CONDITION(!mSlicer->currentCreature(), "should be no current creature");
+    TEST_CONDITION(creature1 && creature2 && creature3);
+    TEST_CONDITION(!mSlicer->currentCreature());
     
     mSlicer->insertCreature(*creature1);
     mSlicer->insertCreature(*creature2);
@@ -66,19 +66,19 @@ SlicerTests::runTest()
     // should be 2, 3, 1 at this point
     mSlicer->printCreatures();
     
-    TEST_CONDITION(mSlicer->currentCreature() == creature1, "creature1 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature1);
 
-    TEST_CONDITION(mSlicer->advance(), "should have rotated with cycling");
+    TEST_CONDITION(mSlicer->advance());
     mSlicer->printCreatures();
-    TEST_CONDITION(mSlicer->currentCreature() == creature2, "creature2 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature2);
 
-    TEST_CONDITION(!mSlicer->advance(), "should have been able to rotate without cycling");
+    TEST_CONDITION(!mSlicer->advance());
     mSlicer->printCreatures();
-    TEST_CONDITION(mSlicer->currentCreature() == creature3, "creature3 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature3);
 
-    TEST_CONDITION(!mSlicer->advance(), "should have been able to rotate without cycling");
+    TEST_CONDITION(!mSlicer->advance());
     mSlicer->printCreatures();
-    TEST_CONDITION(mSlicer->currentCreature() == creature1, "creature1 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature1);
 
     Creature*   creature4 = mWorld->createCreature();
     // new creature should be added before the current item
@@ -86,9 +86,9 @@ SlicerTests::runTest()
 
     mSlicer->printCreatures();
 
-    TEST_CONDITION(mSlicer->currentCreature() == creature1, "creature1 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature1);
     mSlicer->removeCreature(*creature1);
-    TEST_CONDITION(mSlicer->currentCreature() == creature2, "creature2 should be current");
+    TEST_CONDITION(mSlicer->currentCreature() == creature2);
 
     mSlicer->printCreatures();
 

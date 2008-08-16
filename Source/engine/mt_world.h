@@ -23,6 +23,7 @@ namespace MacTierra {
 class Creature;
 class ExecutionUnit;
 class Soup;
+class CellMap;
 
 class World
 {
@@ -33,7 +34,8 @@ public:
 
     void        initializeSoup(u_int32_t inSoupSize);
 
-    Soup*       soup() const { return mSoup; }
+    Soup*       soup() const        { return mSoup; }
+    CellMap*    cellMap() const     { return mCellMap; }
 
     Creature*   createCreature();
 
@@ -58,10 +60,11 @@ protected:
 
     RandomLib::Random   mRNG;
 
-    Soup*       mSoup;
+    Soup*               mSoup;
+    CellMap*            mCellMap;
 
     // creature book keeping
-    creature_id mNextCreatureID;
+    creature_id         mNextCreatureID;
 
     // creatures hashed by ID
     typedef std::map<creature_id, Creature*>    CreatureIDMap;
