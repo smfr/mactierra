@@ -10,6 +10,7 @@
 #ifndef mt_creature_h
 #define mt_creature_h
 
+#include <vector>
 #include <boost/intrusive/list.hpp>
 
 #include "mt_engine.h"
@@ -30,6 +31,9 @@ public:
     SlicerListHook  mSlicerListHook;
     
 public:
+
+    typedef std::vector<instruction_t> genome_t;
+    
     Creature(creature_id inID, Soup* inOwningSoup);
 
     // zero out this creature's space in the soup
@@ -69,7 +73,8 @@ public:
     int32_t         offsetFromAddress(address_t inAddress) const;
     
     instruction_t   getSoupInstruction(int32_t inOffset) const;
-
+    void            getGenome(genome_t& outGenome) const;
+    
     // execute the mal instruction. can set cpu flag
     void            startDividing(Creature* inDaughter);
 

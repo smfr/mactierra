@@ -78,6 +78,18 @@ Creature::getSoupInstruction(int32_t inOffset) const
 }
 
 void
+Creature::getGenome(genome_t& outGenome) const
+{
+    outGenome.clear();
+    
+    outGenome.reserve(mLength);
+    // not the most efficient
+
+    for (u_int32_t i = 0; i < mLength; ++i)
+        outGenome.push_back(getSoupInstruction(i));
+}
+
+void
 Creature::startDividing(Creature* inDaughter)
 {
     assert(!mDividing && !mDaughter);
