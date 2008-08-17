@@ -82,6 +82,8 @@ ReaperTests::runTest()
 
     mReaper->removeCreature(*creature1);
     TEST_CONDITION(mReaper->headCreature() == creature2);
+
+    mReaper->printCreatures();
     
 }
 

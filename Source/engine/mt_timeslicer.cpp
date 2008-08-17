@@ -24,7 +24,7 @@ using namespace std;
 
 TimeSlicer::TimeSlicer(World& inWorld)
 : mWorld(inWorld)
-, mDefaultSliceSize(20)
+, mDefaultSliceSize(10)
 , mLastCycleInstructions(0)
 , mTotalInstructions(0)
 {

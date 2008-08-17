@@ -80,17 +80,23 @@ public:
     bool            transferRegistersToOffspring() const;
     void            setTransferRegistersToOffspring(bool inTransfer);
     
+    double          sliceSizeVariance() const { return mSliceSizeVariance; }
+    void            setSliceSizeVariance(double inVariance) { mSliceSizeVariance = inVariance; }
+
+    bool            clearReapedCreatuers() const { return mClearReapedCreatures; }
+    void            setClearReapedCreatuers(bool inClear) { mClearReapedCreatures = inClear; }
+    
     double          reapThreshold() const { return mReapThreshold; }
     void            setReapThreshold(double inThreshold) { mReapThreshold = inThreshold; }
     
     double          flawRate() const { return mFlawRate; }
-    void            setFlawRate(double inRate) { mFlawRate = inRate; }
+    void            setFlawRate(double inRate);
 
     double          cosmicRate() const { return mCosmicRate; }
-    void            setCosmicRate(double inRate) { mCosmicRate = inRate; }
+    void            setCosmicRate(double inRate);
 
     double          copyErrorRate() const { return mCopyErrorRate; }
-    void            setCopyErrorRate(double inRate) { mCopyErrorRate = inRate; }
+    void            setCopyErrorRate(double inRate);
 
 protected:
 
@@ -115,7 +121,7 @@ protected:
 
 protected:
 
-    RandomLib::Random   mRNG;
+    mutable RandomLib::Random   mRNG;
 
     u_int32_t           mSoupSize;
 
@@ -145,14 +151,17 @@ protected:
 
     // maybe package these up into a "flaws" object?
     double          mCopyErrorRate;
+    double          mMeanCopyErrorInterval;
     bool            mCopyErrorPending;
     u_int32_t       mCopiesSinceLastError;
     u_int32_t       mNextCopyError;
     
     double          mFlawRate;
+    double          mMeanFlawInterval;
     u_int64_t       mNextFlawInstruction;
 
     double          mCosmicRate;
+    double          mMeanCosmicTimeInterval;
     u_int64_t       mCosmicRayInstruction;
     
     double          mSizeSelection;             // size selection
@@ -165,7 +174,8 @@ protected:
     
     bool            mGlobalWritesAllowed;
     bool            mTransferRegistersToOffspring;
-
+    bool            mClearReapedCreatures;
+    
     EDaughterAllocationStrategy mDaughterAllocation;
 };
 

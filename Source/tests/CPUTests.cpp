@@ -40,7 +40,7 @@ CPUTests::setUp()
     mWorld->setFlawRate(0.0);
     mWorld->setCosmicRate(0.0);
     mWorld->setCopyErrorRate(0.0);
-    
+    mWorld->setSliceSizeVariance(0);
     mWorld->setDaughterAllocationStrategy(World::kPreferredAlloc);
     
     mWorld->initializeSoup(kSoupSize);
@@ -141,9 +141,9 @@ CPUTests::runTest()
 
     ++modelCPU.mInstructionPointer;
     
-    Creature* daughterCreature = creature->daughterCreature();
-    TEST_CONDITION(daughterCreature && creature->isDividing());
-    TEST_CONDITION(daughterCreature->location() == 180 && daughterCreature->length() == 80);
+    Creature* daughter1 = creature->daughterCreature();
+    TEST_CONDITION(daughter1 && creature->isDividing());
+    TEST_CONDITION(daughter1->location() == 180 && daughter1->length() == 80);
 
     modelCPU.mRegisters[k_ax] = 80;
     TEST_CONDITION(modelCPU == creature->cpu());
@@ -257,12 +257,14 @@ CPUTests::runTest()
 
     Creature::genome_t parentGenome, daughterGenome;
     creature->getGenome(parentGenome);
-    daughterCreature->getGenome(daughterGenome);
+    daughter1->getGenome(daughterGenome);
     TEST_CONDITION(parentGenome == daughterGenome);
     
     mWorld->iterate(1); // k_jmp
     modelCPU.mInstructionPointer = 27;
     TEST_CONDITION(modelCPU == creature->cpu());
+    
+    Creature* daughter2 = NULL;
     
     // now keep running and look for the second daughter
     bool done = false;
@@ -273,19 +275,23 @@ CPUTests::runTest()
         switch (creature->lastInstruction())
         {
             case k_mal:
-                daughterCreature = creature->daughterCreature();
-                TEST_CONDITION(daughterCreature && creature->isDividing());
-                TEST_CONDITION(daughterCreature->location() == 260 && daughterCreature->length() == 80);
+                daughter2 = creature->daughterCreature();
+                TEST_CONDITION(daughter2 && creature->isDividing());
+                TEST_CONDITION(daughter2->location() == 260 && daughter2->length() == 80);
                 break;
 
             case k_divide:
+                Creature::genome_t daughter2Genome;
+                daughter2->getGenome(daughter2Genome);
+                TEST_CONDITION(parentGenome == daughter2Genome);
+
                 done = true;
                 break;
         }
         
     }
     
-    
+    daughter1->clearDaughter();
 }
 
 TestRegistration cpuTestReg(new CPUTests);

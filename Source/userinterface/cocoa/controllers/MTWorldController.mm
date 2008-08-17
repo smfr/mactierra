@@ -50,6 +50,12 @@ using namespace MacTierra;
 - (void)createSoup:(u_int32_t)inSize
 {
     mWorld = new World();
+
+    mWorld->setFlawRate(8.34E-4);
+    mWorld->setCosmicRate(7.634E-9);
+    mWorld->setCopyErrorRate(1.0E-3);
+    mWorld->setSliceSizeVariance(2);
+
     mWorld->initializeSoup(inSize);
 
     // seed the soup

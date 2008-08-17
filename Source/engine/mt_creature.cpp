@@ -31,11 +31,9 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 {
 }
 
-
-void
-Creature::clearSpace()
+Creature::~Creature()
 {
-
+    BOOST_ASSERT(!mDaughter);
 }
 
 u_int32_t
@@ -90,6 +88,13 @@ Creature::getGenome(genome_t& outGenome) const
 }
 
 void
+Creature::clearSpace()
+{
+    for (u_int32_t i = 0; i < mLength; ++i)
+        mSoup->setInstructionAtAddress(addressFromOffset(i), 0);
+}
+
+void
 Creature::startDividing(Creature* inDaughter)
 {
     assert(!mDividing && !mDaughter);
@@ -114,8 +119,7 @@ Creature::divide(World& inWorld)
                 offspring->mCPU.mRegisters[i] = mCPU.mRegisters[i];
         }
 
-        mDaughter = NULL;
-        mDividing = false;
+        clearDaughter();
         return offspring;
     }
     
@@ -130,6 +134,14 @@ Creature::noteBirth()
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
 }
+
+void
+Creature::clearDaughter()
+{
+    mDaughter = NULL;
+    mDividing = false;
+}
+
 
 
 } // namespace MacTierra

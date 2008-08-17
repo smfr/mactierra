@@ -9,8 +9,10 @@
 
 #include "SlicerTests.h"
 
-
 #include <iostream>
+
+#include "RandomLib/Random.hpp"
+#include "RandomLib/ExponentialDistribution.hpp"
 
 #include "mt_creature.h"
 #include "mt_timeslicer.h"
@@ -19,7 +21,7 @@
 
 
 using namespace MacTierra;
-
+using namespace std;
 
 SlicerTests::SlicerTests()
 : mWorld(NULL)
@@ -91,6 +93,19 @@ SlicerTests::runTest()
     TEST_CONDITION(mSlicer->currentCreature() == creature2);
 
     mSlicer->printCreatures();
+
+    Creature*   testCreature = mWorld->createCreature();
+    testCreature->setLocation(100);
+
+    const double kSliceSizeVariance = 1;
+    cout << "Slice sizes" << endl;
+    for (u_int32_t i = 20; i < 1000; ++i)
+    {
+        testCreature->setLength(i);
+        testCreature->setSliceSize(mSlicer->initialSliceSizeForCreature(testCreature, 1));
+        cout << "Length " << i << ": " << testCreature->sliceSize() << " actual:" << mSlicer->sizeForThisSlice(testCreature, kSliceSizeVariance) << endl;
+    }
+
 
 }
 

@@ -35,14 +35,12 @@ public:
     typedef std::vector<instruction_t> genome_t;
     
     Creature(creature_id inID, Soup* inOwningSoup);
+    ~Creature();
 
     // zero out this creature's space in the soup
     creature_id     creatureID() const  { return mID; }
     
     Soup*           soup() const { return mSoup; }
-
-    // move to soup?
-    void            clearSpace();
 
     u_int32_t       length() const { return mLength; }
     void            setLength(u_int32_t inLength) { mLength = inLength; }
@@ -74,6 +72,9 @@ public:
     
     instruction_t   getSoupInstruction(int32_t inOffset) const;
     void            getGenome(genome_t& outGenome) const;
+
+    // move to soup?
+    void            clearSpace();
     
     // execute the mal instruction. can set cpu flag
     void            startDividing(Creature* inDaughter);
@@ -84,6 +85,8 @@ public:
     bool            isDividing() const          { return mDividing; }
     Creature*       daughterCreature() const    { return mDaughter; }
 
+    void            clearDaughter();
+    
     void            noteMoveToOffspring()       { ++mMovesToLastOffspring; }
 
     void            noteErrors()                { if (mCPU.mFlag) ++mNumErrors; }

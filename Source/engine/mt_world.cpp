@@ -34,18 +34,21 @@ World::World()
 , mSoup(NULL)
 , mCellMap(NULL)
 , mNextCreatureID(1)
-, mSliceSizeVariance(0.3)
+, mSliceSizeVariance(0.0)
 , mExecution(NULL)
 , mTimeSlicer(*this)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
 , mCopyErrorRate(0.0)
+, mMeanCopyErrorInterval(0.0)
 , mCopyErrorPending(false)
 , mCopiesSinceLastError(0)
 , mNextCopyError(0)
 , mFlawRate(0.0)
+, mMeanFlawInterval(0.0)
 , mNextFlawInstruction(0)
 , mCosmicRate(0.0)
+, mMeanCosmicTimeInterval(0.0)
 , mCosmicRayInstruction(0)
 , mSizeSelection(1.0)
 , mLeannessSelection(false)
@@ -53,6 +56,7 @@ World::World()
 , mMutationType(kAddOrDec)
 , mGlobalWritesAllowed(false)
 , mTransferRegistersToOffspring(false)
+, mClearReapedCreatures(true)
 , mDaughterAllocation(kPreferredAlloc)
 {
 }
@@ -70,6 +74,8 @@ World::initializeSoup(u_int32_t inSoupSize)
 {
     BOOST_ASSERT(!mSoup && !mCellMap);
     mSoupSize = inSoupSize;
+    
+    setCosmicRate(mCosmicRate); // recompute cosmic time interval which depends on soup size
     
     mSoup = new Soup(inSoupSize);
     mCellMap = new CellMap(inSoupSize);
@@ -94,11 +100,34 @@ World::createCreature()
 void
 World::eradicateCreature(Creature* inCreature)
 {
+    if (inCreature->isDividing())
+    {
+        Creature* daughterCreature = inCreature->daughterCreature();
+        BOOST_ASSERT(daughterCreature);
+        
+        if (mClearReapedCreatures)
+            daughterCreature->clearSpace();
+
+        mCellMap->removeCreature(daughterCreature);
+        
+        inCreature->clearDaughter();
+        
+        // daughter should not be in reaper or slicer yet.
+        delete daughterCreature;
+    }
+    
+    //mReaper.printCreatures();
+    
+    if (mClearReapedCreatures)
+        inCreature->clearSpace();
+
     // remove from cell map
     mCellMap->removeCreature(inCreature);
     
     // remove from slicer and reaper
     creatureRemoved(inCreature);
+    
+    delete inCreature;
 }
 
 Creature*
@@ -163,12 +192,12 @@ World::iterate(u_int32_t inNumCycles)
                 mReaper.conditionalMoveDown(*curCreature);
 
             // compute next copy error time
-            if  (mCopyErrorRate > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
+            if (mCopyErrorRate > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
             {
                 if (mCopyErrorPending)  // just did one
                 {
                     RandomLib::ExponentialDistribution<double> expDist;
-                    int32_t copyErrorDelay = expDist(mRNG, mCopyErrorRate);
+                    int32_t copyErrorDelay = expDist(mRNG, mMeanCopyErrorInterval);
                     BOOST_ASSERT(copyErrorDelay > 0);
                     mNextCopyError = copyErrorDelay;
                     mCopiesSinceLastError = 0;
@@ -188,10 +217,14 @@ World::iterate(u_int32_t inNumCycles)
         }
         else        // we are at the end of the slice for one creature
         {
-            
             // maybe reap
             if (mCellMap->fullness() > mReapThreshold)
-                eradicateCreature(mReaper.headCreature());
+            {
+                //mReaper.printCreatures();
+                Creature* doomedCreature = mReaper.headCreature();
+                //cout << "Reaping creature " << doomedCreature->creatureID() << " (" << doomedCreature->numErrors() << " errors)" << endl;
+                handleDeath(doomedCreature);
+            }
             
             // maybe kill off long-lived creatures
             
@@ -207,12 +240,13 @@ World::iterate(u_int32_t inNumCycles)
             if (!curCreature)
                 break;
 
+            // cout << "Running creature " << curCreature->creatureID() << endl;
+            
             // track the new creature for tracing
             
             mCurCreatureCycles = 0;
             mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
         }
-    
     }
     
     //cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
@@ -228,13 +262,13 @@ World::mutateInstruction(instruction_t inInst, EMutationType inMutationType) con
     {
         case kAddOrDec:
             {
-                int32_t delta = rng.Boolean() ? -1 : 1;
+                int32_t delta = mRNG.Boolean() ? -1 : 1;
                 resultInst = (inInst + kInstructionSetSize + delta) % kInstructionSetSize;
             }
             break;
 
         case kBitFlip:
-            resultInst ^= (1 << rng.Integer(5));
+            resultInst ^= (1 << mRNG.Integer(5));
             break;
 
         case kRandomChoice:
@@ -287,12 +321,10 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
         case kRandomAlloc:
             {
                 // Choose a random location within the addressing range
-                RandomLib::Random rng(mRNG);
-                
                 while (attempts < kMaxMalAttempts)
                 {
                     int32_t maxOffset = min((int32_t)mSoupSize, INT32_MAX);
-                    u_int32_t offset = rng.IntegerC(-maxOffset, maxOffset);
+                    u_int32_t offset = mRNG.IntegerC(-maxOffset, maxOffset);
                     location = (inParent.location() + offset) % mSoupSize;
                     
                     if (mCellMap->spaceAtAddress(location, inDaughterLength))
@@ -308,10 +340,8 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
         case kRandomPackedAlloc:
             {
                 // Choose a random location within the addressing range
-                RandomLib::Random rng(mRNG);
-                
                 int32_t maxOffset = min((int32_t)mSoupSize, INT32_MAX);
-                u_int32_t offset = rng.IntegerC(-maxOffset, maxOffset);
+                u_int32_t offset = mRNG.IntegerC(-maxOffset, maxOffset);
                 location = (inParent.location() + offset) % mSoupSize;
                 
                 foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
@@ -383,11 +413,10 @@ World::instructionFlaw(u_int64_t inInstructionCount)
 {
     if (mFlawRate > 0 && inInstructionCount == mNextFlawInstruction)
     {
-        RandomLib::Random rng(mRNG);
-        int32_t theFlaw = rng.Boolean() ? 1 : -1;
+        int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
 
         RandomLib::ExponentialDistribution<double> expDist;
-        int64_t flawDelay = static_cast<int64_t>(expDist(mRNG, mFlawRate));
+        int64_t flawDelay = static_cast<int64_t>(expDist(mRNG, mMeanFlawInterval));
         BOOST_ASSERT(flawDelay > 0);
         mNextFlawInstruction = inInstructionCount + flawDelay;
         
@@ -409,7 +438,7 @@ World::cosmicRay(u_int64_t inInstructionCount)
         mSoup->setInstructionAtAddress(target, inst);
         
         RandomLib::ExponentialDistribution<double> expDist;
-        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mCosmicRate));
+        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mMeanCosmicTimeInterval));
         BOOST_ASSERT(cosmicDelay > 0);
         mCosmicRayInstruction = inInstructionCount + cosmicDelay;
         return true;
@@ -479,6 +508,25 @@ World::setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy)
     mDaughterAllocation = inStrategy;
 }
 
+void
+World::setFlawRate(double inRate)
+{
+    mFlawRate = inRate;
+    mMeanFlawInterval = (inRate > 0.0) ? 1.0 / inRate : 0.0;
+}
 
+void
+World::setCosmicRate(double inRate)
+{
+    mCosmicRate = inRate;
+    mMeanCosmicTimeInterval = (inRate > 0.0) ? (1.0 / (inRate * mSoupSize)) : 0.0;
+}
+
+void
+World::setCopyErrorRate(double inRate)
+{
+    mCopyErrorRate = inRate;
+    mMeanCopyErrorInterval = (inRate > 0.0) ? 1.0 / inRate : 0.0;
+}
 
 } // namespace MacTierra

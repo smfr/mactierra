@@ -89,7 +89,6 @@ extern "C" int main()
 {
     cout << "Starting tests..." << endl;
 
-
     TestRegistrar::TestList& tests = TestRegistrar::testRegistrar()->testList();
 
     for (TestRegistrar::TestList::iterator it = tests.begin(); it != tests.end(); ++it)

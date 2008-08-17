@@ -235,7 +235,7 @@ ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
         daughterLength < kMinCreatureSize ||
         (daughterLength > inCreature.length() * kMaxDaughterSizeMultiple))
     {
-        cpu.flag();
+        cpu.setFlag();
         return;
     }
     
@@ -247,7 +247,7 @@ ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
     }
     else
     {
-        cpu.flag();
+        cpu.setFlag();
     }
 
 }
