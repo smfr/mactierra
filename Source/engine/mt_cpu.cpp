@@ -9,8 +9,9 @@
 
 #include "mt_cpu.h"
 
-#include <assert.h>
 #include <string.h>
+
+#include <boost/assert.hpp>
 
 namespace MacTierra {
 
@@ -27,7 +28,7 @@ Cpu::Cpu()
 void
 Cpu::push(int32_t d)
 {
-    assert(mStackPointer >= 0 && mStackPointer < kStackSize);
+    BOOST_ASSERT(mStackPointer >= 0 && mStackPointer < kStackSize);
 
     mStack[mStackPointer] = d;
     mStackPointer = (mStackPointer + 1) % kStackSize;

@@ -68,7 +68,7 @@ World::~World()
 void
 World::initializeSoup(u_int32_t inSoupSize)
 {
-    assert(!mSoup && !mCellMap);
+    BOOST_ASSERT(!mSoup && !mCellMap);
     mSoupSize = inSoupSize;
     
     mSoup = new Soup(inSoupSize);
@@ -118,7 +118,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setReferencedLocation(theCreature->location());
     
     bool inserted = mCellMap->insertCreature(theCreature);
-    assert(inserted);
+    BOOST_ASSERT(inserted);
     
     // add it to the various queues
     creatureAdded(theCreature);
@@ -169,7 +169,7 @@ World::iterate(u_int32_t inNumCycles)
                 {
                     RandomLib::ExponentialDistribution<double> expDist;
                     int32_t copyErrorDelay = expDist(mRNG, mCopyErrorRate);
-                    assert(copyErrorDelay > 0);
+                    BOOST_ASSERT(copyErrorDelay > 0);
                     mNextCopyError = copyErrorDelay;
                     mCopiesSinceLastError = 0;
                     mCopyErrorPending = false;
@@ -344,7 +344,7 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
         bool added = mCellMap->insertCreature(daughter);
         if (!added)
             cout << "adding daughter failed" << endl;
-        assert(added);
+        BOOST_ASSERT(added);
     }
     
     return daughter;
@@ -387,7 +387,7 @@ World::instructionFlaw(u_int64_t inInstructionCount)
 
         RandomLib::ExponentialDistribution<double> expDist;
         int64_t flawDelay = static_cast<int64_t>(expDist(mRNG, mFlawRate));
-        assert(flawDelay > 0);
+        BOOST_ASSERT(flawDelay > 0);
         mNextFlawInstruction = inInstructionCount + flawDelay;
         
         return theFlaw;
@@ -409,7 +409,7 @@ World::cosmicRay(u_int64_t inInstructionCount)
         
         RandomLib::ExponentialDistribution<double> expDist;
         int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mCosmicRate));
-        assert(cosmicDelay > 0);
+        BOOST_ASSERT(cosmicDelay > 0);
         mCosmicRayInstruction = inInstructionCount + cosmicDelay;
         return true;
     }
@@ -419,7 +419,7 @@ World::cosmicRay(u_int64_t inInstructionCount)
 void
 World::creatureAdded(Creature* inCreature)
 {
-    assert(inCreature->soup() == mSoup);
+    BOOST_ASSERT(inCreature->soup() == mSoup);
 
     mCreatureIDMap[inCreature->creatureID()] = inCreature;
     
@@ -430,7 +430,7 @@ World::creatureAdded(Creature* inCreature)
 void
 World::creatureRemoved(Creature* inCreature)
 {
-    assert(inCreature && inCreature->soup() == mSoup);
+    BOOST_ASSERT(inCreature && inCreature->soup() == mSoup);
 
     mReaper.removeCreature(*inCreature);
     mTimeSlicer.removeCreature(*inCreature);

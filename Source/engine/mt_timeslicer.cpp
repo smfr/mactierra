@@ -37,7 +37,7 @@ TimeSlicer::~TimeSlicer()
 void
 TimeSlicer::insertCreature(Creature& inCreature)
 {
-    assert(!inCreature.mSlicerListHook.is_linked());
+    BOOST_ASSERT(!inCreature.mSlicerListHook.is_linked());
     if (mSlicerList.empty())
     {
         mSlicerList.push_back(inCreature);
@@ -57,7 +57,7 @@ TimeSlicer::removeCreature(Creature& inCreature)
     if (mCurrentItem == target)
         advance();
     mSlicerList.erase(target);
-    assert(!inCreature.mSlicerListHook.is_linked());
+    BOOST_ASSERT(!inCreature.mSlicerListHook.is_linked());
 }
 
 Creature*

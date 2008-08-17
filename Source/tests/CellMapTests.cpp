@@ -79,11 +79,18 @@ CellMapTests::runTest()
     TEST_CONDITION(!cellMap->creatureAtAddress(0));
     TEST_CONDITION(!cellMap->creatureAtAddress(100));
 
+    address_t spaceAddr = 100;
+    TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 100);
+
     TEST_CONDITION(cellMap->insertCreature(creature1));
     cellMap->printCreatures();
 
     TEST_CONDITION(cellMap->gapBeforeIndex(0) == (kSoupSize - 100));
     TEST_CONDITION(cellMap->gapAfterIndex(0) == (kSoupSize - 100));
+
+    TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 200);
+    spaceAddr = 99;
+    TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 0);
 
     TEST_CONDITION(!cellMap->indexOfCreatureAtAddress(99, foundIndex));
     TEST_CONDITION(cellMap->indexOfCreatureAtAddress(100, foundIndex) && foundIndex == 0);
@@ -118,6 +125,11 @@ CellMapTests::runTest()
 
     TEST_CONDITION(cellMap->gapBeforeIndex(3) == (1000 - 500));
     TEST_CONDITION(cellMap->gapBeforeIndex(2) == 100);
+
+    spaceAddr = 300;
+    TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 300);
+    spaceAddr = 1023;
+    TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 900);
 
     TEST_CONDITION(cellMap->creatureAtAddress(1023));
     TEST_CONDITION(cellMap->creatureAtAddress(0));

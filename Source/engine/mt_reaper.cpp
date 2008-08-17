@@ -26,7 +26,7 @@ Reaper::~Reaper()
 void
 Reaper::addCreature(Creature& inCreature)
 {
-    assert(!inCreature.mReaperListHook.is_linked());
+    BOOST_ASSERT(!inCreature.mReaperListHook.is_linked());
     mReaperList.push_back(inCreature);
 }
 
@@ -34,7 +34,7 @@ void
 Reaper::removeCreature(Creature& inCreature)
 {
     mReaperList.erase(mReaperList.iterator_to(inCreature));
-    assert(!inCreature.mReaperListHook.is_linked());
+    BOOST_ASSERT(!inCreature.mReaperListHook.is_linked());
 }
 
 bool

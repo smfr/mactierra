@@ -13,6 +13,7 @@
 
 #include "mt_ancestor.h"
 #include "mt_cpu.h"
+#include "mt_instructionSet.h"
 #include "mt_soup.h"
 #include "mt_world.h"
 
@@ -142,9 +143,9 @@ CPUTests::runTest()
     
     Creature* daughterCreature = creature->daughterCreature();
     TEST_CONDITION(daughterCreature && creature->isDividing());
-    TEST_CONDITION(daughterCreature->location() == 20 && daughterCreature->length() == 80);
+    TEST_CONDITION(daughterCreature->location() == 180 && daughterCreature->length() == 80);
 
-    modelCPU.mRegisters[k_ax] = -80;
+    modelCPU.mRegisters[k_ax] = 80;
     TEST_CONDITION(modelCPU == creature->cpu());
 
     mWorld->iterate(1); // k_call
@@ -202,7 +203,6 @@ CPUTests::runTest()
         else
         {
             ++modelCPU.mInstructionPointer;
-        
         }
 
         ++modelCPU.mInstructionPointer;
@@ -263,6 +263,28 @@ CPUTests::runTest()
     mWorld->iterate(1); // k_jmp
     modelCPU.mInstructionPointer = 27;
     TEST_CONDITION(modelCPU == creature->cpu());
+    
+    // now keep running and look for the second daughter
+    bool done = false;
+    while (!done)
+    {
+        mWorld->iterate(1);
+    
+        switch (creature->lastInstruction())
+        {
+            case k_mal:
+                daughterCreature = creature->daughterCreature();
+                TEST_CONDITION(daughterCreature && creature->isDividing());
+                TEST_CONDITION(daughterCreature->location() == 260 && daughterCreature->length() == 80);
+                break;
+
+            case k_divide:
+                done = true;
+                break;
+        }
+        
+    }
+    
     
 }
 

@@ -7,9 +7,10 @@
  *
  */
 
-#include <assert.h>
 #include <stdlib.h>
 #include <new>
+
+#include <boost/assert.hpp>
 
 #include "mt_soup.h"
 
@@ -83,7 +84,7 @@ Soup::seachForTemplate(ESearchDirection inDirection, address_t& ioOffset, u_int3
 instruction_t
 Soup::instructionAtAddress(address_t inAddress) const
 {
-    assert(inAddress < mSoupSize);
+    BOOST_ASSERT(inAddress < mSoupSize);
     return *(mSoup + inAddress);
 }
 

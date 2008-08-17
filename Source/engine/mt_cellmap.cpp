@@ -48,7 +48,7 @@ bool
 CellMap::spaceAtAddress(address_t inAddress, u_int32_t inLength, size_t& outIndex) const
 {
     outIndex = -1;
-    assert(inAddress < mSize);
+    BOOST_ASSERT(inAddress < mSize);
     if (mCells.empty() && inLength <= mSize)
     {
         outIndex = 0;
@@ -75,7 +75,7 @@ CellMap::spaceAtAddress(address_t inAddress, u_int32_t inLength, size_t& outInde
     address_t requestEnd = inAddress + inLength;
     
     size_t index = indexAtOrBefore(inAddress);
-    assert(index < mCells.size());
+    BOOST_ASSERT(index < mCells.size());
     
     // check range at index
     if (mCells[index].containsOffset(inAddress, mSize))
@@ -134,19 +134,19 @@ CellMap::removeCreature(Creature* inCreature)
         return;
     }
     
-    assert(0);
+    BOOST_ASSERT(0);
 }
 
 // distance between start and end going forward (maybe wrapping)
 static inline u_int32_t forwardDelta(address_t inStart, address_t inEnd, u_int32_t inSize)
 {
-    return (inEnd > inStart) ? inEnd - inStart : (inEnd + inSize) - inStart;
+    return (inEnd >= inStart) ? inEnd - inStart : (inEnd + inSize) - inStart;
 }
 
 // distance between start and end going backwards (maybe wrapping)
 static inline u_int32_t backwardDelta(address_t inStart, address_t inEnd, u_int32_t inSize)
 {
-    return (inStart > inEnd) ? inStart - inEnd : inStart + inSize - inEnd;
+    return (inStart >= inEnd) ? inStart - inEnd : inStart + inSize - inEnd;
 }
 
 bool
@@ -155,6 +155,9 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
     const address_t startAddress = ioAddress;
     const size_t startIndex = indexAtOrBefore(startAddress);
     const size_t numCreatures = mCells.size();
+
+    if (numCreatures == 0)
+        return true;
 
     size_t curIndex = startIndex;
     bool maxedRange = false;
@@ -173,10 +176,10 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
                 while (true)
                 {
                     // pick one to advance
-                    u_int32_t   forwardOffset  = forwardDelta(startAddress, mCells[forwardIndex].start(), mSize);
-                    u_int32_t   backwardOffset = backwardDelta(startAddress, (mCells[curIndex].start() - inLength + mSize) % mSize, mSize);
+                    u_int32_t   forwardOffset  = forwardDelta(startAddress, mCells[forwardIndex].wrappedEnd(mSize), mSize);
+                    u_int32_t   backwardOffset = backwardDelta(startAddress, (mCells[backIndex].start() - inLength + mSize) % mSize, mSize);
                 
-                    if (!forwardWrapped && forwardOffset < backwardOffset)
+                    if (!forwardWrapped && forwardOffset <= backwardOffset)
                     {
                         if (gapAfterIndex(forwardIndex) >= inLength)
                         {
@@ -192,7 +195,7 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
                         if (gapBeforeIndex(backIndex) >= inLength)
                         {
                             foundGap = true;
-                            foundLocation = (mCells[forwardIndex].start() - inLength + mSize) % mSize;
+                            foundLocation = (mCells[backIndex].start() - inLength + mSize) % mSize;
                             break;
                         }
                         backIndex = (backIndex - 1 + numCreatures) % numCreatures;;
@@ -390,7 +393,7 @@ CellMap::indexAtOrBefore(address_t inAddress) const
         else
         {
             foundIndex = mid;
-            return true;
+            break;
         }
     }
     
@@ -408,7 +411,7 @@ CellMap::indexAtOrBefore(address_t inAddress) const
 u_int32_t
 CellMap::gapBeforeIndex(size_t inIndex) const
 {
-    assert(inIndex < mCells.size());
+    BOOST_ASSERT(inIndex < mCells.size());
 
     if (mCells.empty())
         return mSize;
@@ -433,7 +436,7 @@ CellMap::gapBeforeIndex(size_t inIndex) const
 u_int32_t
 CellMap::gapAfterIndex(size_t inIndex) const
 {
-    assert(inIndex < mCells.size());
+    BOOST_ASSERT(inIndex < mCells.size());
 
     if (mCells.empty())
         return mSize;
