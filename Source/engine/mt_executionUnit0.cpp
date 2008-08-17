@@ -239,8 +239,6 @@ ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
         return;
     }
     
-    
-    
     Creature*   daughter = inWorld.allocateSpaceForOffspring(inCreature, daughterLength);
     if (daughter)
     {
@@ -266,7 +264,7 @@ ExecutionUnit0::jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection 
     {
         // subtract one so that when we increment the IP later it points to the found location
         u_int32_t soupSize = inSoup.soupSize();
-        inCreature.setReferencedLocation((templateOffset + soupSize - 1) % soupSize);
+        inCreature.setReferencedLocation((templateOffset + templateLength + soupSize - 1) % soupSize);
     }
     else
     {
@@ -290,7 +288,7 @@ ExecutionUnit0::call(Creature& inCreature, Soup& inSoup)
         
         // subtract one so that when we increment the IP later it points to the found location
         u_int32_t soupSize = inSoup.soupSize();
-        inCreature.setReferencedLocation((templateOffset + soupSize - 1) % soupSize);
+        inCreature.setReferencedLocation((templateOffset + templateLength + soupSize - 1) % soupSize);
     }
     else
     {
@@ -311,11 +309,11 @@ ExecutionUnit0::address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirecti
     Cpu& cpu = inCreature.cpu();
 
     u_int32_t templateLength = 0;
-    u_int32_t templateOffset = inCreature.referencedLocation() + 1;
+    address_t templateOffset = inCreature.referencedLocation() + 1;
 
     if (inSoup.seachForTemplate(inDirection, templateOffset, templateLength))
     {
-        cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(templateOffset);
+        cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(templateOffset + templateLength);
         // Step past template
         cpu.mInstructionPointer += templateLength;
         cpu.mRegisters[k_cx] = templateLength;
