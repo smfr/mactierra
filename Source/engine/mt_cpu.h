@@ -10,6 +10,8 @@
 #ifndef mt_cpu_h
 #define mt_cpu_h
 
+#include <string.h>
+
 #include "mt_engine.h"
 #include "mt_isa.h"
 
@@ -30,6 +32,15 @@ public:
 
     void incrementIP(u_int32_t inSoupSize)  { mInstructionPointer = (mInstructionPointer + 1) % inSoupSize; }
 
+    bool operator==(const Cpu& inRHS) const
+    {
+        return memcmp(mRegisters, inRHS.mRegisters, sizeof(mRegisters)) == 0 &&
+               memcmp(mStack, inRHS.mStack, sizeof(mStack)) == 0 &&
+               mStackPointer == inRHS.mStackPointer &&
+               mInstructionPointer == inRHS.mInstructionPointer &&
+               mFlag == inRHS.mFlag;
+    }
+    
 public:
 
     int32_t     mRegisters[kNumRegisters];
