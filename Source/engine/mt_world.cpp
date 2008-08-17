@@ -215,8 +215,7 @@ World::iterate(u_int32_t inNumCycles)
     
     }
     
-    
-    cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
+    //cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
 }
 
 instruction_t
@@ -342,9 +341,11 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
         daughter->setLength(inDaughterLength);
     
         bool added = mCellMap->insertCreature(daughter);
-        if (!added)
-            cout << "adding daughter failed" << endl;
         BOOST_ASSERT(added);
+#ifdef NDEBUG
+        if (!added)
+            mCellMap->printCreatures();
+#endif
     }
     
     return daughter;

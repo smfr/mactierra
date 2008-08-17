@@ -87,21 +87,30 @@ CellMap::spaceAtAddress(address_t inAddress, u_int32_t inLength, size_t& outInde
         if (mCells[numCreatures - 1].containsOffset(inAddress, mSize))
             return false;
         
-        
         // make sure we're in the gap before the first, or between the first and second
-        bool canFit = requestEnd <= mCells[0].start() ||
-                      (inAddress >= mCells[0].end() && ((numCreatures == 1) || requestEnd <= mCells[1].start()));
-        if (!canFit)
-            return false;
+        if (requestEnd <= mCells[0].start())
+        {
+            outIndex = 0;
+            return true;
+        }
+        
+        if (inAddress >= mCells[0].end() && ((numCreatures == 1) || requestEnd <= mCells[1].start()))
+        {
+            outIndex = 1;
+            return true;
+        }
+
+        return false;
     }
     else
     {
         // check end of range with range after index
         if ((index < numCreatures - 1) && requestEnd > mCells[index + 1].start())
             return false;
+
+        outIndex = index + 1;
     }
     
-    outIndex = index + 1;
     return true;
 }
 
@@ -111,11 +120,14 @@ CellMap::insertCreature(Creature* inCreature)
     size_t insertionIndex;
     if (!spaceAtAddress(inCreature->location(), inCreature->length(), insertionIndex))
         return false;
-
+    
     // insert at the given index
     CreatureList::iterator insertPos = mCells.begin() + insertionIndex;
     mCells.insert(insertPos, CreatureCell(inCreature->location(), inCreature->length(), inCreature));
 
+    BOOST_ASSERT(insertionIndex == 0 || mCells[insertionIndex].start() > mCells[insertionIndex - 1].start());
+    BOOST_ASSERT(insertionIndex == mCells.size() - 1 || mCells[insertionIndex].start() < mCells[insertionIndex + 1].start());
+    
     mSpaceUsed += inCreature->length();
 
     return true;

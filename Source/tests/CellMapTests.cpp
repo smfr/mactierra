@@ -67,6 +67,10 @@ CellMapTests::runTest()
     creature4->setLocation(1000);
     creature4->setLength(100);
 
+    Creature*   creature5 = mWorld->createCreature();
+    creature5->setLocation(80);
+    creature5->setLength(20);
+
     TEST_CONDITION(creature1 && creature2 && creature3);
 
     CellMap*    cellMap = mWorld->cellMap();
@@ -142,6 +146,10 @@ CellMapTests::runTest()
     TEST_CONDITION(!cellMap->spaceAtAddress(104, 90));
     TEST_CONDITION(!cellMap->spaceAtAddress(1020, 6));
     TEST_CONDITION(!cellMap->spaceAtAddress(2, 4));
+
+    TEST_CONDITION(cellMap->insertCreature(creature5));
+
+    cellMap->printCreatures();
 
 }
 
