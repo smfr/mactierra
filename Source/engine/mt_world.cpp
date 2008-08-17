@@ -197,8 +197,12 @@ World::iterate(u_int32_t inNumCycles)
                 if (mCopyErrorPending)  // just did one
                 {
                     RandomLib::ExponentialDistribution<double> expDist;
-                    int32_t copyErrorDelay = expDist(mRNG, mMeanCopyErrorInterval);
-                    BOOST_ASSERT(copyErrorDelay > 0);
+                    int32_t copyErrorDelay;
+                    do
+                    {
+                        copyErrorDelay = expDist(mRNG, mMeanCopyErrorInterval);
+                    } while (copyErrorDelay <= 0);
+                    
                     mNextCopyError = copyErrorDelay;
                     mCopiesSinceLastError = 0;
                     mCopyErrorPending = false;
@@ -416,8 +420,12 @@ World::instructionFlaw(u_int64_t inInstructionCount)
         int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
 
         RandomLib::ExponentialDistribution<double> expDist;
-        int64_t flawDelay = static_cast<int64_t>(expDist(mRNG, mMeanFlawInterval));
-        BOOST_ASSERT(flawDelay > 0);
+        int64_t flawDelay;
+        do 
+        {
+            flawDelay = static_cast<int64_t>(expDist(mRNG, mMeanFlawInterval));
+        } while (flawDelay <= 0);
+
         mNextFlawInstruction = inInstructionCount + flawDelay;
         
         return theFlaw;
@@ -438,8 +446,12 @@ World::cosmicRay(u_int64_t inInstructionCount)
         mSoup->setInstructionAtAddress(target, inst);
         
         RandomLib::ExponentialDistribution<double> expDist;
-        int64_t cosmicDelay = static_cast<int64_t>(expDist(mRNG, mMeanCosmicTimeInterval));
-        BOOST_ASSERT(cosmicDelay > 0);
+        int64_t cosmicDelay;
+        do
+        {
+            cosmicDelay = static_cast<int64_t>(expDist(mRNG, mMeanCosmicTimeInterval));
+        } while (cosmicDelay <= 0);
+
         mCosmicRayInstruction = inInstructionCount + cosmicDelay;
         return true;
     }
