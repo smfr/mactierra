@@ -35,6 +35,13 @@ void
 CPUTests::setUp()
 {
     mWorld = new World();
+    
+    mWorld->setFlawRate(0.0);
+    mWorld->setCosmicRate(0.0);
+    mWorld->setCopyErrorRate(0.0);
+    
+    mWorld->setDaughterAllocationStrategy(World::kPreferredAlloc);
+    
     mWorld->initializeSoup(kSoupSize);
 }
 
@@ -187,6 +194,9 @@ CPUTests::runTest()
         {
             mWorld->iterate(1); // k_jmp
             
+            modelCPU.mInstructionPointer = 71;
+            TEST_CONDITION(modelCPU == creature->cpu());
+
             break;
         }
         else
@@ -216,12 +226,44 @@ CPUTests::runTest()
         mWorld->iterate(1); // k_jmp
         modelCPU.mInstructionPointer = 51;
         TEST_CONDITION(modelCPU == creature->cpu());
-
-
     }
 
+    mWorld->iterate(1); // k_pop_cx
+    modelCPU.mRegisters[k_cx] = modelCPU.pop();
+    ++modelCPU.mInstructionPointer;
+    TEST_CONDITION(modelCPU == creature->cpu());
 
+    mWorld->iterate(1); // k_pop_bx
+    modelCPU.mRegisters[k_bx] = modelCPU.pop();
+    ++modelCPU.mInstructionPointer;
+    TEST_CONDITION(modelCPU == creature->cpu());
 
+    mWorld->iterate(1); // k_pop_ax
+    modelCPU.mRegisters[k_ax] = modelCPU.pop();
+    ++modelCPU.mInstructionPointer;
+    TEST_CONDITION(modelCPU == creature->cpu());
+
+    mWorld->iterate(1); // k_ret
+
+    modelCPU.mInstructionPointer = modelCPU.pop();
+    TEST_CONDITION(modelCPU == creature->cpu());
+
+    mWorld->iterate(1); // k_divide
+
+    ++modelCPU.mInstructionPointer;
+    TEST_CONDITION(modelCPU == creature->cpu());
+
+    TEST_CONDITION(!creature->isDividing() && !creature->daughterCreature());
+
+    Creature::genome_t parentGenome, daughterGenome;
+    creature->getGenome(parentGenome);
+    daughterCreature->getGenome(daughterGenome);
+    TEST_CONDITION(parentGenome == daughterGenome);
+    
+    mWorld->iterate(1); // k_jmp
+    modelCPU.mInstructionPointer = 27;
+    TEST_CONDITION(modelCPU == creature->cpu());
+    
 }
 
 TestRegistration cpuTestReg(new CPUTests);

@@ -83,6 +83,15 @@ public:
     double          reapThreshold() const { return mReapThreshold; }
     void            setReapThreshold(double inThreshold) { mReapThreshold = inThreshold; }
     
+    double          flawRate() const { return mFlawRate; }
+    void            setFlawRate(double inRate) { mFlawRate = inRate; }
+
+    double          cosmicRate() const { return mCosmicRate; }
+    void            setCosmicRate(double inRate) { mCosmicRate = inRate; }
+
+    double          copyErrorRate() const { return mCopyErrorRate; }
+    void            setCopyErrorRate(double inRate) { mCopyErrorRate = inRate; }
+
 protected:
 
     creature_id     uniqueCreatureID();
