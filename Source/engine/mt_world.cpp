@@ -113,6 +113,9 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setLength(inLength);
     
     mSoup->injectInstructions(inAddress, inInstructions, inLength);
+
+    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSizeSelection));
+    theCreature->setReferencedLocation(theCreature->location());
     
     bool inserted = mCellMap->insertCreature(theCreature);
     assert(inserted);
@@ -180,6 +183,8 @@ World::iterate(u_int32_t inNumCycles)
             
             ++mCurCreatureCycles;
             mTimeSlicer.executedInstruction();
+
+            ++cycles;
         }
         else        // we are at the end of the slice for one creature
         {
@@ -208,7 +213,6 @@ World::iterate(u_int32_t inNumCycles)
             mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
         }
     
-        ++cycles;
     }
     
     
@@ -350,6 +354,7 @@ void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
     inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSizeSelection));
+    inChild->setReferencedLocation(inChild->location());
 
     // add to slicer and reaper
     creatureAdded(inChild);
