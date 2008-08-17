@@ -23,7 +23,7 @@ class ExecutionUnit
 public:
 
     ExecutionUnit();
-    ~ExecutionUnit();
+    virtual ~ExecutionUnit();
     
     // flaw is -1, 0, or 1
     // FIXME: get flaw from soup?

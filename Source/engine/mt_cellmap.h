@@ -33,10 +33,14 @@ struct cell_range
     {
     }
     
-    u_int32_t       start() const { return mStart; }
-    // unwrapped end
-    u_int32_t       end() const { return mStart + mLength; }
+    u_int32_t       start() const   { return mStart; }
+    u_int32_t       length() const  { return mLength; }
 
+    // unwrapped end
+    u_int32_t       end() const     { return mStart + mLength; }
+
+    u_int32_t       wrappedEnd(u_int32_t inSize) const     { return (mStart + mLength) % inSize; }
+    
     // takes wrapping into account
     bool            containsOffset(u_int32_t inOffset, u_int32_t inMapLength) const
                     {
@@ -69,7 +73,7 @@ public:
     void        removeCreature(Creature* inCreature);
 
     enum ESearchDirection { kBothways, kBackwards, kForwards };
-    bool        searchForSpace(address_t inAddress, u_int32_t inLength, ESearchDirection inSearchDirection) const;
+    bool        searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMaxRange, ESearchDirection inSearchDirection) const;
 
     double      fullness() const;
     
@@ -82,6 +86,9 @@ public:
 
     // index at which to insert a creature with the given address (does not check ranges)
     size_t      indexAtOrBefore(address_t inAddress) const;
+
+    u_int32_t   gapBeforeIndex(size_t inIndex) const;
+    u_int32_t   gapAfterIndex(size_t inIndex) const;
 
 protected:
 

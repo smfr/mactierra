@@ -77,11 +77,12 @@ Creature::getSoupInstruction(int32_t inOffset) const
     return mSoup->instructionAtAddress(addressFromOffset(inOffset));
 }
 
-bool
-Creature::startDividing()
+void
+Creature::startDividing(Creature* inDaughter)
 {
-
-    return false;
+    assert(!mDividing && !mDaughter);
+    mDaughter = inDaughter;
+    mDividing = true;
 }
 
 Creature*

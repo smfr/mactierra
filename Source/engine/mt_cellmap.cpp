@@ -131,14 +131,174 @@ CellMap::removeCreature(Creature* inCreature)
         mCells.erase(it);
         
         mSpaceUsed -= inCreature->length();
+        return;
     }
     
     assert(0);
 }
 
-bool
-CellMap::searchForSpace(address_t inAddress, u_int32_t inLength, ESearchDirection inSearchDirection) const
+// distance between start and end going forward (maybe wrapping)
+static inline u_int32_t forwardDelta(address_t inStart, address_t inEnd, u_int32_t inSize)
 {
+    return (inEnd > inStart) ? inEnd - inStart : (inEnd + inSize) - inStart;
+}
+
+// distance between start and end going backwards (maybe wrapping)
+static inline u_int32_t backwardDelta(address_t inStart, address_t inEnd, u_int32_t inSize)
+{
+    return (inStart > inEnd) ? inStart - inEnd : inStart + inSize - inEnd;
+}
+
+bool
+CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMaxRange, ESearchDirection inSearchDirection) const
+{
+    const address_t startAddress = ioAddress;
+    const size_t startIndex = indexAtOrBefore(startAddress);
+    const size_t numCreatures = mCells.size();
+
+    size_t curIndex = startIndex;
+    bool maxedRange = false;
+    bool foundGap = false;
+    address_t foundLocation = 0;
+    
+    switch (inSearchDirection)
+    {
+        case kBothways:
+            {
+                size_t forwardIndex = curIndex;
+                size_t backIndex = curIndex;
+                bool forwardWrapped = false;
+                bool backwardsWrapped = false;
+                
+                while (true)
+                {
+                    // pick one to advance
+                    u_int32_t   forwardOffset  = forwardDelta(startAddress, mCells[forwardIndex].start(), mSize);
+                    u_int32_t   backwardOffset = backwardDelta(startAddress, (mCells[curIndex].start() - inLength + mSize) % mSize, mSize);
+                
+                    if (!forwardWrapped && forwardOffset < backwardOffset)
+                    {
+                        if (gapAfterIndex(forwardIndex) >= inLength)
+                        {
+                            foundGap = true;
+                            foundLocation = mCells[forwardIndex].wrappedEnd(mSize);
+                            break;
+                        }
+                        forwardIndex = (forwardIndex + 1) % numCreatures;
+                        forwardWrapped = (forwardIndex == startIndex);
+                    }
+                    else if (!backwardsWrapped)
+                    {
+                        if (gapBeforeIndex(backIndex) >= inLength)
+                        {
+                            foundGap = true;
+                            foundLocation = (mCells[forwardIndex].start() - inLength + mSize) % mSize;
+                            break;
+                        }
+                        backIndex = (backIndex - 1 + numCreatures) % numCreatures;;
+                        backwardsWrapped = (backIndex == startIndex);
+                    }
+                    
+                    if ((forwardWrapped && backwardsWrapped) ||
+                        (forwardOffset > inMaxRange && backwardOffset > inMaxRange))
+                        break;
+                }
+            }
+            break;
+            
+        case kBackwards:
+            {
+                // look to start
+                for (curIndex = startIndex; curIndex >= 0; --curIndex)
+                {
+                    if (backwardDelta(startAddress, (mCells[curIndex].start() - inLength + mSize) % mSize, mSize) > inMaxRange)
+                    {
+                        maxedRange = true;
+                        break;
+                    }
+                    
+                    u_int32_t gap = gapBeforeIndex(curIndex);
+                    if (gap <= inLength)
+                    {
+                        foundGap = true;
+                        foundLocation = (mCells[curIndex].start() - inLength + mSize) % mSize;
+                        break;
+                    }
+                }
+                
+                if (maxedRange)
+                    break;
+
+                // wrap
+                for (curIndex = numCreatures - 1; curIndex > startIndex; --curIndex)
+                {
+                    if (backwardDelta(startAddress, (mCells[curIndex].start() - inLength + mSize) % mSize, mSize) > inMaxRange)
+                    {
+                        maxedRange = true;
+                        break;
+                    }
+                    
+                    u_int32_t gap = gapBeforeIndex(curIndex);
+                    if (gap <= inLength)
+                    {
+                        foundGap = true;
+                        foundLocation = mCells[curIndex].start() - inLength;
+                        break;
+                    }
+                }
+            }
+            break;
+            
+        case kForwards:
+            {
+                // look to end
+                for (curIndex = startIndex; curIndex < numCreatures; ++curIndex)
+                {
+                    if (forwardDelta(startAddress, mCells[curIndex].start(), mSize) > inMaxRange)
+                    {
+                        maxedRange = true;
+                        break;
+                    }
+                    
+                    u_int32_t gap = gapAfterIndex(curIndex);
+                    if (gap <= inLength)
+                    {
+                        foundGap = true;
+                        foundLocation = (mCells[curIndex].end() % mSize);
+                        break;
+                    }
+                }
+                
+                if (maxedRange)
+                    break;
+
+                // wrap
+                for (curIndex = 0; curIndex < startIndex; ++curIndex)
+                {
+                    if (forwardDelta(startAddress, mCells[curIndex].start(), mSize) > inMaxRange)
+                    {
+                        maxedRange = true;
+                        break;
+                    }
+                    
+                    u_int32_t gap = gapAfterIndex(curIndex);
+                    if (gap <= inLength)
+                    {
+                        foundGap = true;
+                        foundLocation = mCells[curIndex].end();
+                        break;
+                    }
+                }
+            }
+            break;
+    }
+    
+    if (foundGap)
+    {
+        ioAddress = foundLocation;
+        return true;
+    }
+    
     return false;
 }
 
@@ -242,6 +402,57 @@ CellMap::indexAtOrBefore(address_t inAddress) const
             foundIndex = lastIndex;
     }
     return min(max(foundIndex, 0), numCreatures - 1);
+}
+
+
+u_int32_t
+CellMap::gapBeforeIndex(size_t inIndex) const
+{
+    assert(inIndex < mCells.size());
+
+    if (mCells.empty())
+        return mSize;
+
+    const int32_t numCreatures = mCells.size();
+    if (numCreatures == 1)
+        return mSize - mCells[0].length();
+
+    if (inIndex == 0)
+    {
+        // last may wrap
+        size_t  lastIndex = numCreatures - 1;
+        if (mCells[lastIndex].wraps(mSize))
+            return mCells[0].start() - (mCells[lastIndex].end() % mSize);
+
+        return (mCells[0].start() + mSize) - mCells[lastIndex].end();
+    }
+
+    return mCells[inIndex].start() - mCells[inIndex - 1].end();
+}
+
+u_int32_t
+CellMap::gapAfterIndex(size_t inIndex) const
+{
+    assert(inIndex < mCells.size());
+
+    if (mCells.empty())
+        return mSize;
+
+    const int32_t numCreatures = mCells.size();
+    if (numCreatures == 1)
+        return mSize - mCells[0].length();
+
+    // last may wrap
+    size_t  lastIndex = numCreatures - 1;
+    if (inIndex == lastIndex)
+    {
+        if (mCells[lastIndex].wraps(mSize))
+            return mCells[0].start() - (mCells[lastIndex].end() % mSize);
+
+        return (mCells[0].start() + mSize) - mCells[lastIndex].end();
+    }
+
+    return mCells[inIndex + 1].start() - mCells[inIndex].end();
 }
 
 

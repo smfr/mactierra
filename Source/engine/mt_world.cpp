@@ -7,6 +7,9 @@
  *
  */
 
+#define __STDC_LIMIT_MACROS
+#include <stdint.h>
+
 #include <map>
 #include <iostream>
 
@@ -50,6 +53,7 @@ World::World()
 , mMutationType(kAddOrDec)
 , mGlobalWritesAllowed(false)
 , mTransferRegistersToOffspring(false)
+, mDaughterAllocation(kPreferredAlloc)
 {
 }
 
@@ -90,7 +94,11 @@ World::createCreature()
 void
 World::eradicateCreature(Creature* inCreature)
 {
-    // remove it from all the lists
+    // remove from cell map
+    mCellMap->removeCreature(inCreature);
+    
+    // remove from slicer and reaper
+    creatureRemoved(inCreature);
 }
 
 Creature*
@@ -250,10 +258,92 @@ World::destroyCreatures()
     for (CreatureIDMap::const_iterator it = mCreatureIDMap.begin(); it != theEnd; ++it)
     {
         Creature* theCreature = (*it).second;
+        
+        mCellMap->removeCreature(theCreature);
+
+        mTimeSlicer.removeCreature(*theCreature);
+        mReaper.removeCreature(*theCreature);
+
         delete theCreature;
     }
 
     mCreatureIDMap.clear();
+}
+
+// this allocates space for the daughter in the cell map,
+// but does not enter it into any lists or change the parent.
+Creature*
+World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength)
+{
+    int32_t     attempts = 0;
+    bool        foundLocation = false;
+    address_t   location = -1;
+
+    switch (daughterAllocationStrategy())
+    {
+        case kRandomAlloc:
+            {
+                // Choose a random location within the addressing range
+                RandomLib::Random rng(mRNG);
+                
+                while (attempts < kMaxMalAttempts)
+                {
+                    int32_t maxOffset = min((int32_t)mSoupSize, INT32_MAX);
+                    u_int32_t offset = rng.IntegerC(-maxOffset, maxOffset);
+                    location = (inParent.location() + offset) % mSoupSize;
+                    
+                    if (mCellMap->spaceAtAddress(location, inDaughterLength))
+                    {
+                        foundLocation = true;
+                        break;
+                    }
+                    ++attempts;
+                }
+            }
+            break;
+
+        case kRandomPackedAlloc:
+            {
+                // Choose a random location within the addressing range
+                RandomLib::Random rng(mRNG);
+                
+                int32_t maxOffset = min((int32_t)mSoupSize, INT32_MAX);
+                u_int32_t offset = rng.IntegerC(-maxOffset, maxOffset);
+                location = (inParent.location() + offset) % mSoupSize;
+                
+                foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
+            }
+            break;
+
+        case kClosestAlloc:
+            {
+                location = inParent.addressFromOffset(inParent.cpu().mRegisters[k_bx]);     // why bx?
+                foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
+            }
+            break;
+
+        case kPreferredAlloc:
+            {
+                location = inParent.addressFromOffset(inParent.cpu().mRegisters[k_ax]);     // why ax?
+                foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
+            }
+            break;
+    }
+
+    Creature*   daughter = NULL;
+    if (foundLocation)
+    {
+        daughter = createCreature();
+        daughter->setLocation(location);
+        daughter->setLength(inDaughterLength);
+    
+        bool added = mCellMap->insertCreature(daughter);
+        if (!added)
+            cout << "adding daughter failed" << endl;
+        assert(added);
+    }
+    
+    return daughter;
 }
 
 void
@@ -279,8 +369,7 @@ World::handleBirth(Creature* inParent, Creature* inChild)
 void
 World::handleDeath(Creature* inCreature)
 {
-    mCellMap->removeCreature(inCreature);
-    creatureRemoved(inCreature);
+    eradicateCreature(inCreature);
 }
 
 int32_t
@@ -375,7 +464,13 @@ World::setTransferRegistersToOffspring(bool inTransfer)
 World::EDaughterAllocationStrategy
 World::daughterAllocationStrategy() const
 {
-    return kRandomAlloc;
+    return mDaughterAllocation;
+}
+
+void
+World::setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy)
+{
+    mDaughterAllocation = inStrategy;
 }
 
 

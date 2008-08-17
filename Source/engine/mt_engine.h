@@ -28,9 +28,13 @@ const float kMinPropCopied  = 0.5f;
 // Minimum creature size
 const int32_t kMinCreatureSize = 12;
 
+// Max multiplier on daughter size
+const double kMaxDaughterSizeMultiple = 3.0;
+
 // Max number of attempts to find space for daughter
 const int32_t kMaxMalAttempts = 20;
 
+const u_int32_t kMaxMalSearchRange = 32767;
 
 
 typedef u_int32_t creature_id;

@@ -10,6 +10,8 @@
 #ifndef mt_soup_h
 #define mt_soup_h
 
+#include <string.h>
+
 #include "mt_engine.h"
 
 namespace MacTierra {
@@ -32,6 +34,27 @@ public:
     void            setInstructionAtAddress(address_t inAddress, instruction_t inInst);
 
     void            injectInstructions(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
+
+
+protected:
+
+    bool            searchForwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset);
+    bool            searchBackwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset);
+    bool            searchBothWaysForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset);
+    
+    bool            instructionsMatch(address_t inAddress, const instruction_t* inTemplate, u_int32_t inLen)
+                    {
+                        if (inAddress + inLen < mSoupSize)
+                            return (memcmp(mSoup + inAddress, inTemplate, inLen) == 0);
+
+                        for (u_int32_t i = 0; i < inLen; ++i)
+                        {
+                            address_t addr = (inAddress + i) % mSoupSize;
+                            if (*(mSoup + addr) != inTemplate[i])
+                                return false;
+                        }
+                        return true;
+                    }
 
 protected:
 

@@ -33,6 +33,8 @@ public:
 
 protected:
 
+    void memoryAllocate(Creature& inCreature, World& inWorld);
+
     void jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
     void call(Creature& inCreature, Soup& inSoup);
     void address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);

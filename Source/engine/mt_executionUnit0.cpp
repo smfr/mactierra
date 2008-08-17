@@ -18,6 +18,8 @@
 
 namespace MacTierra {
 
+using namespace std;
+
 ExecutionUnit0::ExecutionUnit0()
 {
 }
@@ -35,6 +37,8 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
     cpu.clearFlag();
     
     instruction_t   theInst = inCreature.getSoupInstruction(cpu.mInstructionPointer);
+    
+    //cout << "Executing instruction " << (int32_t)theInst << endl;
     
     switch (theInst)
     {
@@ -202,6 +206,7 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
             break;
             
         case k_mal:     // Allocate
+            memoryAllocate(inCreature, inWorld);
             break;
             
         case k_divide:  // Divide
@@ -221,21 +226,51 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
 #pragma mark -
 
 void
+ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
+{
+    Cpu& cpu = inCreature.cpu();
+
+    u_int32_t daughterLength = cpu.mRegisters[k_cx];
+    if (inCreature.isDividing() ||
+        daughterLength < kMinCreatureSize ||
+        (daughterLength > inCreature.length() * kMaxDaughterSizeMultiple))
+    {
+        cpu.flag();
+        return;
+    }
+    
+    
+    
+    Creature*   daughter = inWorld.allocateSpaceForOffspring(inCreature, daughterLength);
+    if (daughter)
+    {
+        cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(daughter->location());
+        inCreature.startDividing(daughter);
+    }
+    else
+    {
+        cpu.flag();
+    }
+
+}
+
+void
 ExecutionUnit0::jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection)
 {
     Cpu& cpu = inCreature.cpu();
 
     u_int32_t templateLength = 0;
-    u_int32_t soupOffset = inCreature.referencedLocation();
+    u_int32_t templateOffset = inCreature.referencedLocation() + 1;
 
-    if (inSoup.seachForTemplate(inDirection, soupOffset, templateLength))
+    if (inSoup.seachForTemplate(inDirection, templateOffset, templateLength))
     {
         // subtract one so that when we increment the IP later it points to the found location
         u_int32_t soupSize = inSoup.soupSize();
-        inCreature.setReferencedLocation((soupOffset + soupSize - 1) % soupSize);
+        inCreature.setReferencedLocation((templateOffset + soupSize - 1) % soupSize);
     }
     else
     {
+        cout << "Failed to find jump template" << endl;
         cpu.mInstructionPointer += templateLength;
         cpu.setFlag();
     }
@@ -247,18 +282,19 @@ ExecutionUnit0::call(Creature& inCreature, Soup& inSoup)
     Cpu& cpu = inCreature.cpu();
 
     u_int32_t templateLength = 0;
-    u_int32_t soupOffset = inCreature.referencedLocation();
+    u_int32_t templateOffset = inCreature.referencedLocation() + 1;
 
-    if (inSoup.seachForTemplate(Soup::kBothways, soupOffset, templateLength))
+    if (inSoup.seachForTemplate(Soup::kBothways, templateOffset, templateLength))
     {
         cpu.push(cpu.mInstructionPointer + templateLength + 1); // why the + 1?
         
         // subtract one so that when we increment the IP later it points to the found location
         u_int32_t soupSize = inSoup.soupSize();
-        inCreature.setReferencedLocation((soupOffset + soupSize - 1) % soupSize);
+        inCreature.setReferencedLocation((templateOffset + soupSize - 1) % soupSize);
     }
     else
     {
+        cout << "Failed to find call template" << endl;
         if (templateLength == 0)
             cpu.push(cpu.mInstructionPointer + 1);
         else
@@ -275,16 +311,20 @@ ExecutionUnit0::address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirecti
     Cpu& cpu = inCreature.cpu();
 
     u_int32_t templateLength = 0;
-    u_int32_t soupOffset = inCreature.referencedLocation();
-    if (inSoup.seachForTemplate(inDirection, soupOffset, templateLength))
+    u_int32_t templateOffset = inCreature.referencedLocation() + 1;
+
+    if (inSoup.seachForTemplate(inDirection, templateOffset, templateLength))
     {
-        cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(soupOffset);
+        cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(templateOffset);
         // Step past template
         cpu.mInstructionPointer += templateLength;
         cpu.mRegisters[k_cx] = templateLength;
     }
     else
+    {
+        cout << "Failed to find address template" << endl;
         cpu.setFlag();
+    }
 }
 
 

@@ -58,6 +58,7 @@ public:
     void            setSliceSize(int32_t inSize) { mSliceSize = inSize; }
 
     Cpu&            cpu() { return mCPU; }
+    const Cpu&      cpu() const { return mCPU; }
 
     // location pointed to by the instruction pointer
     u_int32_t       referencedLocation() const;
@@ -70,7 +71,7 @@ public:
     instruction_t   getSoupInstruction(int32_t inOffset) const;
 
     // execute the mal instruction. can set cpu flag
-    bool            startDividing();
+    void            startDividing(Creature* inDaughter);
 
     // execute the divide instruction. can set cpu flag
     Creature*       divide(World& inWorld);

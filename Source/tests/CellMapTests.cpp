@@ -19,6 +19,7 @@
 
 using namespace MacTierra;
 
+const u_int32_t kSoupSize = 1024;
 
 CellMapTests::CellMapTests()
 : mWorld(NULL)
@@ -34,7 +35,7 @@ void
 CellMapTests::setUp()
 {
     mWorld = new World();
-    mWorld->initializeSoup(1024);
+    mWorld->initializeSoup(kSoupSize);
 
 }
 
@@ -81,6 +82,9 @@ CellMapTests::runTest()
     TEST_CONDITION(cellMap->insertCreature(creature1));
     cellMap->printCreatures();
 
+    TEST_CONDITION(cellMap->gapBeforeIndex(0) == (kSoupSize - 100));
+    TEST_CONDITION(cellMap->gapAfterIndex(0) == (kSoupSize - 100));
+
     TEST_CONDITION(!cellMap->indexOfCreatureAtAddress(99, foundIndex));
     TEST_CONDITION(cellMap->indexOfCreatureAtAddress(100, foundIndex) && foundIndex == 0);
     TEST_CONDITION(cellMap->indexOfCreatureAtAddress(101, foundIndex) && foundIndex == 0);
@@ -104,10 +108,16 @@ CellMapTests::runTest()
 
     cellMap->printCreatures();
 
+    TEST_CONDITION(cellMap->gapBeforeIndex(0) == (100 - (1100 - kSoupSize)));
+    TEST_CONDITION(cellMap->gapAfterIndex(0) == (1000 - 200));
+
     TEST_CONDITION(cellMap->insertCreature(creature3));
     TEST_CONDITION(cellMap->insertCreature(creature2));
 
     cellMap->printCreatures();
+
+    TEST_CONDITION(cellMap->gapBeforeIndex(3) == (1000 - 500));
+    TEST_CONDITION(cellMap->gapBeforeIndex(2) == 100);
 
     TEST_CONDITION(cellMap->creatureAtAddress(1023));
     TEST_CONDITION(cellMap->creatureAtAddress(0));

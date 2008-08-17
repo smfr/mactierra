@@ -27,6 +27,7 @@ class CellMap;
 
 class World
 {
+friend class ExecutionUnit0;
 public:
 
     World();
@@ -71,6 +72,7 @@ public:
     };
     
     EDaughterAllocationStrategy daughterAllocationStrategy() const;
+    void            setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy);
     
     bool            globalWritesAllowed() const;
     void            setGlobalWritesAllowed(bool inAllowed);
@@ -87,6 +89,10 @@ protected:
 
     void            destroyCreatures();
 
+    // handle the 'mal' instruction
+    Creature*       allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
+
+    // birth happens on 'divide'
     void            handleBirth(Creature* inParent, Creature* inChild);
     void            handleDeath(Creature* inCreature);
 
@@ -96,6 +102,7 @@ protected:
     // these add and remove from the time slicer and reaper queues.
     void            creatureAdded(Creature* inCreature);
     void            creatureRemoved(Creature* inCreature);
+
 
 protected:
 
@@ -150,6 +157,7 @@ protected:
     bool            mGlobalWritesAllowed;
     bool            mTransferRegistersToOffspring;
 
+    EDaughterAllocationStrategy mDaughterAllocation;
 };
 
 

@@ -53,7 +53,7 @@ using namespace MacTierra;
     mWorld->initializeSoup(inSize);
 
     // seed the soup
-    mWorld->insertCreature(1024, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    mWorld->insertCreature(inSize / 2, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     
     [mSoupView setSoup:mWorld->soup()];
 }
@@ -93,7 +93,7 @@ using namespace MacTierra;
 
 - (void)runTimerFired:(NSTimer*)inTimer
 {
-    const u_int32_t kCycleCount = 100;
+    const u_int32_t kCycleCount = 10000;
     if (mWorld)
         mWorld->iterate(kCycleCount);
 
