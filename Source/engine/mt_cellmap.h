@@ -57,11 +57,14 @@ struct cell_range
 
 
 // The CellMap tracks which bytes of the soup are used by which creature.
-class CellMap {
+class CellMap
+{
 public:
+    typedef cell_range<Creature*> CreatureCell;
+    typedef std::vector<CreatureCell> CreatureList;
+
     CellMap(u_int32_t inSize);
     ~CellMap();
-
     
     // find creature which overlaps the given address
     Creature*   creatureAtAddress(address_t inAddress) const;
@@ -72,6 +75,8 @@ public:
     bool        insertCreature(Creature* inCreature);
     void        removeCreature(Creature* inCreature);
 
+    const CreatureList& cells() const { return mCells; }
+    
     enum ESearchDirection { kBothways, kBackwards, kForwards };
     bool        searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMaxRange, ESearchDirection inSearchDirection) const;
 
@@ -99,8 +104,6 @@ protected:
     u_int32_t       mSize;
     u_int32_t       mSpaceUsed;
     
-    typedef cell_range<Creature*> CreatureCell;
-    typedef std::vector<CreatureCell> CreatureList;
     CreatureList    mCells;
 };
 

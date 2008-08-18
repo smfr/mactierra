@@ -24,6 +24,8 @@ namespace MacTierra {
     NSTimer*                mRunTimer;      // hacky
 }
 
+@property (readonly) MTSoupView* soupView;
+
 - (void)createSoup:(u_int32_t)inSize;
 
 - (IBAction)toggleRunning:(id)sender;

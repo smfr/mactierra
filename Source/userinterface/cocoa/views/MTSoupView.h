@@ -11,21 +11,27 @@
 #import "MTCompositedGLView.h"
 
 namespace MacTierra {
-    class Soup;
+    class World;
 };
 
 
 @interface MTSoupView : MTCompositedGLView
 {
-    MacTierra::Soup*    mSoup;
+    MacTierra::World*   mWorld;
     
     int                 mSoupWidth;
     int                 mSoupHeight;
     
-    BOOL                mZoomToFit;
+    BOOL                zoomToFit;
+    BOOL                showCells;
+    BOOL                showInstructionPointers;
 }
 
-- (void)setSoup:(MacTierra::Soup*)inSoup;
-- (MacTierra::Soup*)soup;
+- (void)setWorld:(MacTierra::World*)inWorld;
+- (MacTierra::World*)world;
+
+@property (assign) BOOL zoomToFit;
+@property (assign) BOOL showCells;
+@property (assign) BOOL showInstructionPointers;
 
 @end

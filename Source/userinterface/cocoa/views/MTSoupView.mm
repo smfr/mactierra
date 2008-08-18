@@ -8,46 +8,144 @@
 
 #import "MTSoupView.h"
 
+#import "mt_cellmap.h"
 #import "mt_soup.h"
+#import "mt_world.h"
+
+using namespace MacTierra;
+
+@interface MTSoupView(Private)
+
+- (void)setScalingCTM;
+- (void)drawCells:(NSRect)inDirtyRect;
+- (void)drawInstructionPointers:(NSRect)inDirtyRect;
+
+@end
+
+#pragma mark -
 
 @implementation MTSoupView
+
+@synthesize zoomToFit;
+@synthesize showCells;
+@synthesize showInstructionPointers;
 
 - (id)initWithFrame:(NSRect)inFrame
 {
     if ((self = [super initWithFrame:inFrame]))
     {
-        mZoomToFit = YES;
+        zoomToFit = YES;
+        showCells = NO;
+        showInstructionPointers = NO;
     }
     return self;
 }
 
-- (void)setSoup:(MacTierra::Soup*)inSoup
+- (void)setWorld:(MacTierra::World*)inWorld
 {
-    mSoup = inSoup;
+    mWorld = inWorld;
     
     const int kSoupWidth = 512;
     mSoupWidth = kSoupWidth;
-    mSoupHeight = mSoup->soupSize() / kSoupWidth;
+    mSoupHeight = mWorld->soupSize() / kSoupWidth;
     
     [self setGLOptions];
 }
 
-- (MacTierra::Soup*)soup
+- (MacTierra::World*)world
 {
-    return mSoup;
+    return mWorld;
 }
 
 - (void)drawRect:(NSRect)inDirtyRect
 {
     [super drawRect:inDirtyRect];
+    
+    [NSGraphicsContext saveGraphicsState];
+    [self setScalingCTM];
+
+    if (showCells)
+        [self drawCells:inDirtyRect];
+
+    if (showInstructionPointers)
+        [self drawInstructionPointers:inDirtyRect];
+
+    [NSGraphicsContext restoreGraphicsState];
 }
+
+- (void)setScalingCTM
+{
+    // set the CTM to match the zooming that GL does
+
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+
+    if (zoomToFit)
+    {
+        // glPixelZoom((GLfloat)mGlWidth / mSoupWidth, (GLfloat)mGlHeight / mSoupHeight);
+
+    }
+    else
+    {
+        // glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+    }
+
+}
+
+- (void)drawCells:(NSRect)inDirtyRect
+{
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+
+    [[NSColor blueColor] set];
+    
+    CellMap*    cellMap = mWorld->cellMap();
+    const u_int32_t soupSize = mWorld->soupSize();
+    
+    CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
+    for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
+    {
+        const CellMap::CreatureCell curCell = *it;
+        
+        int startLine   = curCell.start() / mSoupWidth;
+        int endLine     = curCell.wrappedEnd(soupSize) / mSoupWidth;
+        
+        int startCol    = curCell.start() % mSoupWidth;
+        int endCol      = curCell.wrappedEnd(soupSize) % mSoupWidth;
+        
+        CGContextBeginPath(cgContext);
+        
+        if (curCell.wraps(soupSize))
+        {
+        }
+        else
+        {
+        
+            for (int i = startLine; i <= endLine; ++i)
+            {
+                CGPoint startPoint = CGPointMake((i == startLine) ? startCol : 0, i);
+                CGPoint endPoint   = CGPointMake((i == endLine - 1) ? endCol : mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y);
+                
+            }
+        }
+
+        CGContextStrokePath(cgContext);
+    }
+}
+
+- (void)drawInstructionPointers:(NSRect)inDirtyRect
+{
+}
+
+#pragma mark -
 
 - (NSRect)contentsRect
 {
 	NSRect viewBounds = [self bounds];
 	NSRect imageDestRect = viewBounds;
 
-	if (mSoup)
+	if (mWorld && mWorld->soup())
         imageDestRect = [self contentsRectForSize:NSMakeSize(mSoupWidth, mSoupHeight)];
     
 	return imageDestRect;
@@ -110,10 +208,10 @@
 
     glClear(GL_COLOR_BUFFER_BIT);
 
-    if (!mSoup)
+    if (!mWorld || !mWorld->soup())
         return;
 
-    if (mZoomToFit)
+    if (zoomToFit)
     {
         glPixelZoom((GLfloat)mGlWidth / mSoupWidth, (GLfloat)mGlHeight / mSoupHeight);
         glRasterPos2f(0, 0);
@@ -122,7 +220,7 @@
     {
         glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
     }
-    glDrawPixels(mSoupWidth, mSoupHeight, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, mSoup->soup());
+    glDrawPixels(mSoupWidth, mSoupHeight, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, mWorld->soup()->soup());
 
     [self checkForGLError];
 }

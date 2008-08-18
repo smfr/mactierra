@@ -37,7 +37,7 @@ using namespace MacTierra;
 
 - (void)dealloc
 {
-    [mSoupView setSoup:NULL];
+    [mSoupView setWorld:NULL];
 
     delete mWorld;
     [super dealloc];
@@ -45,6 +45,11 @@ using namespace MacTierra;
 
 - (void)awakeFromNib
 {
+}
+
+- (MTSoupView*)soupView
+{
+    return mSoupView;
 }
 
 - (void)createSoup:(u_int32_t)inSize
@@ -61,7 +66,7 @@ using namespace MacTierra;
     // seed the soup
     mWorld->insertCreature(inSize / 2, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     
-    [mSoupView setSoup:mWorld->soup()];
+    [mSoupView setWorld:mWorld];
 }
 
 - (IBAction)toggleRunning:(id)sender
