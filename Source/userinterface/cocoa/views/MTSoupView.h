@@ -21,6 +21,8 @@ namespace MacTierra {
     
     int                 mSoupWidth;
     int                 mSoupHeight;
+    
+    BOOL                mZoomToFit;
 }
 
 - (void)setSoup:(MacTierra::Soup*)inSoup;

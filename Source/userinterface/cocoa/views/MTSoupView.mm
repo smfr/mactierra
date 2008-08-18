@@ -10,13 +10,13 @@
 
 #import "mt_soup.h"
 
-
 @implementation MTSoupView
 
 - (id)initWithFrame:(NSRect)inFrame
 {
     if ((self = [super initWithFrame:inFrame]))
     {
+        mZoomToFit = YES;
     }
     return self;
 }
@@ -29,6 +29,7 @@
     mSoupWidth = kSoupWidth;
     mSoupHeight = mSoup->soupSize() / kSoupWidth;
     
+    [self setGLOptions];
 }
 
 - (MacTierra::Soup*)soup
@@ -50,6 +51,19 @@
         imageDestRect = [self contentsRectForSize:NSMakeSize(mSoupWidth, mSoupHeight)];
     
 	return imageDestRect;
+}
+
+- (BOOL)checkForGLError
+{
+    CGLContextObj cgl_ctx = mCGlContext;
+
+    GLenum gl_err;
+    if ((gl_err = glGetError()))
+    {
+        NSLog(@"OpenGL error %d", gl_err);
+        return true;
+    }
+    return false;
 }
 
 - (void)setGLOptions
@@ -85,11 +99,11 @@
     glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
     glDisable(GL_DITHER);
 
+    [self checkForGLError];
 
     glClearColor(0.3, 0.3, 0.3, 1.0);
 }
 
-// update the GL texture
 - (void)render
 {
     CGLContextObj cgl_ctx = mCGlContext;
@@ -99,15 +113,18 @@
     if (!mSoup)
         return;
 
-    glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+    if (mZoomToFit)
+    {
+        glPixelZoom((GLfloat)mGlWidth / mSoupWidth, (GLfloat)mGlHeight / mSoupHeight);
+        glRasterPos2f(0, 0);
+    }
+    else
+    {
+        glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+    }
     glDrawPixels(mSoupWidth, mSoupHeight, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, mSoup->soup());
 
-#if 1
-    GLenum gl_err;
-    if ((gl_err = glGetError()))
-        NSLog(@"BinaryImageView got OpenGL error %d", gl_err);
-#endif
-
+    [self checkForGLError];
 }
 
 
