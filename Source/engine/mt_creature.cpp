@@ -29,6 +29,7 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 , mNumErrors(0)
 , mMovesToLastOffspring(0)
 , mNumOffspring(0)
+, mNumIdenticalOffspring(0)
 {
 }
 
@@ -128,12 +129,38 @@ Creature::divide(World& inWorld)
     return NULL;
 }
 
+bool
+Creature::genomeIdenticalToCreature(const Creature& inOther) const
+{
+    if (!length() == inOther.length())
+        return false;
+
+    const u_int32_t soupSize = mSoup->soupSize();
+    const instruction_t* soupStart = mSoup->soup();
+    
+    address_t selfOffset = location();
+    address_t daughterOffset = inOther.location();
+
+    for (u_int32_t i = 0; i < length(); ++ i)
+    {
+        if (*(soupStart + selfOffset) != *(soupStart + daughterOffset))
+            return false;
+
+        selfOffset     = (selfOffset + 1) % soupSize;
+        daughterOffset = (daughterOffset + 1) % soupSize;
+    }
+    return true;
+}
+
 void
-Creature::gaveBirth()
+Creature::gaveBirth(Creature* inDaughter)
 {
     mMovesToLastOffspring = 0;
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
+    
+    if (genomeIdenticalToCreature(*inDaughter))
+        ++mNumIdenticalOffspring;
 }
 
 void

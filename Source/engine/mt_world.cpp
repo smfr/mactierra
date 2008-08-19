@@ -404,7 +404,7 @@ World::handleBirth(Creature* inParent, Creature* inChild)
     // inherit leanness?
 
 
-    inParent->gaveBirth();
+    inParent->gaveBirth(inChild);
     inChild->wasBorn();
 }
 

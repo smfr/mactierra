@@ -102,8 +102,10 @@ public:
 
     instruction_t   lastInstruction() const     { return mLastInstruction; }
 
+    bool            genomeIdenticalToCreature(const Creature& inOther) const;
+    
     // called on parent
-    void            gaveBirth();
+    void            gaveBirth(Creature* inDaughter);
     void            wasBorn();
     
     bool            isEmbryo() const { return !mBorn; }
@@ -144,6 +146,7 @@ protected:
     u_int32_t       mMovesToLastOffspring;
 
     u_int32_t       mNumOffspring;
+    u_int32_t       mNumIdenticalOffspring;
     
     // leanness stuff
     
