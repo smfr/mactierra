@@ -10,7 +10,7 @@
 
 #import "MTSoupView.h"
 
-#import "mt_ancestor.h"
+#import "MT_Ancestor.h"
 #import "mt_cellmap.h"
 #import "mt_world.h"
 

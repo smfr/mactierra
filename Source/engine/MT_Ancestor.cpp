@@ -1,5 +1,5 @@
 /*
- *  mt_ancestor.cpp
+ *  MT_Ancestor.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/16/08.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "mt_ancestor.h"
+#include "MT_Ancestor.h"
 
 namespace MacTierra {
 

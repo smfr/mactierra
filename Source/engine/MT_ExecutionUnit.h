@@ -1,5 +1,5 @@
 /*
- *  mt_executionUnit.h
+ *  MT_ExecutionUnit.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,10 +7,10 @@
  *
  */
 
-#ifndef mt_executionUnit_h
-#define mt_executionUnit_h
+#ifndef MT_ExecutionUnit_h
+#define MT_ExecutionUnit_h
 
-#include "mt_engine.h"
+#include "MT_Engine.h"
 
 namespace MacTierra {
 
@@ -40,4 +40,4 @@ protected:
 } // namespace MacTierra
 
 
-#endif // mt_executionUnit_h
+#endif // MT_ExecutionUnit_h

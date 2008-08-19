@@ -2,15 +2,15 @@
  *  mactierra.cpp
  *  MacTierra
  *
- *  Created by Simon Fraser on 8/15/08.
+ *  Created by Simon Fraser onMT_A 8/15/08.
  *  Copyright 2008 __MyCompanyName__. All rights reserved.
  *
  */
 
 #include "mactierra.h"
 
-#include "mt_world.h"
-#include "mt_ancestor.h"
+#include "MT_World.h"
+#include "MT_Ancestor.h"
 
 using namespace MacTierra;
 

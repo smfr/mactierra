@@ -1,5 +1,5 @@
 /*
- *  mt_reaper.h
+ *  MT_Reaper.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -9,13 +9,13 @@
 
 
 
-#ifndef mt_reaper_h
-#define mt_reaper_h
+#ifndef MT_Reaper_h
+#define MT_Reaper_h
 
 #include <boost/intrusive/list.hpp>
 
-#include "mt_engine.h"
-#include "mt_creature.h"
+#include "MT_Engine.h"
+#include "MT_Creature.h"
 
 namespace MacTierra {
 
@@ -54,4 +54,4 @@ protected:
 } // namespace MacTierra
 
 
-#endif // mt_reaper_h
+#endif // MT_Reaper_h

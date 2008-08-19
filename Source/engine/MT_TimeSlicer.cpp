@@ -1,5 +1,5 @@
 /*
- *  mt_timeslicer.cpp
+ *  MT_Timeslicer.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -13,10 +13,10 @@
 
 #include "NormalDistribution.hpp"
 
-#include "mt_timeslicer.h"
+#include "MT_Timeslicer.h"
 
-#include "mt_creature.h"
-#include "mt_world.h"
+#include "MT_Creature.h"
+#include "MT_World.h"
 
 namespace MacTierra {
 

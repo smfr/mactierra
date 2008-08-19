@@ -1,5 +1,5 @@
 /*
- *  mt_world.h
+ *  MT_World.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,16 +7,16 @@
  *
  */
 
-#ifndef mt_world_h
-#define mt_world_h
+#ifndef MT_World_h
+#define MT_World_h
 
 #include <map>
 #include "Random.hpp"
 
-#include "mt_engine.h"
+#include "MT_Engine.h"
 
-#include "mt_reaper.h"
-#include "mt_timeslicer.h"
+#include "MT_Reaper.h"
+#include "MT_Timeslicer.h"
 
 namespace MacTierra {
 
@@ -190,4 +190,4 @@ protected:
 
 } // namespace MacTierra
 
-#endif // mt_world_h
+#endif // MT_World_h

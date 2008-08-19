@@ -12,9 +12,9 @@
 
 #include <iostream>
 
-#include "mt_creature.h"
-#include "mt_cellmap.h"
-#include "mt_world.h"
+#include "MT_Creature.h"
+#include "MT_Cellmap.h"
+#include "MT_World.h"
 
 
 using namespace MacTierra;

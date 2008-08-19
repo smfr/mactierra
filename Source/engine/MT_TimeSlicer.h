@@ -1,5 +1,5 @@
 /*
- *  mt_timeslicer.h
+ *  MT_Timeslicer.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,13 +7,13 @@
  *
  */
 
-#ifndef mt_timeslicer_h
-#define mt_timeslicer_h
+#ifndef MT_Timeslicer_h
+#define MT_Timeslicer_h
 
 #include <boost/intrusive/list.hpp>
 
-#include "mt_engine.h"
-#include "mt_creature.h"
+#include "MT_Engine.h"
+#include "MT_Creature.h"
 
 namespace MacTierra {
 
@@ -82,4 +82,4 @@ protected:
 } // namespace MacTierra
 
 
-#endif // mt_timeslicer_h
+#endif // MT_Timeslicer_h

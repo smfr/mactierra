@@ -1,5 +1,5 @@
 /*
- *  mt_reaper.cpp
+ *  MT_Reaper.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "mt_reaper.h"
+#include "MT_Reaper.h"
 
 #include <iostream>
 

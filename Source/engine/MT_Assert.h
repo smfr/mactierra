@@ -1,5 +1,5 @@
 /*
- *  mt_assert.h
+ *  MT_Assert.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/17/08.

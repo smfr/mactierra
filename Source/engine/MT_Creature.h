@@ -1,5 +1,5 @@
 /*
- *  mt_creature.h
+ *  MT_Creature.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,14 +7,14 @@
  *
  */
 
-#ifndef mt_creature_h
-#define mt_creature_h
+#ifndef MT_Creature_h
+#define MT_Creature_h
 
 #include <vector>
 #include <boost/intrusive/list.hpp>
 
-#include "mt_engine.h"
-#include "mt_cpu.h"
+#include "MT_Engine.h"
+#include "MT_Cpu.h"
 
 namespace MacTierra {
 
@@ -156,4 +156,4 @@ protected:
 
 } // namespace MacTierra
 
-#endif // mt_creature_h
+#endif // MT_Creature_h

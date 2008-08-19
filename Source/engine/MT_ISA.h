@@ -1,5 +1,5 @@
 /*
- *  mt_isa.h
+ *  MT_Isa.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef mt_isa_h
-#define mt_isa_h
+#ifndef MT_Isa_h
+#define MT_Isa_h
 
 namespace MacTierra {
 
@@ -28,4 +28,4 @@ enum {
 } // namespace MacTierra
 
 
-#endif // mt_isa_h
+#endif // MT_Isa_h

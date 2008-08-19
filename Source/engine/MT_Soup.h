@@ -1,5 +1,5 @@
 /*
- *  mt_soup.h
+ *  MT_Soup.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,12 +7,12 @@
  *
  */
 
-#ifndef mt_soup_h
-#define mt_soup_h
+#ifndef MT_Soup_h
+#define MT_Soup_h
 
 #include <string.h>
 
-#include "mt_engine.h"
+#include "MT_Engine.h"
 
 namespace MacTierra {
 
@@ -67,4 +67,4 @@ protected:
 
 } // namespace MacTierra
 
-#endif // mt_soup_h
+#endif // MT_Soup_h

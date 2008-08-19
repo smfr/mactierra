@@ -1,5 +1,5 @@
 /*
- *  mt_assert.cpp
+ *  MT_Assert.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/17/08.
@@ -9,7 +9,7 @@
 
 #include <iostream>
 
-#include "mt_assert.h"
+#include "MT_Assert.h"
 
 namespace boost
 {

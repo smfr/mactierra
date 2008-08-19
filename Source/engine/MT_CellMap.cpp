@@ -1,5 +1,5 @@
 /*
- *  mt_cellmap.cpp
+ *  MT_Cellmap.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/12/08.
@@ -9,9 +9,9 @@
 
 #include <iostream>
 
-#include "mt_cellmap.h"
+#include "MT_Cellmap.h"
 
-#include "mt_creature.h"
+#include "MT_Creature.h"
 
 namespace MacTierra {
 

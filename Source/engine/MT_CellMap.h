@@ -1,5 +1,5 @@
 /*
- *  mt_cellmap.h
+ *  MT_Cellmap.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/12/08.
@@ -7,13 +7,13 @@
  *
  */
 
-#ifndef mt_cellmap_h
-#define mt_cellmap_h
+#ifndef MT_Cellmap_h
+#define MT_Cellmap_h
 
 #include <vector>
 
-#include "mt_engine.h"
-#include "mt_creature.h"
+#include "MT_Engine.h"
+#include "MT_Creature.h"
 
 namespace MacTierra {
 
@@ -111,5 +111,5 @@ protected:
 } // namespace MacTierra
 
 
-#endif // mt_cellmap_h
+#endif // MT_Cellmap_h
 

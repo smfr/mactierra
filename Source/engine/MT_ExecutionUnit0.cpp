@@ -1,5 +1,5 @@
 /*
- *  mt_executionUnit0.cpp
+ *  MT_ExecutionUnit0.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,14 +7,14 @@
  *
  */
 
-#include "mt_executionUnit0.h"
+#include "MT_ExecutionUnit0.h"
 
-#include "mt_creature.h"
-#include "mt_cpu.h"
-#include "mt_isa.h"
-#include "mt_instructionSet.h"
-#include "mt_soup.h"
-#include "mt_world.h"
+#include "MT_Creature.h"
+#include "MT_Cpu.h"
+#include "MT_Isa.h"
+#include "MT_InstructionSet.h"
+#include "MT_Soup.h"
+#include "MT_World.h"
 
 namespace MacTierra {
 

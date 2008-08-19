@@ -1,5 +1,5 @@
 /*
- *  mt_soup.cpp
+ *  MT_Soup.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -12,7 +12,7 @@
 
 #include <boost/assert.hpp>
 
-#include "mt_soup.h"
+#include "MT_Soup.h"
 
 namespace MacTierra {
 

@@ -14,10 +14,10 @@
 #include "RandomLib/Random.hpp"
 #include "RandomLib/ExponentialDistribution.hpp"
 
-#include "mt_creature.h"
-#include "mt_timeslicer.h"
-#include "mt_soup.h"
-#include "mt_world.h"
+#include "MT_Creature.h"
+#include "MT_Timeslicer.h"
+#include "MT_Soup.h"
+#include "MT_World.h"
 
 
 using namespace MacTierra;

@@ -1,5 +1,5 @@
 /*
- *  mt_ancestor.h
+ *  MT_Ancestor.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/16/08.
@@ -8,10 +8,10 @@
  */
 
 
-#ifndef mt_ancestor_h
-#define mt_ancestor_h
+#ifndef MT_Ancestor_h
+#define MT_Ancestor_h
 
-#include "mt_engine.h"
+#include "MT_Engine.h"
 
 namespace MacTierra {
 
@@ -101,4 +101,4 @@ const instruction_t kAncestor80aaa[] = {
 } // namespace MacTierra
 
 
-#endif // mt_ancestor_h
+#endif // MT_Ancestor_h

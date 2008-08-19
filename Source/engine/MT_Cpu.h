@@ -1,5 +1,5 @@
 /*
- *  mt_cpu.h
+ *  MT_Cpu.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,13 +7,13 @@
  *
  */
 
-#ifndef mt_cpu_h
-#define mt_cpu_h
+#ifndef MT_Cpu_h
+#define MT_Cpu_h
 
 #include <string.h>
 
-#include "mt_engine.h"
-#include "mt_isa.h"
+#include "MT_Engine.h"
+#include "MT_Isa.h"
 
 namespace MacTierra {
 
@@ -59,4 +59,4 @@ public:
 } // namespace MacTierra
 
 
-#endif // mt_cpu_h
+#endif // MT_Cpu_h

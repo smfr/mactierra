@@ -1,5 +1,5 @@
 /*
- *  mt_instructionSet.h
+ *  MT_InstructionSet.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef mt_instructionSet_h
-#define mt_instructionSet_h
+#ifndef MT_InstructionSet_h
+#define MT_InstructionSet_h
 
 namespace MacTierra {
 
@@ -56,5 +56,5 @@ const int32_t kInstructionSetSize = 32;
 } // namespace MacTierra
 
 
-#endif // mt_instructionSet_h
+#endif // MT_InstructionSet_h
 

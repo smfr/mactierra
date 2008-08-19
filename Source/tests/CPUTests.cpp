@@ -3,7 +3,7 @@
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/16/08.
- *  Copyright 2008 __MyCompanyName__. All rights reserved.
+ *  Copyright 2008 __MyCompanyName__.MT_A All rights reserved.
  *
  */
 
@@ -11,11 +11,11 @@
 
 #include "CPUTests.h"
 
-#include "mt_ancestor.h"
-#include "mt_cpu.h"
-#include "mt_instructionSet.h"
-#include "mt_soup.h"
-#include "mt_world.h"
+#include "MT_Ancestor.h"
+#include "MT_Cpu.h"
+#include "MT_InstructionSet.h"
+#include "MT_Soup.h"
+#include "MT_World.h"
 
 using namespace MacTierra;
 using namespace std;

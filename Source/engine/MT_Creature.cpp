@@ -1,5 +1,5 @@
 /*
- *  mt_creature.cpp
+ *  MT_Creature.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,10 +7,10 @@
  *
  */
 
-#include "mt_creature.h"
+#include "MT_Creature.h"
 
-#include "mt_soup.h"
-#include "mt_world.h"       // avoid?
+#include "MT_Soup.h"
+#include "MT_World.h"       // avoid?
 
 namespace MacTierra {
 

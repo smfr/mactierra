@@ -11,9 +11,9 @@
 
 #include <iostream>
 
-#include "mt_creature.h"
-#include "mt_reaper.h"
-#include "mt_soup.h"
+#include "MT_Creature.h"
+#include "MT_Reaper.h"
+#include "MT_Soup.h"
 
 
 using namespace MacTierra;

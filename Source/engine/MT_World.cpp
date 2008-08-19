@@ -1,5 +1,5 @@
 /*
- *  mt_world.cpp
+ *  MT_World.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -16,13 +16,13 @@
 #include "RandomLib/Random.hpp"
 #include "RandomLib/ExponentialDistribution.hpp"
 
-#include "mt_world.h"
+#include "MT_World.h"
 
-#include "mt_cellmap.h"
-#include "mt_creature.h"
-#include "mt_executionUnit0.h"
-#include "mt_instructionSet.h"
-#include "mt_soup.h"
+#include "MT_Cellmap.h"
+#include "MT_Creature.h"
+#include "MT_ExecutionUnit0.h"
+#include "MT_InstructionSet.h"
+#include "MT_Soup.h"
 
 namespace MacTierra {
 

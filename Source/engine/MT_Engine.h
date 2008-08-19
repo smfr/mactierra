@@ -1,5 +1,5 @@
 /*
- *  mt_engine.h
+ *  MT_Engine.h
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef mt_engine_h
-#define mt_engine_h
+#ifndef MT_Engine_h
+#define MT_Engine_h
 
 #include <stddef.h>
 #include <sys/types.h>
@@ -47,5 +47,5 @@ typedef u_int32_t address_t;
 } // namespace MacTierra
 
 
-#endif // mt_engine_h
+#endif // MT_Engine_h
 

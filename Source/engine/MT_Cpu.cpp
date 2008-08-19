@@ -1,5 +1,5 @@
 /*
- *  mt_cpu.cpp
+ *  MT_Cpu.cpp
  *  MacTierra
  *
  *  Created by Simon Fraser on 8/10/08.
@@ -7,7 +7,7 @@
  *
  */
 
-#include "mt_cpu.h"
+#include "MT_Cpu.h"
 
 #include <string.h>
 
