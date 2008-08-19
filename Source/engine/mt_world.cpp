@@ -152,6 +152,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     // add it to the various queues
     creatureAdded(theCreature);
     
+    theCreature->wasBorn();     // IVF, kinda
     return theCreature;
 }
 
@@ -403,7 +404,8 @@ World::handleBirth(Creature* inParent, Creature* inChild)
     // inherit leanness?
 
 
-    inParent->noteBirth();
+    inParent->gaveBirth();
+    inChild->wasBorn();
 }
 
 void

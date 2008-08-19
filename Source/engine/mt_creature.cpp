@@ -19,6 +19,7 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 , mSoup(inOwningSoup)
 , mDaughter(NULL)
 , mDividing(false)
+, mBorn(false)
 , mLength(0)
 , mLocation(0)
 , mSliceSize(0)
@@ -36,7 +37,7 @@ Creature::~Creature()
     BOOST_ASSERT(!mDaughter);
 }
 
-u_int32_t
+address_t
 Creature::referencedLocation() const
 {
     return addressFromOffset(mCPU.mInstructionPointer);
@@ -48,7 +49,7 @@ Creature::setReferencedLocation(u_int32_t inAddress)
     mCPU.mInstructionPointer = offsetFromAddress(inAddress);
 }
 
-u_int32_t
+address_t
 Creature::addressFromOffset(int32_t inOffset) const
 {
 #ifdef RELATIVE_ADDRESSING
@@ -128,11 +129,17 @@ Creature::divide(World& inWorld)
 }
 
 void
-Creature::noteBirth()
+Creature::gaveBirth()
 {
     mMovesToLastOffspring = 0;
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
+}
+
+void
+Creature::wasBorn()
+{
+    mBorn = true;
 }
 
 void

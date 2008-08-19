@@ -64,7 +64,7 @@ using namespace MacTierra;
     mWorld->initializeSoup(inSize);
 
     // seed the soup
-    mWorld->insertCreature(inSize / 2, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    mWorld->insertCreature(inSize / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     
     [mSoupView setWorld:mWorld];
 }

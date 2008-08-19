@@ -63,7 +63,7 @@ public:
     const Cpu&      cpu() const { return mCPU; }
 
     // location pointed to by the instruction pointer
-    u_int32_t       referencedLocation() const;
+    address_t       referencedLocation() const;
     // the the IP to point to the referenced location
     void            setReferencedLocation(u_int32_t inAddress);
 
@@ -102,8 +102,12 @@ public:
 
     instruction_t   lastInstruction() const     { return mLastInstruction; }
 
-    void            noteBirth();
+    // called on parent
+    void            gaveBirth();
+    void            wasBorn();
     
+    bool            isEmbryo() const { return !mBorn; }
+
     bool            operator==(const Creature& inRHS)
                     {
                         return mID == inRHS.creatureID();
@@ -124,6 +128,8 @@ protected:
     
     Creature*       mDaughter;
     bool            mDividing;
+    
+    bool            mBorn;              // false until parent divides
     
     u_int32_t       mLength;
     address_t       mLocation;          // position in soup

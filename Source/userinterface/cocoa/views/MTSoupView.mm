@@ -20,6 +20,12 @@ using namespace MacTierra;
 - (void)drawCells:(NSRect)inDirtyRect;
 - (void)drawInstructionPointers:(NSRect)inDirtyRect;
 
+- (NSPoint)soupAddressToSoupPoint:(address_t)inAddr;
+- (address_t)soupPointToSoupAddress:(NSPoint)inPoint;
+
+- (NSPoint)viewPointToSoupPoint:(NSPoint)inPoint;
+- (NSPoint)soupPointToViewPoint:(NSPoint)inPoint;
+
 @end
 
 #pragma mark -
@@ -57,6 +63,29 @@ using namespace MacTierra;
     return mWorld;
 }
 
+- (void)setShowCells:(BOOL)inShow
+{
+    if (inShow != showCells)
+    {
+        showCells = inShow;
+        [self setNeedsDisplay:YES];
+    }
+}
+
+- (void)setShowInstructionPointers:(BOOL)inShow
+{
+    if (inShow != showInstructionPointers)
+    {
+        showInstructionPointers = inShow;
+        [self setNeedsDisplay:YES];
+    }
+}
+
+- (BOOL)isFlipped
+{
+    return YES;
+}
+
 - (void)drawRect:(NSRect)inDirtyRect
 {
     [super drawRect:inDirtyRect];
@@ -76,26 +105,22 @@ using namespace MacTierra;
 - (void)setScalingCTM
 {
     // set the CTM to match the zooming that GL does
-
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 
     if (zoomToFit)
-    {
-        // glPixelZoom((GLfloat)mGlWidth / mSoupWidth, (GLfloat)mGlHeight / mSoupHeight);
-
-    }
+        CGContextScaleCTM(cgContext, (CGFloat)mGlWidth / mSoupWidth, (CGFloat)mGlHeight / mSoupHeight);
     else
-    {
-        // glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
-    }
-
+        CGContextTranslateCTM(cgContext, (mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
 }
 
 - (void)drawCells:(NSRect)inDirtyRect
 {
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 
-    [[NSColor blueColor] set];
+    NSColor* adultColor  = [[NSColor blueColor] colorWithAlphaComponent:0.5];
+    NSColor* embryoColor = [[NSColor grayColor] colorWithAlphaComponent:0.5];
+
+    CGContextSetLineWidth(cgContext, 1.0f);
     
     CellMap*    cellMap = mWorld->cellMap();
     const u_int32_t soupSize = mWorld->soupSize();
@@ -104,6 +129,7 @@ using namespace MacTierra;
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
     {
         const CellMap::CreatureCell curCell = *it;
+        const Creature* curCreature = curCell.mData;
         
         int startLine   = curCell.start() / mSoupWidth;
         int endLine     = curCell.wrappedEnd(soupSize) / mSoupWidth;
@@ -115,20 +141,42 @@ using namespace MacTierra;
         
         if (curCell.wraps(soupSize))
         {
+            int numLines = mSoupHeight;
+            
+            for (int i = startLine; i < numLines; ++i)
+            {
+                CGPoint startPoint = CGPointMake((i == startLine) ? startCol : 0, i);
+                CGPoint endPoint   = CGPointMake(mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
+            }
+
+            for (int i = 0; i <= endLine; ++i)
+            {
+                CGPoint startPoint = CGPointMake(0, i);
+                CGPoint endPoint   = CGPointMake((i == endLine) ? endCol : mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
+            }
         }
         else
         {
-        
             for (int i = startLine; i <= endLine; ++i)
             {
                 CGPoint startPoint = CGPointMake((i == startLine) ? startCol : 0, i);
-                CGPoint endPoint   = CGPointMake((i == endLine - 1) ? endCol : mSoupWidth, i);
+                CGPoint endPoint   = CGPointMake((i == endLine) ? endCol : mSoupWidth, i);
                 
-                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y);
-                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y);
-                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
             }
         }
+
+        if (curCreature->isEmbryo())
+            [embryoColor set];
+        else
+            [adultColor set];
 
         CGContextStrokePath(cgContext);
     }
@@ -136,7 +184,58 @@ using namespace MacTierra;
 
 - (void)drawInstructionPointers:(NSRect)inDirtyRect
 {
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+
+    const CGFloat kInstPointerRectBorderWidth = 1.0f;
+    CGContextSetLineWidth(cgContext, kInstPointerRectBorderWidth);
+    
+    NSColor* withinColor  = [[NSColor greenColor] colorWithAlphaComponent:0.5];
+    NSColor* outsideColor = [[NSColor orangeColor] colorWithAlphaComponent:0.5];
+    
+    CellMap*    cellMap = mWorld->cellMap();
+    const u_int32_t soupSize = mWorld->soupSize();
+    
+    CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
+    for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
+    {
+        const CellMap::CreatureCell curCell = *it;
+        const Creature* curCreature = curCell.mData;
+        
+        address_t instPointer = curCreature->referencedLocation();
+        bool isInCreature = curCreature->containsAddress(instPointer, soupSize);
+
+        if (isInCreature)
+            [withinColor set];
+        else
+            [outsideColor set];
+        
+        CGRect pointerRect = CGRectMake(instPointer % mSoupWidth - kInstPointerRectBorderWidth,
+                                        instPointer / mSoupWidth - kInstPointerRectBorderWidth,
+                                        1 + 2 * kInstPointerRectBorderWidth,
+                                        1 + 2 * kInstPointerRectBorderWidth);
+        CGContextStrokeEllipseInRect(cgContext, pointerRect);
+    }
+
 }
+
+- (NSPoint)soupAddressToSoupPoint:(address_t)inAddr
+{
+    return NSMakePoint(inAddr * mSoupWidth, inAddr / mSoupWidth);
+}
+
+- (address_t)soupPointToSoupAddress:(NSPoint)inPoint
+{
+    return ((address_t)inPoint.x + inPoint.y * mSoupWidth);
+}
+
+- (NSPoint)viewPointToSoupPoint:(NSPoint)inPoint
+{
+}
+
+- (NSPoint)soupPointToViewPoint:(NSPoint)inPoint
+{
+}
+
 
 #pragma mark -
 
@@ -213,12 +312,13 @@ using namespace MacTierra;
 
     if (zoomToFit)
     {
-        glPixelZoom((GLfloat)mGlWidth / mSoupWidth, (GLfloat)mGlHeight / mSoupHeight);
-        glRasterPos2f(0, 0);
+        glPixelZoom((GLfloat)mGlWidth / mSoupWidth, -(GLfloat)mGlHeight / mSoupHeight);
+        glRasterPos2f(0, mGlHeight);
     }
     else
     {
-        glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+        glPixelZoom(1, -1);
+        glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, mSoupHeight - (((float)mSoupHeight - mGlHeight) / 2.0));
     }
     glDrawPixels(mSoupWidth, mSoupHeight, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, mWorld->soup()->soup());
 
