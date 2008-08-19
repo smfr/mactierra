@@ -53,6 +53,15 @@
 		0FBB06A50E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06810E5A984B007F2A6B /* MT_ExecutionUnit0.cpp */; };
 		0FBB06A60E5A984B007F2A6B /* MT_Assert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06830E5A984B007F2A6B /* MT_Assert.cpp */; };
 		0FBB06A70E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06840E5A984B007F2A6B /* MT_Ancestor.cpp */; };
+		0FBB06FA0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06F90E5A9A78007F2A6B /* MT_Genebank.cpp */; };
+		0FBB06FB0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06F90E5A9A78007F2A6B /* MT_Genebank.cpp */; };
+		0FBB06FC0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06F90E5A9A78007F2A6B /* MT_Genebank.cpp */; };
+		0FBB07040E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07030E5A9B51007F2A6B /* MT_Inventory.cpp */; };
+		0FBB07050E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07030E5A9B51007F2A6B /* MT_Inventory.cpp */; };
+		0FBB07060E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07030E5A9B51007F2A6B /* MT_Inventory.cpp */; };
+		0FBB07110E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
+		0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
+		0FBB07130E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
@@ -115,6 +124,12 @@
 		0FBB06840E5A984B007F2A6B /* MT_Ancestor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Ancestor.cpp; sourceTree = "<group>"; };
 		0FBB06850E5A984B007F2A6B /* MT_Creature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Creature.h; sourceTree = "<group>"; };
 		0FBB06860E5A984B007F2A6B /* MT_ExecutionUnit0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_ExecutionUnit0.h; sourceTree = "<group>"; };
+		0FBB06F80E5A9A78007F2A6B /* MT_Genebank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Genebank.h; sourceTree = "<group>"; };
+		0FBB06F90E5A9A78007F2A6B /* MT_Genebank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Genebank.cpp; sourceTree = "<group>"; };
+		0FBB07020E5A9B51007F2A6B /* MT_Inventory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Inventory.h; sourceTree = "<group>"; };
+		0FBB07030E5A9B51007F2A6B /* MT_Inventory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Inventory.cpp; sourceTree = "<group>"; };
+		0FBB070F0E5A9BF0007F2A6B /* MT_Genotype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Genotype.h; sourceTree = "<group>"; };
+		0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Genotype.cpp; sourceTree = "<group>"; };
 		0FBB72120E534AFD00469B7C /* flat_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = flat_set.hpp; path = interprocess/containers/flat_set.hpp; sourceTree = "<group>"; };
 		0FBEC0430E56AF7A00ABB516 /* mactierra */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mactierra; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
@@ -250,7 +265,13 @@
 				0FBB06770E5A984B007F2A6B /* MT_ExecutionUnit.h */,
 				0FBB06810E5A984B007F2A6B /* MT_ExecutionUnit0.cpp */,
 				0FBB06860E5A984B007F2A6B /* MT_ExecutionUnit0.h */,
+				0FBB06F80E5A9A78007F2A6B /* MT_Genebank.h */,
+				0FBB06F90E5A9A78007F2A6B /* MT_Genebank.cpp */,
+				0FBB070F0E5A9BF0007F2A6B /* MT_Genotype.h */,
+				0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */,
 				0FBB06780E5A984B007F2A6B /* MT_InstructionSet.h */,
+				0FBB07020E5A9B51007F2A6B /* MT_Inventory.h */,
+				0FBB07030E5A9B51007F2A6B /* MT_Inventory.cpp */,
 				0FBB06700E5A984B007F2A6B /* MT_ISA.h */,
 				0FBB06800E5A984B007F2A6B /* MT_Reaper.cpp */,
 				0FBB067C0E5A984B007F2A6B /* MT_Reaper.h */,
@@ -499,6 +520,9 @@
 				0FBB069A0E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */,
 				0FBB069B0E5A984B007F2A6B /* MT_Assert.cpp in Sources */,
 				0FBB069C0E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */,
+				0FBB06FA0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */,
+				0FBB07040E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */,
+				0FBB07110E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -519,6 +543,9 @@
 				0FBB06A50E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */,
 				0FBB06A60E5A984B007F2A6B /* MT_Assert.cpp in Sources */,
 				0FBB06A70E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */,
+				0FBB06FC0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */,
+				0FBB07060E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */,
+				0FBB07130E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -544,6 +571,9 @@
 				0FBB068F0E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */,
 				0FBB06900E5A984B007F2A6B /* MT_Assert.cpp in Sources */,
 				0FBB06910E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */,
+				0FBB06FB0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */,
+				0FBB07050E5A9B51007F2A6B /* MT_Inventory.cpp in Sources */,
+				0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -670,7 +700,7 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = MacTierra;
 			};

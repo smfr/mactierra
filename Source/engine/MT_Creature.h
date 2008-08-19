@@ -10,6 +10,7 @@
 #ifndef MT_Creature_h
 #define MT_Creature_h
 
+#include <string>
 #include <vector>
 #include <boost/intrusive/list.hpp>
 
@@ -73,6 +74,9 @@ public:
     instruction_t   getSoupInstruction(int32_t inOffset) const;
     void            getGenome(genome_t& outGenome) const;
 
+    // this string can have embedded nulls. Not printable.
+    std::string     genotypeString() const;
+    
     // move to soup?
     void            clearSpace();
     

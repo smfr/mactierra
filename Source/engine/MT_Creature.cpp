@@ -14,6 +14,8 @@
 
 namespace MacTierra {
 
+using namespace std;
+
 Creature::Creature(creature_id inID, Soup* inOwningSoup)
 : mID(inID)
 , mSoup(inOwningSoup)
@@ -87,6 +89,18 @@ Creature::getGenome(genome_t& outGenome) const
 
     for (u_int32_t i = 0; i < mLength; ++i)
         outGenome.push_back(getSoupInstruction(i));
+}
+
+std::string
+Creature::genotypeString() const
+{
+    string  genotype;
+    genotype.reserve(length());
+    
+    for (u_int32_t i = 0; i < mLength; ++i)
+        genotype.push_back(getSoupInstruction(i));
+    
+    return genotype;
 }
 
 void
