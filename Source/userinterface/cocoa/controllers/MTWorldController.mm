@@ -11,6 +11,7 @@
 #import "MTSoupView.h"
 
 #import "mt_ancestor.h"
+#import "mt_cellmap.h"
 #import "mt_world.h"
 
 using namespace MacTierra;
@@ -26,6 +27,15 @@ using namespace MacTierra;
 #pragma mark -
 
 @implementation MTWorldController
+
+@synthesize running;
+@synthesize instructionsPerSecond;
+
++ (void)initialize
+{
+    [self setKeys:[NSArray arrayWithObject:@"running"]
+                                triggerChangeNotificationsForDependentKey:@"playPauseButtonTitle"];
+}
 
 - (id)init
 {
@@ -71,16 +81,42 @@ using namespace MacTierra;
 
 - (IBAction)toggleRunning:(id)sender
 {
-    if (mRunning)
+    if (running)
     {
         [self stopRunTimer];
-        mRunning = NO;
+        self.running = NO;
     }
     else
     {
         [self startRunTimer];
-        mRunning = YES;
+        self.running = YES;
     }
+}
+
+- (NSString*)playPauseButtonTitle
+{
+    return running ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
+}
+
+- (double)fullness
+{
+    return mWorld ? mWorld->cellMap()->fullness() : 0.0;
+}
+
+- (u_int64_t)totalInstructions
+{
+    return mWorld ? mWorld->timeSlicer().instructionsExecuted() : 0;
+}
+
+- (NSInteger)numberOfCreatures
+{
+    return mWorld ? mWorld->cellMap()->numCreatures() : 0;
+}
+
+- (void)documentClosing
+{
+    // have to break ref cycles
+    [self stopRunTimer];
 }
 
 #pragma mark -
@@ -92,8 +128,10 @@ using namespace MacTierra;
                                                 selector:@selector(runTimerFired:)
                                                 userInfo:nil
                                                  repeats:YES] retain];       // retain cycle
-}
 
+    mLastInstTime = CFAbsoluteTimeGetCurrent();
+    mLastInstructions = mWorld->timeSlicer().instructionsExecuted();
+}
 
 - (void)stopRunTimer
 {
@@ -104,11 +142,27 @@ using namespace MacTierra;
 
 - (void)runTimerFired:(NSTimer*)inTimer
 {
-    const u_int32_t kCycleCount = 10000;
+    [self willChangeValueForKey:@"fullness"];
+    [self willChangeValueForKey:@"totalInstructions"];
+    [self willChangeValueForKey:@"numberOfCreatures"];
+    
+    const u_int32_t kCycleCount = 100000;
     if (mWorld)
         mWorld->iterate(kCycleCount);
 
+    u_int64_t curInstructions = mWorld->timeSlicer().instructionsExecuted();
+    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+
+    self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
+    
+    mLastInstTime = currentTime;
+    mLastInstructions = curInstructions;
+    
     [mSoupView setNeedsDisplay:YES];
+
+    [self didChangeValueForKey:@"fullness"];
+    [self didChangeValueForKey:@"totalInstructions"];
+    [self didChangeValueForKey:@"numberOfCreatures"];
 }
 
 @end

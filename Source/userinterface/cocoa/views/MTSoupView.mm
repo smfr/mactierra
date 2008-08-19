@@ -51,11 +51,14 @@ using namespace MacTierra;
 {
     mWorld = inWorld;
     
-    const int kSoupWidth = 512;
-    mSoupWidth = kSoupWidth;
-    mSoupHeight = mWorld->soupSize() / kSoupWidth;
-    
-    [self setGLOptions];
+    if (mWorld)
+    {
+        const int kSoupWidth = 512;
+        mSoupWidth = kSoupWidth;
+        mSoupHeight = mWorld->soupSize() / kSoupWidth;
+        
+        [self setGLOptions];
+    }
 }
 
 - (MacTierra::World*)world

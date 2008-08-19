@@ -40,6 +40,9 @@ public:
     Soup*       soup() const        { return mSoup; }
     CellMap*    cellMap() const     { return mCellMap; }
 
+    const TimeSlicer& timeSlicer() const { return mTimeSlicer; }
+    const Reaper&   reaper() const  { return mReaper; }
+    
     Creature*   createCreature();
     void        eradicateCreature(Creature* inCreature);
     

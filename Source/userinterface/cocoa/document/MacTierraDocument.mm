@@ -32,6 +32,12 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [worldController release]; // ??
+    [super dealloc];
+}
+
 - (NSString *)windowNibName
 {
     return @"MacTierraDocument";
@@ -69,6 +75,12 @@
         *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
     }
     return YES;
+}
+
+- (void)close
+{
+    [worldController documentClosing];
+    [super close];
 }
 
 @end

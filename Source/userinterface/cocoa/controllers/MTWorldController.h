@@ -20,14 +20,30 @@ namespace MacTierra {
     IBOutlet MTSoupView*    mSoupView;
     MacTierra::World*       mWorld;
     
-    BOOL                    mRunning;
+    BOOL                    running;
     NSTimer*                mRunTimer;      // hacky
+    
+    u_int64_t               mLastInstructions;
+    CFAbsoluteTime          mLastInstTime;
+
+    double                  instructionsPerSecond;
 }
 
 @property (readonly) MTSoupView* soupView;
 
+@property (assign) BOOL running;
+
+@property (assign) double instructionsPerSecond;
+@property (readonly) double fullness;
+@property (readonly) u_int64_t totalInstructions;
+@property (readonly) NSInteger numberOfCreatures;
+
+@property (readonly) NSString* playPauseButtonTitle;
+
 - (void)createSoup:(u_int32_t)inSize;
 
 - (IBAction)toggleRunning:(id)sender;
+
+- (void)documentClosing;
 
 @end

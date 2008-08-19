@@ -81,7 +81,8 @@ public:
     bool        searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMaxRange, ESearchDirection inSearchDirection) const;
 
     double      fullness() const;
-    
+    u_int32_t   numCreatures() const { return mCells.size(); }
+
     void        printCreatures() const;
 
     // public for testing

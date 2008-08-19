@@ -31,6 +31,8 @@
 		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
 		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0F9DEE3E0E57CDCD00E86DD6 /* CPUTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */; };
+		0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FA56BAA0E5A64E20001E997 /* Localizable.strings */; };
+		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
 		0FAC2FB90E4F78BE00CB068B /* mt_cpu.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */; };
 		0FAC309B0E4F7B3F00CB068B /* mt_creature.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC309A0E4F7B3F00CB068B /* mt_creature.cpp */; };
 		0FAC30B10E4F7C5500CB068B /* mt_soup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FAC30B00E4F7C5500CB068B /* mt_soup.cpp */; };
@@ -87,6 +89,9 @@
 		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0F9DEE250E57CD4600E86DD6 /* CPUTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUTests.h; sourceTree = "<group>"; };
 		0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTests.cpp; sourceTree = "<group>"; };
+		0FA56BAA0E5A64E20001E997 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInstructionCountFormatter.h; sourceTree = "<group>"; };
+		0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInstructionCountFormatter.m; sourceTree = "<group>"; };
 		0FAC2FB70E4F78BE00CB068B /* mt_cpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_cpu.h; sourceTree = "<group>"; };
 		0FAC2FB80E4F78BE00CB068B /* mt_cpu.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mt_cpu.cpp; sourceTree = "<group>"; };
 		0FAC30750E4F797B00CB068B /* mt_engine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mt_engine.h; sourceTree = "<group>"; };
@@ -218,6 +223,15 @@
 			path = views;
 			sourceTree = "<group>";
 		};
+		0FA56D280E5A87FA0001E997 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */,
+				0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		0FAC2F910E4F75FE00CB068B /* engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -346,6 +360,7 @@
 				0F9DE5DB0E575DB800E86DD6 /* views */,
 				0F9DE5D30E575DAD00E86DD6 /* controllers */,
 				0F9DE5D70E575DB300E86DD6 /* document */,
+				0FA56D280E5A87FA0001E997 /* utils */,
 				32DBCF750370BD2300C91783 /* MacTierra_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 			);
@@ -361,6 +376,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
+				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -455,6 +471,7 @@
 				8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */,
 				1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
+				0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +543,7 @@
 				0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */,
 				0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */,
 				0F9382A60E58908E004E93C5 /* mt_assert.cpp in Sources */,
+				0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

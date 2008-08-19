@@ -268,7 +268,7 @@ ExecutionUnit0::jump(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection 
     }
     else
     {
-        cout << "Failed to find jump template" << endl;
+        //cout << "Failed to find jump template" << endl;
         cpu.mInstructionPointer += templateLength;
         cpu.setFlag();
     }
@@ -292,7 +292,7 @@ ExecutionUnit0::call(Creature& inCreature, Soup& inSoup)
     }
     else
     {
-        cout << "Failed to find call template" << endl;
+        //cout << "Failed to find call template" << endl;
         if (templateLength == 0)
             cpu.push(cpu.mInstructionPointer + 1);
         else
@@ -320,7 +320,7 @@ ExecutionUnit0::address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirecti
     }
     else
     {
-        cout << "Failed to find address template" << endl;
+        //cout << "Failed to find address template" << endl;
         cpu.setFlag();
     }
 }
