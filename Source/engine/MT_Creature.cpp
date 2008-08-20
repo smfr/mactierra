@@ -18,6 +18,8 @@ using namespace std;
 
 Creature::Creature(creature_id inID, Soup* inOwningSoup)
 : mID(inID)
+, mGenotype(NULL)
+, mGenotypeDivergence(0)
 , mSoup(inOwningSoup)
 , mDaughter(NULL)
 , mDividing(false)
@@ -38,6 +40,17 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 Creature::~Creature()
 {
     BOOST_ASSERT(!mDaughter);
+}
+
+std::string
+Creature::creatureName() const
+{
+    BOOST_ASSERT(mGenotype);
+    
+    string name(mGenotype->name());
+    name.append(max(mGenotypeDivergence, 5U), '\'');
+
+    return name;
 }
 
 address_t
@@ -166,15 +179,29 @@ Creature::genomeIdenticalToCreature(const Creature& inOther) const
     return true;
 }
 
-void
+bool
 Creature::gaveBirth(Creature* inDaughter)
 {
     mMovesToLastOffspring = 0;
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
+
+    // daughter gets our genotype
+    inDaughter->setGenotype(genotype());
     
-    if (genomeIdenticalToCreature(*inDaughter))
+    bool identicalCopy = genomeIdenticalToCreature(*inDaughter);
+    if (identicalCopy)
+    {
         ++mNumIdenticalOffspring;
+        inDaughter->setGenotypeDivergence(genotypeDivergence());
+    }
+    else
+    {
+        // add a ' to the daughter name
+        inDaughter->setGenotypeDivergence(genotypeDivergence() + 1);
+    }
+
+    return identicalCopy;
 }
 
 void

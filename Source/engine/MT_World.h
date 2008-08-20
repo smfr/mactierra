@@ -20,10 +20,11 @@
 
 namespace MacTierra {
 
+class CellMap;
 class Creature;
 class ExecutionUnit;
+class Inventory;
 class Soup;
-class CellMap;
 
 class World
 {
@@ -146,7 +147,8 @@ protected:
     TimeSlicer      mTimeSlicer;
 
     Reaper          mReaper;
-
+    
+    Inventory*      mInventory;
 
     // runtime
     u_int32_t       mCurCreatureCycles;         // fAlive

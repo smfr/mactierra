@@ -14,7 +14,6 @@
 #include <map>
 
 #include "MT_Engine.h"
-
 #include "MT_Genotype.h"
 
 namespace MacTierra {
@@ -28,9 +27,16 @@ public:
     Inventory();
     ~Inventory();
 
+    Genotype*       findGenotype(const genotype_t& inGenotype) const;
+    
+    // return true if it's new
+    bool            enterGenotype(const genotype_t& inGenotype, Genotype*& outGenotype);
 
 protected:
 
+    std::string     uniqueNameForLength(u_int32_t inLength) const;
+    
+protected:
 
     u_int32_t       mNumSpeciesEver;
     u_int32_t       mNumSpeciesCurrent;
@@ -38,14 +44,11 @@ protected:
     u_int32_t       mSpeciationCount;
     u_int32_t       mExtinctionCount;
 
-    class InventoryEntry
-    {
-    public:
-    };
-    
-    typedef std::map<InventoryEntry*, Genotype> InventoryMap;
-    
-    
+    typedef std::map<genotype_t, Genotype*> InventoryMap;
+    typedef std::multimap<u_int32_t, Genotype*>  SizeMap;
+
+    InventoryMap    mInventoryMap;
+    SizeMap         mGenotypeSizeMap;
 
 };
 

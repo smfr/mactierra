@@ -16,6 +16,7 @@
 
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
+#include "MT_Genotype.h"
 
 namespace MacTierra {
 
@@ -40,6 +41,8 @@ public:
 
     // zero out this creature's space in the soup
     creature_id     creatureID() const  { return mID; }
+    
+    std::string     creatureName() const;
     
     Soup*           soup() const { return mSoup; }
 
@@ -74,8 +77,13 @@ public:
     instruction_t   getSoupInstruction(int32_t inOffset) const;
     void            getGenome(genome_t& outGenome) const;
 
+    Genotype*       genotype() const                                { return mGenotype; }
+    void            setGenotype(Genotype* inGenotype)               { mGenotype = inGenotype; }
+    u_int32_t       genotypeDivergence() const                      { return mGenotypeDivergence; }
+    void            setGenotypeDivergence(u_int32_t inDivergence)   { mGenotypeDivergence = inDivergence; }
+
     // this string can have embedded nulls. Not printable.
-    std::string     genotypeString() const;
+    genotype_t      genotypeString() const;
     
     // move to soup?
     void            clearSpace();
@@ -108,10 +116,13 @@ public:
 
     bool            genomeIdenticalToCreature(const Creature& inOther) const;
     
-    // called on parent
-    void            gaveBirth(Creature* inDaughter);
+    // called on parent. return true if the daughter is identical
+    bool            gaveBirth(Creature* inDaughter);
     void            wasBorn();
     
+    u_int32_t       numOffspring() const            { return mNumOffspring; }
+    u_int32_t       numIdenticalOffspring() const   { return mNumIdenticalOffspring; }
+
     bool            isEmbryo() const { return !mBorn; }
 
     bool            operator==(const Creature& inRHS)
@@ -128,6 +139,9 @@ protected:
 
     creature_id     mID;
     
+    Genotype*       mGenotype;
+    u_int32_t       mGenotypeDivergence;        // number of primes after the name
+
     Cpu             mCPU;
     
     Soup*           mSoup;

@@ -21,7 +21,9 @@
 #include "MT_Cellmap.h"
 #include "MT_Creature.h"
 #include "MT_ExecutionUnit0.h"
+#include "MT_Genotype.h"
 #include "MT_InstructionSet.h"
+#include "MT_Inventory.h"
 #include "MT_Soup.h"
 
 namespace MacTierra {
@@ -37,6 +39,7 @@ World::World()
 , mSliceSizeVariance(0.0)
 , mExecution(NULL)
 , mTimeSlicer(*this)
+, mInventory(NULL)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
 , mCopyErrorRate(0.0)
@@ -67,6 +70,7 @@ World::~World()
     delete mSoup;
     delete mCellMap;
     delete mExecution;
+    delete mInventory;
 }
 
 void
@@ -81,6 +85,8 @@ World::initializeSoup(u_int32_t inSoupSize)
     mCellMap = new CellMap(inSoupSize);
 
     mExecution = new ExecutionUnit0();
+    
+    mInventory = new Inventory();
     
     // FIXME get real number
     mTimeSlicer.setDefaultSliceSize(20);
@@ -143,6 +149,11 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     
     mSoup->injectInstructions(inAddress, inInstructions, inLength);
 
+    Genotype* theGenotype = NULL;
+    mInventory->enterGenotype(theCreature->genotypeString(), theGenotype);
+    BOOST_ASSERT(theGenotype);
+    theCreature->setGenotype(theGenotype);
+    
     theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSizeSelection));
     theCreature->setReferencedLocation(theCreature->location());
     
@@ -404,7 +415,22 @@ World::handleBirth(Creature* inParent, Creature* inChild)
     // inherit leanness?
 
 
-    inParent->gaveBirth(inChild);
+    bool bredTrue = inParent->gaveBirth(inChild);
+    if (bredTrue  && inParent->numIdenticalOffspring() == 2)
+    {
+        Genotype*   foundGenotype = NULL;
+        if (mInventory->enterGenotype(inParent->genotypeString(), foundGenotype))
+        {
+            // we have a new species; set the parent genotype.
+            inParent->setGenotype(foundGenotype);
+            inParent->setGenotypeDivergence(0);
+            
+            inChild->setGenotype(foundGenotype);
+            inChild->setGenotypeDivergence(0);
+            // FIXME: we should change the genotype names of the first offspring too
+        }
+    }
+    
     inChild->wasBorn();
 }
 

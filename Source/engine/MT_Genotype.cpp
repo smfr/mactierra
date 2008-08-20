@@ -11,8 +11,9 @@
 
 namespace MacTierra {
 
-Genotype::Genotype(const std::string& inGenotype)
-: mGenotype(inGenotype)
+Genotype::Genotype(const std::string& inName, const std::string& inGenotype)
+: mName(inName)
+, mGenotype(inGenotype)
 {
 }
 
