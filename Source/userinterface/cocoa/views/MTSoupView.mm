@@ -8,9 +8,9 @@
 
 #import "MTSoupView.h"
 
-#import "mt_cellmap.h"
-#import "mt_soup.h"
-#import "mt_world.h"
+#import "MT_Cellmap.h"
+#import "MT_Soup.h"
+#import "MT_World.h"
 
 using namespace MacTierra;
 
@@ -20,11 +20,14 @@ using namespace MacTierra;
 - (void)drawCells:(NSRect)inDirtyRect;
 - (void)drawInstructionPointers:(NSRect)inDirtyRect;
 
-- (NSPoint)soupAddressToSoupPoint:(address_t)inAddr;
-- (address_t)soupPointToSoupAddress:(NSPoint)inPoint;
+- (CGPoint)soupAddressToSoupPoint:(address_t)inAddr;
+- (address_t)soupPointToSoupAddress:(CGPoint)inPoint;
 
-- (NSPoint)viewPointToSoupPoint:(NSPoint)inPoint;
-- (NSPoint)soupPointToViewPoint:(NSPoint)inPoint;
+- (CGAffineTransform)viewToSoupTransform;
+- (CGAffineTransform)soupToViewTransform;
+
+- (CGPoint)viewPointToSoupPoint:(CGPoint)inPoint;
+- (CGPoint)soupPointToViewPoint:(CGPoint)inPoint;
 
 @end
 
@@ -35,6 +38,7 @@ using namespace MacTierra;
 @synthesize zoomToFit;
 @synthesize showCells;
 @synthesize showInstructionPointers;
+@synthesize focusedCreatureName;
 
 - (id)initWithFrame:(NSRect)inFrame
 {
@@ -43,8 +47,15 @@ using namespace MacTierra;
         zoomToFit = YES;
         showCells = NO;
         showInstructionPointers = NO;
+        self.focusedCreatureName = @"";
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.focusedCreatureName = nil;
+    [super dealloc];
 }
 
 - (void)setWorld:(MacTierra::World*)inWorld
@@ -84,6 +95,17 @@ using namespace MacTierra;
     }
 }
 
+- (void)viewDidMoveToWindow
+{
+    if ([self window])
+        [[self window] setAcceptsMouseMovedEvents:YES];
+}
+
+- (BOOL)acceptsFirstResponder
+{
+    return YES;
+}
+
 - (BOOL)isFlipped
 {
     return YES;
@@ -109,11 +131,7 @@ using namespace MacTierra;
 {
     // set the CTM to match the zooming that GL does
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-
-    if (zoomToFit)
-        CGContextScaleCTM(cgContext, (CGFloat)mGlWidth / mSoupWidth, (CGFloat)mGlHeight / mSoupHeight);
-    else
-        CGContextTranslateCTM(cgContext, (mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+    CGContextConcatCTM(cgContext, [self soupToViewTransform]);
 }
 
 - (void)drawCells:(NSRect)inDirtyRect
@@ -221,22 +239,87 @@ using namespace MacTierra;
 
 }
 
-- (NSPoint)soupAddressToSoupPoint:(address_t)inAddr
+- (CGPoint)soupAddressToSoupPoint:(address_t)inAddr
 {
-    return NSMakePoint(inAddr * mSoupWidth, inAddr / mSoupWidth);
+    return CGPointMake(inAddr * mSoupWidth, inAddr / mSoupWidth);
 }
 
-- (address_t)soupPointToSoupAddress:(NSPoint)inPoint
+- (address_t)soupPointToSoupAddress:(CGPoint)inPoint
 {
     return ((address_t)inPoint.x + inPoint.y * mSoupWidth);
 }
 
-- (NSPoint)viewPointToSoupPoint:(NSPoint)inPoint
+- (CGAffineTransform)soupToViewTransform
 {
+    return zoomToFit ? CGAffineTransformMakeScale((CGFloat)mGlWidth / mSoupWidth, (CGFloat)mGlHeight / mSoupHeight)
+                     : CGAffineTransformMakeTranslation((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
 }
 
-- (NSPoint)soupPointToViewPoint:(NSPoint)inPoint
+- (CGAffineTransform)viewToSoupTransform
 {
+    return CGAffineTransformInvert([self soupToViewTransform]);
+}
+
+- (BOOL)viewPointInSoup:(CGPoint)inPoint
+{
+    CGRect soupExtent = zoomToFit ? CGRectMake(0, 0, mGlWidth, mGlHeight)
+                                  : CGRectMake((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
+
+    return CGRectContainsPoint(soupExtent, inPoint);
+}
+
+- (CGPoint)viewPointToSoupPoint:(CGPoint)inPoint
+{
+    if (![self viewPointInSoup:inPoint])
+        return CGPointZero;
+
+    return CGPointApplyAffineTransform(inPoint, [self viewToSoupTransform]);
+}
+
+- (CGPoint)soupPointToViewPoint:(CGPoint)inPoint
+{
+    return CGPointApplyAffineTransform(inPoint, [self soupToViewTransform]);
+}
+
+#pragma mark -
+
+- (void)mouseMoved:(NSEvent*)inEvent
+{
+    NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
+    CGPoint thePoint = *(CGPoint*)&localPoint;
+
+    if (mWorld && [self viewPointInSoup:thePoint])
+    {
+        CGPoint soupPoint = [self viewPointToSoupPoint:*(CGPoint*)&localPoint];
+        address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
+
+        MacTierra::Creature* theCreature = mWorld->cellMap()->creatureAtAddress(soupAddr);
+        if (theCreature && !theCreature->isEmbryo())
+        {
+            std::string creatureName = theCreature->creatureName();
+            self.focusedCreatureName = [NSString stringWithUTF8String:creatureName.c_str()];
+        }
+        else
+        {
+            self.focusedCreatureName = @"";
+        }
+    }
+    else
+    {
+        self.focusedCreatureName = @"";
+    }
+}
+
+- (void)mouseDown:(NSEvent*)inEvent
+{
+    NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
+
+}
+
+- (void)mouseDragged:(NSEvent*)inEvent
+{
+    NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
+    NSLog(@"dragging");
 }
 
 

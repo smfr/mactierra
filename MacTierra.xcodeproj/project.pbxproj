@@ -395,8 +395,8 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
-				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
+				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
 			);
 			path = Resources;

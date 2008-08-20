@@ -11,8 +11,8 @@
 #import "MTSoupView.h"
 
 #import "MT_Ancestor.h"
-#import "mt_cellmap.h"
-#import "mt_world.h"
+#import "MT_Cellmap.h"
+#import "MT_World.h"
 
 using namespace MacTierra;
 

@@ -337,6 +337,40 @@
 								<reference key="NSTextColor" ref="377116039"/>
 							</object>
 						</object>
+						<object class="NSTextField" id="715595545">
+							<reference key="NSNextResponder" ref="568628114"/>
+							<int key="NSvFlags">292</int>
+							<string key="NSFrame">{{17, 34}, {95, 17}}</string>
+							<reference key="NSSuperview" ref="568628114"/>
+							<reference key="NSWindow"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="759032910">
+								<int key="NSCellFlags">68288064</int>
+								<int key="NSCellFlags2">71304192</int>
+								<string key="NSContents">Creature:</string>
+								<reference key="NSSupport" ref="410377631"/>
+								<reference key="NSControlView" ref="715595545"/>
+								<reference key="NSBackgroundColor" ref="623501826"/>
+								<reference key="NSTextColor" ref="377116039"/>
+							</object>
+						</object>
+						<object class="NSTextField" id="28918850">
+							<reference key="NSNextResponder" ref="568628114"/>
+							<int key="NSvFlags">292</int>
+							<string key="NSFrame">{{114, 34}, {95, 17}}</string>
+							<reference key="NSSuperview" ref="568628114"/>
+							<reference key="NSWindow"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSTextFieldCell" key="NSCell" id="973508577">
+								<int key="NSCellFlags">68288064</int>
+								<int key="NSCellFlags2">272630784</int>
+								<string key="NSContents">Label</string>
+								<reference key="NSSupport" ref="410377631"/>
+								<reference key="NSControlView" ref="28918850"/>
+								<reference key="NSBackgroundColor" ref="623501826"/>
+								<reference key="NSTextColor" ref="377116039"/>
+							</object>
+						</object>
 					</object>
 					<string key="NSFrameSize">{697, 604}</string>
 					<reference key="NSSuperview"/>
@@ -531,6 +565,22 @@
 					</object>
 					<int key="connectionID">100074</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: soupView.focusedCreatureName</string>
+						<reference key="source" ref="28918850"/>
+						<reference key="destination" ref="647581288"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="28918850"/>
+							<reference key="NSDestination" ref="647581288"/>
+							<string key="NSLabel">value: soupView.focusedCreatureName</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">soupView.focusedCreatureName</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100079</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -582,6 +632,8 @@
 							<reference ref="72783159"/>
 							<reference ref="29555356"/>
 							<reference ref="917370141"/>
+							<reference ref="715595545"/>
+							<reference ref="28918850"/>
 						</object>
 						<reference key="parent" ref="275939982"/>
 					</object>
@@ -781,6 +833,34 @@
 						<reference key="object" ref="868916574"/>
 						<reference key="parent" ref="0"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100075</int>
+						<reference key="object" ref="715595545"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="759032910"/>
+						</object>
+						<reference key="parent" ref="568628114"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100076</int>
+						<reference key="object" ref="759032910"/>
+						<reference key="parent" ref="715595545"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100077</int>
+						<reference key="object" ref="28918850"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="973508577"/>
+						</object>
+						<reference key="parent" ref="568628114"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">100078</int>
+						<reference key="object" ref="973508577"/>
+						<reference key="parent" ref="28918850"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -815,6 +895,10 @@
 					<string>100057.IBPluginDependency</string>
 					<string>100066.IBPluginDependency</string>
 					<string>100071.IBPluginDependency</string>
+					<string>100075.IBPluginDependency</string>
+					<string>100076.IBPluginDependency</string>
+					<string>100077.IBPluginDependency</string>
+					<string>100078.IBPluginDependency</string>
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.IBViewEditorWindowController.showingLayoutRectangles</string>
@@ -857,10 +941,14 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{359, 324}, {697, 604}}</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>{{487, 315}, {697, 604}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<reference ref="9"/>
-					<string>{{359, 324}, {697, 604}}</string>
+					<string>{{487, 315}, {697, 604}}</string>
 					<reference ref="9"/>
 					<string>{{201, 387}, {507, 413}}</string>
 					<reference ref="9"/>
@@ -890,7 +978,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100074</int>
+			<int key="maxID">100079</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
