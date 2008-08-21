@@ -14,6 +14,8 @@
 #import "MT_Cellmap.h"
 #import "MT_World.h"
 
+#import "MTInventoryController.h"
+
 using namespace MacTierra;
 
 
@@ -30,6 +32,7 @@ using namespace MacTierra;
 
 @synthesize running;
 @synthesize instructionsPerSecond;
+@synthesize inventoryController;
 
 + (void)initialize
 {
@@ -47,6 +50,7 @@ using namespace MacTierra;
 
 - (void)dealloc
 {
+    self.inventoryController = nil;
     [mSoupView setWorld:NULL];
 
     delete mWorld;
@@ -77,6 +81,8 @@ using namespace MacTierra;
     mWorld->insertCreature(inSize / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     
     [mSoupView setWorld:mWorld];
+    
+    self.inventoryController = [[[MTInventoryController alloc] initWithInventory:mWorld->inventory()] autorelease];
 }
 
 - (IBAction)toggleRunning:(id)sender
@@ -163,6 +169,10 @@ using namespace MacTierra;
     [self didChangeValueForKey:@"fullness"];
     [self didChangeValueForKey:@"totalInstructions"];
     [self didChangeValueForKey:@"numberOfCreatures"];
+    
+    // hack to avoid slowing things down too much
+    if ([mInventoryTableView window])
+        [inventoryController updateGenotypesArray];
 }
 
 @end

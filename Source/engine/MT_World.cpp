@@ -255,7 +255,7 @@ World::iterate(u_int32_t inNumCycles)
             bool cycled = mTimeSlicer.advance();
             if (cycled)
             {
-                mInventory->printCreatures();
+                //mInventory->printCreatures();
             }
             
             // start on the next creature

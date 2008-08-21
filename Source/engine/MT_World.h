@@ -34,26 +34,28 @@ public:
     World();
     ~World();
 
-    void        initializeSoup(u_int32_t inSoupSize);
+    void            initializeSoup(u_int32_t inSoupSize);
 
-    u_int32_t   soupSize() const    { return mSoupSize; }
+    u_int32_t       soupSize() const    { return mSoupSize; }
 
-    Soup*       soup() const        { return mSoup; }
-    CellMap*    cellMap() const     { return mCellMap; }
+    Soup*           soup() const        { return mSoup; }
+    CellMap*        cellMap() const     { return mCellMap; }
 
     const TimeSlicer& timeSlicer() const { return mTimeSlicer; }
     const Reaper&   reaper() const  { return mReaper; }
     
-    Creature*   createCreature();
-    void        eradicateCreature(Creature* inCreature);
+    Inventory*      inventory() const   { return mInventory; }
     
-    Creature*   insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
+    Creature*       createCreature();
+    void            eradicateCreature(Creature* inCreature);
     
-    void        iterate(uint32_t inNumCycles);
+    Creature*       insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
+    
+    void            iterate(uint32_t inNumCycles);
     
     RandomLib::Random&  RNG()   { return mRNG; }
 
-    bool        copyErrorPending() const { return mCopyErrorPending; }
+    bool            copyErrorPending() const { return mCopyErrorPending; }
 
     enum EMutationType {
         kAddOrDec,

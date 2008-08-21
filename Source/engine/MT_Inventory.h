@@ -61,6 +61,9 @@ protected:
 class Inventory
 {
 public:
+    typedef std::map<genotype_t, InventoryGenotype*> InventoryMap;
+    typedef std::multimap<u_int32_t, InventoryGenotype*>  SizeMap;
+
     Inventory();
     ~Inventory();
 
@@ -71,6 +74,8 @@ public:
 
     void            printCreatures() const;
     
+    const InventoryMap& inventoryMap() const { return mInventoryMap; }
+
 protected:
 
     std::string     uniqueNameForLength(u_int32_t inLength) const;
@@ -82,9 +87,6 @@ protected:
 
     u_int32_t       mSpeciationCount;
     u_int32_t       mExtinctionCount;
-
-    typedef std::map<genotype_t, InventoryGenotype*> InventoryMap;
-    typedef std::multimap<u_int32_t, InventoryGenotype*>  SizeMap;
 
     InventoryMap    mInventoryMap;
     SizeMap         mGenotypeSizeMap;
