@@ -19,7 +19,7 @@ namespace MacTierra {
 typedef std::string genotype_t;
 
 // Represents a set of creatures with the same instructions. Used for
-// bookkeeping in the inventory and genebank.
+// book-keeping in the inventory and genebank.
 class Genotype
 {
 public:
@@ -36,13 +36,10 @@ public:
     std::string         printableGenotype() const;
     std::string         prettyPrintedGenotype() const;
 
-    // does this need a hash?
-
     bool operator < (const Genotype inRHS)
     {
         return mGenotype < inRHS.genotype();
     }
-    
 
 protected:
 

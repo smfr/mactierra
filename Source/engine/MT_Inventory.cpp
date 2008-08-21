@@ -7,6 +7,7 @@
  *
  */
 
+#include <iostream>
 #include <sstream>
 
 #include "MT_Inventory.h"
@@ -15,7 +16,23 @@ namespace MacTierra {
 
 using namespace std;
 
+InventoryGenotype::InventoryGenotype(const std::string& inName, const genotype_t& inGenotype)
+: Genotype(inName, inGenotype)
+, mNumAlive(0)
+, mNumEverLived(0)
+, mOriginInstructions(0)
+, mOriginGenerations(0)
+{
+}
+
+
+#pragma mark -
+
 Inventory::Inventory()
+: mNumSpeciesEver(0)
+, mNumSpeciesCurrent(0)
+, mSpeciationCount(0)
+, mExtinctionCount(0)
 {
 }
 
@@ -24,7 +41,7 @@ Inventory::~Inventory()
     // FIXME: delete stuff
 }
 
-Genotype*
+InventoryGenotype*
 Inventory::findGenotype(const genotype_t& inGenotype) const
 {
     InventoryMap::const_iterator it = mInventoryMap.find(inGenotype);
@@ -32,7 +49,7 @@ Inventory::findGenotype(const genotype_t& inGenotype) const
 }
 
 bool
-Inventory::enterGenotype(const genotype_t& inGenotype, Genotype*& outGenotype)
+Inventory::enterGenotype(const genotype_t& inGenotype, InventoryGenotype*& outGenotype)
 {
     InventoryMap::const_iterator it = mInventoryMap.find(inGenotype);
     if (it == mInventoryMap.end())
@@ -40,9 +57,9 @@ Inventory::enterGenotype(const genotype_t& inGenotype, Genotype*& outGenotype)
         // not found. make a new one.
         string name = uniqueNameForLength(inGenotype.length());
 
-        Genotype* newGenotype = new Genotype(name, inGenotype);
+        InventoryGenotype* newGenotype = new InventoryGenotype(name, inGenotype);
         mInventoryMap[inGenotype] = newGenotype;
-        mGenotypeSizeMap.insert(pair<u_int32_t, Genotype*>(inGenotype.length(), newGenotype));
+        mGenotypeSizeMap.insert(pair<u_int32_t, InventoryGenotype*>(inGenotype.length(), newGenotype));
 
         outGenotype = newGenotype;
         return true;
@@ -73,6 +90,23 @@ static std::string incrementString(const std::string& inString)
     }
 
     return tempString;
+}
+
+void
+Inventory::printCreatures() const
+{
+    cout << "Inventory" << endl;
+    
+    InventoryMap::const_iterator it, end;
+    
+    for (it = mInventoryMap.begin(), end = mInventoryMap.end();
+         it != end;
+         ++it)
+    {
+        const InventoryGenotype* curEntry = it->second;
+        cout << curEntry->name() << " alive: " << curEntry->numberAlive() << " total: " << curEntry->numberEverLived() << endl;
+    }
+
 }
 
 std::string

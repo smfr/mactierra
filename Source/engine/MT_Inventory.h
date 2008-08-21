@@ -13,25 +13,64 @@
 
 #include <map>
 
+#include <boost/assert.hpp>
+
 #include "MT_Engine.h"
 #include "MT_Genotype.h"
 
 namespace MacTierra {
 
 
-// The inventory tracks the species that are alive now.
+class InventoryGenotype : public Genotype
+{
+public:
+    InventoryGenotype(const std::string& inName, const genotype_t& inGenotype);
+    
+    void creatureBorn()
+    {
+        ++mNumAlive;
+        ++mNumEverLived;
+    }
 
+    void creatureDied() 
+    {
+        BOOST_ASSERT(mNumAlive > 0);
+        --mNumAlive;
+    }
+
+    u_int32_t       numberAlive() const         { return mNumAlive; }
+    u_int32_t       numberEverLived() const     { return mNumEverLived; }
+
+    u_int64_t       originInstructions() const  { return mOriginInstructions; }
+    void            setOriginInstructions(u_int64_t inInstCount) { mOriginInstructions = inInstCount; }
+
+    u_int32_t       originGenerations() const  { return mOriginGenerations; }
+    void            setOriginGenerations(u_int32_t inGenerations) { mOriginGenerations = inGenerations; }
+
+protected:
+
+    u_int32_t       mNumAlive;
+    u_int32_t       mNumEverLived;
+    
+    u_int64_t       mOriginInstructions;
+    u_int32_t       mOriginGenerations;
+};
+
+
+// The inventory tracks the species that are alive now.
 class Inventory
 {
 public:
     Inventory();
     ~Inventory();
 
-    Genotype*       findGenotype(const genotype_t& inGenotype) const;
+    InventoryGenotype*  findGenotype(const genotype_t& inGenotype) const;
     
     // return true if it's new
-    bool            enterGenotype(const genotype_t& inGenotype, Genotype*& outGenotype);
+    bool                enterGenotype(const genotype_t& inGenotype, InventoryGenotype*& outGenotype);
 
+    void            printCreatures() const;
+    
 protected:
 
     std::string     uniqueNameForLength(u_int32_t inLength) const;
@@ -44,8 +83,8 @@ protected:
     u_int32_t       mSpeciationCount;
     u_int32_t       mExtinctionCount;
 
-    typedef std::map<genotype_t, Genotype*> InventoryMap;
-    typedef std::multimap<u_int32_t, Genotype*>  SizeMap;
+    typedef std::map<genotype_t, InventoryGenotype*> InventoryMap;
+    typedef std::multimap<u_int32_t, InventoryGenotype*>  SizeMap;
 
     InventoryMap    mInventoryMap;
     SizeMap         mGenotypeSizeMap;

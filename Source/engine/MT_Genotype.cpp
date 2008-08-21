@@ -30,6 +30,8 @@ Genotype::printableGenotype() const
     
     for (u_int32_t i = 0; i < mGenotype.length(); ++i)
     {
+        if (i > 0)
+            prettyString.push_back(' ');
         prettyString.push_back(hexChars[(mGenotype[i] >> 4) & 0x0F]);
         prettyString.push_back(hexChars[mGenotype[i] & 0x0F]);
     }

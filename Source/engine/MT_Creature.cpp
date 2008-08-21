@@ -9,6 +9,7 @@
 
 #include "MT_Creature.h"
 
+#include "MT_Inventory.h"
 #include "MT_Soup.h"
 #include "MT_World.h"       // avoid?
 
@@ -34,6 +35,7 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 , mMovesToLastOffspring(0)
 , mNumOffspring(0)
 , mNumIdenticalOffspring(0)
+, mGeneration(0)
 {
 }
 
@@ -188,7 +190,8 @@ Creature::gaveBirth(Creature* inDaughter)
 
     // daughter gets our genotype
     inDaughter->setGenotype(genotype());
-    
+    inDaughter->setGeneration(generation() + 1);
+
     bool identicalCopy = genomeIdenticalToCreature(*inDaughter);
     if (identicalCopy)
     {
@@ -205,9 +208,22 @@ Creature::gaveBirth(Creature* inDaughter)
 }
 
 void
-Creature::wasBorn()
+Creature::onBirth(const World& inWorld, bool inLogBirth)
 {
+    setOriginInstructions(inWorld.timeSlicer().instructionsExecuted());
+    
+    mGenotypeCountedBirth = inLogBirth;
+    if (inLogBirth)
+        mGenotype->creatureBorn();
+        
     mBorn = true;
+}
+
+void
+Creature::onDeath(const World& inWorld)
+{
+    if (mGenotypeCountedBirth)
+        mGenotype->creatureDied();
 }
 
 void

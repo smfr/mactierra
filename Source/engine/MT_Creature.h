@@ -20,6 +20,7 @@
 
 namespace MacTierra {
 
+class InventoryGenotype;
 class Soup;
 class World;
 
@@ -77,8 +78,8 @@ public:
     instruction_t   getSoupInstruction(int32_t inOffset) const;
     void            getGenome(genome_t& outGenome) const;
 
-    Genotype*       genotype() const                                { return mGenotype; }
-    void            setGenotype(Genotype* inGenotype)               { mGenotype = inGenotype; }
+    InventoryGenotype* genotype() const                             { return mGenotype; }
+    void            setGenotype(InventoryGenotype* inGenotype)      { mGenotype = inGenotype; }
     u_int32_t       genotypeDivergence() const                      { return mGenotypeDivergence; }
     void            setGenotypeDivergence(u_int32_t inDivergence)   { mGenotypeDivergence = inDivergence; }
 
@@ -118,11 +119,19 @@ public:
     
     // called on parent. return true if the daughter is identical
     bool            gaveBirth(Creature* inDaughter);
-    void            wasBorn();
+
+    void            onBirth(const World& inWorld, bool inLogBirth);
+    void            onDeath(const World& inWorld);
     
     u_int32_t       numOffspring() const            { return mNumOffspring; }
     u_int32_t       numIdenticalOffspring() const   { return mNumIdenticalOffspring; }
 
+    u_int32_t       generation() const              { return mGeneration; }
+    void            setGeneration(u_int32_t inGen)  { mGeneration = inGen; }
+
+    u_int64_t       originInstructions() const      { return mBirthInstructions; }
+    void            setOriginInstructions(u_int64_t inInstCount)  { mBirthInstructions = inInstCount; }
+    
     bool            isEmbryo() const { return !mBorn; }
 
     bool            operator==(const Creature& inRHS)
@@ -139,17 +148,18 @@ protected:
 
     creature_id     mID;
     
-    Genotype*       mGenotype;
-    u_int32_t       mGenotypeDivergence;        // number of primes after the name
+    InventoryGenotype*  mGenotype;
+    u_int32_t           mGenotypeDivergence;        // number of primes after the name
 
     Cpu             mCPU;
     
     Soup*           mSoup;
     
     Creature*       mDaughter;
-    bool            mDividing;
-    
-    bool            mBorn;              // false until parent divides
+
+    bool            mDividing : 1;
+    bool            mBorn : 1;              // false until parent divides
+    bool            mGenotypeCountedBirth : 1;
     
     u_int32_t       mLength;
     address_t       mLocation;          // position in soup
@@ -159,12 +169,15 @@ protected:
     
     u_int32_t       mInstructionsToLastOffspring;
     u_int64_t       mTotalInstructionsExecuted;
+    u_int64_t       mBirthInstructions;     // world instructions at birth
     
     u_int32_t       mNumErrors;
     u_int32_t       mMovesToLastOffspring;
 
     u_int32_t       mNumOffspring;
     u_int32_t       mNumIdenticalOffspring;
+    
+    u_int32_t       mGeneration;
     
     // leanness stuff
     
