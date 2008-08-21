@@ -86,22 +86,25 @@ public:
     bool            transferRegistersToOffspring() const;
     void            setTransferRegistersToOffspring(bool inTransfer);
     
-    double          sliceSizeVariance() const { return mSliceSizeVariance; }
+    double          sliceSizeVariance() const       { return mSliceSizeVariance; }
     void            setSliceSizeVariance(double inVariance) { mSliceSizeVariance = inVariance; }
 
-    bool            clearReapedCreatuers() const { return mClearReapedCreatures; }
+    double          sizeSelection() const           { return mSizeSelection; }
+    void            setSizeSelection(double inSel)  { mSizeSelection = inSel; }
+
+    bool            clearReapedCreatuers() const    { return mClearReapedCreatures; }
     void            setClearReapedCreatuers(bool inClear) { mClearReapedCreatures = inClear; }
     
     double          reapThreshold() const { return mReapThreshold; }
     void            setReapThreshold(double inThreshold) { mReapThreshold = inThreshold; }
     
-    double          flawRate() const { return mFlawRate; }
+    double          flawRate() const                { return mFlawRate; }
     void            setFlawRate(double inRate);
 
-    double          cosmicRate() const { return mCosmicRate; }
+    double          cosmicRate() const              { return mCosmicRate; }
     void            setCosmicRate(double inRate);
 
-    double          copyErrorRate() const { return mCopyErrorRate; }
+    double          copyErrorRate() const           { return mCopyErrorRate; }
     void            setCopyErrorRate(double inRate);
 
 protected:

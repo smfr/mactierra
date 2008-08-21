@@ -37,6 +37,11 @@ using namespace MacTierra;
     return [NSString stringWithUTF8String:genotype->name().c_str()];
 }
 
+- (NSInteger)length
+{
+    return genotype->length();
+}
+
 - (NSInteger)numAlive
 {
     return genotype->numberAlive();

@@ -13,8 +13,9 @@ namespace MacTierra {
     class World;
 };
 
-@class MTSoupView;
+@class MTCreature;
 @class MTInventoryController;
+@class MTSoupView;
 
 @interface MTWorldController : NSObject
 {
@@ -24,6 +25,8 @@ namespace MacTierra {
     MacTierra::World*       mWorld;
     
     MTInventoryController*  inventoryController;
+
+    MTCreature*             selectedCreature;
     
     BOOL                    running;
     NSTimer*                mRunTimer;      // hacky
@@ -37,6 +40,8 @@ namespace MacTierra {
 @property (readonly) MTSoupView* soupView;
 
 @property (retain) MTInventoryController* inventoryController;
+
+@property (retain) MTCreature* selectedCreature;
 
 @property (assign) BOOL running;
 

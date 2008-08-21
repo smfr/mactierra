@@ -159,7 +159,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     BOOST_ASSERT(theGenotype);
     theCreature->setGenotype(theGenotype);
     theCreature->setGeneration(1);
-        
+                
     theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSizeSelection));
     theCreature->setReferencedLocation(theCreature->location());
     

@@ -14,6 +14,7 @@
 #import "MT_Cellmap.h"
 #import "MT_World.h"
 
+#import "MTCreature.h"
 #import "MTInventoryController.h"
 
 using namespace MacTierra;
@@ -33,6 +34,7 @@ using namespace MacTierra;
 @synthesize running;
 @synthesize instructionsPerSecond;
 @synthesize inventoryController;
+@synthesize selectedCreature;
 
 + (void)initialize
 {
@@ -50,7 +52,9 @@ using namespace MacTierra;
 
 - (void)dealloc
 {
+    self.selectedCreature = nil;
     self.inventoryController = nil;
+    
     [mSoupView setWorld:NULL];
 
     delete mWorld;
@@ -74,6 +78,7 @@ using namespace MacTierra;
     mWorld->setCosmicRate(7.634E-9);
     mWorld->setCopyErrorRate(1.0E-3);
     mWorld->setSliceSizeVariance(2);
+    mWorld->setSizeSelection(0.9);
 
     mWorld->initializeSoup(inSize);
 

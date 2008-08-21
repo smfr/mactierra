@@ -21,7 +21,7 @@ namespace MacTierra {
 
 @property (assign) MacTierra::InventoryGenotype* genotype;
 @property (readonly) NSString* name;
-
+@property (readonly) NSInteger length;
 @property (readonly) NSInteger numAlive;
 @property (readonly) NSInteger numEverLived;
 @property (readonly) u_int64_t originInstructions;

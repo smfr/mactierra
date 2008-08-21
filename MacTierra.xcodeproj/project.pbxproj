@@ -21,6 +21,7 @@
 		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
 		0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */; };
 		0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */; };
+		0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB044E80E5D3B990024DF67 /* MTCreature.mm */; };
 		0FB90D330E52A72900449CC6 /* CellMapTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90D320E52A72900449CC6 /* CellMapTests.cpp */; };
 		0FBB06870E5A984B007F2A6B /* MT_TimeSlicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */; };
 		0FBB06880E5A984B007F2A6B /* MT_CellMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06710E5A984B007F2A6B /* MT_CellMap.cpp */; };
@@ -103,6 +104,8 @@
 		0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTInventoryGenotype.mm; sourceTree = "<group>"; };
 		0FB044290E5D325B0024DF67 /* MTInventoryController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInventoryController.h; sourceTree = "<group>"; };
 		0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTInventoryController.mm; sourceTree = "<group>"; };
+		0FB044E70E5D3B990024DF67 /* MTCreature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCreature.h; sourceTree = "<group>"; };
+		0FB044E80E5D3B990024DF67 /* MTCreature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTCreature.mm; sourceTree = "<group>"; };
 		0FB90D310E52A72900449CC6 /* CellMapTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMapTests.h; sourceTree = "<group>"; };
 		0FB90D320E52A72900449CC6 /* CellMapTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CellMapTests.cpp; sourceTree = "<group>"; };
 		0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_TimeSlicer.cpp; sourceTree = "<group>"; };
@@ -297,6 +300,8 @@
 		0FB043F60E5D2FB60024DF67 /* engine_objects */ = {
 			isa = PBXGroup;
 			children = (
+				0FB044E70E5D3B990024DF67 /* MTCreature.h */,
+				0FB044E80E5D3B990024DF67 /* MTCreature.mm */,
 				0FB043F90E5D2FCD0024DF67 /* MTInventoryGenotype.h */,
 				0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */,
 			);
@@ -594,6 +599,7 @@
 				0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 				0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */,
 				0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */,
+				0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -78,7 +78,7 @@ static std::string incrementString(const std::string& inString)
     size_t pos = len - 1;
     while (pos >= 0)
     {
-        if (tempString[pos] <= 0)       // we hit the numbers
+        if (tempString[pos] <= '0')       // we hit the numbers
             break;
 
         if (tempString[pos] < 'z')

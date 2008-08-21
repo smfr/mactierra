@@ -12,6 +12,9 @@
 #import "MT_Soup.h"
 #import "MT_World.h"
 
+#import "MTCreature.h"
+#import "MTWorldController.h"
+
 using namespace MacTierra;
 
 @interface MTSoupView(Private)
@@ -314,6 +317,24 @@ using namespace MacTierra;
 {
     NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
 
+    CGPoint thePoint = *(CGPoint*)&localPoint;
+
+    if (mWorld && [self viewPointInSoup:thePoint])
+    {
+        CGPoint soupPoint = [self viewPointToSoupPoint:*(CGPoint*)&localPoint];
+        address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
+
+        MacTierra::Creature* theCreature = mWorld->cellMap()->creatureAtAddress(soupAddr);
+        if (theCreature && !theCreature->isEmbryo())
+        {
+            MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
+//            [creatureObj genotype]; // force the genotype to be created
+            mWorldController.selectedCreature = creatureObj;
+            return;
+        }
+    }
+
+    mWorldController.selectedCreature = nil;
 }
 
 - (void)mouseDragged:(NSEvent*)inEvent

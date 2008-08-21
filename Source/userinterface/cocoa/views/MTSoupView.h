@@ -14,9 +14,12 @@ namespace MacTierra {
     class World;
 };
 
+@class MTWorldController;
 
 @interface MTSoupView : MTCompositedGLView
 {
+    IBOutlet MTWorldController* mWorldController;
+    
     MacTierra::World*   mWorld;
     
     int                 mSoupWidth;
@@ -27,6 +30,7 @@ namespace MacTierra {
     BOOL                showInstructionPointers;
     
     NSString*           focusedCreatureName;
+
 }
 
 - (void)setWorld:(MacTierra::World*)inWorld;

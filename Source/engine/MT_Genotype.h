@@ -28,7 +28,7 @@ public:
     Genotype(const std::string& inName, const genotype_t& inGenotype);
     ~Genotype();
         
-    const u_int32_t     length() const;
+    u_int32_t           length() const      { return mGenotype.size(); }
     
     const std::string&  name() const        { return mName; }
     const genotype_t&   genotype() const    { return mGenotype; }
