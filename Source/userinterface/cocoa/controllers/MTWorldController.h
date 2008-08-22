@@ -53,6 +53,7 @@ namespace MacTierra {
 @property (readonly) NSString* playPauseButtonTitle;
 
 - (void)createSoup:(u_int32_t)inSize;
+- (void)seedWithAncestor;
 
 - (IBAction)toggleRunning:(id)sender;
 

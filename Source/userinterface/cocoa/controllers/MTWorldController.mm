@@ -56,13 +56,15 @@ using namespace MacTierra;
     self.inventoryController = nil;
     
     [mSoupView setWorld:NULL];
-
+    [mSoupView release];
+    
     delete mWorld;
     [super dealloc];
 }
 
 - (void)awakeFromNib
 {
+    [mSoupView retain];
 }
 
 - (MTSoupView*)soupView
@@ -72,6 +74,8 @@ using namespace MacTierra;
 
 - (void)createSoup:(u_int32_t)inSize
 {
+    NSAssert(!mWorld, @"Should not have world yet");
+    
     mWorld = new World();
 
     mWorld->setFlawRate(8.34E-4);
@@ -81,14 +85,19 @@ using namespace MacTierra;
     mWorld->setSizeSelection(0.9);
 
     mWorld->initializeSoup(inSize);
-
-    // seed the soup
-    mWorld->insertCreature(inSize / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     
     [mSoupView setWorld:mWorld];
     
     self.inventoryController = [[[MTInventoryController alloc] initWithInventory:mWorld->inventory()] autorelease];
 }
+
+- (void)seedWithAncestor
+{
+    // seed the soup
+    if (mWorld)
+        mWorld->insertCreature(mWorld->soupSize() / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+}
+
 
 - (IBAction)toggleRunning:(id)sender
 {
@@ -128,6 +137,8 @@ using namespace MacTierra;
 {
     // have to break ref cycles
     [self stopRunTimer];
+    
+    self.selectedCreature = nil;
 }
 
 #pragma mark -

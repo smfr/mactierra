@@ -11,6 +11,8 @@
 		0F0C949F0E514AE200B233E8 /* TestRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C948B0E514A8800B233E8 /* TestRunner.cpp */; };
 		0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C963E0E51620100B233E8 /* SlicerTests.cpp */; };
+		0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F63B1020E5E6A54005793DE /* MTDocumentController.m */; };
+		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */; };
 		0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */; };
 		0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */; };
@@ -85,6 +87,10 @@
 		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F0C963D0E51620100B233E8 /* SlicerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlicerTests.h; sourceTree = "<group>"; };
 		0F0C963E0E51620100B233E8 /* SlicerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlicerTests.cpp; sourceTree = "<group>"; };
+		0F63B1010E5E6A54005793DE /* MTDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentController.h; sourceTree = "<group>"; };
+		0F63B1020E5E6A54005793DE /* MTDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentController.m; sourceTree = "<group>"; };
+		0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
+		0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		0F9382900E589031004E93C5 /* assert.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = assert.hpp; sourceTree = "<group>"; };
 		0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldController.h; sourceTree = "<group>"; };
 		0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldController.mm; sourceTree = "<group>"; };
@@ -234,6 +240,8 @@
 			children = (
 				0F9DE5D80E575DB300E86DD6 /* MacTierraDocument.h */,
 				0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */,
+				0F63B1010E5E6A54005793DE /* MTDocumentController.h */,
+				0F63B1020E5E6A54005793DE /* MTDocumentController.m */,
 			);
 			path = document;
 			sourceTree = "<group>";
@@ -252,6 +260,8 @@
 		0FA56D280E5A87FA0001E997 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */,
+				0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */,
 				0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */,
 				0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */,
 			);
@@ -600,6 +610,8 @@
 				0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */,
 				0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */,
 				0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */,
+				0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */,
+				0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

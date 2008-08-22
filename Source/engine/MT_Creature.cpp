@@ -94,18 +94,6 @@ Creature::getSoupInstruction(int32_t inOffset) const
     return mSoup->instructionAtAddress(addressFromOffset(inOffset));
 }
 
-void
-Creature::getGenome(genome_t& outGenome) const
-{
-    outGenome.clear();
-    
-    outGenome.reserve(mLength);
-    // not the most efficient
-
-    for (u_int32_t i = 0; i < mLength; ++i)
-        outGenome.push_back(getSoupInstruction(i));
-}
-
 std::string
 Creature::genotypeString() const
 {

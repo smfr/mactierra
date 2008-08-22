@@ -51,6 +51,8 @@ using namespace MacTierra;
         showCells = NO;
         showInstructionPointers = NO;
         self.focusedCreatureName = @"";
+
+        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, nil]];
     }
     return self;
 }
@@ -244,12 +246,12 @@ using namespace MacTierra;
 
 - (CGPoint)soupAddressToSoupPoint:(address_t)inAddr
 {
-    return CGPointMake(inAddr * mSoupWidth, inAddr / mSoupWidth);
+    return CGPointMake(inAddr % mSoupWidth, inAddr / mSoupWidth);
 }
 
 - (address_t)soupPointToSoupAddress:(CGPoint)inPoint
 {
-    return ((address_t)inPoint.x + inPoint.y * mSoupWidth);
+    return ((address_t)inPoint.x + (address_t)inPoint.y * mSoupWidth);
 }
 
 - (CGAffineTransform)soupToViewTransform
@@ -286,26 +288,29 @@ using namespace MacTierra;
 
 #pragma mark -
 
-- (void)mouseMoved:(NSEvent*)inEvent
+- (MacTierra::Creature*)creatureForPoint:(NSPoint)inLocalPoint
 {
-    NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
-    CGPoint thePoint = *(CGPoint*)&localPoint;
-
+    CGPoint thePoint = *(CGPoint*)&inLocalPoint;
     if (mWorld && [self viewPointInSoup:thePoint])
     {
-        CGPoint soupPoint = [self viewPointToSoupPoint:*(CGPoint*)&localPoint];
+        CGPoint soupPoint = [self viewPointToSoupPoint:thePoint];
         address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
 
         MacTierra::Creature* theCreature = mWorld->cellMap()->creatureAtAddress(soupAddr);
-        if (theCreature && !theCreature->isEmbryo())
-        {
-            std::string creatureName = theCreature->creatureName();
-            self.focusedCreatureName = [NSString stringWithUTF8String:creatureName.c_str()];
-        }
-        else
-        {
-            self.focusedCreatureName = @"";
-        }
+        return theCreature;
+    }
+
+    return NULL;
+}
+
+- (void)mouseMoved:(NSEvent*)inEvent
+{
+    NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
+    MacTierra::Creature* theCreature = [self creatureForPoint:localPoint];
+    if (theCreature && !theCreature->isEmbryo())
+    {
+        std::string creatureName = theCreature->creatureName();
+        self.focusedCreatureName = [NSString stringWithUTF8String:creatureName.c_str()];
     }
     else
     {
@@ -316,22 +321,13 @@ using namespace MacTierra;
 - (void)mouseDown:(NSEvent*)inEvent
 {
     NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
-
-    CGPoint thePoint = *(CGPoint*)&localPoint;
-
-    if (mWorld && [self viewPointInSoup:thePoint])
+    MacTierra::Creature* theCreature = [self creatureForPoint:localPoint];
+    if (theCreature && !theCreature->isEmbryo())
     {
-        CGPoint soupPoint = [self viewPointToSoupPoint:*(CGPoint*)&localPoint];
-        address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
-
-        MacTierra::Creature* theCreature = mWorld->cellMap()->creatureAtAddress(soupAddr);
-        if (theCreature && !theCreature->isEmbryo())
-        {
-            MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
+        MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
 //            [creatureObj genotype]; // force the genotype to be created
-            mWorldController.selectedCreature = creatureObj;
-            return;
-        }
+        mWorldController.selectedCreature = creatureObj;
+        return;
     }
 
     mWorldController.selectedCreature = nil;
@@ -340,9 +336,98 @@ using namespace MacTierra;
 - (void)mouseDragged:(NSEvent*)inEvent
 {
     NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
-    NSLog(@"dragging");
+
+    MacTierra::Creature* theCreature = [self creatureForPoint:localPoint];
+
+    if (theCreature && !theCreature->isEmbryo())
+    {
+        MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
+
+        MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithMTCreature:creatureObj] autorelease];
+
+        NSData* creatureData = [NSKeyedArchiver archivedDataWithRootObject:serCreature]; 
+
+        NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        
+        [pasteboard declareTypes:[NSArray arrayWithObject:kCreaturePasteboardType]  owner:self];
+        [pasteboard setData:creatureData forType:kCreaturePasteboardType];
+    
+        // FIXME: scale the image so that it matches the soup scaling
+        NSImage* theImage = [[[NSImage alloc] initWithSize:NSMakeSize(creatureObj.length, 1.0)] autorelease];
+        [theImage lockFocus];
+        [[NSColor grayColor] set];
+        NSRectFill(NSMakeRect(0, 0, creatureObj.length, 1.0));
+        [theImage unlockFocus];
+        
+        [self dragImage:theImage
+                     at:NSMakePoint(localPoint.x - [theImage size].width / 2.0, localPoint.y)
+                 offset:NSZeroSize
+                  event:inEvent
+             pasteboard:pasteboard
+                 source:self
+              slideBack:YES];
+    }
 }
 
+#pragma mark -
+
+- (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
+{
+    NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
+
+    NSPasteboard* pasteboard = [sender draggingPasteboard];
+    if ([[pasteboard types] containsObject:kCreaturePasteboardType])
+    {
+        if (sourceDragMask & NSDragOperationCopy)
+            return NSDragOperationCopy;
+    }
+    
+    return NSDragOperationNone;
+}
+
+- (NSDragOperation)draggingUpdated:(id < NSDraggingInfo >)sender
+{
+    return NSDragOperationCopy;
+}
+
+// perform the drop
+- (BOOL)performDragOperation:(id <NSDraggingInfo>)sender
+{
+    NSPasteboard* pasteboard = [sender draggingPasteboard];
+
+    BOOL inserted = NO;
+
+    if ([[pasteboard types] containsObject:kCreaturePasteboardType])
+    {
+        NSData* creatureData = [pasteboard dataForType:kCreaturePasteboardType];
+        if (!creatureData) return NO;
+        
+        MTSerializableCreature* creature = [NSKeyedUnarchiver unarchiveObjectWithData:creatureData];
+        if (!creature) return NO;
+
+        NSUInteger creatureLen = [creature.genome length];
+        
+//        NSPoint localPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
+        NSPoint imagePoint = [self convertPoint:[sender draggedImageLocation] fromView:nil];
+                
+        CGPoint thePoint = *(CGPoint*)&imagePoint;
+        if (mWorld && [self viewPointInSoup:thePoint])
+        {
+            CGPoint soupPoint = [self viewPointToSoupPoint:thePoint];
+            address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
+
+            if (mWorld->cellMap()->spaceAtAddress(soupAddr, creatureLen))
+            {
+                Creature* newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[creature.genome bytes], creatureLen);
+                NSAssert(newCreature, @"Should have been able to insert");
+                inserted = YES;
+                [self setNeedsDisplay:YES];
+            }
+        }
+        
+    }
+    return inserted;
+}
 
 #pragma mark -
 

@@ -11,11 +11,16 @@
 
 @class MTWorldController;
 
+extern NSString* const kEmptySoupDocumentType;
+
 @interface MacTierraDocument : NSDocument
 {
-    IBOutlet MTWorldController*      worldController;
+    IBOutlet MTWorldController* worldController;
+
+    BOOL                        startEmpty;
 }
 
 @property (retain) MTWorldController*   worldController;
+@property (assign) BOOL startEmpty;
 
 @end

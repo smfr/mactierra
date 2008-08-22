@@ -10,9 +10,12 @@
 
 #import "MTWorldController.h"
 
+NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to match the plist
+
 @implementation MacTierraDocument
 
 @synthesize worldController;
+@synthesize startEmpty;
 
 - (id)init
 {
@@ -28,6 +31,8 @@
 {
     if (self = [super init])
     {
+        if ([typeName isEqualToString:kEmptySoupDocumentType])
+            startEmpty = YES;
     }
     return self;
 }
@@ -46,6 +51,9 @@
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
     [worldController createSoup:(256 * 1024)];
+    if (!startEmpty)
+        [worldController seedWithAncestor];
+
     [super windowControllerDidLoadNib:aController];
 }
 

@@ -13,6 +13,8 @@
 
 #import "MTInventoryGenotype.h"
 
+NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
+
 @implementation MTCreature
 
 - (id)initWithCreature:(MacTierra::Creature*)inCreature
@@ -36,6 +38,14 @@
     return [NSString stringWithUTF8String:mCreature->creatureName().c_str()];
 }
 
+- (NSData*)genome
+{
+    std::string genomeString = mCreature->genotypeString();
+    
+    NSData* data  = [NSData dataWithBytes:genomeString.data() length:genomeString.length()];
+    return data;
+}
+
 - (NSInteger)length
 {
     return mCreature->length();
@@ -53,6 +63,48 @@
         genotype = [[MTInventoryGenotype alloc] initWithGenotype:mCreature->genotype()];
 
     return genotype;
+}
+
+@end
+
+#pragma mark -
+
+@implementation MTSerializableCreature
+
+@synthesize name;
+@synthesize genome;
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    if ((self = [super init]))
+    {
+        self.name   = [[decoder decodeObjectForKey:@"name"] retain];
+        self.genome = [[decoder decodeObjectForKey:@"genome"] retain];
+    }
+    return self;
+}
+
+- (id)initWithMTCreature:(MTCreature *)inCreature
+{
+    if ((self = [super init]))
+    {
+        self.name = inCreature.name;
+        self.genome = inCreature.genome;
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    self.name = nil;
+    self.genome = nil;
+    [super dealloc];
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+    [encoder encodeObject:name forKey:@"name"];
+    [encoder encodeObject:genome forKey:@"genome"];
 }
 
 @end

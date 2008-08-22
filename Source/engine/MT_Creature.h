@@ -76,7 +76,6 @@ public:
     int32_t         offsetFromAddress(address_t inAddress) const;
     
     instruction_t   getSoupInstruction(int32_t inOffset) const;
-    void            getGenome(genome_t& outGenome) const;
 
     InventoryGenotype* genotype() const                             { return mGenotype; }
     void            setGenotype(InventoryGenotype* inGenotype)      { mGenotype = inGenotype; }
