@@ -119,7 +119,7 @@ public:
     // called on parent. return true if the daughter is identical
     bool            gaveBirth(Creature* inDaughter);
 
-    void            onBirth(const World& inWorld, bool inLogBirth);
+    void            onBirth(const World& inWorld);
     void            onDeath(const World& inWorld);
     
     u_int32_t       numOffspring() const            { return mNumOffspring; }
@@ -158,7 +158,6 @@ protected:
 
     bool            mDividing : 1;
     bool            mBorn : 1;              // false until parent divides
-    bool            mGenotypeCountedBirth : 1;
     
     u_int32_t       mLength;
     address_t       mLocation;          // position in soup

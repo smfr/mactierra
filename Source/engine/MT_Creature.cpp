@@ -149,7 +149,7 @@ Creature::divide(World& inWorld)
 bool
 Creature::genomeIdenticalToCreature(const Creature& inOther) const
 {
-    if (!length() == inOther.length())
+    if (length() != inOther.length())
         return false;
 
     const u_int32_t soupSize = mSoup->soupSize();
@@ -177,41 +177,25 @@ Creature::gaveBirth(Creature* inDaughter)
     ++mNumOffspring;
 
     // daughter gets our genotype
-    inDaughter->setGenotype(genotype());
     inDaughter->setGeneration(generation() + 1);
 
     bool identicalCopy = genomeIdenticalToCreature(*inDaughter);
     if (identicalCopy)
-    {
         ++mNumIdenticalOffspring;
-        inDaughter->setGenotypeDivergence(genotypeDivergence());
-    }
-    else
-    {
-        // add a ' to the daughter name
-        inDaughter->setGenotypeDivergence(genotypeDivergence() + 1);
-    }
 
     return identicalCopy;
 }
 
 void
-Creature::onBirth(const World& inWorld, bool inLogBirth)
+Creature::onBirth(const World& inWorld)
 {
     setOriginInstructions(inWorld.timeSlicer().instructionsExecuted());
-    
-    mGenotypeCountedBirth = inLogBirth;
-    if (inLogBirth)
-        mGenotype->creatureBorn();
-        
     mBorn = true;
 }
 
 void
 Creature::onDeath(const World& inWorld)
 {
-    if (mGenotypeCountedBirth)
-        mGenotype->creatureDied();
 }
 
 void

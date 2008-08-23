@@ -159,7 +159,8 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     BOOST_ASSERT(theGenotype);
     theCreature->setGenotype(theGenotype);
     theCreature->setGeneration(1);
-                
+    theGenotype->creatureBorn();
+
     theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSizeSelection));
     theCreature->setReferencedLocation(theCreature->location());
     
@@ -169,7 +170,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     // add it to the various queues
     creatureAdded(theCreature);
     
-    theCreature->onBirth(*this, true);     // IVF, kinda
+    theCreature->onBirth(*this);     // IVF, kinda
     return theCreature;
 }
 
@@ -423,57 +424,61 @@ World::handleBirth(Creature* inParent, Creature* inChild)
 
 
     bool bredTrue = inParent->gaveBirth(inChild);
-    bool logBirth = false;
     if (bredTrue)
     {
-        // FIXME: we really need to snapshot each genotype at birth, and keep around a
-        // collection of "garbage" genotypes. Maybe they are only entered into the inventory
-        // when a creature has 2 identical offspring.
-        if (inParent->numIdenticalOffspring() == 2)
-        {
-            InventoryGenotype*   foundGenotype = NULL;
-            if (mInventory->enterGenotype(inParent->genotypeString(), foundGenotype))
-            {
-                foundGenotype->setOriginInstructions(inParent->originInstructions());
-                foundGenotype->setOriginGenerations(inParent->generation());
+        InventoryGenotype* parentGenotype = NULL;
 
-                // we have a new species; set the parent genotype.
-                inParent->setGenotype(foundGenotype);
-                inParent->setGenotypeDivergence(0);
-                
-                inChild->setGenotype(foundGenotype);
-                inChild->setGenotypeDivergence(0);
-                // FIXME: we should change the genotype names of the first offspring too
-            }
-            else
-            {
-                // not a new genotype
-                // FIXME: maybe convergent evolution; look for genotype here?
-                
-                // The found genotype may not match the parent's genotype, because of
-                // cosmic ray mutations. Do we need to snapshot the genotype when the creature
-                // is born?
-                //BOOST_ASSERT(foundGenotype == inParent->genotype());
-                if (foundGenotype != inParent->genotype())
-                {
-//                    cout << "Parent genotype    " << inParent->genotype()->printableGenotype() << endl;
-//                    cout << "Offspring genotype " << foundGenotype->printableGenotype() << endl;
-                }
-            }
+        // if the parent has not diverged, we could use its genotype. However, this may have changed
+        // because of cosmic mutations, being written over etc, so we need to fetch it again.
+        if (inParent->genotypeDivergence() == 0)
+            parentGenotype = inParent->genotype();
+
+        InventoryGenotype*   foundGenotype = NULL;
+        if (mInventory->enterGenotype(inParent->genotypeString(), foundGenotype))
+        {
+            // it's new
+            foundGenotype->setOriginInstructions(inParent->originInstructions());
+            foundGenotype->setOriginGenerations(inParent->generation());
         }
 
-        // if the parent has a previously recorded genotype, bump up its alive count
-        if (inParent->genotypeDivergence() == 0)
-            logBirth = true;
+        if (parentGenotype != foundGenotype)
+        {
+            if (parentGenotype)
+            {
+                // cout << "Creature genotype changed between birth and reproduction:" << endl;
+                // cout << "was: " << parentGenotype->name() << " " << parentGenotype->printableGenotype() << endl;
+                // cout << "now: " << foundGenotype->name() << " " << foundGenotype->printableGenotype() << endl;
+                // old genotype lost a member
+                parentGenotype->creatureDied();
+            }
+
+            inParent->setGenotype(foundGenotype);
+            inParent->setGenotypeDivergence(0);
+            foundGenotype->creatureBorn();  // count the parent
+        }
+
+        inChild->setGenotype(foundGenotype);
+        inChild->setGenotypeDivergence(0);
+        foundGenotype->creatureBorn();  // count the child
+    }
+    else
+    {
+        // not bred true
+        inChild->setGenotype(inParent->genotype());
+        inChild->setGenotypeDivergence(inParent->genotypeDivergence() + 1);
     }
     
-    inChild->onBirth(*this, logBirth);
+    inChild->onBirth(*this);
 }
 
 void
 World::handleDeath(Creature* inCreature)
 {
     inCreature->onDeath(*this);
+
+    if (inCreature->genotypeDivergence() == 0)
+        inCreature->genotype()->creatureDied();
+
     eradicateCreature(inCreature);
 }
 
