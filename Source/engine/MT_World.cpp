@@ -150,7 +150,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     mSoup->injectInstructions(inAddress, inInstructions, inLength);
 
     InventoryGenotype* theGenotype = NULL;
-    bool isNew = mInventory->enterGenotype(theCreature->genotypeString(), theGenotype);
+    bool isNew = mInventory->enterGenotype(theCreature->genomeString(), theGenotype);
     if (isNew)
     {
         theGenotype->setOriginInstructions(mTimeSlicer.instructionsExecuted());
@@ -434,7 +434,7 @@ World::handleBirth(Creature* inParent, Creature* inChild)
             parentGenotype = inParent->genotype();
 
         InventoryGenotype*   foundGenotype = NULL;
-        if (mInventory->enterGenotype(inParent->genotypeString(), foundGenotype))
+        if (mInventory->enterGenotype(inParent->genomeString(), foundGenotype))
         {
             // it's new
             foundGenotype->setOriginInstructions(inParent->originInstructions());

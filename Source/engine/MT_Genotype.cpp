@@ -13,9 +13,9 @@
 
 namespace MacTierra {
 
-Genotype::Genotype(const std::string& inIdentifier, const std::string& inGenotype)
+Genotype::Genotype(const std::string& inIdentifier, const std::string& inGenome)
 : mIdentifier(inIdentifier)
-, mGenotype(inGenotype)
+, mGenome(inGenome)
 {
 }
 
@@ -27,7 +27,7 @@ std::string
 Genotype::name() const
 {
     std::ostringstream formatter;
-    formatter << mGenotype.length() << mIdentifier;
+    formatter << mGenome.length() << mIdentifier;
     return formatter.str();
 }
 
@@ -38,12 +38,12 @@ Genotype::printableGenotype() const
  
     std::string prettyString;
     
-    for (u_int32_t i = 0; i < mGenotype.length(); ++i)
+    for (u_int32_t i = 0; i < mGenome.length(); ++i)
     {
         if (i > 0)
             prettyString.push_back(' ');
-        prettyString.push_back(hexChars[(mGenotype[i] >> 4) & 0x0F]);
-        prettyString.push_back(hexChars[mGenotype[i] & 0x0F]);
+        prettyString.push_back(hexChars[(mGenome[i] >> 4) & 0x0F]);
+        prettyString.push_back(hexChars[mGenome[i] & 0x0F]);
     }
     
     return prettyString;

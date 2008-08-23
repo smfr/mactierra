@@ -12,6 +12,8 @@
 
 #include <string.h>
 
+#include <boost/serialization/serialization.hpp>
+
 #include "MT_Engine.h"
 #include "MT_Isa.h"
 
@@ -39,6 +41,17 @@ public:
                mStackPointer == inRHS.mStackPointer &&
                mInstructionPointer == inRHS.mInstructionPointer &&
                mFlag == inRHS.mFlag;
+    }
+
+private:
+    friend class boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & mRegisters;
+        ar & mStack;
+        ar & mStackPointer;
+        ar & mInstructionPointer;
+        ar & mFlag;
     }
     
 public:

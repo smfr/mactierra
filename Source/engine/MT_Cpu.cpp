@@ -41,7 +41,4 @@ Cpu::pop()
     return mStack[mStackPointer];
 }
 
-
-
-
 } // namespace MacTierra

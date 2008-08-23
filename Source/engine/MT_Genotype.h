@@ -16,7 +16,7 @@
 
 namespace MacTierra {
 
-typedef std::string genotype_t;
+typedef std::string genome_t;
 
 // Represents a set of creatures with the same instructions. Used for
 // book-keeping in the inventory and genebank.
@@ -24,30 +24,30 @@ class Genotype
 {
 public:
 
-    Genotype(const std::string& inIdentifier, const genotype_t& inGenotype);
+    Genotype(const std::string& inIdentifier, const genome_t& inGenome);
     ~Genotype();
         
-    u_int32_t           length() const      { return mGenotype.size(); }
+    u_int32_t           length() const      { return mGenome.size(); }
     
     // like "80aaa"
     std::string         name() const;
     // like "aaa"
     const std::string&  identifier() const  { return mIdentifier; }
 
-    const genotype_t&   genotype() const    { return mGenotype; }
+    const genome_t&     genome() const    { return mGenome; }
 
     std::string         printableGenotype() const;
     std::string         prettyPrintedGenotype() const;
 
     bool operator < (const Genotype inRHS)
     {
-        return mGenotype < inRHS.genotype();
+        return mGenome < inRHS.genome();
     }
 
 protected:
 
     std::string         mIdentifier;      // just the letters part
-    genotype_t          mGenotype;
+    genome_t            mGenome;
 
 };
 

@@ -94,10 +94,10 @@ Creature::getSoupInstruction(int32_t inOffset) const
     return mSoup->instructionAtAddress(addressFromOffset(inOffset));
 }
 
-std::string
-Creature::genotypeString() const
+genome_t
+Creature::genomeString() const
 {
-    string  genotype;
+    genome_t  genotype;
     genotype.reserve(length());
     
     for (u_int32_t i = 0; i < mLength; ++i)
@@ -204,7 +204,5 @@ Creature::clearDaughter()
     mDaughter = NULL;
     mDividing = false;
 }
-
-
 
 } // namespace MacTierra

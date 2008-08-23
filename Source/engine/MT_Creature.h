@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <boost/intrusive/list.hpp>
+#include <boost/serialization/serialization.hpp>
 
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
@@ -34,8 +35,6 @@ public:
     SlicerListHook  mSlicerListHook;
     
 public:
-
-    typedef std::vector<instruction_t> genome_t;
     
     Creature(creature_id inID, Soup* inOwningSoup);
     ~Creature();
@@ -83,7 +82,7 @@ public:
     void            setGenotypeDivergence(u_int32_t inDivergence)   { mGenotypeDivergence = inDivergence; }
 
     // this string can have embedded nulls. Not printable.
-    genotype_t      genotypeString() const;
+    genome_t        genomeString() const;
     
     // move to soup?
     void            clearSpace();
@@ -142,7 +141,38 @@ private:
     // disallow copy construct and copy
     Creature& operator=(const Creature& inRHS);
     Creature(const Creature& inRHS);
-    
+
+    friend class boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & mID;
+        ar & mGenotype;
+        ar & mGenotypeDivergence;
+        ar & mCPU;
+        ar & mSoup;
+
+        ar & mDaughter;
+        ar & mDividing;
+        ar & mBorn;
+
+        ar & mLength;
+        ar & mLocation;
+        ar & mSliceSize;
+        ar & mLastInstruction;
+
+        ar & mInstructionsToLastOffspring;
+        ar & mTotalInstructionsExecuted;
+        ar & mBirthInstructions;
+
+        ar & mNumErrors;
+        ar & mMovesToLastOffspring;
+
+        ar & mNumOffspring;
+        ar & mNumIdenticalOffspring;
+
+        ar & mGeneration;
+    }
+
 protected:
 
     creature_id     mID;

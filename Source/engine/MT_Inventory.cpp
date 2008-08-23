@@ -15,7 +15,7 @@ namespace MacTierra {
 
 using namespace std;
 
-InventoryGenotype::InventoryGenotype(const std::string& inName, const genotype_t& inGenotype)
+InventoryGenotype::InventoryGenotype(const std::string& inName, const genome_t& inGenotype)
 : Genotype(inName, inGenotype)
 , mNumAlive(0)
 , mNumEverLived(0)
@@ -41,14 +41,14 @@ Inventory::~Inventory()
 }
 
 InventoryGenotype*
-Inventory::findGenotype(const genotype_t& inGenotype) const
+Inventory::findGenotype(const genome_t& inGenotype) const
 {
     InventoryMap::const_iterator it = mInventoryMap.find(inGenotype);
     return (it != mInventoryMap.end()) ? it->second  : NULL;
 }
 
 bool
-Inventory::enterGenotype(const genotype_t& inGenotype, InventoryGenotype*& outGenotype)
+Inventory::enterGenotype(const genome_t& inGenotype, InventoryGenotype*& outGenotype)
 {
     InventoryMap::const_iterator it = mInventoryMap.find(inGenotype);
     if (it == mInventoryMap.end())

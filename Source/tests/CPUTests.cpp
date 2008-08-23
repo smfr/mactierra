@@ -255,9 +255,8 @@ CPUTests::runTest()
 
     TEST_CONDITION(!creature->isDividing() && !creature->daughterCreature());
 
-    Creature::genome_t parentGenome, daughterGenome;
-    creature->getGenome(parentGenome);
-    daughter1->getGenome(daughterGenome);
+    genome_t parentGenome = creature->genomeString();
+    genome_t daughterGenome = daughter1->genomeString();
     TEST_CONDITION(parentGenome == daughterGenome);
     
     mWorld->iterate(1); // k_jmp
@@ -281,8 +280,7 @@ CPUTests::runTest()
                 break;
 
             case k_divide:
-                Creature::genome_t daughter2Genome;
-                daughter2->getGenome(daughter2Genome);
+                genome_t daughter2Genome = daughter2->genomeString();
                 TEST_CONDITION(parentGenome == daughter2Genome);
 
                 done = true;

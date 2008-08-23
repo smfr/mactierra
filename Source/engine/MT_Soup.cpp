@@ -105,6 +105,13 @@ Soup::injectInstructions(address_t inAddress, const instruction_t* inInstruction
         setInstructionAtAddress((inAddress + i) % mSoupSize, inInstructions[i]);
 }
 
+bool
+Soup::operator==(const Soup& inRHS) const
+{
+    return (mSoupSize == inRHS.soupSize()) &&
+           (memcmp(mSoup, inRHS.soup(), mSoupSize) == 0);
+}
+
 
 bool
 Soup::searchForwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset)
