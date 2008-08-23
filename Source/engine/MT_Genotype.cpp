@@ -7,18 +7,28 @@
  *
  */
 
+#include <sstream>
+
 #include "MT_Genotype.h"
 
 namespace MacTierra {
 
-Genotype::Genotype(const std::string& inName, const std::string& inGenotype)
-: mName(inName)
+Genotype::Genotype(const std::string& inIdentifier, const std::string& inGenotype)
+: mIdentifier(inIdentifier)
 , mGenotype(inGenotype)
 {
 }
 
 Genotype::~Genotype()
 {
+}
+
+std::string
+Genotype::name() const
+{
+    std::ostringstream formatter;
+    formatter << mGenotype.length() << mIdentifier;
+    return formatter.str();
 }
 
 std::string

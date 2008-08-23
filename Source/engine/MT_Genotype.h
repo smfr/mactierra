@@ -24,13 +24,16 @@ class Genotype
 {
 public:
 
-    // note that these strings can have embedded null bytes
-    Genotype(const std::string& inName, const genotype_t& inGenotype);
+    Genotype(const std::string& inIdentifier, const genotype_t& inGenotype);
     ~Genotype();
         
     u_int32_t           length() const      { return mGenotype.size(); }
     
-    const std::string&  name() const        { return mName; }
+    // like "80aaa"
+    std::string         name() const;
+    // like "aaa"
+    const std::string&  identifier() const  { return mIdentifier; }
+
     const genotype_t&   genotype() const    { return mGenotype; }
 
     std::string         printableGenotype() const;
@@ -43,7 +46,7 @@ public:
 
 protected:
 
-    std::string         mName;
+    std::string         mIdentifier;      // just the letters part
     genotype_t          mGenotype;
 
 };

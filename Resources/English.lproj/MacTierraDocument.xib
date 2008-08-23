@@ -694,6 +694,7 @@
 																				<string key="NSFrame">{{1, 1}, {118, 419}}</string>
 																				<reference key="NSSuperview" ref="205053322"/>
 																				<reference key="NSWindow"/>
+																				<reference key="NSNextKeyView" ref="897396159"/>
 																				<reference key="NSDocView" ref="897396159"/>
 																				<reference key="NSBGColor" ref="846881806"/>
 																				<object class="NSCursor" key="NSCursor">
@@ -729,6 +730,7 @@
 																		<string key="NSFrame">{{91, 17}, {131, 421}}</string>
 																		<reference key="NSSuperview" ref="429138115"/>
 																		<reference key="NSWindow"/>
+																		<reference key="NSNextKeyView" ref="694915335"/>
 																		<int key="NSsFlags">18</int>
 																		<reference key="NSVScroller" ref="460022202"/>
 																		<reference key="NSHScroller" ref="683007517"/>
@@ -964,14 +966,14 @@
 																			<object class="NSTableView" id="358998908">
 																				<reference key="NSNextResponder" ref="999149641"/>
 																				<int key="NSvFlags">256</int>
-																				<string key="NSFrameSize">{989, 133}</string>
+																				<string key="NSFrameSize">{985, 133}</string>
 																				<reference key="NSSuperview" ref="999149641"/>
 																				<reference key="NSWindow"/>
 																				<bool key="NSEnabled">YES</bool>
 																				<object class="NSTableHeaderView" key="NSHeaderView" id="1067095830">
 																					<reference key="NSNextResponder" ref="154614865"/>
 																					<int key="NSvFlags">256</int>
-																					<string key="NSFrameSize">{989, 17}</string>
+																					<string key="NSFrameSize">{985, 17}</string>
 																					<reference key="NSSuperview" ref="154614865"/>
 																					<reference key="NSWindow"/>
 																					<reference key="NSTableView" ref="358998908"/>
@@ -979,7 +981,7 @@
 																				<object class="_NSCornerView" key="NSCornerView" id="101504306">
 																					<reference key="NSNextResponder" ref="1052934936"/>
 																					<int key="NSvFlags">256</int>
-																					<string key="NSFrame">{{990, 0}, {16, 17}}</string>
+																					<string key="NSFrame">{{986, 0}, {16, 17}}</string>
 																					<reference key="NSSuperview" ref="1052934936"/>
 																					<reference key="NSWindow"/>
 																				</object>
@@ -1147,7 +1149,7 @@
 																					</object>
 																					<object class="NSTableColumn" id="433881376">
 																						<string key="NSIdentifier">genotype</string>
-																						<double key="NSWidth">5.670000e+02</double>
+																						<double key="NSWidth">5.630000e+02</double>
 																						<double key="NSMinWidth">1.000000e+01</double>
 																						<double key="NSMaxWidth">3.402823e+38</double>
 																						<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -1193,9 +1195,10 @@
 																				<bool key="NSAllowsTypeSelect">YES</bool>
 																			</object>
 																		</object>
-																		<string key="NSFrame">{{1, 17}, {989, 133}}</string>
+																		<string key="NSFrame">{{1, 17}, {985, 133}}</string>
 																		<reference key="NSSuperview" ref="1052934936"/>
 																		<reference key="NSWindow"/>
+																		<reference key="NSNextKeyView" ref="358998908"/>
 																		<reference key="NSDocView" ref="358998908"/>
 																		<reference key="NSBGColor" ref="365590202"/>
 																		<int key="NScvFlags">4</int>
@@ -1203,7 +1206,7 @@
 																	<object class="NSScroller" id="476085581">
 																		<reference key="NSNextResponder" ref="1052934936"/>
 																		<int key="NSvFlags">256</int>
-																		<string key="NSFrame">{{990, 17}, {15, 133}}</string>
+																		<string key="NSFrame">{{986, 17}, {15, 133}}</string>
 																		<reference key="NSSuperview" ref="1052934936"/>
 																		<reference key="NSWindow"/>
 																		<reference key="NSTarget" ref="1052934936"/>
@@ -1229,18 +1232,20 @@
 																			<bool key="EncodedWithXMLCoder">YES</bool>
 																			<reference ref="1067095830"/>
 																		</object>
-																		<string key="NSFrame">{{1, 0}, {989, 17}}</string>
+																		<string key="NSFrame">{{1, 0}, {985, 17}}</string>
 																		<reference key="NSSuperview" ref="1052934936"/>
 																		<reference key="NSWindow"/>
+																		<reference key="NSNextKeyView" ref="1067095830"/>
 																		<reference key="NSDocView" ref="1067095830"/>
 																		<reference key="NSBGColor" ref="365590202"/>
 																		<int key="NScvFlags">4</int>
 																	</object>
 																	<reference ref="101504306"/>
 																</object>
-																<string key="NSFrame">{{2, 2}, {1006, 151}}</string>
+																<string key="NSFrame">{{2, 2}, {1002, 151}}</string>
 																<reference key="NSSuperview" ref="45276"/>
 																<reference key="NSWindow"/>
+																<reference key="NSNextKeyView" ref="999149641"/>
 																<int key="NSsFlags">18</int>
 																<reference key="NSVScroller" ref="476085581"/>
 																<reference key="NSHScroller" ref="890750164"/>
@@ -1709,6 +1714,22 @@
 						</object>
 					</object>
 					<int key="connectionID">100177</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">contentObject: selectedCreature</string>
+						<reference key="source" ref="627753675"/>
+						<reference key="destination" ref="647581288"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="627753675"/>
+							<reference key="NSDestination" ref="647581288"/>
+							<string key="NSLabel">contentObject: selectedCreature</string>
+							<string key="NSBinding">contentObject</string>
+							<string key="NSKeyPath">selectedCreature</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">100178</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2619,7 +2640,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100177</int>
+			<int key="maxID">100178</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

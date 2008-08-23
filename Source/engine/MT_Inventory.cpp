@@ -8,7 +8,6 @@
  */
 
 #include <iostream>
-#include <sstream>
 
 #include "MT_Inventory.h"
 
@@ -55,9 +54,9 @@ Inventory::enterGenotype(const genotype_t& inGenotype, InventoryGenotype*& outGe
     if (it == mInventoryMap.end())
     {
         // not found. make a new one.
-        string name = uniqueNameForLength(inGenotype.length());
+        string newIdentifier = uniqueIdentifierForLength(inGenotype.length());
 
-        InventoryGenotype* newGenotype = new InventoryGenotype(name, inGenotype);
+        InventoryGenotype* newGenotype = new InventoryGenotype(newIdentifier, inGenotype);
         mInventoryMap[inGenotype] = newGenotype;
         mGenotypeSizeMap.insert(pair<u_int32_t, InventoryGenotype*>(inGenotype.length(), newGenotype));
 
@@ -78,9 +77,6 @@ static std::string incrementString(const std::string& inString)
     size_t pos = len - 1;
     while (pos >= 0)
     {
-        if (tempString[pos] <= '0')       // we hit the numbers
-            break;
-
         if (tempString[pos] < 'z')
         {
             ++tempString[pos];
@@ -110,22 +106,17 @@ Inventory::printCreatures() const
 }
 
 std::string
-Inventory::uniqueNameForLength(u_int32_t inLength) const
+Inventory::uniqueIdentifierForLength(u_int32_t inLength) const
 {
-    std::ostringstream formatter;
-    formatter << inLength;
     pair<SizeMap::const_iterator, SizeMap::const_iterator> sizeRange = mGenotypeSizeMap.equal_range(inLength);
     
     if (sizeRange.first == sizeRange.second)
-    {
-        formatter << "aaaaa";
-        return formatter.str();
-    }
+        return "aaaaa";
     
     SizeMap::const_iterator last = sizeRange.second;
     --last;
     const Genotype* lastGenotype = last->second;
-    return incrementString(lastGenotype->name());
+    return incrementString(lastGenotype->identifier());
 }
 
 

@@ -24,7 +24,7 @@ namespace MacTierra {
 class InventoryGenotype : public Genotype
 {
 public:
-    InventoryGenotype(const std::string& inName, const genotype_t& inGenotype);
+    InventoryGenotype(const std::string& inIdentifier, const genotype_t& inGenotype);
     
     void creatureBorn()
     {
@@ -72,13 +72,13 @@ public:
     // return true if it's new
     bool                enterGenotype(const genotype_t& inGenotype, InventoryGenotype*& outGenotype);
 
-    void            printCreatures() const;
+    void                printCreatures() const;
     
     const InventoryMap& inventoryMap() const { return mInventoryMap; }
 
 protected:
 
-    std::string     uniqueNameForLength(u_int32_t inLength) const;
+    std::string         uniqueIdentifierForLength(u_int32_t inLength) const;
     
 protected:
 

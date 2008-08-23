@@ -50,7 +50,7 @@ Creature::creatureName() const
     BOOST_ASSERT(mGenotype);
     
     string name(mGenotype->name());
-    name.append(max(mGenotypeDivergence, 5U), '\'');
+    name.append(min(mGenotypeDivergence, 5U), '\'');
 
     return name;
 }
