@@ -8,6 +8,7 @@
 
 #import "MacTierraDocument.h"
 
+#import "MTDocumentController.h"
 #import "MTWorldController.h"
 
 NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to match the plist
@@ -31,8 +32,8 @@ NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to ma
 {
     if (self = [super init])
     {
-        if ([typeName isEqualToString:kEmptySoupDocumentType])
-            startEmpty = YES;
+        if ([(MTDocumentController*)[NSDocumentController sharedDocumentController] creatingEmptySoup])
+            self.startEmpty = YES;
     }
     return self;
 }

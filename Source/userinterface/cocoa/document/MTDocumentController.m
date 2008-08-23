@@ -12,9 +12,11 @@
 
 @implementation MTDocumentController
 
+@synthesize creatingEmptySoup;
+
 - (IBAction)newEmptySoupDocument:(id)sender
 {
-    mCreatingEmptySoup = YES;
+    self.creatingEmptySoup = YES;
     @try
     {
         [super newDocument:sender];
@@ -23,15 +25,7 @@
     {
         NSLog(@"Got exception %@ when creating new soup document", ex);
     }
-    mCreatingEmptySoup = NO;
-}
-
-- (NSString *)defaultType
-{
-    if (mCreatingEmptySoup)
-        return kEmptySoupDocumentType;
-
-    return [super defaultType];
+    self.creatingEmptySoup = NO;
 }
 
 @end
