@@ -40,7 +40,7 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
 
 - (NSData*)genome
 {
-    std::string genomeString = mCreature->genotypeString();
+    std::string genomeString = mCreature->genomeString();
     
     NSData* data  = [NSData dataWithBytes:genomeString.data() length:genomeString.length()];
     return data;

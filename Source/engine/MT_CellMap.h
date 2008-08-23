@@ -11,6 +11,9 @@
 #define MT_Cellmap_h
 
 #include <vector>
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/vector.hpp>
+#include <boost/serialization/split_member.hpp>
 
 #include "MT_Engine.h"
 #include "MT_Creature.h"
@@ -19,14 +22,21 @@ namespace MacTierra {
 
 class Creature;
 
-template <class T>
-struct cell_range
+struct CreatureRange
 {
     u_int32_t       mStart;
     u_int32_t       mLength;
-    T               mData;
+    Creature*       mData;
 
-    cell_range(u_int32_t inStart, u_int32_t inLength, T inData)
+    // default ctor for serialization only
+    CreatureRange()
+    : mStart(0)
+    , mLength(0)
+    , mData(NULL)
+    {
+    }
+    
+    CreatureRange(u_int32_t inStart, u_int32_t inLength, Creature* inData)
     : mStart(inStart)
     , mLength(inLength)
     , mData(inData)
@@ -53,19 +63,29 @@ struct cell_range
                     {
                         return mStart + mLength > inMapLength;
                     }
-};
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & BOOST_SERIALIZATION_NVP(mStart);
+        ar & BOOST_SERIALIZATION_NVP(mLength);
+        ar & BOOST_SERIALIZATION_NVP(mData);
+    }
+    
+};
 
 // The CellMap tracks which bytes of the soup are used by which creature.
 class CellMap
 {
 public:
-    typedef cell_range<Creature*> CreatureCell;
-    typedef std::vector<CreatureCell> CreatureList;
+    typedef std::vector<CreatureRange> CreatureList;
 
     CellMap(u_int32_t inSize);
     ~CellMap();
     
+    u_int32_t   size() const { return mSize; }
+
     // find creature which overlaps the given address
     Creature*   creatureAtAddress(address_t inAddress) const;
     
@@ -99,16 +119,50 @@ public:
 protected:
 
     bool        spaceAtAddress(address_t inAddress, u_int32_t inLength, size_t& outIndex) const;
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        // size is passed in via the ctor
+        ar & BOOST_SERIALIZATION_NVP(mSpaceUsed);
+        ar & BOOST_SERIALIZATION_NVP(mCells);
+    }
     
 protected:
 
-    u_int32_t       mSize;
-    u_int32_t       mSpaceUsed;
+    const u_int32_t     mSize;
+    u_int32_t           mSpaceUsed;
     
-    CreatureList    mCells;
+    CreatureList        mCells;
 };
 
 } // namespace MacTierra
+
+
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+inline void save_construct_data(Archive& ar, const MacTierra::CellMap* inCellMap, const unsigned int file_version)
+{
+    // save data required to construct instance
+    u_int32_t soupSize = inCellMap->size();
+    ar << BOOST_SERIALIZATION_NVP(soupSize);
+}
+
+template<class Archive>
+inline void load_construct_data(Archive& ar, MacTierra::CellMap* inCellMap, const unsigned int file_version)
+{
+    // retrieve data from archive required to construct new instance
+    u_int32_t soupSize;
+    ar >> BOOST_SERIALIZATION_NVP(soupSize);
+    // invoke inplace constructor to initialize instance of my_class
+    ::new(inCellMap)MacTierra::CellMap(soupSize);
+}
+
+} // namespace boost
+} // namespace serialization
 
 
 #endif // MT_Cellmap_h

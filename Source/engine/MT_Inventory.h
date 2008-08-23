@@ -14,6 +14,9 @@
 #include <map>
 
 #include <boost/assert.hpp>
+#include <boost/serialization/export.hpp>
+#include <boost/serialization/map.hpp>
+#include <boost/serialization/serialization.hpp>
 
 #include "MT_Engine.h"
 #include "MT_Genotype.h"
@@ -47,6 +50,19 @@ public:
     u_int32_t       originGenerations() const  { return mOriginGenerations; }
     void            setOriginGenerations(u_int32_t inGenerations) { mOriginGenerations = inGenerations; }
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Genotype);
+        
+        ar & BOOST_SERIALIZATION_NVP(mNumAlive);
+        ar & BOOST_SERIALIZATION_NVP(mNumEverLived);
+
+        ar & BOOST_SERIALIZATION_NVP(mOriginInstructions);
+        ar & BOOST_SERIALIZATION_NVP(mOriginGenerations);
+    }
+
 protected:
 
     u_int32_t       mNumAlive;
@@ -55,6 +71,44 @@ protected:
     u_int64_t       mOriginInstructions;
     u_int32_t       mOriginGenerations;
 };
+
+} // namespace MacTierra
+
+BOOST_CLASS_EXPORT_GUID(MacTierra::InventoryGenotype, "InventoryGenotype")
+
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+inline void save_construct_data(Archive& ar, const MacTierra::InventoryGenotype* inGenotype, const unsigned int file_version)
+{
+    // save data required to construct instance
+    const std::string& identifier = inGenotype->identifier();
+    const MacTierra::genome_t& genome = inGenotype->genome();
+    ar << BOOST_SERIALIZATION_NVP(identifier);
+    ar << BOOST_SERIALIZATION_NVP(genome);
+}
+
+template<class Archive>
+inline void load_construct_data(Archive& ar, MacTierra::InventoryGenotype* inGenotype, const unsigned int file_version)
+{
+    // retrieve data from archive required to construct new instance
+    std::string identifier;
+    MacTierra::genome_t genome;
+    ar >> BOOST_SERIALIZATION_NVP(identifier);
+    ar >> BOOST_SERIALIZATION_NVP(genome);
+    // invoke inplace constructor to initialize instance of my_class
+    ::new(inGenotype)MacTierra::InventoryGenotype(identifier, genome);
+}
+
+} // namespace boost
+} // namespace serialization
+
+
+BOOST_CLASS_EXPORT(MacTierra::InventoryGenotype)
+
+
+namespace MacTierra {
 
 
 // The inventory tracks the species that are alive now.
@@ -79,6 +133,20 @@ public:
 protected:
 
     std::string         uniqueIdentifierForLength(u_int32_t inLength) const;
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & BOOST_SERIALIZATION_NVP(mNumSpeciesEver);
+        ar & BOOST_SERIALIZATION_NVP(mNumSpeciesCurrent);
+
+        ar & BOOST_SERIALIZATION_NVP(mSpeciationCount);
+        ar & BOOST_SERIALIZATION_NVP(mExtinctionCount);
+
+        ar & BOOST_SERIALIZATION_NVP(mInventoryMap);
+        ar & BOOST_SERIALIZATION_NVP(mGenotypeSizeMap);
+    }
     
 protected:
 

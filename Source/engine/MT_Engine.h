@@ -42,8 +42,6 @@ typedef u_int8_t instruction_t;
 
 typedef u_int32_t address_t;
 
-
-
 } // namespace MacTierra
 
 

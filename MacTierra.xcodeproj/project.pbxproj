@@ -15,7 +15,6 @@
 		0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F88E0E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */; };
-		0F13F8900E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */; };
 		0F13FA6D0E5FD98300D8E649 /* archive_pointer_iserializer.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2D0E5FD98300D8E649 /* archive_pointer_iserializer.ipp */; };
 		0F13FA6E0E5FD98300D8E649 /* archive_pointer_oserializer.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2E0E5FD98300D8E649 /* archive_pointer_oserializer.ipp */; };
 		0F13FA6F0E5FD98300D8E649 /* basic_binary_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2F0E5FD98300D8E649 /* basic_binary_iarchive.ipp */; };
@@ -102,18 +101,6 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildRule section */
-		0F13F9040E5FCE9700D8E649 /* PBXBuildRule */ = {
-			isa = PBXBuildRule;
-			compilerSpec = com.apple.compilers.gcc;
-			filePatterns = "*.ipp";
-			fileType = pattern.proxy;
-			isEditable = 1;
-			outputFiles = (
-			);
-		};
-/* End PBXBuildRule section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -1042,7 +1029,6 @@
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 			);
 			buildRules = (
-				0F13F9040E5FCE9700D8E649 /* PBXBuildRule */,
 			);
 			dependencies = (
 			);
@@ -1188,7 +1174,6 @@
 				0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */,
 				0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */,
 				0F13F8810E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */,
-				0F13F8900E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -15,15 +15,26 @@
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+
+#include <boost/serialization/serialization.hpp>
+
+#include "MT_Ancestor.h"
 #include "MT_Cpu.h"
 #include "MT_Creature.h"
+#include "MT_Inventory.h"
 #include "MT_Reaper.h"
 #include "MT_Soup.h"
+#include "MT_World.h"
 
 using namespace MacTierra;
 using namespace std;
 
+const u_int32_t kSoupSize = 1024;
+
 SerializationTests::SerializationTests()
+: mWorld(NULL)
 {
 }
 
@@ -35,11 +46,14 @@ SerializationTests::~SerializationTests()
 void
 SerializationTests::setUp()
 {
+    mWorld = new World();
+    mWorld->initializeSoup(kSoupSize);
 }
 
 void
 SerializationTests::tearDown()
 {
+    delete mWorld; mWorld = NULL;
 }
 
 void
@@ -47,49 +61,36 @@ SerializationTests::runTest()
 {
     cout << "SerializationTests" << endl;
 
-    Cpu theCPU;
-    theCPU.push(3);
-    theCPU.push(5);
-    theCPU.push(6);
-    theCPU.push(1);
-
-    theCPU.setFlag();
-
-    theCPU.mInstructionPointer = 12345;
-
-
-    Soup* theSoup = new Soup(1024);
-
-    instruction_t* soupMem = (instruction_t*)theSoup->soup();
-    soupMem[0] = 1;
-    soupMem[100] = 2;
-    soupMem[200] = 3;
-    soupMem[1023] = 5;
-
+    Creature* creature1 = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    creature1->setLocation(400);
+    creature1->setLength(100);
 
     // output archive
     {
-        std::ofstream ofs("test.out");
-
-        boost::archive::text_oarchive oa(ofs);
-        oa << theCPU;
-        oa << theSoup;
+        std::ofstream textStream("test.out");
+        std::ofstream xmlStream("test_out.xml");
+        
+        ::boost::archive::text_oarchive textArchive(textStream);
+        ::boost::archive::xml_oarchive xmlArchive(xmlStream);
+        textArchive << BOOST_SERIALIZATION_NVP(mWorld);
+        xmlArchive << BOOST_SERIALIZATION_NVP(mWorld);
     }
 
     // now read it back in
-    Cpu cloneCpu;
-    Soup* cloneSoup = NULL;
+    World* newWorld = NULL;
     {
-        std::ifstream ifs("test.out");
-        boost::archive::text_iarchive ia(ifs);
-        ia >> cloneCpu;
-        ia >> cloneSoup;
+        std::ifstream textInStream("test.out");
+//        std::ifstream xmlInStream("test_out.xml");
+
+        ::boost::archive::text_iarchive textArchive(textInStream);
+//        ::boost::archive::text_iarchive xmlArchive(xmlInStream);
+
+        textArchive >> BOOST_SERIALIZATION_NVP(newWorld);
     }
-    TEST_CONDITION(cloneCpu == theCPU);
-    TEST_CONDITION(*cloneSoup == *theSoup);
 
+//    TEST_CONDITION(*cloneCreature == *creature1);
 
-
+    delete newWorld;
 }
 
 

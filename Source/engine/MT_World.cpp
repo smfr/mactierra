@@ -13,10 +13,9 @@
 #include <map>
 #include <iostream>
 
-#include "RandomLib/Random.hpp"
-#include "RandomLib/ExponentialDistribution.hpp"
-
 #include "MT_World.h"
+
+#include "RandomLib/ExponentialDistribution.hpp"
 
 #include "MT_Cellmap.h"
 #include "MT_Creature.h"
@@ -38,7 +37,7 @@ World::World()
 , mNextCreatureID(1)
 , mSliceSizeVariance(0.0)
 , mExecution(NULL)
-, mTimeSlicer(*this)
+, mTimeSlicer(this)
 , mInventory(NULL)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)

@@ -11,6 +11,7 @@
 
 #include <iostream>
 
+#define HAVE_BOOST_SERIALIZATION 1
 #include "RandomLib/Random.hpp"
 #include "RandomLib/ExponentialDistribution.hpp"
 
@@ -39,7 +40,7 @@ SlicerTests::setUp()
 {
     mWorld = new World();
     mWorld->initializeSoup(1024);
-    mSlicer = new TimeSlicer(*mWorld);
+    mSlicer = new TimeSlicer(mWorld);
 }
 
 void

@@ -13,6 +13,10 @@
 
 #include "TestRunner.h"
 
+namespace MacTierra {
+class World;
+}
+
 class SerializationTests : public TestCase
 {
 public:
@@ -27,6 +31,7 @@ public:
 
 protected:
 
+    MacTierra::World*   mWorld;
 
 };
 

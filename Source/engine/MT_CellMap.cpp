@@ -60,7 +60,7 @@ CellMap::spaceAtAddress(address_t inAddress, u_int32_t inLength, size_t& outInde
     // if request wraps
     if (inAddress + inLength > mSize)
     {
-        const CreatureCell& lastCreature = mCells[numCreatures - 1];
+        const CreatureRange& lastCreature = mCells[numCreatures - 1];
         if (lastCreature.wraps(mSize))
             return false;
 
@@ -123,7 +123,7 @@ CellMap::insertCreature(Creature* inCreature)
     
     // insert at the given index
     CreatureList::iterator insertPos = mCells.begin() + insertionIndex;
-    mCells.insert(insertPos, CreatureCell(inCreature->location(), inCreature->length(), inCreature));
+    mCells.insert(insertPos, CreatureRange(inCreature->location(), inCreature->length(), inCreature));
 
     BOOST_ASSERT(insertionIndex == 0 || mCells[insertionIndex].start() > mCells[insertionIndex - 1].start());
     BOOST_ASSERT(insertionIndex == mCells.size() - 1 || mCells[insertionIndex].start() < mCells[insertionIndex + 1].start());
@@ -332,7 +332,7 @@ CellMap::printCreatures() const
          it != mCells.end();
          ++it)
     {
-        CreatureCell    cell = (*it);
+        CreatureRange   cell = (*it);
         Creature*       creature = cell.mData;
 
         cout << cell.mStart << " creature (" << creature->location() << ", " << creature->length() << ")" << endl;

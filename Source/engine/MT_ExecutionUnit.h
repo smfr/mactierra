@@ -10,6 +10,8 @@
 #ifndef MT_ExecutionUnit_h
 #define MT_ExecutionUnit_h
 
+#include <boost/serialization/serialization.hpp>
+
 #include "MT_Engine.h"
 
 namespace MacTierra {
@@ -30,6 +32,11 @@ public:
     // Returns new creature on divide instruction
     virtual Creature* execute(Creature& inCreature, World& inWorld, int32_t inFlaw) = 0;
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+    }
 
 protected:
 

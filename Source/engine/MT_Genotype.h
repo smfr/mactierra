@@ -11,6 +11,7 @@
 #define MT_Genotype_h
 
 #include <string>
+#include <boost/serialization/serialization.hpp>
 
 #include "MT_Engine.h"
 
@@ -44,6 +45,14 @@ public:
         return mGenome < inRHS.genome();
     }
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & BOOST_SERIALIZATION_NVP(mIdentifier);
+        ar & BOOST_SERIALIZATION_NVP(mGenome);
+    }
+
 protected:
 
     std::string         mIdentifier;      // just the letters part
@@ -51,8 +60,36 @@ protected:
 
 };
 
-
 } // namespace MacTierra
+
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+inline void save_construct_data(Archive& ar, const MacTierra::Genotype* inGenotype, const unsigned int file_version)
+{
+    // save data required to construct instance
+    const std::string& identifier = inGenotype->identifier();
+    const MacTierra::genome_t& genome = inGenotype->genome();
+    ar << BOOST_SERIALIZATION_NVP(identifier);
+    ar << BOOST_SERIALIZATION_NVP(genome);
+}
+
+template<class Archive>
+inline void load_construct_data(Archive& ar, MacTierra::Genotype* inGenotype, const unsigned int file_version)
+{
+    // retrieve data from archive required to construct new instance
+    std::string identifier;
+    MacTierra::genome_t genome;
+    ar >> BOOST_SERIALIZATION_NVP(identifier);
+    ar >> BOOST_SERIALIZATION_NVP(genome);
+    // invoke inplace constructor to initialize instance of my_class
+    ::new(inGenotype)MacTierra::Genotype(identifier, genome);
+}
+
+} // namespace boost
+} // namespace serialization
+
 
 #endif // MT_Genotype_h
 

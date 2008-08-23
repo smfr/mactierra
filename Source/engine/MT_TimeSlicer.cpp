@@ -22,7 +22,7 @@ namespace MacTierra {
 
 using namespace std;
 
-TimeSlicer::TimeSlicer(World& inWorld)
+TimeSlicer::TimeSlicer(World* inWorld)
 : mWorld(inWorld)
 , mDefaultSliceSize(10)
 , mLastCycleInstructions(0)
@@ -109,7 +109,7 @@ TimeSlicer::sizeForThisSlice(const Creature* inCreature, double inSliceSizeVaria
         u_int32_t sliceSize = inCreature->sliceSize();
         
         RandomLib::NormalDistribution<double> normdist;
-        return std::max(lround(normdist(mWorld.RNG(), sliceSize, inSliceSizeVariance)), 1L);
+        return std::max(lround(normdist(mWorld->RNG(), sliceSize, inSliceSizeVariance)), 1L);
     }
     
     return inCreature->sliceSize();

@@ -44,14 +44,14 @@ public:
     }
 
 private:
-    friend class boost::serialization::access;
+    friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-        ar & mRegisters;
-        ar & mStack;
-        ar & mStackPointer;
-        ar & mInstructionPointer;
-        ar & mFlag;
+        ar & BOOST_SERIALIZATION_NVP(mRegisters);
+        ar & BOOST_SERIALIZATION_NVP(mStack);
+        ar & BOOST_SERIALIZATION_NVP(mStackPointer);
+        ar & BOOST_SERIALIZATION_NVP(mInstructionPointer);
+        ar & BOOST_SERIALIZATION_NVP(mFlag);
     }
     
 public:

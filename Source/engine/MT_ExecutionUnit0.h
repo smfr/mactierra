@@ -11,6 +11,9 @@
 #ifndef MT_ExecutionUnit0_h
 #define MT_ExecutionUnit0_h
 
+#include <boost/serialization/serialization.hpp>
+#include <boost/serialization/export.hpp>
+
 #include "MT_ExecutionUnit.h"
 
 #include "MT_Soup.h"
@@ -39,10 +42,18 @@ protected:
     void call(Creature& inCreature, Soup& inSoup);
     void address(Creature& inCreature, Soup& inSoup, Soup::ESearchDirection inDirection);
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(ExecutionUnit);
+    }
+
 };
 
 
 } // namespace MacTierra
 
+BOOST_CLASS_EXPORT_GUID(MacTierra::ExecutionUnit0, "ExecutionUnit0")
 
 #endif // MT_ExecutionUnit0_h

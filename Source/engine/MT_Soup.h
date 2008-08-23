@@ -14,6 +14,7 @@
 
 #include <boost/serialization/binary_object.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_member.hpp>
 
 #include "MT_Engine.h"
 
@@ -60,21 +61,26 @@ protected:
                         return true;
                     }
 
-    friend class boost::serialization::access;
+private:
+    friend class ::boost::serialization::access;
     template<class Archive> void save(Archive& ar, const unsigned int version) const
     {
         // mSoupSize is archived separately to allow for construction
-        ar << boost::serialization::make_binary_object(mSoup, mSoupSize);
+        ::boost::serialization::binary_object soupObject = ::boost::serialization::make_binary_object(mSoup, mSoupSize);
+        ar << BOOST_SERIALIZATION_NVP(soupObject);
     }
 
     template<class Archive> void load(Archive& ar, const unsigned int version)
     {
         // mSoupSize is archived separately to allow for construction
-        boost::serialization::binary_object soupBlob(mSoup, mSoupSize);
-        ar >> soupBlob;
+        ::boost::serialization::binary_object soupObject(mSoup, mSoupSize);
+        ar >> BOOST_SERIALIZATION_NVP(soupObject);
     }
 
-    BOOST_SERIALIZATION_SPLIT_MEMBER()
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ::boost::serialization::split_member(ar, *this, file_version);
+    }
     
 protected:
 
@@ -90,25 +96,24 @@ namespace boost {
 namespace serialization {
 
 template<class Archive>
-inline void save_construct_data(Archive& ar, const MacTierra::Soup* t, const unsigned int file_version)
+inline void save_construct_data(Archive& ar, const MacTierra::Soup* inSoup, const unsigned int file_version)
 {
     // save data required to construct instance
-    u_int32_t soupSize = t->soupSize();
-    ar << soupSize;
+    u_int32_t soupSize = inSoup->soupSize();
+    ar << BOOST_SERIALIZATION_NVP(soupSize);
 }
 
 template<class Archive>
-inline void load_construct_data(Archive& ar, MacTierra::Soup* t, const unsigned int file_version)
+inline void load_construct_data(Archive& ar, MacTierra::Soup* inSoup, const unsigned int file_version)
 {
     // retrieve data from archive required to construct new instance
     u_int32_t soupSize;
-    ar >> soupSize;
+    ar >> BOOST_SERIALIZATION_NVP(soupSize);
     // invoke inplace constructor to initialize instance of my_class
-    ::new(t)MacTierra::Soup(soupSize);
+    ::new(inSoup)MacTierra::Soup(soupSize);
 }
 
 } // namespace boost
 } // namespace serialization
-
 
 #endif // MT_Soup_h

@@ -12,21 +12,23 @@
 
 #include <string>
 #include <vector>
+
 #include <boost/intrusive/list.hpp>
 #include <boost/serialization/serialization.hpp>
+#include <boost/serialization/split_member.hpp>
 
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
 #include "MT_Genotype.h"
+
+typedef boost::intrusive::list_member_hook<> ReaperListHook;
+typedef boost::intrusive::list_member_hook<> SlicerListHook;
 
 namespace MacTierra {
 
 class InventoryGenotype;
 class Soup;
 class World;
-
-typedef boost::intrusive::list_member_hook<> ReaperListHook;
-typedef boost::intrusive::list_member_hook<> SlicerListHook;
 
 class Creature
 {
@@ -35,6 +37,29 @@ public:
     SlicerListHook  mSlicerListHook;
     
 public:
+    
+    // default ctor for serialization
+    Creature()
+    : mID(0)
+    , mGenotype(NULL)
+    , mGenotypeDivergence(0)
+    , mSoup(NULL)
+    , mDaughter(NULL)
+    , mDividing(false)
+    , mBorn(false)
+    , mLength(0)
+    , mLocation(0)
+    , mSliceSize(0)
+    , mLastInstruction(0)
+    , mInstructionsToLastOffspring(0)
+    , mTotalInstructionsExecuted(0)
+    , mNumErrors(0)
+    , mMovesToLastOffspring(0)
+    , mNumOffspring(0)
+    , mNumIdenticalOffspring(0)
+    , mGeneration(0)
+    {
+    }
     
     Creature(creature_id inID, Soup* inOwningSoup);
     ~Creature();
@@ -142,35 +167,78 @@ private:
     Creature& operator=(const Creature& inRHS);
     Creature(const Creature& inRHS);
 
-    friend class boost::serialization::access;
-    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    friend class ::boost::serialization::access;
+    template<class Archive> void save(Archive& ar, const unsigned int version) const
     {
-        ar & mID;
-        ar & mGenotype;
-        ar & mGenotypeDivergence;
-        ar & mCPU;
-        ar & mSoup;
+        // mReaperListHook and mSlicerListHook are saved by the slicer and reaper lists
 
-        ar & mDaughter;
-        ar & mDividing;
-        ar & mBorn;
+        ar << BOOST_SERIALIZATION_NVP(mID);
+        ar << BOOST_SERIALIZATION_NVP(mGenotype);
+        ar << BOOST_SERIALIZATION_NVP(mGenotypeDivergence);
+        ar << BOOST_SERIALIZATION_NVP(mCPU);
+        ar << BOOST_SERIALIZATION_NVP(mSoup);
 
-        ar & mLength;
-        ar & mLocation;
-        ar & mSliceSize;
-        ar & mLastInstruction;
+        ar << BOOST_SERIALIZATION_NVP(mDaughter);
+        bool dividing = mDividing;
+        ar << BOOST_SERIALIZATION_NVP(dividing);
+        bool born = mBorn;
+        ar << BOOST_SERIALIZATION_NVP(born);
 
-        ar & mInstructionsToLastOffspring;
-        ar & mTotalInstructionsExecuted;
-        ar & mBirthInstructions;
+        ar << BOOST_SERIALIZATION_NVP(mLength);
+        ar << BOOST_SERIALIZATION_NVP(mLocation);
+        ar << BOOST_SERIALIZATION_NVP(mSliceSize);
+        ar << BOOST_SERIALIZATION_NVP(mLastInstruction);
 
-        ar & mNumErrors;
-        ar & mMovesToLastOffspring;
+        ar << BOOST_SERIALIZATION_NVP(mInstructionsToLastOffspring);
+        ar << BOOST_SERIALIZATION_NVP(mTotalInstructionsExecuted);
+        ar << BOOST_SERIALIZATION_NVP(mBirthInstructions);
 
-        ar & mNumOffspring;
-        ar & mNumIdenticalOffspring;
+        ar << BOOST_SERIALIZATION_NVP(mNumErrors);
+        ar << BOOST_SERIALIZATION_NVP(mMovesToLastOffspring);
 
-        ar & mGeneration;
+        ar << BOOST_SERIALIZATION_NVP(mNumOffspring);
+        ar << BOOST_SERIALIZATION_NVP(mNumIdenticalOffspring);
+
+        ar << BOOST_SERIALIZATION_NVP(mGeneration);
+    }
+
+    template<class Archive> void load(Archive& ar, const unsigned int version)
+    {
+        // mReaperListHook and mSlicerListHook are filled in when the slicer and reaper lists load
+
+        ar >> BOOST_SERIALIZATION_NVP(mID);
+        ar >> BOOST_SERIALIZATION_NVP(mGenotype);
+        ar >> BOOST_SERIALIZATION_NVP(mGenotypeDivergence);
+        ar >> BOOST_SERIALIZATION_NVP(mCPU);
+        ar >> BOOST_SERIALIZATION_NVP(mSoup);
+
+        ar >> BOOST_SERIALIZATION_NVP(mDaughter);
+        bool dividing;
+        ar >> BOOST_SERIALIZATION_NVP(dividing); mDividing = dividing;
+        bool born;
+        ar >> BOOST_SERIALIZATION_NVP(born); mBorn = born;
+
+        ar >> BOOST_SERIALIZATION_NVP(mLength);
+        ar >> BOOST_SERIALIZATION_NVP(mLocation);
+        ar >> BOOST_SERIALIZATION_NVP(mSliceSize);
+        ar >> BOOST_SERIALIZATION_NVP(mLastInstruction);
+
+        ar >> BOOST_SERIALIZATION_NVP(mInstructionsToLastOffspring);
+        ar >> BOOST_SERIALIZATION_NVP(mTotalInstructionsExecuted);
+        ar >> BOOST_SERIALIZATION_NVP(mBirthInstructions);
+
+        ar >> BOOST_SERIALIZATION_NVP(mNumErrors);
+        ar >> BOOST_SERIALIZATION_NVP(mMovesToLastOffspring);
+
+        ar >> BOOST_SERIALIZATION_NVP(mNumOffspring);
+        ar >> BOOST_SERIALIZATION_NVP(mNumIdenticalOffspring);
+
+        ar >> BOOST_SERIALIZATION_NVP(mGeneration);
+    }
+
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ::boost::serialization::split_member(ar, *this, file_version);
     }
 
 protected:
@@ -212,7 +280,38 @@ protected:
     
 };
 
-
 } // namespace MacTierra
+
+/*
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+inline void save_construct_data(Archive& ar, const MacTierra::Creature* inCreature, const unsigned int file_version)
+{
+    // save data required to construct instance
+    MacTierra::creature_id creatureID = inCreature->creatureID();
+    ar << creatureID;
+    MacTierra::Soup* theSoup = inCreature->soup();
+    ar << theSoup;
+}
+
+template<class Archive>
+inline void load_construct_data(Archive& ar, MacTierra::Creature* inCreature, const unsigned int file_version)
+{
+    // retrieve data from archive required to construct new instance
+    MacTierra::creature_id creatureID;
+    ar >> creatureID;
+    MacTierra::Soup* theSoup;
+    ar >> theSoup;
+    // invoke inplace constructor to initialize instance of my_class
+    ::new(inCreature)MacTierra::Creature(creatureID, theSoup);
+}
+
+} // namespace serialization
+} // namespace boost
+*/
+
+
 
 #endif // MT_Creature_h
