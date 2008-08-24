@@ -19,8 +19,9 @@ GenomeData::printableGenome() const
 {
     const char hexChars[16] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
  
+    // FIXME: this is lame. use streams
     std::string prettyString;
-    
+
     for (u_int32_t i = 0; i < mData.length(); ++i)
     {
         if (i > 0)
@@ -36,29 +37,34 @@ GenomeData::printableGenome() const
 void
 GenomeData::setFromPrintableGenome(const std::string& inString)
 {
-    instruction_t curInst = 0;
-    
     std::string::const_iterator it = inString.begin();
     std::string::const_iterator end = inString.end();
     
+    // FIXME: this is lame. use streams
+    instruction_t curInst;
     bool gotFirst = false;
     while (it != end)
     {
-        if (!isxdigit(*it))
+        const char curChar = tolower(*it);
+        if (!isxdigit(curChar))
         {
             ++it;
             continue;
         }
         
+        u_int32_t charVal = (curChar < 'a') ? curChar - '0' : curChar - ('a' - 10);
+        
         if (!gotFirst)
         {
-            curInst = ((*it) - '0') << 4;
+            curInst = (charVal & 0x0F) << 4;
             gotFirst = true;
         }
         else
-            curInst |= ((*it) - '0') & 0x0F;
-        
-        mData.push_back(curInst);
+        {
+            curInst |= charVal & 0x0F;
+            mData.push_back(curInst);
+            gotFirst = false;
+        }
         ++it;
     }
 }

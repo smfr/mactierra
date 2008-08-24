@@ -19,6 +19,8 @@ namespace MacTierra {
 
 @interface MTWorldController : NSObject
 {
+    IBOutlet NSDocument*    document;
+
     IBOutlet MTSoupView*    mSoupView;
     IBOutlet NSTableView*   mInventoryTableView;
 

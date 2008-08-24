@@ -90,7 +90,6 @@ using namespace MacTierra;
 
 - (void)setWorld:(World*)inWorld
 {
-    NSAssert(!mWorld, @"Should have have world yet");
     if (inWorld != mWorld)
     {
         [mSoupView setWorld:nil];
@@ -158,6 +157,8 @@ using namespace MacTierra;
 
 - (void)startRunTimer
 {
+    [document updateChangeCount:NSChangeDone];
+
     mRunTimer = [[NSTimer scheduledTimerWithTimeInterval:0.01
                                                   target:self
                                                 selector:@selector(runTimerFired:)
@@ -215,8 +216,6 @@ using namespace MacTierra;
 
 - (void)setWorldWithData:(NSData*)inData
 {
-    NSAssert(!mWorld, @"Should not have world already");
-
     std::string worldString((const char*)[inData bytes], [inData length]);
     World* newWorld = World::worldFromString(worldString);
 

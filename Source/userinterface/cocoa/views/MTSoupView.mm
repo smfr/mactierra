@@ -75,6 +75,7 @@ using namespace MacTierra;
         
         [self setGLOptions];
     }
+    [self setNeedsDisplay:YES];
 }
 
 - (MacTierra::World*)world

@@ -93,6 +93,8 @@
 		0FBB07130E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
+		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
+		0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24610E61115700F37B71 /* MacTierra document.icns */; };
 		0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
@@ -399,6 +401,8 @@
 		0FBEC0430E56AF7A00ABB516 /* mactierra */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mactierra; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
 		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
+		0FCA24600E61115700F37B71 /* MacTierra.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MacTierra.icns; sourceTree = "<group>"; };
+		0FCA24610E61115700F37B71 /* MacTierra document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra document.icns"; sourceTree = "<group>"; };
 		0FFF64490E4FE38E00404828 /* RandomSelect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomSelect.hpp; sourceTree = "<group>"; };
 		0FFF644A0E4FE38E00404828 /* RandomMixer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomMixer.hpp; sourceTree = "<group>"; };
 		0FFF644B0E4FE38E00404828 /* RandomEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomEngine.hpp; sourceTree = "<group>"; };
@@ -972,6 +976,8 @@
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
+				0FCA24600E61115700F37B71 /* MacTierra.icns */,
+				0FCA24610E61115700F37B71 /* MacTierra document.icns */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1087,6 +1093,8 @@
 				0F13FA7E0E5FD98300D8E649 /* xml_oarchive_impl.ipp in Resources */,
 				0F13FA7F0E5FD98300D8E649 /* xml_wiarchive_impl.ipp in Resources */,
 				0F13FA800E5FD98300D8E649 /* xml_woarchive_impl.ipp in Resources */,
+				0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */,
+				0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

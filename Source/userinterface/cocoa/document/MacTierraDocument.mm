@@ -87,6 +87,18 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     return YES;
 }
 
+- (BOOL)revertToContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
+{
+    BOOL reverting = [super revertToContentsOfURL:absoluteURL ofType:typeName error:outError];
+    if (reverting)
+    {
+        [worldController setWorldWithData:soupData];
+        self.soupData = nil;
+    }
+    
+    return reverting;
+}
+
 - (void)close
 {
     [worldController documentClosing];

@@ -38,12 +38,12 @@ public:
     void                setFromPrintableGenome(const std::string& inString);
     std::string         printableGenome() const;
 
-    bool operator < (const GenomeData inRHS) const
+    bool operator < (const GenomeData& inRHS) const
     {
         return mData < inRHS.dataString();
     }
 
-    bool operator == (const GenomeData inRHS) const
+    bool operator == (const GenomeData& inRHS) const
     {
         return mData == inRHS.dataString();
     }

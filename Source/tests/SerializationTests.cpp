@@ -23,6 +23,7 @@
 #include "MT_Ancestor.h"
 #include "MT_Cpu.h"
 #include "MT_Creature.h"
+#include "MT_Genotype.h"
 #include "MT_Inventory.h"
 #include "MT_Reaper.h"
 #include "MT_Soup.h"
@@ -61,6 +62,17 @@ SerializationTests::runTest()
 {
     cout << "SerializationTests" << endl;
 
+    std::string ancestorString((char*)kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    GenomeData  firstGenome(ancestorString);
+    
+    std:: string printableStr = firstGenome.printableGenome();
+
+    GenomeData  secondGenome;
+    secondGenome.setFromPrintableGenome(printableStr);
+    
+    TEST_CONDITION(firstGenome == secondGenome);
+    
+    
     Creature* creature1 = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     creature1->setLocation(400);
     creature1->setLength(100);
