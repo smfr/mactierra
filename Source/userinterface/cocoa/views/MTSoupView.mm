@@ -154,7 +154,7 @@ using namespace MacTierra;
     CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
     {
-        const CellMap::CreatureCell curCell = *it;
+        const CreatureRange& curCell = *it;
         const Creature* curCreature = curCell.mData;
         
         int startLine   = curCell.start() / mSoupWidth;
@@ -224,7 +224,7 @@ using namespace MacTierra;
     CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
     {
-        const CellMap::CreatureCell curCell = *it;
+        const CreatureRange& curCell = *it;
         const Creature* curCreature = curCell.mData;
         
         address_t instPointer = curCreature->referencedLocation();

@@ -64,7 +64,7 @@ using namespace MacTierra;
 
 - (NSString*)genotypeString
 {
-    return [NSString stringWithUTF8String:genotype->printableGenotype().c_str()];
+    return [NSString stringWithUTF8String:genotype->genome().printableGenome().c_str()];
 }
 
 @end

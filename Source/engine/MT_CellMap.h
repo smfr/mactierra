@@ -28,14 +28,6 @@ struct CreatureRange
     u_int32_t       mLength;
     Creature*       mData;
 
-    // default ctor for serialization only
-    CreatureRange()
-    : mStart(0)
-    , mLength(0)
-    , mData(NULL)
-    {
-    }
-    
     CreatureRange(u_int32_t inStart, u_int32_t inLength, Creature* inData)
     : mStart(inStart)
     , mLength(inLength)
@@ -65,6 +57,14 @@ struct CreatureRange
                     }
 
 private:
+
+    CreatureRange() // default ctor for serialization
+    : mStart(0)
+    , mLength(0)
+    , mData(NULL)
+    {
+    }
+
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {

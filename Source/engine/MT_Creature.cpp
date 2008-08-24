@@ -94,16 +94,16 @@ Creature::getSoupInstruction(int32_t inOffset) const
     return mSoup->instructionAtAddress(addressFromOffset(inOffset));
 }
 
-genome_t
-Creature::genomeString() const
+GenomeData
+Creature::genomeData() const
 {
-    genome_t  genotype;
+    std::string  genotype;
     genotype.reserve(length());
     
     for (u_int32_t i = 0; i < mLength; ++i)
         genotype.push_back(getSoupInstruction(i));
     
-    return genotype;
+    return GenomeData(genotype);
 }
 
 void

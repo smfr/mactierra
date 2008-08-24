@@ -13,10 +13,13 @@
 
 NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to match the plist
 
+NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
+
 @implementation MacTierraDocument
 
 @synthesize worldController;
 @synthesize startEmpty;
+@synthesize soupData;
 
 - (id)init
 {
@@ -40,6 +43,7 @@ NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to ma
 
 - (void)dealloc
 {
+    self.soupData = nil;
     [worldController release]; // ??
     [super dealloc];
 }
@@ -51,38 +55,35 @@ NSString* const kEmptySoupDocumentType = @"EmptySoupDocumentType";  // has to ma
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
-    [worldController createSoup:(256 * 1024)];
-    if (!startEmpty)
-        [worldController seedWithAncestor];
-
+    if (soupData)
+    {
+        [worldController setWorldWithData:soupData];
+        self.soupData = nil;
+    }
+    else
+    {
+        [worldController createSoup:(256 * 1024)];
+        if (!startEmpty)
+            [worldController seedWithAncestor];
+    }
+    
     [super windowControllerDidLoadNib:aController];
 }
 
 - (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to write your document to data of the specified type. If the given outError != NULL, ensure that you set *outError when returning nil.
+    NSData* worldData = [worldController worldData];
 
-    // You can also choose to override -fileWrapperOfType:error:, -writeToURL:ofType:error:, or -writeToURL:ofType:forSaveOperation:originalContentsURL:error: instead.
+    if (!worldData && outError != NULL)
+        *outError = [NSError errorWithDomain:kMacTierraErrorDomain code:-1 userInfo:NULL];
 
-    // For applications targeted for Panther or earlier systems, you should use the deprecated API -dataRepresentationOfType:. In this case you can also choose to override -fileWrapperRepresentationOfType: or -writeToFile:ofType: instead.
-
-    if ( outError != NULL ) {
-        *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
-    }
-    return nil;
+    return worldData;
 }
 
 - (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
 {
-    // Insert code here to read your document from the given data of the specified type.  If the given outError != NULL, ensure that you set *outError when returning NO.
-
-    // You can also choose to override -readFromFileWrapper:ofType:error: or -readFromURL:ofType:error: instead. 
-    
-    // For applications targeted for Panther or earlier systems, you should use the deprecated API -loadDataRepresentation:ofType. In this case you can also choose to override -readFromFile:ofType: or -loadFileWrapperRepresentation:ofType: instead.
-    
-    if ( outError != NULL ) {
-        *outError = [NSError errorWithDomain:NSOSStatusErrorDomain code:unimpErr userInfo:NULL];
-    }
+    // have to wait until the window controller is hooked up in windowControllerDidLoadNib:
+    self.soupData = data;
     return YES;
 }
 

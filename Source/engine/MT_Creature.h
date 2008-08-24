@@ -38,29 +38,6 @@ public:
     
 public:
     
-    // default ctor for serialization
-    Creature()
-    : mID(0)
-    , mGenotype(NULL)
-    , mGenotypeDivergence(0)
-    , mSoup(NULL)
-    , mDaughter(NULL)
-    , mDividing(false)
-    , mBorn(false)
-    , mLength(0)
-    , mLocation(0)
-    , mSliceSize(0)
-    , mLastInstruction(0)
-    , mInstructionsToLastOffspring(0)
-    , mTotalInstructionsExecuted(0)
-    , mNumErrors(0)
-    , mMovesToLastOffspring(0)
-    , mNumOffspring(0)
-    , mNumIdenticalOffspring(0)
-    , mGeneration(0)
-    {
-    }
-    
     Creature(creature_id inID, Soup* inOwningSoup);
     ~Creature();
 
@@ -107,7 +84,7 @@ public:
     void            setGenotypeDivergence(u_int32_t inDivergence)   { mGenotypeDivergence = inDivergence; }
 
     // this string can have embedded nulls. Not printable.
-    genome_t        genomeString() const;
+    GenomeData      genomeData() const;
     
     // move to soup?
     void            clearSpace();
@@ -166,6 +143,29 @@ private:
     // disallow copy construct and copy
     Creature& operator=(const Creature& inRHS);
     Creature(const Creature& inRHS);
+
+    // default ctor for serialization
+    Creature()
+    : mID(0)
+    , mGenotype(NULL)
+    , mGenotypeDivergence(0)
+    , mSoup(NULL)
+    , mDaughter(NULL)
+    , mDividing(false)
+    , mBorn(false)
+    , mLength(0)
+    , mLocation(0)
+    , mSliceSize(0)
+    , mLastInstruction(0)
+    , mInstructionsToLastOffspring(0)
+    , mTotalInstructionsExecuted(0)
+    , mNumErrors(0)
+    , mMovesToLastOffspring(0)
+    , mNumOffspring(0)
+    , mNumIdenticalOffspring(0)
+    , mGeneration(0)
+    {
+    }
 
     friend class ::boost::serialization::access;
     template<class Archive> void save(Archive& ar, const unsigned int version) const

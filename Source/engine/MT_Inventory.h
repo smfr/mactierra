@@ -27,7 +27,7 @@ namespace MacTierra {
 class InventoryGenotype : public Genotype
 {
 public:
-    InventoryGenotype(const std::string& inIdentifier, const genome_t& inGenotype);
+    InventoryGenotype(const std::string& inIdentifier, const GenomeData& inGenotype);
     
     void creatureBorn()
     {
@@ -51,6 +51,15 @@ public:
     void            setOriginGenerations(u_int32_t inGenerations) { mOriginGenerations = inGenerations; }
 
 private:
+
+    InventoryGenotype() // default ctor for serialization
+    : mNumAlive(0)
+    , mNumEverLived(0)
+    , mOriginInstructions(0)
+    , mOriginGenerations(0)
+    {
+    }
+
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
@@ -76,37 +85,6 @@ protected:
 
 BOOST_CLASS_EXPORT_GUID(MacTierra::InventoryGenotype, "InventoryGenotype")
 
-namespace boost {
-namespace serialization {
-
-template<class Archive>
-inline void save_construct_data(Archive& ar, const MacTierra::InventoryGenotype* inGenotype, const unsigned int file_version)
-{
-    // save data required to construct instance
-    const std::string& identifier = inGenotype->identifier();
-    const MacTierra::genome_t& genome = inGenotype->genome();
-    ar << BOOST_SERIALIZATION_NVP(identifier);
-    ar << BOOST_SERIALIZATION_NVP(genome);
-}
-
-template<class Archive>
-inline void load_construct_data(Archive& ar, MacTierra::InventoryGenotype* inGenotype, const unsigned int file_version)
-{
-    // retrieve data from archive required to construct new instance
-    std::string identifier;
-    MacTierra::genome_t genome;
-    ar >> BOOST_SERIALIZATION_NVP(identifier);
-    ar >> BOOST_SERIALIZATION_NVP(genome);
-    // invoke inplace constructor to initialize instance of my_class
-    ::new(inGenotype)MacTierra::InventoryGenotype(identifier, genome);
-}
-
-} // namespace boost
-} // namespace serialization
-
-
-BOOST_CLASS_EXPORT(MacTierra::InventoryGenotype)
-
 
 namespace MacTierra {
 
@@ -115,16 +93,16 @@ namespace MacTierra {
 class Inventory
 {
 public:
-    typedef std::map<genome_t, InventoryGenotype*> InventoryMap;
+    typedef std::map<GenomeData, InventoryGenotype*> InventoryMap;
     typedef std::multimap<u_int32_t, InventoryGenotype*>  SizeMap;
 
     Inventory();
     ~Inventory();
 
-    InventoryGenotype*  findGenotype(const genome_t& inGenotype) const;
+    InventoryGenotype*  findGenotype(const GenomeData& inGenotype) const;
     
     // return true if it's new
-    bool                enterGenotype(const genome_t& inGenotype, InventoryGenotype*& outGenotype);
+    bool                enterGenotype(const GenomeData& inGenotype, InventoryGenotype*& outGenotype);
 
     void                printCreatures() const;
     

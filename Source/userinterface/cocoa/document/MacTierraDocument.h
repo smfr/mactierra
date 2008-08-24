@@ -18,9 +18,12 @@ extern NSString* const kEmptySoupDocumentType;
     IBOutlet MTWorldController* worldController;
 
     BOOL                        startEmpty;
+    
+    NSData*                     soupData;
 }
 
 @property (retain) MTWorldController*   worldController;
+@property (retain) NSData*   soupData;
 @property (assign) BOOL startEmpty;
 
 @end

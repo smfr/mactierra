@@ -24,6 +24,7 @@ using namespace MacTierra;
 
 - (void)startRunTimer;
 - (void)stopRunTimer;
+- (void)setWorld:(World*)inWorld;
 
 @end
 
@@ -74,21 +75,33 @@ using namespace MacTierra;
 
 - (void)createSoup:(u_int32_t)inSize
 {
-    NSAssert(!mWorld, @"Should not have world yet");
-    
-    mWorld = new World();
+    World* newWorld = new World();
 
-    mWorld->setFlawRate(8.34E-4);
-    mWorld->setCosmicRate(7.634E-9);
-    mWorld->setCopyErrorRate(1.0E-3);
-    mWorld->setSliceSizeVariance(2);
-    mWorld->setSizeSelection(0.9);
+    newWorld->setFlawRate(8.34E-4);
+    newWorld->setCosmicRate(7.634E-9);
+    newWorld->setCopyErrorRate(1.0E-3);
+    newWorld->setSliceSizeVariance(2);
+    newWorld->setSizeSelection(0.9);
 
-    mWorld->initializeSoup(inSize);
+    newWorld->initializeSoup(inSize);
     
-    [mSoupView setWorld:mWorld];
-    
-    self.inventoryController = [[[MTInventoryController alloc] initWithInventory:mWorld->inventory()] autorelease];
+    [self setWorld:newWorld];
+}
+
+- (void)setWorld:(World*)inWorld
+{
+    NSAssert(!mWorld, @"Should have have world yet");
+    if (inWorld != mWorld)
+    {
+        [mSoupView setWorld:nil];
+        delete mWorld;
+        self.inventoryController = nil;
+        
+        mWorld = inWorld;
+        [mSoupView setWorld:mWorld];
+        
+        self.inventoryController = [[[MTInventoryController alloc] initWithInventory:mWorld->inventory()] autorelease];
+    }
 }
 
 - (void)seedWithAncestor
@@ -190,5 +203,25 @@ using namespace MacTierra;
     if ([mInventoryTableView window])
         [inventoryController updateGenotypesArray];
 }
+
+- (NSData*)worldData
+{
+    if (!mWorld)
+        return nil;
+
+    std::string worldString(World::stringFromWorld(mWorld));
+    return [NSData dataWithBytes:worldString.data() length:worldString.length()];
+}
+
+- (void)setWorldWithData:(NSData*)inData
+{
+    NSAssert(!mWorld, @"Should not have world already");
+
+    std::string worldString((const char*)[inData bytes], [inData length]);
+    World* newWorld = World::worldFromString(worldString);
+
+    [self setWorld:newWorld];
+}
+
 
 @end

@@ -31,7 +31,7 @@
 using namespace MacTierra;
 using namespace std;
 
-const u_int32_t kSoupSize = 1024;
+const u_int32_t kSoupSize = 10240;
 
 SerializationTests::SerializationTests()
 : mWorld(NULL)
@@ -65,6 +65,8 @@ SerializationTests::runTest()
     creature1->setLocation(400);
     creature1->setLength(100);
 
+    mWorld->iterate(20000);
+
     // output archive
     {
         std::ofstream textStream("test.out");
@@ -78,19 +80,30 @@ SerializationTests::runTest()
 
     // now read it back in
     World* newWorld = NULL;
+    World* newWorld2 = NULL;
     {
         std::ifstream textInStream("test.out");
-//        std::ifstream xmlInStream("test_out.xml");
+        std::ifstream xmlInStream("test_out.xml");
 
         ::boost::archive::text_iarchive textArchive(textInStream);
-//        ::boost::archive::text_iarchive xmlArchive(xmlInStream);
+        ::boost::archive::xml_iarchive xmlArchive(xmlInStream);
 
-        textArchive >> BOOST_SERIALIZATION_NVP(newWorld);
+        //textArchive >> BOOST_SERIALIZATION_NVP(newWorld);
+        xmlArchive >> BOOST_SERIALIZATION_NVP(newWorld2);
     }
 
 //    TEST_CONDITION(*cloneCreature == *creature1);
 
+    TEST_CONDITION(*mWorld->soup() == *newWorld2->soup());
+
+    // run both worlds, then compare again
+    mWorld->iterate(20000);
+    newWorld2->iterate(20000);
+
+    TEST_CONDITION(*mWorld->soup() == *newWorld2->soup());
+
     delete newWorld;
+    delete newWorld2;
 }
 
 

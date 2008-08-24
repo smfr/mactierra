@@ -17,6 +17,10 @@
 
 #include "RandomLib/ExponentialDistribution.hpp"
 
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/serialization/serialization.hpp>
+
 #include "MT_Cellmap.h"
 #include "MT_Creature.h"
 #include "MT_ExecutionUnit0.h"
@@ -149,7 +153,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     mSoup->injectInstructions(inAddress, inInstructions, inLength);
 
     InventoryGenotype* theGenotype = NULL;
-    bool isNew = mInventory->enterGenotype(theCreature->genomeString(), theGenotype);
+    bool isNew = mInventory->enterGenotype(theCreature->genomeData(), theGenotype);
     if (isNew)
     {
         theGenotype->setOriginInstructions(mTimeSlicer.instructionsExecuted());
@@ -433,7 +437,7 @@ World::handleBirth(Creature* inParent, Creature* inChild)
             parentGenotype = inParent->genotype();
 
         InventoryGenotype*   foundGenotype = NULL;
-        if (mInventory->enterGenotype(inParent->genomeString(), foundGenotype))
+        if (mInventory->enterGenotype(inParent->genomeData(), foundGenotype))
         {
             // it's new
             foundGenotype->setOriginInstructions(inParent->originInstructions());
@@ -609,5 +613,33 @@ World::setCopyErrorRate(double inRate)
     mCopyErrorRate = inRate;
     mMeanCopyErrorInterval = (inRate > 0.0) ? 1.0 / inRate : 0.0;
 }
+
+
+// static
+std::string
+World::stringFromWorld(const World* inWorld)
+{
+    std::stringstream stringStream;
+    
+    ::boost::archive::xml_oarchive xmlArchive(stringStream);
+    xmlArchive << BOOST_SERIALIZATION_NVP(inWorld);
+    
+    return stringStream.str();
+}
+
+// static
+World*
+World::worldFromString(const std::string& inString)
+{
+    std::stringstream stringStream(inString);
+
+    ::boost::archive::xml_iarchive xmlArchive(stringStream);
+
+    World* braveNewWorld;
+    xmlArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+    return braveNewWorld;
+}
+
+
 
 } // namespace MacTierra

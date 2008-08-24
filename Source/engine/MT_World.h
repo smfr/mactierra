@@ -114,6 +114,9 @@ public:
     double          copyErrorRate() const           { return mCopyErrorRate; }
     void            setCopyErrorRate(double inRate);
 
+    static std::string  stringFromWorld(const World* inWorld);
+    static World*       worldFromString(const std::string& inString);
+
 protected:
 
     creature_id     uniqueCreatureID();
