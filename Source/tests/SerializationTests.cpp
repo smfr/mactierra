@@ -86,7 +86,7 @@ SerializationTests::runTest()
         
         ::boost::archive::text_oarchive textArchive(textStream);
         ::boost::archive::xml_oarchive xmlArchive(xmlStream);
-        textArchive << BOOST_SERIALIZATION_NVP(mWorld);
+//        textArchive << BOOST_SERIALIZATION_NVP(mWorld);
         xmlArchive << BOOST_SERIALIZATION_NVP(mWorld);
     }
 

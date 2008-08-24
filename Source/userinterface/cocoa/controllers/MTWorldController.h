@@ -66,4 +66,7 @@ namespace MacTierra {
 - (NSData*)worldData;
 - (void)setWorldWithData:(NSData*)inData;
 
+- (NSData*)worldXMLData;
+- (void)setWorldWithXMLData:(NSData*)inData;
+
 @end

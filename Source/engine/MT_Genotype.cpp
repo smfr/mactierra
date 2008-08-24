@@ -41,7 +41,7 @@ GenomeData::setFromPrintableGenome(const std::string& inString)
     std::string::const_iterator end = inString.end();
     
     // FIXME: this is lame. use streams
-    instruction_t curInst;
+    instruction_t curInst = 0;
     bool gotFirst = false;
     while (it != end)
     {

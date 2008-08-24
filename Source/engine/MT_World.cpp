@@ -11,7 +11,8 @@
 #include <stdint.h>
 
 #include <map>
-#include <iostream>
+
+#include <sstream>
 
 #include "MT_World.h"
 
@@ -19,6 +20,10 @@
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+
+#include <boost/archive/binary_iarchive.hpp>
+#include <boost/archive/binary_oarchive.hpp>
+
 #include <boost/serialization/serialization.hpp>
 
 #include "MT_Cellmap.h"
@@ -617,9 +622,9 @@ World::setCopyErrorRate(double inRate)
 
 // static
 std::string
-World::stringFromWorld(const World* inWorld)
+World::xmlStringFromWorld(const World* inWorld)
 {
-    std::stringstream stringStream;
+    std::ostringstream stringStream;
     
     ::boost::archive::xml_oarchive xmlArchive(stringStream);
     xmlArchive << BOOST_SERIALIZATION_NVP(inWorld);
@@ -629,9 +634,9 @@ World::stringFromWorld(const World* inWorld)
 
 // static
 World*
-World::worldFromString(const std::string& inString)
+World::worldFromXMLString(const std::string& inString)
 {
-    std::stringstream stringStream(inString);
+    std::istringstream stringStream(inString);
 
     ::boost::archive::xml_iarchive xmlArchive(stringStream);
 
@@ -640,6 +645,29 @@ World::worldFromString(const std::string& inString)
     return braveNewWorld;
 }
 
+// static
+std::string
+World::dataFromWorld(const World* inWorld)
+{
+    std::ostringstream stringStream;
+    
+    ::boost::archive::binary_oarchive binaryArchive(stringStream);
+    binaryArchive << BOOST_SERIALIZATION_NVP(inWorld);
+    
+    return stringStream.str();
+}
 
+// static
+World*
+World::worldFromData(const std::string& inString)
+{
+    std::istringstream stringStream(inString);
+
+    ::boost::archive::binary_iarchive binaryArchive(stringStream);
+
+    World* braveNewWorld;
+    binaryArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+    return braveNewWorld;
+}
 
 } // namespace MacTierra

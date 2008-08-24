@@ -114,8 +114,11 @@ public:
     double          copyErrorRate() const           { return mCopyErrorRate; }
     void            setCopyErrorRate(double inRate);
 
-    static std::string  stringFromWorld(const World* inWorld);
-    static World*       worldFromString(const std::string& inString);
+    static std::string  xmlStringFromWorld(const World* inWorld);
+    static World*       worldFromXMLString(const std::string& inString);
+
+    static std::string  dataFromWorld(const World* inWorld);
+    static World*       worldFromData(const std::string& inString);
 
 protected:
 

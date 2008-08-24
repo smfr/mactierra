@@ -9,6 +9,28 @@
 		<dict>
 			<key>CFBundleTypeExtensions</key>
 			<array>
+				<string>mactierra_xml</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>MacTierra document</string>
+			<key>CFBundleTypeName</key>
+			<string>XMLSoupDocumentType</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>TrrX</string>
+			</array>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>LSTypeIsPackage</key>
+			<false/>
+			<key>NSDocumentClass</key>
+			<string>MacTierraDocument</string>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>XML</string>
+		</dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
 				<string>mactierra</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
@@ -24,7 +46,7 @@
 			<key>NSDocumentClass</key>
 			<string>MacTierraDocument</string>
 			<key>NSPersistentStoreTypeKey</key>
-			<string>XML</string>
+			<string>Binary</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>

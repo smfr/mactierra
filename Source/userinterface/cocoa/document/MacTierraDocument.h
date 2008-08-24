@@ -11,7 +11,8 @@
 
 @class MTWorldController;
 
-extern NSString* const kEmptySoupDocumentType;
+extern NSString* const kBinarySoupDocumentType;
+extern NSString* const kXMLSoupDocumentType;
 
 @interface MacTierraDocument : NSDocument
 {
@@ -20,10 +21,12 @@ extern NSString* const kEmptySoupDocumentType;
     BOOL                        startEmpty;
     
     NSData*                     soupData;
+    BOOL                        dataIsXML;
 }
 
 @property (retain) MTWorldController*   worldController;
 @property (retain) NSData*   soupData;
+@property (assign) BOOL dataIsXML;
 @property (assign) BOOL startEmpty;
 
 @end

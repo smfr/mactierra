@@ -205,20 +205,46 @@ using namespace MacTierra;
         [inventoryController updateGenotypesArray];
 }
 
+#pragma mark -
+
 - (NSData*)worldData
 {
     if (!mWorld)
         return nil;
 
-    std::string worldString(World::stringFromWorld(mWorld));
+//    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+
+    std::string worldString(World::dataFromWorld(mWorld));
+
+//    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
+//    NSLog(@"Serializaing world took %f milliseconds", (endTime - startTime) * 1000.0);
+
     return [NSData dataWithBytes:worldString.data() length:worldString.length()];
 }
 
 - (void)setWorldWithData:(NSData*)inData
 {
     std::string worldString((const char*)[inData bytes], [inData length]);
-    World* newWorld = World::worldFromString(worldString);
 
+    World* newWorld = World::worldFromData(worldString);
+
+    [self setWorld:newWorld];
+}
+
+- (NSData*)worldXMLData
+{
+    if (!mWorld)
+        return nil;
+
+    std::string worldString(World::xmlStringFromWorld(mWorld));
+    return [NSData dataWithBytes:worldString.data() length:worldString.length()];
+}
+
+- (void)setWorldWithXMLData:(NSData*)inData
+{
+    std::string worldString((const char*)[inData bytes], [inData length]);
+
+    World* newWorld = World::worldFromXMLString(worldString);
     [self setWorld:newWorld];
 }
 
