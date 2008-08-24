@@ -132,7 +132,7 @@ Creature::divide(World& inWorld)
 #else
         offspring->mCPU.mInstructionPointer = offspring->location();
 #endif
-        if (inWorld.transferRegistersToOffspring())
+        if (inWorld.settings().transferRegistersToOffspring())
         {
             for (int32_t i = 0; i < kNumRegisters; ++i)
                 offspring->mCPU.mRegisters[i] = mCPU.mRegisters[i];

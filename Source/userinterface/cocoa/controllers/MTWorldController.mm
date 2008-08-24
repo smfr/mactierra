@@ -77,12 +77,16 @@ using namespace MacTierra;
 {
     World* newWorld = new World();
 
-    newWorld->setFlawRate(8.34E-4);
-    newWorld->setCosmicRate(7.634E-9);
-    newWorld->setCopyErrorRate(1.0E-3);
-    newWorld->setSliceSizeVariance(2);
-    newWorld->setSizeSelection(0.9);
+    Settings    settings;
+    settings.setFlawRate(8.34E-4);
+    settings.setCosmicRate(7.634E-9, inSize);
+    settings.setCopyErrorRate(1.0E-3);
+    settings.setSliceSizeVariance(2);
+    settings.setSizeSelection(0.9);
+//    settings.setMutationType(Settings::kBitFlip);
 
+    newWorld->setSettings(settings);
+    
     newWorld->initializeSoup(inSize);
     
     [self setWorld:newWorld];

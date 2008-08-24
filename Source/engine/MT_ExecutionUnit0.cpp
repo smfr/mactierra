@@ -179,9 +179,9 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
                 address_t       targetAddress = inCreature.addressFromOffset(cpu.mRegisters[k_ax]);
                 
                 if (inWorld.copyErrorPending())
-                    inst = inWorld.mutateInstruction(inst, inWorld.mutationType());
+                    inst = inWorld.mutateInstruction(inst, inWorld.settings().mutationType());
                 
-                if (inWorld.globalWritesAllowed() || 
+                if (inWorld.settings().globalWritesAllowed() || 
                     inCreature.containsAddress(targetAddress, soupSize) || 
                     (inCreature.isDividing() && inCreature.daughterCreature()->containsAddress(targetAddress, soupSize)))
                 {

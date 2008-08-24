@@ -44,31 +44,16 @@ World::World()
 , mSoup(NULL)
 , mCellMap(NULL)
 , mNextCreatureID(1)
-, mSliceSizeVariance(0.0)
 , mExecution(NULL)
 , mTimeSlicer(this)
 , mInventory(NULL)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
-, mCopyErrorRate(0.0)
-, mMeanCopyErrorInterval(0.0)
 , mCopyErrorPending(false)
 , mCopiesSinceLastError(0)
 , mNextCopyError(0)
-, mFlawRate(0.0)
-, mMeanFlawInterval(0.0)
 , mNextFlawInstruction(0)
-, mCosmicRate(0.0)
-, mMeanCosmicTimeInterval(0.0)
-, mCosmicRayInstruction(0)
-, mSizeSelection(1.0)
-, mLeannessSelection(false)
-, mReapThreshold(0.8)
-, mMutationType(kAddOrDec)
-, mGlobalWritesAllowed(false)
-, mTransferRegistersToOffspring(false)
-, mClearReapedCreatures(true)
-, mDaughterAllocation(kPreferredAlloc)
+, mNextCosmicRayInstruction(0)
 {
 }
 
@@ -87,7 +72,7 @@ World::initializeSoup(u_int32_t inSoupSize)
     BOOST_ASSERT(!mSoup && !mCellMap);
     mSoupSize = inSoupSize;
     
-    setCosmicRate(mCosmicRate); // recompute cosmic time interval which depends on soup size
+    mSettings.updateWithSoupSize(mSoupSize);
     
     mSoup = new Soup(inSoupSize);
     mCellMap = new CellMap(inSoupSize);
@@ -119,7 +104,7 @@ World::eradicateCreature(Creature* inCreature)
         Creature* daughterCreature = inCreature->daughterCreature();
         BOOST_ASSERT(daughterCreature);
         
-        if (mClearReapedCreatures)
+        if (mSettings.clearReapedCreatures())
             daughterCreature->clearSpace();
 
         mCellMap->removeCreature(daughterCreature);
@@ -132,7 +117,7 @@ World::eradicateCreature(Creature* inCreature)
     
     //mReaper.printCreatures();
     
-    if (mClearReapedCreatures)
+    if (mSettings.clearReapedCreatures())
         inCreature->clearSpace();
 
     // remove from cell map
@@ -169,7 +154,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setGeneration(1);
     theGenotype->creatureBorn();
 
-    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSizeSelection));
+    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSettings.sizeSelection()));
     theCreature->setReferencedLocation(theCreature->location());
     
     bool inserted = mCellMap->insertCreature(theCreature);
@@ -194,7 +179,7 @@ World::iterate(u_int32_t inNumCycles)
         return;
 
     if (mCurCreatureCycles == 0)
-        mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
+        mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSettings.sliceSizeVariance());
     
     while (cycles < numCycles)
     {
@@ -219,7 +204,7 @@ World::iterate(u_int32_t inNumCycles)
                 mReaper.conditionalMoveDown(*curCreature);
 
             // compute next copy error time
-            if (mCopyErrorRate > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
+            if (mSettings.copyErrorRate() > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
             {
                 if (mCopyErrorPending)  // just did one
                 {
@@ -227,7 +212,7 @@ World::iterate(u_int32_t inNumCycles)
                     int32_t copyErrorDelay;
                     do
                     {
-                        copyErrorDelay = expDist(mRNG, mMeanCopyErrorInterval);
+                        copyErrorDelay = expDist(mRNG, mSettings.meanCopyErrorInterval());
                     } while (copyErrorDelay <= 0);
                     
                     mNextCopyError = copyErrorDelay;
@@ -249,7 +234,7 @@ World::iterate(u_int32_t inNumCycles)
         else        // we are at the end of the slice for one creature
         {
             // maybe reap
-            if (mCellMap->fullness() > mReapThreshold)
+            if (mCellMap->fullness() > mSettings.reapThreshold())
             {
                 //mReaper.printCreatures();
                 Creature* doomedCreature = mReaper.headCreature();
@@ -277,7 +262,7 @@ World::iterate(u_int32_t inNumCycles)
             // track the new creature for tracing
             
             mCurCreatureCycles = 0;
-            mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSliceSizeVariance);
+            mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSettings.sliceSizeVariance());
         }
     }
     
@@ -285,25 +270,25 @@ World::iterate(u_int32_t inNumCycles)
 }
 
 instruction_t
-World::mutateInstruction(instruction_t inInst, EMutationType inMutationType) const
+World::mutateInstruction(instruction_t inInst, Settings::EMutationType inMutationType) const
 {
     RandomLib::Random rng(mRNG);
     instruction_t resultInst = inInst;
 
     switch (inMutationType)
     {
-        case kAddOrDec:
+        case Settings::kAddOrDec:
             {
                 int32_t delta = mRNG.Boolean() ? -1 : 1;
                 resultInst = (inInst + kInstructionSetSize + delta) % kInstructionSetSize;
             }
             break;
 
-        case kBitFlip:
+        case Settings::kBitFlip:
             resultInst ^= (1 << mRNG.Integer(5));
             break;
 
-        case kRandomChoice:
+        case Settings::kRandomChoice:
             resultInst = rng.Integer(kInstructionSetSize);
             break;
     }
@@ -349,9 +334,9 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
     bool        foundLocation = false;
     address_t   location = -1;
 
-    switch (daughterAllocationStrategy())
+    switch (mSettings.daughterAllocationStrategy())
     {
-        case kRandomAlloc:
+        case Settings::kRandomAlloc:
             {
                 // Choose a random location within the addressing range
                 while (attempts < kMaxMalAttempts)
@@ -370,7 +355,7 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
             }
             break;
 
-        case kRandomPackedAlloc:
+        case Settings::kRandomPackedAlloc:
             {
                 // Choose a random location within the addressing range
                 int32_t maxOffset = min((int32_t)mSoupSize, INT32_MAX);
@@ -381,14 +366,14 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
             }
             break;
 
-        case kClosestAlloc:
+        case Settings::kClosestAlloc:
             {
                 location = inParent.addressFromOffset(inParent.cpu().mRegisters[k_bx]);     // why bx?
                 foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
             }
             break;
 
-        case kPreferredAlloc:
+        case Settings::kPreferredAlloc:
             {
                 location = inParent.addressFromOffset(inParent.cpu().mRegisters[k_ax]);     // why ax?
                 foundLocation = mCellMap->searchForSpace(location, inDaughterLength, kMaxMalSearchRange, CellMap::kBothways);
@@ -417,7 +402,7 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
 void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
-    inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSizeSelection));
+    inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings.sizeSelection()));
     inChild->setReferencedLocation(inChild->location());
 
     // add to slicer and reaper
@@ -494,7 +479,7 @@ World::handleDeath(Creature* inCreature)
 int32_t
 World::instructionFlaw(u_int64_t inInstructionCount)
 {
-    if (mFlawRate > 0 && inInstructionCount == mNextFlawInstruction)
+    if (mSettings.flawRate() > 0 && inInstructionCount == mNextFlawInstruction)
     {
         int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
 
@@ -502,7 +487,7 @@ World::instructionFlaw(u_int64_t inInstructionCount)
         int64_t flawDelay;
         do 
         {
-            flawDelay = static_cast<int64_t>(expDist(mRNG, mMeanFlawInterval));
+            flawDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanFlawInterval()));
         } while (flawDelay <= 0);
 
         mNextFlawInstruction = inInstructionCount + flawDelay;
@@ -515,23 +500,23 @@ World::instructionFlaw(u_int64_t inInstructionCount)
 bool
 World::cosmicRay(u_int64_t inInstructionCount)
 {
-    if (mCosmicRate > 0.0 && inInstructionCount == mCosmicRayInstruction)
+    if (mSettings.cosmicRate() > 0.0 && inInstructionCount == mNextCosmicRayInstruction)
     {
         RandomLib::Random rng(mRNG);
         address_t   target = rng.Integer(mSoupSize);
 
         instruction_t inst = mSoup->instructionAtAddress(target);
-        inst = mutateInstruction(inst, mutationType());
+        inst = mutateInstruction(inst, mSettings.mutationType());
         mSoup->setInstructionAtAddress(target, inst);
         
         RandomLib::ExponentialDistribution<double> expDist;
         int64_t cosmicDelay;
         do
         {
-            cosmicDelay = static_cast<int64_t>(expDist(mRNG, mMeanCosmicTimeInterval));
+            cosmicDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanCosmicTimeInterval()));
         } while (cosmicDelay <= 0);
 
-        mCosmicRayInstruction = inInstructionCount + cosmicDelay;
+        mNextCosmicRayInstruction = inInstructionCount + cosmicDelay;
         return true;
     }
     return false;
@@ -563,63 +548,14 @@ World::creatureRemoved(Creature* inCreature)
 
 // Settings
 
-bool
-World::globalWritesAllowed() const
-{
-    return mGlobalWritesAllowed;
-}
-
 void
-World::setGlobalWritesAllowed(bool inAllowed)
+World::setSettings(const Settings& inSettings)
 {
-    mGlobalWritesAllowed = inAllowed;
+    mSettings = inSettings;
+    // FIXME: recompute next flaw, copy error, cosmic ray times
 }
 
-bool
-World::transferRegistersToOffspring() const
-{
-    return mTransferRegistersToOffspring;
-}
-
-void
-World::setTransferRegistersToOffspring(bool inTransfer)
-{
-    mTransferRegistersToOffspring = inTransfer;
-}
-
-World::EDaughterAllocationStrategy
-World::daughterAllocationStrategy() const
-{
-    return mDaughterAllocation;
-}
-
-void
-World::setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy)
-{
-    mDaughterAllocation = inStrategy;
-}
-
-void
-World::setFlawRate(double inRate)
-{
-    mFlawRate = inRate;
-    mMeanFlawInterval = (inRate > 0.0) ? 1.0 / inRate : 0.0;
-}
-
-void
-World::setCosmicRate(double inRate)
-{
-    mCosmicRate = inRate;
-    mMeanCosmicTimeInterval = (inRate > 0.0) ? (1.0 / (inRate * mSoupSize)) : 0.0;
-}
-
-void
-World::setCopyErrorRate(double inRate)
-{
-    mCopyErrorRate = inRate;
-    mMeanCopyErrorInterval = (inRate > 0.0) ? 1.0 / inRate : 0.0;
-}
-
+#pragma mark -
 
 // static
 std::string

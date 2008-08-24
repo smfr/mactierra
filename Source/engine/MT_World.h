@@ -26,6 +26,7 @@
 #include "MT_ExecutionUnit0.h"      // needed for serialization registration
 #include "MT_Inventory.h"
 #include "MT_Reaper.h"
+#include "MT_Settings.h"
 #include "MT_Soup.h"
 #include "MT_Timeslicer.h"
 
@@ -64,56 +65,15 @@ public:
 
     bool            copyErrorPending() const { return mCopyErrorPending; }
 
-    enum EMutationType {
-        kAddOrDec,
-        kBitFlip,
-        kRandomChoice
-    };
-    instruction_t   mutateInstruction(instruction_t inInst, EMutationType inMutationType) const;
+    instruction_t   mutateInstruction(instruction_t inInst, Settings::EMutationType inMutationType) const;
 
     void            cosmicRay();
 
     // settings
+    const Settings&     settings() const { return mSettings; }
+    void                setSettings(const Settings& inSettings);
 
-    EMutationType   mutationType() const    { return mMutationType; }
-
-    enum EDaughterAllocationStrategy {
-        kRandomAlloc,
-        kRandomPackedAlloc,
-        kClosestAlloc,
-        kPreferredAlloc
-    };
-    
-    EDaughterAllocationStrategy daughterAllocationStrategy() const;
-    void            setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy);
-    
-    bool            globalWritesAllowed() const;
-    void            setGlobalWritesAllowed(bool inAllowed);
-
-    bool            transferRegistersToOffspring() const;
-    void            setTransferRegistersToOffspring(bool inTransfer);
-    
-    double          sliceSizeVariance() const       { return mSliceSizeVariance; }
-    void            setSliceSizeVariance(double inVariance) { mSliceSizeVariance = inVariance; }
-
-    double          sizeSelection() const           { return mSizeSelection; }
-    void            setSizeSelection(double inSel)  { mSizeSelection = inSel; }
-
-    bool            clearReapedCreatuers() const    { return mClearReapedCreatures; }
-    void            setClearReapedCreatuers(bool inClear) { mClearReapedCreatures = inClear; }
-    
-    double          reapThreshold() const { return mReapThreshold; }
-    void            setReapThreshold(double inThreshold) { mReapThreshold = inThreshold; }
-    
-    double          flawRate() const                { return mFlawRate; }
-    void            setFlawRate(double inRate);
-
-    double          cosmicRate() const              { return mCosmicRate; }
-    void            setCosmicRate(double inRate);
-
-    double          copyErrorRate() const           { return mCopyErrorRate; }
-    void            setCopyErrorRate(double inRate);
-
+    // save/restore
     static std::string  xmlStringFromWorld(const World* inWorld);
     static World*       worldFromXMLString(const std::string& inString);
 
@@ -149,6 +109,8 @@ private:
         ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
         ar.register_type(static_cast<InventoryGenotype *>(NULL));
 
+        ar & BOOST_SERIALIZATION_NVP(mSettings);
+
         ar & BOOST_SERIALIZATION_NVP(mRNG);
         ar & BOOST_SERIALIZATION_NVP(mSoupSize);
         
@@ -158,7 +120,6 @@ private:
         ar & BOOST_SERIALIZATION_NVP(mNextCreatureID);
         ar & BOOST_SERIALIZATION_NVP(mCreatureIDMap);
 
-        ar & BOOST_SERIALIZATION_NVP(mSliceSizeVariance);
         ar & BOOST_SERIALIZATION_NVP(mExecution);
         ar & BOOST_SERIALIZATION_NVP(mTimeSlicer);
         ar & BOOST_SERIALIZATION_NVP(mReaper);
@@ -167,37 +128,18 @@ private:
         ar & BOOST_SERIALIZATION_NVP(mCurCreatureCycles);
         ar & BOOST_SERIALIZATION_NVP(mCurCreatureSliceCycles);
 
-        ar & BOOST_SERIALIZATION_NVP(mCopyErrorRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanCopyErrorInterval);
         ar & BOOST_SERIALIZATION_NVP(mCopyErrorPending);
         ar & BOOST_SERIALIZATION_NVP(mCopiesSinceLastError);
-        ar & BOOST_SERIALIZATION_NVP(mCurCreatureCycles);
         ar & BOOST_SERIALIZATION_NVP(mNextCopyError);
 
-        ar & BOOST_SERIALIZATION_NVP(mFlawRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanFlawInterval);
         ar & BOOST_SERIALIZATION_NVP(mNextFlawInstruction);
-
-        ar & BOOST_SERIALIZATION_NVP(mCosmicRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanCosmicTimeInterval);
-        ar & BOOST_SERIALIZATION_NVP(mCosmicRayInstruction);
-
-        ar & BOOST_SERIALIZATION_NVP(mSizeSelection);
-        ar & BOOST_SERIALIZATION_NVP(mLeannessSelection);
-        ar & BOOST_SERIALIZATION_NVP(mReapThreshold);
-
-        ar & BOOST_SERIALIZATION_NVP(mLeannessSelection);
-
-        ar & BOOST_SERIALIZATION_NVP(mMutationType);
-        ar & BOOST_SERIALIZATION_NVP(mGlobalWritesAllowed);
-        ar & BOOST_SERIALIZATION_NVP(mTransferRegistersToOffspring);
-        ar & BOOST_SERIALIZATION_NVP(mClearReapedCreatures);
-
-        ar & BOOST_SERIALIZATION_NVP(mDaughterAllocation);
+        ar & BOOST_SERIALIZATION_NVP(mNextCosmicRayInstruction);
     }
 
 
 protected:
+
+    Settings            mSettings;
 
     mutable RandomLib::Random   mRNG;
 
@@ -213,9 +155,6 @@ protected:
     typedef std::map<creature_id, Creature*>    CreatureIDMap;
     CreatureIDMap       mCreatureIDMap;
     
-    // settings
-    double          mSliceSizeVariance; // sigma of normal distribution
-    
     ExecutionUnit*  mExecution;
     
     TimeSlicer      mTimeSlicer;
@@ -228,34 +167,16 @@ protected:
     u_int32_t       mCurCreatureCycles;         // fAlive
     u_int32_t       mCurCreatureSliceCycles;    // fCurCpuSliceSize
 
-    // maybe package these up into a "flaws" object?
-    double          mCopyErrorRate;
-    double          mMeanCopyErrorInterval;
+
+
     bool            mCopyErrorPending;
     u_int32_t       mCopiesSinceLastError;
     u_int32_t       mNextCopyError;
-    
-    double          mFlawRate;
-    double          mMeanFlawInterval;
+
     u_int64_t       mNextFlawInstruction;
+    u_int64_t       mNextCosmicRayInstruction;
 
-    double          mCosmicRate;
-    double          mMeanCosmicTimeInterval;
-    u_int64_t       mCosmicRayInstruction;
-    
-    double          mSizeSelection;             // size selection
-    bool            mLeannessSelection;         // select for "lean" creatures
 
-    double          mReapThreshold;     // [0, 1)
-
-    // settings
-    EMutationType   mMutationType;
-    
-    bool            mGlobalWritesAllowed;
-    bool            mTransferRegistersToOffspring;
-    bool            mClearReapedCreatures;
-    
-    EDaughterAllocationStrategy mDaughterAllocation;
 };
 
 
