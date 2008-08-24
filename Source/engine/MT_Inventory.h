@@ -83,7 +83,7 @@ protected:
 
 } // namespace MacTierra
 
-BOOST_CLASS_EXPORT_GUID(MacTierra::InventoryGenotype, "InventoryGenotype")
+//BOOST_CLASS_EXPORT_GUID(MacTierra::InventoryGenotype, "InventoryGenotype")
 
 
 namespace MacTierra {

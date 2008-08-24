@@ -142,8 +142,9 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-//        ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
-//        ar.register_type(static_cast<InventoryGenotype *>(NULL));
+        // using BOOST_CLASS_EXPORT_GUID() for these causes a crash on quit
+        ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
+        ar.register_type(static_cast<InventoryGenotype *>(NULL));
 
         ar & BOOST_SERIALIZATION_NVP(mRNG);
         ar & BOOST_SERIALIZATION_NVP(mSoupSize);

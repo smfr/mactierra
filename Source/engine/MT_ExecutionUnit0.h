@@ -54,6 +54,6 @@ private:
 
 } // namespace MacTierra
 
-BOOST_CLASS_EXPORT_GUID(MacTierra::ExecutionUnit0, "ExecutionUnit0")
+//BOOST_CLASS_EXPORT_GUID(MacTierra::ExecutionUnit0, "ExecutionUnit0")
 
 #endif // MT_ExecutionUnit0_h
