@@ -333,6 +333,7 @@ World::destroyCreatures()
         mTimeSlicer.removeCreature(*theCreature);
         mReaper.removeCreature(*theCreature);
 
+        theCreature->clearDaughter();
         delete theCreature;
     }
 
