@@ -186,6 +186,7 @@ World::iterate(u_int32_t inNumCycles)
         if (mCurCreatureCycles < mCurCreatureSliceCycles)
         {
             // do cosmic rays
+            // FIXME: avoid the method call if we can
             cosmicRay(mTimeSlicer.instructionsExecuted());
             
             // decide whether to throw in a flaw
@@ -272,7 +273,6 @@ World::iterate(u_int32_t inNumCycles)
 instruction_t
 World::mutateInstruction(instruction_t inInst, Settings::EMutationType inMutationType) const
 {
-    RandomLib::Random rng(mRNG);
     instruction_t resultInst = inInst;
 
     switch (inMutationType)
@@ -289,7 +289,7 @@ World::mutateInstruction(instruction_t inInst, Settings::EMutationType inMutatio
             break;
 
         case Settings::kRandomChoice:
-            resultInst = rng.Integer(kInstructionSetSize);
+            resultInst = mRNG.Integer(kInstructionSetSize);
             break;
     }
     return resultInst;
@@ -502,8 +502,7 @@ World::cosmicRay(u_int64_t inInstructionCount)
 {
     if (mSettings.cosmicRate() > 0.0 && inInstructionCount == mNextCosmicRayInstruction)
     {
-        RandomLib::Random rng(mRNG);
-        address_t   target = rng.Integer(mSoupSize);
+        address_t   target = mRNG.Integer(mSoupSize);
 
         instruction_t inst = mSoup->instructionAtAddress(target);
         inst = mutateInstruction(inst, mSettings.mutationType());
