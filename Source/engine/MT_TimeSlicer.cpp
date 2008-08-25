@@ -16,6 +16,7 @@
 #include "MT_Timeslicer.h"
 
 #include "MT_Creature.h"
+#include "MT_Settings.h"
 #include "MT_World.h"
 
 namespace MacTierra {
@@ -24,7 +25,6 @@ using namespace std;
 
 TimeSlicer::TimeSlicer(World* inWorld)
 : mWorld(inWorld)
-, mDefaultSliceSize(10)
 , mLastCycleInstructions(0)
 , mTotalInstructions(0)
 {
@@ -82,23 +82,18 @@ TimeSlicer::advance(bool inForwards /* = true */)
     return false;
 }
 
-TimeSlicer::ETimeSliceStrategy
-TimeSlicer::timeSliceStrategy() const
-{
-    return kProportionalSize;
-}
-
 u_int32_t
-TimeSlicer::initialSliceSizeForCreature(const Creature* inCreature, double inSizeSelection)
+TimeSlicer::initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings)
 {
-    if (timeSliceStrategy() == kConstantSize)
-        return mDefaultSliceSize;
+    if (inSettings.timeSliceType() == Settings::kConstantSlizeSize)
+        return inSettings.constantSliceSize();
 
 /*
     if (self.fLeannessSelection) then
         thisSize := System.Round(thisCreature.fLeanness * fSliceConst * exp(fSizeSelection * ln(thisCreature.fValue/80.0)))
 */
-    return lround(mDefaultSliceSize * exp(inSizeSelection * log(inCreature->length() / 80.0)));
+
+    return lround(inSettings.constantSliceSize() * exp(inSettings.sizeSelection() * log(inCreature->length() / 80.0)));
 }
 
 u_int32_t

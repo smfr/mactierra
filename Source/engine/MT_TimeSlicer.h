@@ -18,6 +18,7 @@
 
 namespace MacTierra {
 
+class Settings;
 class World;
 
 typedef ::boost::intrusive::member_hook<Creature, SlicerListHook, &Creature::mSlicerListHook> SlicerMemberHookOption;
@@ -31,9 +32,6 @@ public:
     TimeSlicer(World* inWorld);
     ~TimeSlicer();
     
-    u_int32_t   defaultSliceSize() const                { return mDefaultSliceSize; }
-    void        setDefaultSliceSize(u_int32_t inSize)   { mDefaultSliceSize = inSize; }
-
     // creature is added before the current item (so it gets time after a full cycle)
     void        insertCreature(Creature& inCreature);
     void        removeCreature(Creature& inCreature);
@@ -51,14 +49,7 @@ public:
 
     u_int64_t   instructionsExecuted() const { return mTotalInstructions; }
 
-    enum ETimeSliceStrategy {
-        kConstantSize,
-        kProportionalSize
-    };
-    
-    ETimeSliceStrategy timeSliceStrategy() const;
-
-    u_int32_t   initialSliceSizeForCreature(const Creature* inCreature, double inSizeSelection);
+    u_int32_t   initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings);
 
     u_int32_t   sizeForThisSlice(const Creature* inCreature, double inSliceSizeVariance);
 
@@ -71,7 +62,6 @@ private:
     {
         ar & BOOST_SERIALIZATION_NVP(mWorld);
 
-        ar << BOOST_SERIALIZATION_NVP(mDefaultSliceSize);
         ar << BOOST_SERIALIZATION_NVP(mLastCycleInstructions);
         ar << BOOST_SERIALIZATION_NVP(mTotalInstructions);
 
@@ -95,7 +85,6 @@ private:
     {
         ar >> BOOST_SERIALIZATION_NVP(mWorld);
 
-        ar >> BOOST_SERIALIZATION_NVP(mDefaultSliceSize);
         ar >> BOOST_SERIALIZATION_NVP(mLastCycleInstructions);
         ar >> BOOST_SERIALIZATION_NVP(mTotalInstructions);
 
@@ -128,8 +117,6 @@ protected:
 
     SlicerList              mSlicerList;
     SlicerList::iterator    mCurrentItem;
-
-    u_int32_t   mDefaultSliceSize;
     
     // number of instructions for the last run through the whole slicer queue
     u_int32_t   mLastCycleInstructions;

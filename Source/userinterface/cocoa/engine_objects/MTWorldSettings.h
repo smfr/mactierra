@@ -33,6 +33,7 @@
 @property (assign) double flawRate;
 @property (readonly) double meanFlawInterval;
 
+#warning fix when soup size changes
 @property (assign) double cosmicRate;
 @property (readonly) double meanCosmicTimeInterval;
 
@@ -44,6 +45,7 @@
 
 @property (assign) BOOL globalWritesAllowed;
 @property (assign) BOOL transferRegistersToOffspring;
+@property (assign) BOOL clearDaughterCells;
 @property (assign) BOOL clearReapedCreatures;
 
 

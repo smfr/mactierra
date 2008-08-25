@@ -244,6 +244,9 @@ ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
     {
         cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(daughter->location());
         inCreature.startDividing(daughter);
+
+        if (inWorld.settings().clearDaughterCells())
+            daughter->clearSpace();
     }
     else
     {

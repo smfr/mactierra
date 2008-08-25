@@ -29,6 +29,7 @@ Settings::Settings()
 , mMutationType(kAddOrDec)
 , mGlobalWritesAllowed(false)
 , mTransferRegistersToOffspring(false)
+, mClearDaughterCells(false)
 , mClearReapedCreatures(true)
 , mDaughterAllocation(kPreferredAlloc)
 {

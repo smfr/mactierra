@@ -80,9 +80,6 @@ World::initializeSoup(u_int32_t inSoupSize)
     mExecution = new ExecutionUnit0();
     
     mInventory = new Inventory();
-    
-    // FIXME get real number
-    mTimeSlicer.setDefaultSliceSize(20);
 }
 
 Creature*
@@ -154,7 +151,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setGeneration(1);
     theGenotype->creatureBorn();
 
-    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSettings.sizeSelection()));
+    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSettings));
     theCreature->setReferencedLocation(theCreature->location());
     
     bool inserted = mCellMap->insertCreature(theCreature);
@@ -412,7 +409,7 @@ World::noteInstructionCopy()
 void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
-    inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings.sizeSelection()));
+    inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings));
     inChild->setReferencedLocation(inChild->location());
 
     // add to slicer and reaper

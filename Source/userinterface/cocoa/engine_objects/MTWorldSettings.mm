@@ -17,6 +17,12 @@
 {
     [self setKeys:[NSArray arrayWithObject:@"flawRate"]
                                 triggerChangeNotificationsForDependentKey:@"meanFlawInterval"];
+
+    [self setKeys:[NSArray arrayWithObject:@"copyErrorRate"]
+                                triggerChangeNotificationsForDependentKey:@"meanCopyErrorInterval"];
+
+    [self setKeys:[NSArray arrayWithObject:@"soupSize"]
+                                triggerChangeNotificationsForDependentKey:@"meanCosmicTimeInterval"];
 }
 
 
@@ -175,6 +181,16 @@
     mSettings->setTransferRegistersToOffspring(inVal);
 }
 
+- (BOOL)clearDaughterCells
+{
+    return mSettings->clearDaughterCells();
+}
+
+- (void)setClearDaughterCells:(BOOL)inVal
+{
+    mSettings->setClearDaughterCells(inVal);
+}
+
 - (BOOL)clearReapedCreatures
 {
     return mSettings->clearReapedCreatures();
@@ -184,7 +200,5 @@
 {
     mSettings->setClearReapedCreatures(inVal);
 }
-
-
 
 @end

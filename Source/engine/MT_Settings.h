@@ -30,11 +30,9 @@ public:
         kSizeVariableSliceSize,
     };
 
-    // FIXME: implement
     ETimeSliceType  timeSliceType() const    { return mTimeSliceType; }
     void            setTimeSliceType(ETimeSliceType inType) { mTimeSliceType = inType; }
     
-    // FIXME: implement
     double          constantSliceSize() const       { return mConstantSliceSize; }
     void            setConstantSliceSize(double inSize) { mConstantSliceSize = inSize; }
 
@@ -84,6 +82,9 @@ public:
     bool            transferRegistersToOffspring() const;
     void            setTransferRegistersToOffspring(bool inTransfer);
     
+    bool            clearDaughterCells() const    { return mClearDaughterCells; }
+    void            setClearDaughterCells(bool inClear) { mClearDaughterCells = inClear; }
+
     bool            clearReapedCreatures() const    { return mClearReapedCreatures; }
     void            setClearReapedCreatures(bool inClear) { mClearReapedCreatures = inClear; }
     
@@ -114,6 +115,7 @@ private:
         ar & BOOST_SERIALIZATION_NVP(mMutationType);
         ar & BOOST_SERIALIZATION_NVP(mGlobalWritesAllowed);
         ar & BOOST_SERIALIZATION_NVP(mTransferRegistersToOffspring);
+        ar & BOOST_SERIALIZATION_NVP(mClearDaughterCells);
         ar & BOOST_SERIALIZATION_NVP(mClearReapedCreatures);
 
         ar & BOOST_SERIALIZATION_NVP(mDaughterAllocation);
@@ -144,6 +146,7 @@ protected:
     
     bool            mGlobalWritesAllowed;
     bool            mTransferRegistersToOffspring;
+    bool            mClearDaughterCells;
     bool            mClearReapedCreatures;
     
     EDaughterAllocationStrategy mDaughterAllocation;
