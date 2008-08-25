@@ -185,15 +185,20 @@ World::iterate(u_int32_t inNumCycles)
     {
         if (mCurCreatureCycles < mCurCreatureSliceCycles)
         {
+            const u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
+
             // do cosmic rays
-            // FIXME: avoid the method call if we can
-            cosmicRay(mTimeSlicer.instructionsExecuted());
+            if (timeForCosmicRay(instructionCount))
+                cosmicRay(instructionCount);
             
             // decide whether to throw in a flaw
-            int32_t flaw = instructionFlaw(mTimeSlicer.instructionsExecuted());
+            int32_t flaw = 0;
+            if (timeForFlaw(instructionCount))
+                flaw = instructionFlaw(instructionCount);
             
-            // track leanness
-            
+            // TODO: track leanness
+
+            // execute the next instruction
             Creature* daughterCreature = mExecution->execute(*curCreature, *this, flaw);
             if (daughterCreature)
                 handleBirth(curCreature, daughterCreature);
@@ -206,26 +211,7 @@ World::iterate(u_int32_t inNumCycles)
 
             // compute next copy error time
             if (mSettings.copyErrorRate() > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
-            {
-                if (mCopyErrorPending)  // just did one
-                {
-                    RandomLib::ExponentialDistribution<double> expDist;
-                    int32_t copyErrorDelay;
-                    do
-                    {
-                        copyErrorDelay = expDist(mRNG, mSettings.meanCopyErrorInterval());
-                    } while (copyErrorDelay <= 0);
-                    
-                    mNextCopyError = copyErrorDelay;
-                    mCopiesSinceLastError = 0;
-                    mCopyErrorPending = false;
-                }
-                else
-                {
-                    ++mCopiesSinceLastError;
-                    mCopyErrorPending = (mCopiesSinceLastError == mNextCopyError);
-                }
-            }
+                noteInstructionCopy();
             
             ++mCurCreatureCycles;
             mTimeSlicer.executedInstruction();
@@ -400,6 +386,30 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
 }
 
 void
+World::noteInstructionCopy()
+{
+    if (mCopyErrorPending)  // just did one
+    {
+        RandomLib::ExponentialDistribution<double> expDist;
+        int32_t copyErrorDelay;
+        do
+        {
+            copyErrorDelay = expDist(mRNG, mSettings.meanCopyErrorInterval());
+        } while (copyErrorDelay <= 0);
+        
+        mNextCopyError = copyErrorDelay;
+        mCopiesSinceLastError = 0;
+        mCopyErrorPending = false;
+    }
+    else
+    {
+        ++mCopiesSinceLastError;
+        mCopyErrorPending = (mCopiesSinceLastError == mNextCopyError);
+    }
+}
+
+
+void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
     inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings.sizeSelection()));
@@ -479,46 +489,37 @@ World::handleDeath(Creature* inCreature)
 int32_t
 World::instructionFlaw(u_int64_t inInstructionCount)
 {
-    if (mSettings.flawRate() > 0 && inInstructionCount == mNextFlawInstruction)
+    int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
+
+    RandomLib::ExponentialDistribution<double> expDist;
+    int64_t flawDelay;
+    do 
     {
-        int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
+        flawDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanFlawInterval()));
+    } while (flawDelay <= 0);
 
-        RandomLib::ExponentialDistribution<double> expDist;
-        int64_t flawDelay;
-        do 
-        {
-            flawDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanFlawInterval()));
-        } while (flawDelay <= 0);
-
-        mNextFlawInstruction = inInstructionCount + flawDelay;
-        
-        return theFlaw;
-    }
-    return 0;
+    mNextFlawInstruction = inInstructionCount + flawDelay;
+    
+    return theFlaw;
 }
 
-bool
+void
 World::cosmicRay(u_int64_t inInstructionCount)
 {
-    if (mSettings.cosmicRate() > 0.0 && inInstructionCount == mNextCosmicRayInstruction)
+    address_t   target = mRNG.Integer(mSoupSize);
+
+    instruction_t inst = mSoup->instructionAtAddress(target);
+    inst = mutateInstruction(inst, mSettings.mutationType());
+    mSoup->setInstructionAtAddress(target, inst);
+    
+    RandomLib::ExponentialDistribution<double> expDist;
+    int64_t cosmicDelay;
+    do
     {
-        address_t   target = mRNG.Integer(mSoupSize);
+        cosmicDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanCosmicTimeInterval()));
+    } while (cosmicDelay <= 0);
 
-        instruction_t inst = mSoup->instructionAtAddress(target);
-        inst = mutateInstruction(inst, mSettings.mutationType());
-        mSoup->setInstructionAtAddress(target, inst);
-        
-        RandomLib::ExponentialDistribution<double> expDist;
-        int64_t cosmicDelay;
-        do
-        {
-            cosmicDelay = static_cast<int64_t>(expDist(mRNG, mSettings.meanCosmicTimeInterval()));
-        } while (cosmicDelay <= 0);
-
-        mNextCosmicRayInstruction = inInstructionCount + cosmicDelay;
-        return true;
-    }
-    return false;
+    mNextCosmicRayInstruction = inInstructionCount + cosmicDelay;
 }
 
 void

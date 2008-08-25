@@ -201,7 +201,7 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
             address(inCreature, *inWorld.soup(), Soup::kBackwards);
             break;
 
-        case k_adrf:    // AddrFore
+        case k_adrf:    // AddrFor
             address(inCreature, *inWorld.soup(), Soup::kForwards);
             break;
             

@@ -67,8 +67,6 @@ public:
 
     instruction_t   mutateInstruction(instruction_t inInst, Settings::EMutationType inMutationType) const;
 
-    void            cosmicRay();
-
     // settings
     const Settings&     settings() const { return mSettings; }
     void                setSettings(const Settings& inSettings);
@@ -89,12 +87,24 @@ protected:
     // handle the 'mal' instruction
     Creature*       allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
 
+    bool            timeForFlaw(u_int64_t inInstructionCount) const
+    {
+        return (mSettings.flawRate() > 0 && inInstructionCount == mNextFlawInstruction);
+    }
+    
+    bool            timeForCosmicRay(u_int64_t inInstructionCount) const
+    {
+        return (mSettings.cosmicRate() > 0.0 && inInstructionCount == mNextCosmicRayInstruction);
+    }
+    
+    void            noteInstructionCopy();
+    
     // birth happens on 'divide'
     void            handleBirth(Creature* inParent, Creature* inChild);
     void            handleDeath(Creature* inCreature);
 
     int32_t         instructionFlaw(u_int64_t inInstructionCount);
-    bool            cosmicRay(u_int64_t inInstructionCount);
+    void            cosmicRay(u_int64_t inInstructionCount);
 
     // these add and remove from the time slicer and reaper queues.
     void            creatureAdded(Creature* inCreature);
