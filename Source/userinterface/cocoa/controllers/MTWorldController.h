@@ -16,6 +16,7 @@ namespace MacTierra {
 @class MTCreature;
 @class MTInventoryController;
 @class MTSoupView;
+@class MTSoupSettingsPanelController;
 
 @interface MTWorldController : NSObject
 {
@@ -25,7 +26,8 @@ namespace MacTierra {
     IBOutlet NSTableView*   mInventoryTableView;
 
     IBOutlet MTInventoryController*  mInventoryController;
-
+    IBOutlet MTSoupSettingsPanelController*  mSoupSettingsPanelController;
+    
     MacTierra::World*       mWorld;
 
     MTCreature*             selectedCreature;
@@ -39,11 +41,14 @@ namespace MacTierra {
     double                  instructionsPerSecond;
 }
 
+@property (readonly) NSDocument* document;
 @property (readonly) MTSoupView* soupView;
 
 @property (retain) MTCreature* selectedCreature;
 
 @property (assign) BOOL running;
+
+@property (readonly) MacTierra::World* world;
 
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;
@@ -52,10 +57,10 @@ namespace MacTierra {
 
 @property (readonly) NSString* playPauseButtonTitle;
 
-
 - (void)createSoup:(u_int32_t)inSize;
 - (void)seedWithAncestor;
 
+- (IBAction)showSettings:(id)sender;
 - (IBAction)toggleRunning:(id)sender;
 - (IBAction)exportInventory:(id)sender;
 
@@ -67,5 +72,7 @@ namespace MacTierra {
 
 - (NSData*)worldXMLData;
 - (void)setWorldWithXMLData:(NSData*)inData;
+
+
 
 @end

@@ -19,6 +19,7 @@
 
 #import "MTCreature.h"
 #import "MTInventoryController.h"
+#import "MTWorldSettings.h"
 
 using namespace MacTierra;
 
@@ -35,6 +36,7 @@ using namespace MacTierra;
 
 @implementation MTWorldController
 
+@synthesize document;
 @synthesize running;
 @synthesize instructionsPerSecond;
 @synthesize selectedCreature;
@@ -115,6 +117,10 @@ using namespace MacTierra;
         mWorld->insertCreature(mWorld->soupSize() / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
 }
 
+- (IBAction)showSettings:(id)sender
+{
+    [mSoupSettingsPanelController showSettings:sender];
+}
 
 - (IBAction)toggleRunning:(id)sender
 {
@@ -156,6 +162,11 @@ using namespace MacTierra;
 - (NSString*)playPauseButtonTitle
 {
     return running ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
+}
+
+- (MacTierra::World*)world
+{
+    return mWorld;
 }
 
 - (double)fullness

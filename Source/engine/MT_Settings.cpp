@@ -14,7 +14,9 @@ namespace MacTierra {
 using namespace std;
 
 Settings::Settings()
-: mSliceSizeVariance(.0)
+: mTimeSliceType(kSizeVariableSliceSize)
+, mConstantSliceSize(20)
+, mSliceSizeVariance(.0)
 , mCopyErrorRate(0.0)
 , mMeanCopyErrorInterval(0.0)
 , mFlawRate(0.0)

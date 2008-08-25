@@ -24,7 +24,20 @@ public:
     
     // update computed settings values that depend on soup size
     void            updateWithSoupSize(u_int32_t inSoupSize);
+
+    enum ETimeSliceType {
+        kConstantSlizeSize,
+        kSizeVariableSliceSize,
+    };
+
+    // FIXME: implement
+    ETimeSliceType  timeSliceType() const    { return mTimeSliceType; }
+    void            setTimeSliceType(ETimeSliceType inType) { mTimeSliceType = inType; }
     
+    // FIXME: implement
+    double          constantSliceSize() const       { return mConstantSliceSize; }
+    void            setConstantSliceSize(double inSize) { mConstantSliceSize = inSize; }
+
     double          sliceSizeVariance() const       { return mSliceSizeVariance; }
     void            setSliceSizeVariance(double inVariance) { mSliceSizeVariance = inVariance; }
 
@@ -72,12 +85,15 @@ public:
     void            setTransferRegistersToOffspring(bool inTransfer);
     
     bool            clearReapedCreatures() const    { return mClearReapedCreatures; }
-    void            setClearReapedCreatuers(bool inClear) { mClearReapedCreatures = inClear; }
+    void            setClearReapedCreatures(bool inClear) { mClearReapedCreatures = inClear; }
     
 private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
+        ar & BOOST_SERIALIZATION_NVP(mTimeSliceType);
+        ar & BOOST_SERIALIZATION_NVP(mConstantSliceSize);
+
         ar & BOOST_SERIALIZATION_NVP(mSliceSizeVariance);
 
         ar & BOOST_SERIALIZATION_NVP(mCopyErrorRate);
@@ -104,6 +120,10 @@ private:
     }
 
 protected:
+
+    ETimeSliceType  mTimeSliceType;
+
+    u_int32_t       mConstantSliceSize;
 
     double          mSliceSizeVariance;         // sigma of normal distribution
 

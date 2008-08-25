@@ -124,4 +124,14 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     [super close];
 }
 
+- (IBAction)showSettings:(id)sender
+{
+    [worldController showSettings:sender];
+}
+
+- (IBAction)toggleRunning:(id)sender
+{
+    [worldController toggleRunning:sender];
+}
+
 @end

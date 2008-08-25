@@ -98,6 +98,12 @@
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
 		0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24610E61115700F37B71 /* MacTierra document.icns */; };
+		0FEDEAE40E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
+		0FEDEAE50E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
+		0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
+		0FEDEB5B0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEB5A0E62806700DEF441 /* MTSoupSettingsPanelController.mm */; };
+		0FEDEB5C0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEB5A0E62806700DEF441 /* MTSoupSettingsPanelController.mm */; };
+		0FEDEB5D0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEB5A0E62806700DEF441 /* MTSoupSettingsPanelController.mm */; };
 		0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
@@ -408,6 +414,10 @@
 		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
 		0FCA24600E61115700F37B71 /* MacTierra.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MacTierra.icns; sourceTree = "<group>"; };
 		0FCA24610E61115700F37B71 /* MacTierra document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra document.icns"; sourceTree = "<group>"; };
+		0FEDEAE20E62728000DEF441 /* MTWorldSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldSettings.h; sourceTree = "<group>"; };
+		0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldSettings.mm; sourceTree = "<group>"; };
+		0FEDEB590E62806700DEF441 /* MTSoupSettingsPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSoupSettingsPanelController.h; sourceTree = "<group>"; };
+		0FEDEB5A0E62806700DEF441 /* MTSoupSettingsPanelController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTSoupSettingsPanelController.mm; sourceTree = "<group>"; };
 		0FFF64490E4FE38E00404828 /* RandomSelect.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomSelect.hpp; sourceTree = "<group>"; };
 		0FFF644A0E4FE38E00404828 /* RandomMixer.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomMixer.hpp; sourceTree = "<group>"; };
 		0FFF644B0E4FE38E00404828 /* RandomEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = RandomEngine.hpp; sourceTree = "<group>"; };
@@ -789,6 +799,8 @@
 			children = (
 				0FB044290E5D325B0024DF67 /* MTInventoryController.h */,
 				0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */,
+				0FEDEB590E62806700DEF441 /* MTSoupSettingsPanelController.h */,
+				0FEDEB5A0E62806700DEF441 /* MTSoupSettingsPanelController.mm */,
 				0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */,
 				0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */,
 			);
@@ -876,6 +888,8 @@
 				0FB044E80E5D3B990024DF67 /* MTCreature.mm */,
 				0FB043F90E5D2FCD0024DF67 /* MTInventoryGenotype.h */,
 				0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */,
+				0FEDEAE20E62728000DEF441 /* MTWorldSettings.h */,
+				0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */,
 			);
 			path = engine_objects;
 			sourceTree = "<group>";
@@ -1134,6 +1148,8 @@
 				0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */,
 				0F13F88E0E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */,
 				0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */,
+				0FEDEAE40E62728000DEF441 /* MTWorldSettings.mm in Sources */,
+				0FEDEB5B0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1158,6 +1174,8 @@
 				0FBB07130E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 				0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */,
 				0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */,
+				0FEDEAE50E62728000DEF441 /* MTWorldSettings.mm in Sources */,
+				0FEDEB5C0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1192,6 +1210,8 @@
 				0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */,
 				0F13F8810E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */,
 				0FB6C5DD0E61EAC60030536C /* MT_Settings.cpp in Sources */,
+				0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */,
+				0FEDEB5D0E62806700DEF441 /* MTSoupSettingsPanelController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

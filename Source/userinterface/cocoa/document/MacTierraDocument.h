@@ -29,4 +29,7 @@ extern NSString* const kXMLSoupDocumentType;
 @property (assign) BOOL dataIsXML;
 @property (assign) BOOL startEmpty;
 
+
+- (IBAction)showSettings:(id)sender;
+
 @end
