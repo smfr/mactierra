@@ -83,7 +83,7 @@ using namespace MacTierra;
     settings.setCopyErrorRate(1.0E-3);
     settings.setSliceSizeVariance(2);
     settings.setSizeSelection(0.9);
-//    settings.setMutationType(Settings::kBitFlip);
+    settings.setMutationType(Settings::kBitFlip);
 
     newWorld->setSettings(settings);
     
