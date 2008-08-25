@@ -344,7 +344,7 @@ using namespace MacTierra;
     {
         MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
 
-        MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithMTCreature:creatureObj] autorelease];
+        MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithName:[creatureObj name] genome:[creatureObj genome]] autorelease];
 
         NSData* creatureData = [NSKeyedArchiver archivedDataWithRootObject:serCreature]; 
 

@@ -42,8 +42,7 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
 {
     std::string genomeString = mCreature->genomeData().dataString();
     
-    NSData* data  = [NSData dataWithBytes:genomeString.data() length:genomeString.length()];
-    return data;
+    return [NSData dataWithBytes:genomeString.data() length:genomeString.length()];
 }
 
 - (NSInteger)length
@@ -84,12 +83,12 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
     return self;
 }
 
-- (id)initWithMTCreature:(MTCreature *)inCreature
+- (id)initWithName:(NSString *)inName genome:(NSData*)inGenome
 {
     if ((self = [super init]))
     {
-        self.name = inCreature.name;
-        self.genome = inCreature.genome;
+        self.name = [[inName copy] autorelease];
+        self.genome = [[inGenome copy] autorelease];
     }
     return self;
 }

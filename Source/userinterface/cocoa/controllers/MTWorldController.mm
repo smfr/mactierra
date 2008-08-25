@@ -8,10 +8,13 @@
 
 #import "MTWorldController.h"
 
+#import <fstream>
+
 #import "MTSoupView.h"
 
 #import "MT_Ancestor.h"
 #import "MT_Cellmap.h"
+#import "MT_Inventory.h"
 #import "MT_World.h"
 
 #import "MTCreature.h"
@@ -34,7 +37,6 @@ using namespace MacTierra;
 
 @synthesize running;
 @synthesize instructionsPerSecond;
-@synthesize inventoryController;
 @synthesize selectedCreature;
 
 + (void)initialize
@@ -54,7 +56,6 @@ using namespace MacTierra;
 - (void)dealloc
 {
     self.selectedCreature = nil;
-    self.inventoryController = nil;
     
     [mSoupView setWorld:NULL];
     [mSoupView release];
@@ -98,12 +99,12 @@ using namespace MacTierra;
     {
         [mSoupView setWorld:nil];
         delete mWorld;
-        self.inventoryController = nil;
+        [mInventoryController setInventory:nil];
         
         mWorld = inWorld;
         [mSoupView setWorld:mWorld];
         
-        self.inventoryController = [[[MTInventoryController alloc] initWithInventory:mWorld->inventory()] autorelease];
+        [mInventoryController setInventory:mWorld ? mWorld->inventory() : NULL];
     }
 }
 
@@ -126,6 +127,29 @@ using namespace MacTierra;
     {
         [self startRunTimer];
         self.running = YES;
+    }
+}
+
+- (IBAction)exportInventory:(id)sender
+{
+    NSSavePanel*    savePanel = [NSSavePanel savePanel];
+    
+    [savePanel beginSheetForDirectory:nil
+                                 file:@"Inventory.txt"
+                       modalForWindow:[document windowForSheet]
+                        modalDelegate:self
+                       didEndSelector:@selector(exportInventorySavePanelDidDne:returnCode:contextInfo:)
+                          contextInfo:NULL];
+}
+
+- (void)exportInventorySavePanelDidDne:(NSSavePanel *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    if (mWorld && returnCode == NSOKButton)
+    {
+        NSString* filePath = [sheet filename];
+        
+        std::ofstream outFileStream([filePath fileSystemRepresentation]);
+        mWorld->inventory()->writeToStream(outFileStream);
     }
 }
 
@@ -154,6 +178,7 @@ using namespace MacTierra;
     // have to break ref cycles
     [self stopRunTimer];
     
+    [self setWorld:NULL];
     self.selectedCreature = nil;
 }
 
@@ -206,7 +231,7 @@ using namespace MacTierra;
     
     // hack to avoid slowing things down too much
     if ([mInventoryTableView window])
-        [inventoryController updateGenotypesArray];
+        [mInventoryController updateGenotypesArray];
 }
 
 #pragma mark -

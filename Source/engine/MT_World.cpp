@@ -443,6 +443,12 @@ World::handleBirth(Creature* inParent, Creature* inChild)
             // it's new
             foundGenotype->setOriginInstructions(inParent->originInstructions());
             foundGenotype->setOriginGenerations(inParent->generation());
+            
+//            cout << "New genotype: " << foundGenotype->genome().printableGenome() << endl;
+//            cout << "      parent: " << (parentGenotype ? foundGenotype->genome().printableGenome() : "unclean") << endl;
+        }
+        else
+        {
         }
 
         if (parentGenotype != foundGenotype)
@@ -450,8 +456,8 @@ World::handleBirth(Creature* inParent, Creature* inChild)
             if (parentGenotype)
             {
                 // cout << "Creature genotype changed between birth and reproduction:" << endl;
-                // cout << "was: " << parentGenotype->name() << " " << parentGenotype->printableGenotype() << endl;
-                // cout << "now: " << foundGenotype->name() << " " << foundGenotype->printableGenotype() << endl;
+                // cout << "was: " << parentGenotype->name() << " " << parentGenotype->printableGenome() << endl;
+                // cout << "now: " << foundGenotype->name() << " " << foundGenotype->printableGenome() << endl;
                 // old genotype lost a member
                 parentGenotype->creatureDied();
             }

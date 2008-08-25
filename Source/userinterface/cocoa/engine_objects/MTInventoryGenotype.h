@@ -27,6 +27,7 @@ namespace MacTierra {
 @property (readonly) u_int64_t originInstructions;
 @property (readonly) NSInteger originGenerations;
 
-@property (readonly) NSString* genotypeString;
+@property (readonly) NSString* genomeString;
+@property (readonly) NSData* genome;
 
 @end

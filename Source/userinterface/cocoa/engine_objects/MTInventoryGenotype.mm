@@ -21,7 +21,8 @@ using namespace MacTierra;
 @synthesize numEverLived;
 @synthesize originInstructions;
 @synthesize originGenerations;
-@synthesize genotypeString;
+@synthesize genomeString;
+@synthesize genome;
 
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype
 {
@@ -62,9 +63,14 @@ using namespace MacTierra;
     return genotype->originGenerations();
 }
 
-- (NSString*)genotypeString
+- (NSString*)genomeString
 {
     return [NSString stringWithUTF8String:genotype->genome().printableGenome().c_str()];
+}
+
+- (NSData*)genome
+{
+    return [NSData dataWithBytes:genotype->genome().dataString().data() length:genotype->genome().length()];
 }
 
 @end

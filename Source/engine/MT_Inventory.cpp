@@ -105,6 +105,23 @@ Inventory::printCreatures() const
 
 }
 
+void
+Inventory::writeToStream(std::ostream& inStream) const
+{
+    InventoryMap::const_iterator it, end;
+    
+    inStream << "Name\t" << "Length\t" << "Alive\t" << "Ever\t" << "Origin Generations\t" << "Origin Instructions\t" << "Genotype" << endl;
+
+    for (it = mInventoryMap.begin(), end = mInventoryMap.end();
+         it != end;
+         ++it)
+    {
+        const InventoryGenotype* curEntry = it->second;
+        inStream << curEntry->name() << "\t" << curEntry->length() << "\t" << curEntry->numberAlive() << "\t" << curEntry->numberEverLived() << "\t"
+            << curEntry->originGenerations() << "\t" << curEntry->originInstructions() << "\t" << curEntry->genome().printableGenome() << endl;
+    }
+}
+
 std::string
 Inventory::uniqueIdentifierForLength(u_int32_t inLength) const
 {

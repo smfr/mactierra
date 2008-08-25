@@ -10,6 +10,7 @@
 
 #import "MT_Inventory.h"
 
+#import "MTCreature.h"
 #import "MTInventoryGenotype.h"
 
 
@@ -17,14 +18,7 @@ using namespace MacTierra;
 
 @implementation MTInventoryController
 
-- (id)initWithInventory:(MacTierra::Inventory*)inInventory
-{
-    if ((self = [super init]))
-    {
-        mInventory = inInventory;
-    }
-    return self;
-}
+@synthesize inventory;
 
 - (void)dealloc
 {
@@ -32,11 +26,25 @@ using namespace MacTierra;
     [super dealloc];
 }
 
+- (void)setInventory:(MacTierra::Inventory*)inInventory
+{
+    if (inInventory != inventory)
+    {
+        [mGenotypes release];
+        mGenotypes = nil;
+        
+        inventory = inInventory;
+    }
+}
+
 - (void)updateGenotypesArray
 {
+    if (!inventory)
+        return;
+
     [self willChange:NSKeyValueChangeSetting valuesAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [mGenotypes count])] forKey:@"genotypes"];
     
-    const Inventory::InventoryMap& theInventory = mInventory->inventoryMap();
+    const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
 
     // for now, nuke everything
     [mGenotypes removeAllObjects];
@@ -60,8 +68,10 @@ using namespace MacTierra;
 
 - (NSArray*)genotypes
 {
-    const Inventory::InventoryMap& theInventory = mInventory->inventoryMap();
+    if (!inventory)
+        return [NSArray array];
 
+    const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
     if (!mGenotypes)
     {
         mGenotypes = [[NSMutableArray alloc] initWithCapacity:theInventory.size()];
@@ -70,5 +80,32 @@ using namespace MacTierra;
     
     return mGenotypes;
 }
+
+#pragma mark -
+
+// NSTableView dataSource methods (unused because we bind the columns)
+- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+{
+	return 0;
+}
+
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+{
+    return nil;
+}
+
+- (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
+{
+    [pasteboard declareTypes:[NSArray arrayWithObject:kCreaturePasteboardType]  owner:self];
+
+    NSUInteger curIndex = [rowIndexes firstIndex];
+    MTInventoryGenotype* curGenotype = [[mGenotypesArrayController arrangedObjects] objectAtIndex:curIndex];
+
+    MTSerializableCreature* curCreature = [[[MTSerializableCreature alloc] initWithName:[curGenotype name] genome:[curGenotype genome]] autorelease];
+    NSData* creatureData = [NSKeyedArchiver archivedDataWithRootObject:curCreature]; 
+    [pasteboard setData:creatureData forType:kCreaturePasteboardType];
+    return true;
+}
+
 
 @end

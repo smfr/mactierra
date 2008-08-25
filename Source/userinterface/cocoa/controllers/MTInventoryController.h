@@ -16,14 +16,14 @@ namespace MacTierra {
 
 @interface MTInventoryController : NSObject
 {
-    MacTierra::Inventory*   mInventory;
-    NSMutableArray*         mGenotypes;
+    IBOutlet NSArrayController*     mGenotypesArrayController;
+    MacTierra::Inventory*           inventory;
+    NSMutableArray*                 mGenotypes;
 }
 
-- (id)initWithInventory:(MacTierra::Inventory*)inInventory;
+@property (assign) MacTierra::Inventory* inventory;
 
 - (void)updateGenotypesArray;
-
 - (NSArray*)genotypes;
 
 @end

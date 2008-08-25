@@ -24,9 +24,9 @@ namespace MacTierra {
     IBOutlet MTSoupView*    mSoupView;
     IBOutlet NSTableView*   mInventoryTableView;
 
+    IBOutlet MTInventoryController*  mInventoryController;
+
     MacTierra::World*       mWorld;
-    
-    MTInventoryController*  inventoryController;
 
     MTCreature*             selectedCreature;
     
@@ -40,8 +40,6 @@ namespace MacTierra {
 }
 
 @property (readonly) MTSoupView* soupView;
-
-@property (retain) MTInventoryController* inventoryController;
 
 @property (retain) MTCreature* selectedCreature;
 
@@ -59,6 +57,7 @@ namespace MacTierra {
 - (void)seedWithAncestor;
 
 - (IBAction)toggleRunning:(id)sender;
+- (IBAction)exportInventory:(id)sender;
 
 - (void)documentClosing;
 

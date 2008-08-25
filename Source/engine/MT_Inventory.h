@@ -108,6 +108,8 @@ public:
     
     const InventoryMap& inventoryMap() const { return mInventoryMap; }
 
+    void            writeToStream(std::ostream& inStream) const;
+
 protected:
 
     std::string         uniqueIdentifierForLength(u_int32_t inLength) const;

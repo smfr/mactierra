@@ -45,6 +45,6 @@ extern NSString* const kCreaturePasteboardType;
 @property (retain) NSData* genome;
 
 - (id)initWithCoder:(NSCoder *)decoder;
-- (id)initWithMTCreature:(MTCreature *)inCreature;
+- (id)initWithName:(NSString *)inName genome:(NSData*)inGenome;
 
 @end
