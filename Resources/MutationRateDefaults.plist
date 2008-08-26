@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>instruction-flaws</key>
+	<dict>
+		<key>none</key>
+		<integer>0</integer>
+		<key>low</key>
+		<real>0.0004</real>
+		<key>medium</key>
+		<real>0.000834</real>
+		<key>high</key>
+		<real>0.001668</real>
+		<key>very-high</key>
+		<real>0.004</real>
+	</dict>
+	<key>copy-errors</key>
+	<dict>
+		<key>none</key>
+		<integer>0</integer>
+		<key>low</key>
+		<real>0.0004</real>
+		<key>medium</key>
+		<real>0.001</real>
+		<key>high</key>
+		<real>0.002</real>
+		<key>very-high</key>
+		<real>0.01</real>
+	</dict>
+	<key>cosmic-rays</key>
+	<dict>
+		<key>none</key>
+		<integer>0</integer>
+		<key>low</key>
+		<real>1.526e-09</real>
+		<key>medium</key>
+		<real>7.634000000000001e-09</real>
+		<key>high</key>
+		<real>1.34e-08</real>
+		<key>very-high</key>
+		<real>3.815e-08</real>
+	</dict>
+</dict>
+</plist>

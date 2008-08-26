@@ -10,17 +10,32 @@
 
 #import "MT_Settings.h"
 
+typedef enum EMutationRate {
+    kNone,
+    kLow,
+    kMedium,
+    kHigh,
+    kVeryHigh,
+    kOther
+} EMutationRate;
+
 @interface MTWorldSettings : NSObject
 {
     MacTierra::Settings*    mSettings;
     
-    double                  soupSize;
+    NSUInteger              soupSize;
+    
+    EMutationRate           flawLevel;
+    EMutationRate           cosmicMutationLevel;
+    EMutationRate           copyErrorLevel;
+    
+    NSDictionary*           mutationDefaults;
 }
 
 - (id)initWithSettings:(const MacTierra::Settings&)inSettings;
 @property (readonly) const MacTierra::Settings* settings;
 
-@property (assign) double soupSize;
+@property (assign) NSUInteger soupSize;
 
 @property (assign) MacTierra::Settings::ETimeSliceType timeSliceType;
 
@@ -30,15 +45,17 @@
 @property (assign) double sizeSelection;
 @property (assign) double reapThreshold;
 
+@property (assign) EMutationRate flawLevel;
 @property (assign) double flawRate;
-@property (readonly) double meanFlawInterval;
+@property (assign) double meanFlawInterval;
 
-#warning fix when soup size changes
+@property (assign) EMutationRate cosmicMutationLevel;
 @property (assign) double cosmicRate;
-@property (readonly) double meanCosmicTimeInterval;
+@property (assign) double meanCosmicTimeInterval;
 
+@property (assign) EMutationRate copyErrorLevel;
 @property (assign) double copyErrorRate;
-@property (readonly) double meanCopyErrorInterval;
+@property (assign) double meanCopyErrorInterval;
 
 @property (assign) MacTierra::Settings::EMutationType mutationType;
 @property (assign) MacTierra::Settings::EDaughterAllocationStrategy daughterAllocationStrategy;
@@ -48,5 +65,8 @@
 @property (assign) BOOL clearDaughterCells;
 @property (assign) BOOL clearReapedCreatures;
 
+
+// internal
+@property (retain) NSDictionary* mutationDefaults;
 
 @end

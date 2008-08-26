@@ -22,7 +22,8 @@
 {
     // fetch settings from the world
     self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorldController.world->settings()] autorelease];
-
+    self.worldSettings.soupSize = mWorldController.world->soupSize();
+    
     [NSApp beginSheet:mSettingsPanel
        modalForWindow:[mWorldController.document windowForSheet]
         modalDelegate:self

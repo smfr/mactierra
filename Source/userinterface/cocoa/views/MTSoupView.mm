@@ -142,6 +142,9 @@ using namespace MacTierra;
 
 - (void)drawCells:(NSRect)inDirtyRect
 {
+    if (!mWorld)
+        return;
+
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 
     NSColor* adultColor  = [[NSColor blueColor] colorWithAlphaComponent:0.5];
@@ -211,6 +214,9 @@ using namespace MacTierra;
 
 - (void)drawInstructionPointers:(NSRect)inDirtyRect
 {
+    if (!mWorld)
+        return;
+
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 
     const CGFloat kInstPointerRectBorderWidth = 1.0f;
