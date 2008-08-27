@@ -128,6 +128,8 @@ using namespace MacTierra;
     {
         [self stopRunTimer];
         self.running = NO;
+        // hack to update genotypes on pause
+        [mInventoryController updateGenotypesArray];
     }
     else
     {

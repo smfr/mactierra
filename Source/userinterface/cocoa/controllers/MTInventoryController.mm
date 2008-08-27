@@ -55,11 +55,14 @@ using namespace MacTierra;
     while (it != itEnd)
     {
         MacTierra::InventoryGenotype* theGenotype = it->second;
-        MTInventoryGenotype* genotypeObj = [[MTInventoryGenotype alloc] initWithGenotype:theGenotype];
-    
-        [mGenotypes addObject:genotypeObj];
-        [genotypeObj release];
-
+        // only show current genotypes, for performance
+        if (theGenotype->numberAlive() > 0)
+        {
+            MTInventoryGenotype* genotypeObj = [[MTInventoryGenotype alloc] initWithGenotype:theGenotype];
+        
+            [mGenotypes addObject:genotypeObj];
+            [genotypeObj release];
+        }
         ++it;
     }
 

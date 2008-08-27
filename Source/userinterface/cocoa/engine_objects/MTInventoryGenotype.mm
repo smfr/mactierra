@@ -9,6 +9,7 @@
 #import "MTInventoryGenotype.h"
 
 #import "MT_Inventory.h"
+#include "MT_InstructionSet.h"
 
 using namespace MacTierra;
 
@@ -66,6 +67,23 @@ using namespace MacTierra;
 - (NSString*)genomeString
 {
     return [NSString stringWithUTF8String:genotype->genome().printableGenome().c_str()];
+}
+
+- (NSString*)prettyPrintedGenomeString
+{
+    NSMutableString* genomeString = [NSMutableString string];
+    
+    const GenomeData& genome = genotype->genome();
+
+    for (u_int32_t i = 0; i < genome.length(); ++i)
+    {
+        instruction_t curInst = genome.dataString()[i];
+        const char* instructionName = nameForInstruction(curInst);
+     
+        [genomeString appendFormat:@"%02X %s\n", curInst, instructionName];
+    }
+
+    return genomeString;
 }
 
 - (NSData*)genome

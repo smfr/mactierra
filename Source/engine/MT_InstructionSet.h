@@ -51,7 +51,7 @@ enum {
 
 const int32_t kInstructionSetSize = 32;
 
-
+const char* nameForInstruction(instruction_t inInst);
 
 } // namespace MacTierra
 

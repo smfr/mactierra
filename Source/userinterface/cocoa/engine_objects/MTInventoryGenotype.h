@@ -27,7 +27,8 @@ namespace MacTierra {
 @property (readonly) u_int64_t originInstructions;
 @property (readonly) NSInteger originGenerations;
 
-@property (readonly) NSString* genomeString;
+@property (readonly) NSString* genomeString;        // like "01 01 0a" etc.
+@property (readonly) NSString* prettyPrintedGenomeString;        // pretty-printed
 @property (readonly) NSData* genome;
 
 @end

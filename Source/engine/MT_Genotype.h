@@ -99,7 +99,7 @@ public:
 
     const GenomeData&   genome() const    { return mGenome; }
 
-    bool operator < (const Genotype inRHS)
+    bool operator < (const Genotype& inRHS)
     {
         return mGenome < inRHS.genome();
     }
