@@ -35,6 +35,11 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
     [super dealloc];
 }
 
+- (MacTierra::Creature*)creature
+{
+    return mCreature;
+}
+
 - (NSString*)name
 {
     return [NSString stringWithUTF8String:mCreature->creatureName().c_str()];
@@ -122,7 +127,6 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
 {
     return NSMakeRange(0, 1);
 }
-
 
 - (MTInventoryGenotype*)genotype
 {

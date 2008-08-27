@@ -61,8 +61,12 @@ namespace MacTierra {
 - (void)seedWithAncestor;
 
 - (IBAction)showSettings:(id)sender;
+
 - (IBAction)toggleRunning:(id)sender;
+- (IBAction)step:(id)sender;
+
 - (IBAction)exportInventory:(id)sender;
+
 
 - (void)documentClosing;
 

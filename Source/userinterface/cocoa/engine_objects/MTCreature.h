@@ -25,12 +25,14 @@ extern NSString* const kCreaturePasteboardType;
 
 - (id)initWithCreature:(MacTierra::Creature*)inCreature;
 
+@property (readonly) MacTierra::Creature* creature;
+
+// we don't even try to make these properties KVC-compliant. Manual updates of the UI are required
 @property (readonly) NSString* name;
 @property (readonly) NSData* genome;
 @property (readonly) NSInteger length;
 @property (readonly) NSUInteger location;
 
-// cpu properties
 @property (readonly) NSInteger instructionPointer;
 @property (readonly) NSString* lastInstruction;     // or next one?
 @property (readonly) BOOL flag;

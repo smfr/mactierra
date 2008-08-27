@@ -134,6 +134,9 @@ public:
     
     bool            isEmbryo() const { return !mBorn; }
 
+    bool            isInSlicerList() const { return mSlicerListHook.is_linked(); }
+    bool            isInReaperList() const { return mReaperListHook.is_linked(); }
+
     bool            operator==(const Creature& inRHS)
                     {
                         return mID == inRHS.creatureID();

@@ -168,8 +168,7 @@ void
 World::iterate(u_int32_t inNumCycles)
 {
     u_int32_t   cycles = 0;
-    bool        tracing = false;
-    u_int32_t   numCycles = tracing ? 1 : inNumCycles;      // unless tracing
+    u_int32_t   numCycles = inNumCycles;      // unless tracing
     
     Creature*   curCreature = mTimeSlicer.currentCreature();
     if (!curCreature)
@@ -241,16 +240,26 @@ World::iterate(u_int32_t inNumCycles)
             if (!curCreature)
                 break;
 
-            // cout << "Running creature " << curCreature->creatureID() << endl;
-            
-            // track the new creature for tracing
-            
             mCurCreatureCycles = 0;
             mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSettings.sliceSizeVariance());
         }
     }
     
     //cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
+}
+
+void
+World::stepCreature(Creature* inCreature)
+{
+    // if the creature is not in the slicer list, don't do anything
+    if (!inCreature->isInSlicerList())
+        return;
+
+    // run until this creature is current
+    while (mTimeSlicer.currentCreature() != inCreature)
+        iterate(1);
+
+    iterate(1);
 }
 
 instruction_t

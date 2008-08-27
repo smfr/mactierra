@@ -30,6 +30,10 @@ using namespace MacTierra;
 - (void)stopRunTimer;
 - (void)setWorld:(World*)inWorld;
 
+- (void)updateSoup;
+- (void)updateGenotypes;
+- (void)updateDebugPanel;
+
 @end
 
 #pragma mark -
@@ -129,12 +133,24 @@ using namespace MacTierra;
         [self stopRunTimer];
         self.running = NO;
         // hack to update genotypes on pause
-        [mInventoryController updateGenotypesArray];
+        [self updateGenotypes];
+        [self updateDebugPanel];
     }
     else
     {
         [self startRunTimer];
         self.running = YES;
+    }
+}
+
+- (IBAction)step:(id)sender
+{
+    if (self.selectedCreature)
+    {
+        mWorld->stepCreature(selectedCreature.creature);
+        [self updateSoup];
+        [self updateDebugPanel];
+        [document updateChangeCount:NSChangeDone];
     }
 }
 
@@ -199,8 +215,6 @@ using namespace MacTierra;
 
 - (void)startRunTimer
 {
-    [document updateChangeCount:NSChangeDone];
-
     mRunTimer = [[NSTimer scheduledTimerWithTimeInterval:0.01
                                                   target:self
                                                 selector:@selector(runTimerFired:)
@@ -236,7 +250,7 @@ using namespace MacTierra;
     mLastInstTime = currentTime;
     mLastInstructions = curInstructions;
     
-    [mSoupView setNeedsDisplay:YES];
+    [self updateSoup];
 
     [self didChangeValueForKey:@"fullness"];
     [self didChangeValueForKey:@"totalInstructions"];
@@ -244,7 +258,28 @@ using namespace MacTierra;
     
     // hack to avoid slowing things down too much
     if ([mInventoryTableView window])
-        [mInventoryController updateGenotypesArray];
+        [self updateGenotypes];
+
+    [document updateChangeCount:NSChangeDone];
+}
+
+- (void)updateSoup
+{
+    [mSoupView setNeedsDisplay:YES];
+}
+
+- (void)updateGenotypes
+{
+    [mInventoryController updateGenotypesArray];
+}
+
+- (void)updateDebugPanel
+{
+    // hack
+    MTCreature* oldSelectedCreature = [self.selectedCreature retain];
+    self.selectedCreature = nil;
+    self.selectedCreature = oldSelectedCreature;
+    [oldSelectedCreature release];
 }
 
 #pragma mark -
