@@ -32,6 +32,22 @@ public:
     void clearFlag()    { mFlag = false; }
     bool flag() const   { return mFlag; }
 
+    int32_t registerValue(int32_t inRegisterIndex) const
+    {
+        if (inRegisterIndex < kNumRegisters)
+            return mRegisters[inRegisterIndex];
+        return -1;
+    }
+
+    int32_t stackValue(int32_t inStackIndex) const
+    {
+        if (inStackIndex < kStackSize)
+            return mStack[inStackIndex];
+        return -1;
+    }
+    int32_t stackPointer() const { return mStackPointer; }
+    
+    int32_t instructionPointer() const { return mInstructionPointer; }
     void incrementIP(u_int32_t inSoupSize)  { mInstructionPointer = (mInstructionPointer + 1) % inSoupSize; }
 
     bool operator==(const Cpu& inRHS) const

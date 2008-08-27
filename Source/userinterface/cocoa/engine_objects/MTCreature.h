@@ -28,7 +28,23 @@ extern NSString* const kCreaturePasteboardType;
 @property (readonly) NSString* name;
 @property (readonly) NSData* genome;
 @property (readonly) NSInteger length;
-@property (readonly) u_int32_t location;
+@property (readonly) NSUInteger location;
+
+// cpu properties
+@property (readonly) NSInteger instructionPointer;
+@property (readonly) NSString* lastInstruction;     // or next one?
+@property (readonly) BOOL flag;
+
+@property (readonly) NSInteger axRegister;
+@property (readonly) NSInteger bxRegister;
+@property (readonly) NSInteger cxRegister;
+@property (readonly) NSInteger dxRegister;
+
+@property (readonly) NSArray* stack;
+
+@property (readonly) NSString* soupAroundIP;
+@property (readonly) NSRange soupSelectionRange;
+
 
 @property (readonly) MTInventoryGenotype* genotype;
 

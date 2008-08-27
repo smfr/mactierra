@@ -10,6 +10,8 @@
 
 #import "MT_Engine.h"
 #import "MT_Creature.h"
+#import "MT_InstructionSet.h"
+#import "MT_ISA.h"
 
 #import "MTInventoryGenotype.h"
 
@@ -50,10 +52,77 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
     return mCreature->length();
 }
 
-- (u_int32_t)location
+- (NSUInteger)location
 {
     return mCreature->location();
 }
+
+- (NSInteger)instructionPointer
+{
+    return mCreature->cpu().instructionPointer();
+}
+
+- (NSString*)lastInstruction
+{
+    return [NSString stringWithUTF8String:MacTierra::nameForInstruction(mCreature->lastInstruction())];
+}
+
+- (BOOL)flag
+{
+    return mCreature->cpu().flag();
+}
+
+- (NSInteger)axRegister
+{
+    return mCreature->cpu().registerValue(MacTierra::k_ax);
+}
+
+- (NSInteger)bxRegister
+{
+    return mCreature->cpu().registerValue(MacTierra::k_bx);
+}
+
+- (NSInteger)cxRegister
+{
+    return mCreature->cpu().registerValue(MacTierra::k_cx);
+}
+
+- (NSInteger)dxRegister
+{
+    return mCreature->cpu().registerValue(MacTierra::k_dx);
+}
+
+- (NSArray*)stack
+{
+    NSMutableArray*    stackArray = [NSMutableArray arrayWithCapacity:MacTierra::kStackSize];
+    int32_t stackPointer = mCreature->cpu().stackPointer();
+    for (u_int32_t i = 0; i < MacTierra::kStackSize; ++i)
+    {
+        NSDictionary* stackItem = [NSDictionary dictionaryWithObjectsAndKeys:
+                                        [NSNumber numberWithInteger:mCreature->cpu().stackValue(i)], @"value",
+                                        ((i == stackPointer) ? @"•" : @"") , @"sp",
+                                        nil];
+        [stackArray addObject:stackItem];
+    }
+    return stackArray;
+}
+
+- (NSArray*)stackPointer
+{
+    return [NSArray array];
+}
+
+- (NSString*)soupAroundIP
+{
+    // FIXME
+    return @"";
+}
+
+- (NSRange)soupSelectionRange
+{
+    return NSMakeRange(0, 1);
+}
+
 
 - (MTInventoryGenotype*)genotype
 {
