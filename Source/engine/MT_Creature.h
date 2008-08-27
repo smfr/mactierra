@@ -71,7 +71,7 @@ public:
     // location pointed to by the instruction pointer
     address_t       referencedLocation() const;
     // the the IP to point to the referenced location
-    void            setReferencedLocation(u_int32_t inAddress);
+    void            setReferencedLocation(address_t inAddress);
 
     address_t       addressFromOffset(int32_t inOffset) const;
     int32_t         offsetFromAddress(address_t inAddress) const;

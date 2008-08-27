@@ -72,6 +72,12 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
     return [NSString stringWithUTF8String:MacTierra::nameForInstruction(mCreature->lastInstruction())];
 }
 
+- (NSString*)nextInstruction
+{
+    MacTierra::instruction_t nextInst = mCreature->getSoupInstruction(mCreature->cpu().instructionPointer());
+    return [NSString stringWithUTF8String:MacTierra::nameForInstruction(nextInst)];
+}
+
 - (BOOL)flag
 {
     return mCreature->cpu().flag();

@@ -35,6 +35,7 @@ extern NSString* const kCreaturePasteboardType;
 
 @property (readonly) NSInteger instructionPointer;
 @property (readonly) NSString* lastInstruction;     // or next one?
+@property (readonly) NSString* nextInstruction;
 @property (readonly) BOOL flag;
 
 @property (readonly) NSInteger axRegister;
