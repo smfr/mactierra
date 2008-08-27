@@ -280,6 +280,10 @@ using namespace MacTierra;
     self.selectedCreature = nil;
     self.selectedCreature = oldSelectedCreature;
     [oldSelectedCreature release];
+    
+    // FIXME: need to do this on setSelectedCreature too
+    if (selectedCreature)
+        [mCreatureSoupView setSelectedRanges:[NSArray arrayWithObject:[NSValue valueWithRange:selectedCreature.soupSelectionRange]]];
 }
 
 #pragma mark -

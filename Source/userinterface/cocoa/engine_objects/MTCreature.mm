@@ -123,15 +123,26 @@ NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
     return [NSArray array];
 }
 
+const NSInteger kSoupVisibleRange = 48;
+const NSInteger kRangeBeforeIP = 8;
+
 - (NSString*)soupAroundIP
 {
-    // FIXME
-    return @"";
+    NSMutableString* soupString = [NSMutableString stringWithCapacity:3 * kSoupVisibleRange];
+
+    for (int32_t i = 0; i < kSoupVisibleRange; ++i)
+    {
+        int32_t offset = mCreature->cpu().instructionPointer() + i - kRangeBeforeIP;
+        MacTierra::instruction_t curInst = mCreature->getSoupInstruction(offset);
+        [soupString appendFormat:@"%02X ", curInst];
+    }
+
+    return soupString;
 }
 
 - (NSRange)soupSelectionRange
 {
-    return NSMakeRange(0, 1);
+    return NSMakeRange(3 * kRangeBeforeIP, 2);
 }
 
 - (MTInventoryGenotype*)genotype

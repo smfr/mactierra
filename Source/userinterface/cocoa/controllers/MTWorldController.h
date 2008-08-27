@@ -27,6 +27,8 @@ namespace MacTierra {
 
     IBOutlet MTInventoryController*  mInventoryController;
     IBOutlet MTSoupSettingsPanelController*  mSoupSettingsPanelController;
+
+    IBOutlet NSTextView*    mCreatureSoupView;
     
     MacTierra::World*       mWorld;
 
