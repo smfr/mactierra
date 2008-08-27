@@ -467,25 +467,48 @@ using namespace MacTierra;
     CGLContextObj cgl_ctx = mCGlContext;
 
     GLint i;
-    GLfloat map[256];
+    GLfloat redMap[256];
+    GLfloat greenMap[256];
+    GLfloat blueMap[256];
+    
+    /* define accelerated bgr233 to RGBA pixelmaps.  */
+    for (i = 0; i < 256; i++)
+        redMap[i] = (i & 0x7) / 7.0;
+
+    for (i = 0; i < 256; i++)
+        greenMap[i] = ((i & 0x38) >> 3) / 7.0;
+
+    for (i = 0; i < 256; i++)
+        blueMap[i] = ((i & 0xc0) >> 6) / 3.0;
+
+
+    NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
+    NSColorList* colorList = [[[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath] autorelease];
+    NSColorSpace* rgbColorSpace = [NSColorSpace genericRGBColorSpace];
+    if (colorList)
+    {
+        NSArray*    colorKeys = [colorList allKeys];
+        NSUInteger n, numColors = [colorKeys count];
+        for (n = 0; n < numColors; ++n)
+        {
+            NSString* curKey = [colorKeys objectAtIndex:n];
+            // make sure we can get RGB
+            NSColor* curColor = [[colorList colorWithKey:curKey] colorUsingColorSpace:rgbColorSpace];
+            if (curColor)
+            {
+                float alphaComp;
+                [curColor getRed:&redMap[n] green:&greenMap[n] blue:&blueMap[n] alpha:&alphaComp];
+            }
+        }
+    }
 
     glPixelTransferf(GL_ALPHA_SCALE, 0.0);
     glPixelTransferf(GL_ALPHA_BIAS,  1.0);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    /* define accelerated bgr233 to RGBA pixelmaps.  */
-    for(i = 0; i < 256; i++)
-        map[i] = (i & 0x7) / 7.0;
-
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 256, map);
-    for (i = 0; i < 256; i++)
-        map[i] = ((i & 0x38) >> 3) / 7.0;
-
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 256, map);
-    for(i = 0; i < 256; i++)
-        map[i] = ((i & 0xc0) >> 6) / 3.0;
-
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 256, map);
+    glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 256, redMap);
+    glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 256, greenMap);
+    glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 256, blueMap);
 
     GLfloat constantAlpha = 1.0;
     glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 1, &constantAlpha);

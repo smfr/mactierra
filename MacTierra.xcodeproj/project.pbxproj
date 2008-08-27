@@ -44,6 +44,7 @@
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
+		0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */ = {isa = PBXBuildFile; fileRef = 0F992C010E650BCF00EFF4D3 /* Instructions0.clr */; };
 		0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */; };
 		0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */; };
 		0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */; };
@@ -361,6 +362,7 @@
 		0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MutationRateDefaults.plist; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
+		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldController.h; sourceTree = "<group>"; };
 		0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldController.mm; sourceTree = "<group>"; };
 		0F9DE5D80E575DB300E86DD6 /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
@@ -1001,6 +1003,7 @@
 				2A37F4B9FDCFA73011CA2CEA /* Credits.rtf */,
 				8D15AC360486D014006FF6A4 /* Info.plist */,
 				0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */,
+				0F992C010E650BCF00EFF4D3 /* Instructions0.clr */,
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
@@ -1125,6 +1128,7 @@
 				0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */,
 				0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */,
 				0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */,
+				0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
