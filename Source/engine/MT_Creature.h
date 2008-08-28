@@ -162,6 +162,7 @@ private:
     , mLastInstruction(0)
     , mInstructionsToLastOffspring(0)
     , mTotalInstructionsExecuted(0)
+    , mBirthInstructions(0)
     , mNumErrors(0)
     , mMovesToLastOffspring(0)
     , mNumOffspring(0)

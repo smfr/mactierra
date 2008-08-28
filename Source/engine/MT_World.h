@@ -74,6 +74,8 @@ public:
     const Settings&     settings() const { return mSettings; }
     void                setSettings(const Settings& inSettings);
 
+    void                printCreatures() const;
+
     enum EWorldSerializationFormat {
         kBinary,
         kXML

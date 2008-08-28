@@ -92,6 +92,7 @@ World::createCreature()
     // mCreatureIDMap is the ultimate owner of creatures. both adults and embryos are entered
     mCreatureIDMap[theCreature->creatureID()] = theCreature;
     
+    //cout << "Created creature " << (void*)theCreature << " id: " << theCreature->creatureID() << endl;
     return theCreature;
 }
 
@@ -107,9 +108,13 @@ World::eradicateCreature(Creature* inCreature)
             daughterCreature->clearSpace();
 
         mCellMap->removeCreature(daughterCreature);
+        //cout << "Deleted daughter creature " << (void*)daughterCreature << " id: " << daughterCreature->creatureID() << endl;
         
         inCreature->clearDaughter();
         
+        // remove from id map
+        creatureRemoved(daughterCreature);
+
         // daughter should not be in reaper or slicer yet.
         delete daughterCreature;
     }
@@ -121,12 +126,27 @@ World::eradicateCreature(Creature* inCreature)
 
     // remove from cell map
     mCellMap->removeCreature(inCreature);
+    //cout << "Deleted creature " << (void*)inCreature << " id: " << inCreature->creatureID() << endl;
     
-    // remove from slicer and reaper
+    // remove from slicer, reaper and id map
     creatureRemoved(inCreature);
     
     delete inCreature;
 }
+
+void
+World::printCreatures() const
+{
+    cout << "Creature ID map" << endl;
+    CreatureIDMap::const_iterator theEnd = mCreatureIDMap.end();
+    for (CreatureIDMap::const_iterator it = mCreatureIDMap.begin(); it != theEnd; ++it)
+    {
+        const Creature* curCreature = it->second;
+        BOOST_ASSERT(it->first == curCreature->creatureID());
+        cout << curCreature->creatureID() << " " << curCreature->creatureName() << endl;
+    }
+}
+
 
 Creature*
 World::insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength)
@@ -235,6 +255,7 @@ World::iterate(u_int32_t inNumCycles)
             if (cycled)
             {
                 //mInventory->printCreatures();
+                //printCreatures();
             }
             
             // start on the next creature
@@ -553,8 +574,11 @@ World::creatureRemoved(Creature* inCreature)
 {
     BOOST_ASSERT(inCreature && inCreature->soup() == mSoup);
 
-    mReaper.removeCreature(*inCreature);
-    mTimeSlicer.removeCreature(*inCreature);
+    if (inCreature->isInReaperList())
+        mReaper.removeCreature(*inCreature);
+
+    if (inCreature->isInSlicerList())
+        mTimeSlicer.removeCreature(*inCreature);
 
     mCreatureIDMap.erase(inCreature->creatureID());
 }

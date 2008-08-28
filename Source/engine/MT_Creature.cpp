@@ -31,6 +31,7 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 , mLastInstruction(0)
 , mInstructionsToLastOffspring(0)
 , mTotalInstructionsExecuted(0)
+, mBirthInstructions(0)
 , mNumErrors(0)
 , mMovesToLastOffspring(0)
 , mNumOffspring(0)
@@ -47,12 +48,16 @@ Creature::~Creature()
 std::string
 Creature::creatureName() const
 {
-    BOOST_ASSERT(mGenotype);
-    
-    string name(mGenotype->name());
-    name.append(min(mGenotypeDivergence, 5U), '\'');
+    if (mGenotype)
+    {
+        string name(mGenotype->name());
+        name.append(min(mGenotypeDivergence, 5U), '\'');
+        return name;
+    }
 
-    return name;
+    ostringstream str;
+    str << "Embryo " << mID;
+    return str.str();
 }
 
 address_t
