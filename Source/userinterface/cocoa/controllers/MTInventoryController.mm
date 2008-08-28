@@ -46,8 +46,15 @@ using namespace MacTierra;
     
     const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
 
-    // for now, nuke everything
-    [mGenotypes removeAllObjects];
+    if (!mGenotypes)
+    {
+        mGenotypes = [[NSMutableArray alloc] initWithCapacity:theInventory.size()];
+    }
+    else
+    {
+        // for now, nuke everything
+        [mGenotypes removeAllObjects];
+    }
     
     Inventory::InventoryMap::const_iterator it = theInventory.begin();
     Inventory::InventoryMap::const_iterator itEnd = theInventory.end();
@@ -76,10 +83,7 @@ using namespace MacTierra;
 
     const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
     if (!mGenotypes)
-    {
-        mGenotypes = [[NSMutableArray alloc] initWithCapacity:theInventory.size()];
         [self updateGenotypesArray];
-    }
     
     return mGenotypes;
 }

@@ -111,6 +111,8 @@ using namespace MacTierra;
         [mSoupView setWorld:mWorld];
         
         [mInventoryController setInventory:mWorld ? mWorld->inventory() : NULL];
+
+        [self updateGenotypes];
     }
 }
 
