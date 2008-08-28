@@ -37,12 +37,18 @@
     {
         const MacTierra::Settings* theSettings = worldSettings.settings;
         BOOST_ASSERT(theSettings);
+#warning need to kick mutations to start?
         mWorldController.world->setSettings(*theSettings);
-    
-    
     }
     [sheet orderOut:nil];
     self.worldSettings = nil;
+}
+
+- (IBAction)zeroMutationRates:(id)sender
+{
+    worldSettings.cosmicRate = 0.0;
+    worldSettings.flawRate = 0.0;
+    worldSettings.copyErrorRate = 0.0;
 }
 
 - (IBAction)okSettingsPanel:(id)sender

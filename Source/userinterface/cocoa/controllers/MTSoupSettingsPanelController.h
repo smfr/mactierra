@@ -27,6 +27,8 @@
 
 
 // for settings panel
+- (IBAction)zeroMutationRates:(id)sender;
+
 - (IBAction)okSettingsPanel:(id)sender;
 - (IBAction)cancelSettingsPanel:(id)sender;
 
