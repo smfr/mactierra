@@ -119,6 +119,7 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
             }
             break;
 
+#warning should these raise the flag if the sp wraps?
         case k_pop_ax:  // Pop top of stack into ax
             {
                 int32_t targetRegister = (k_ax + kNumRegisters + inFlaw) % kNumRegisters; 

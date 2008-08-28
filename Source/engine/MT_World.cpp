@@ -89,6 +89,8 @@ World::createCreature()
         return NULL;
 
     Creature*   theCreature = new Creature(uniqueCreatureID(), mSoup);
+    // mCreatureIDMap is the ultimate owner of creatures. both adults and embryos are entered
+    mCreatureIDMap[theCreature->creatureID()] = theCreature;
     
     return theCreature;
 }
@@ -307,8 +309,11 @@ World::destroyCreatures()
         
         mCellMap->removeCreature(theCreature);
 
-        mTimeSlicer.removeCreature(*theCreature);
-        mReaper.removeCreature(*theCreature);
+        if (theCreature->isInSlicerList())
+            mTimeSlicer.removeCreature(*theCreature);
+
+        if (theCreature->isInReaperList())
+            mReaper.removeCreature(*theCreature);
 
         theCreature->clearDaughter();
         delete theCreature;
@@ -539,8 +544,6 @@ World::creatureAdded(Creature* inCreature)
 {
     BOOST_ASSERT(inCreature->soup() == mSoup);
 
-    mCreatureIDMap[inCreature->creatureID()] = inCreature;
-    
     mTimeSlicer.insertCreature(*inCreature);
     mReaper.addCreature(*inCreature);
 }

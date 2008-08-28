@@ -108,7 +108,7 @@ public:
     
     const InventoryMap& inventoryMap() const { return mInventoryMap; }
 
-    void            writeToStream(std::ostream& inStream) const;
+    void                writeToStream(std::ostream& inStream) const;
 
 protected:
 

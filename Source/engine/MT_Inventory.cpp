@@ -37,7 +37,16 @@ Inventory::Inventory()
 
 Inventory::~Inventory()
 {
-    // FIXME: delete stuff
+    InventoryMap::iterator it, end;
+    
+    for (it = mInventoryMap.begin(), end = mInventoryMap.end();
+         it != end;
+         ++it)
+    {
+        InventoryGenotype* curEntry = it->second;
+        delete curEntry;
+    }
+    mInventoryMap.clear();
 }
 
 InventoryGenotype*
