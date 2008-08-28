@@ -74,13 +74,16 @@ public:
     const Settings&     settings() const { return mSettings; }
     void                setSettings(const Settings& inSettings);
 
+    enum EWorldSerializationFormat {
+        kBinary,
+        kXML
+    };
+    
     // save/restore
-    static std::string  xmlStringFromWorld(const World* inWorld);
-    static World*       worldFromXMLString(const std::string& inString);
+    static void         worldToStream(const World* inWorld, std::ostream& inStream, EWorldSerializationFormat inFormat);
+    static World*       worldFromStream(std::istream& inStream, EWorldSerializationFormat inFormat);
 
-    static std::string  dataFromWorld(const World* inWorld);
-    static World*       worldFromData(const std::string& inString);
-
+    
 protected:
 
     creature_id     uniqueCreatureID();

@@ -56,6 +56,8 @@
 		0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */; };
 		0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */; };
 		0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB044E80E5D3B990024DF67 /* MTCreature.mm */; };
+		0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */; };
+		0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */; };
 		0FB6C5DD0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
@@ -102,7 +104,6 @@
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
-		0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24610E61115700F37B71 /* MacTierra document.icns */; };
 		0FEDEAE40E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
 		0FEDEAE50E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
 		0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
@@ -383,6 +384,8 @@
 		0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTInventoryController.mm; sourceTree = "<group>"; };
 		0FB044E70E5D3B990024DF67 /* MTCreature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCreature.h; sourceTree = "<group>"; };
 		0FB044E80E5D3B990024DF67 /* MTCreature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTCreature.mm; sourceTree = "<group>"; };
+		0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra XML Document.icns"; sourceTree = "<group>"; };
+		0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra Binary Document.icns"; sourceTree = "<group>"; };
 		0FB6C5DB0E61EAC60030536C /* MT_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Settings.h; sourceTree = "<group>"; };
 		0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Settings.cpp; sourceTree = "<group>"; };
 		0FB90D310E52A72900449CC6 /* CellMapTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMapTests.h; sourceTree = "<group>"; };
@@ -421,7 +424,6 @@
 		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
 		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
 		0FCA24600E61115700F37B71 /* MacTierra.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MacTierra.icns; sourceTree = "<group>"; };
-		0FCA24610E61115700F37B71 /* MacTierra document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra document.icns"; sourceTree = "<group>"; };
 		0FEDEAE20E62728000DEF441 /* MTWorldSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldSettings.h; sourceTree = "<group>"; };
 		0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldSettings.mm; sourceTree = "<group>"; };
 		0FEDEB590E62806700DEF441 /* MTSoupSettingsPanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSoupSettingsPanelController.h; sourceTree = "<group>"; };
@@ -1009,7 +1011,8 @@
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
 				0FCA24600E61115700F37B71 /* MacTierra.icns */,
-				0FCA24610E61115700F37B71 /* MacTierra document.icns */,
+				0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */,
+				0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -1126,9 +1129,10 @@
 				0F13FA7F0E5FD98300D8E649 /* xml_wiarchive_impl.ipp in Resources */,
 				0F13FA800E5FD98300D8E649 /* xml_woarchive_impl.ipp in Resources */,
 				0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */,
-				0FCA24630E61115700F37B71 /* MacTierra document.icns in Resources */,
 				0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */,
 				0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */,
+				0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */,
+				0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

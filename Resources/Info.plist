@@ -12,7 +12,7 @@
 				<string>mactierra_xml</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>MacTierra document</string>
+			<string>MacTierra XML Document</string>
 			<key>CFBundleTypeName</key>
 			<string>XMLSoupDocumentType</string>
 			<key>CFBundleTypeOSTypes</key>
@@ -34,7 +34,7 @@
 				<string>mactierra</string>
 			</array>
 			<key>CFBundleTypeIconFile</key>
-			<string>MacTierra document</string>
+			<string>MacTierra Binary Document</string>
 			<key>CFBundleTypeName</key>
 			<string>SoupDocumentType</string>
 			<key>CFBundleTypeOSTypes</key>

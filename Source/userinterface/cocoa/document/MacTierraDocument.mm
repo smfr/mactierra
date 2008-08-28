@@ -20,7 +20,7 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 
 @synthesize worldController;
 @synthesize startEmpty;
-@synthesize soupData;
+@synthesize pendingFileURL;
 @synthesize dataIsXML;
 
 - (id)init
@@ -45,7 +45,7 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 
 - (void)dealloc
 {
-    self.soupData = nil;
+    self.fileURL = nil;
     [worldController release]; // ??
     [super dealloc];
 }
@@ -57,14 +57,14 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
-    if (soupData)
+    if (pendingFileURL)
     {
         if (dataIsXML)
-            [worldController setWorldWithXMLData:soupData];
+            [worldController readWorldFromXMLFile:pendingFileURL];
         else
-            [worldController setWorldWithData:soupData];
+            [worldController readWorldFromBinaryFile:pendingFileURL];
 
-        self.soupData = nil;
+        self.pendingFileURL = nil;
     }
     else
     {
@@ -76,26 +76,27 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     [super windowControllerDidLoadNib:aController];
 }
 
-- (NSData *)dataOfType:(NSString *)typeName error:(NSError **)outError
+- (BOOL)writeToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
-    NSData* worldData = nil;
+    BOOL succeeded = NO;
+    
     if ([typeName isEqualToString:kBinarySoupDocumentType])
-        worldData = [worldController worldData];
+        succeeded = [worldController writeBinaryDataToFile:absoluteURL];
     else if ([typeName isEqualToString:kXMLSoupDocumentType])
-        worldData = [worldController worldXMLData];
+        succeeded = [worldController writeXMLDataToFile:absoluteURL];
 
-    if (!worldData && outError != NULL)
+    if (!succeeded && outError != NULL)
         *outError = [NSError errorWithDomain:kMacTierraErrorDomain code:-1 userInfo:NULL];
 
-    return worldData;
+    return succeeded;
 }
 
-- (BOOL)readFromData:(NSData *)data ofType:(NSString *)typeName error:(NSError **)outError
+- (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError;
 {
     // have to wait until the window controller is hooked up in windowControllerDidLoadNib:
     if ([typeName isEqualToString:kBinarySoupDocumentType] || [typeName isEqualToString:kXMLSoupDocumentType])
     {
-        self.soupData = data;
+        self.pendingFileURL = absoluteURL;
         self.dataIsXML = [typeName isEqualToString:kXMLSoupDocumentType];
         return YES;
     }
@@ -105,17 +106,18 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 - (BOOL)revertToContentsOfURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
     BOOL reverting = [super revertToContentsOfURL:absoluteURL ofType:typeName error:outError];
+    BOOL succeeded = NO;
     if (reverting)
     {
         if ([typeName isEqualToString:kBinarySoupDocumentType])
-            [worldController setWorldWithData:self.soupData];
+            succeeded = [worldController readWorldFromBinaryFile:self.pendingFileURL];
         else if ([typeName isEqualToString:kXMLSoupDocumentType])
-            [worldController setWorldWithXMLData:self.soupData];
+            succeeded = [worldController readWorldFromXMLFile:self.pendingFileURL];
 
-        self.soupData = nil;
+        self.pendingFileURL = nil;
     }
     
-    return reverting;
+    return succeeded;
 }
 
 - (void)close

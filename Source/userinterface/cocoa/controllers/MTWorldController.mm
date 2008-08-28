@@ -295,19 +295,21 @@ using namespace MacTierra;
 
 //    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
 
-    std::string worldString(World::dataFromWorld(mWorld));
+    std::ostringstream stringStream;
+    World::worldToStream(mWorld, stringStream, World::kBinary);
 
 //    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
 //    NSLog(@"Serializaing world took %f milliseconds", (endTime - startTime) * 1000.0);
 
-    return [NSData dataWithBytes:worldString.data() length:worldString.length()];
+    return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
 }
 
 - (void)setWorldWithData:(NSData*)inData
 {
     std::string worldString((const char*)[inData bytes], [inData length]);
+    std::istringstream stringStream(worldString);
 
-    World* newWorld = World::worldFromData(worldString);
+    World* newWorld = World::worldFromStream(stringStream, World::kBinary);
 
     [self setWorld:newWorld];
 }
@@ -317,16 +319,79 @@ using namespace MacTierra;
     if (!mWorld)
         return nil;
 
-    std::string worldString(World::xmlStringFromWorld(mWorld));
-    return [NSData dataWithBytes:worldString.data() length:worldString.length()];
+    std::ostringstream stringStream;
+    World::worldToStream(mWorld, stringStream, World::kXML);
+
+    return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
 }
 
 - (void)setWorldWithXMLData:(NSData*)inData
 {
     std::string worldString((const char*)[inData bytes], [inData length]);
 
-    World* newWorld = World::worldFromXMLString(worldString);
+    std::istringstream stringStream(worldString);
+    World* newWorld = World::worldFromStream(stringStream, World::kXML);
+
     [self setWorld:newWorld];
+}
+
+#pragma mark -
+
+static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
+{
+    if (![inURL isFileURL])
+        return NO;
+
+    outPath = [[inURL path] fileSystemRepresentation];
+    return YES;
+}
+
+- (BOOL)writeBinaryDataToFile:(NSURL*)inFileURL
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+    std::ofstream fileStream(filePath.c_str());
+    World::worldToStream(mWorld, fileStream, World::kBinary);
+    return YES;
+}
+
+- (BOOL)readWorldFromBinaryFile:(NSURL*)inFileURL
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+    std::ifstream fileStream(filePath.c_str());
+    World* newWorld = World::worldFromStream(fileStream, World::kBinary);
+    [self setWorld:newWorld];
+
+    return YES;
+}
+
+- (BOOL)writeXMLDataToFile:(NSURL*)inFileURL
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+    std::ofstream fileStream(filePath.c_str());
+    World::worldToStream(mWorld, fileStream, World::kXML);
+    return YES;
+}
+
+- (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+    std::ifstream fileStream(filePath.c_str());
+    World* newWorld = World::worldFromStream(fileStream, World::kXML);
+    [self setWorld:newWorld];
+
+    return YES;
 }
 
 

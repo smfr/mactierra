@@ -20,12 +20,12 @@ extern NSString* const kXMLSoupDocumentType;
 
     BOOL                        startEmpty;
     
-    NSData*                     soupData;
+    NSURL*                      pendingFileURL;
     BOOL                        dataIsXML;
 }
 
 @property (retain) MTWorldController*   worldController;
-@property (retain) NSData*   soupData;
+@property (retain) NSURL*   pendingFileURL;
 @property (assign) BOOL dataIsXML;
 @property (assign) BOOL startEmpty;
 

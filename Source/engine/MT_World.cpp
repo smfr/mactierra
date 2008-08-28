@@ -573,52 +573,50 @@ World::setSettings(const Settings& inSettings)
 #pragma mark -
 
 // static
-std::string
-World::xmlStringFromWorld(const World* inWorld)
+void
+World::worldToStream(const World* inWorld, std::ostream& inStream, EWorldSerializationFormat inFormat)
 {
-    std::ostringstream stringStream;
-    
-    ::boost::archive::xml_oarchive xmlArchive(stringStream);
-    xmlArchive << BOOST_SERIALIZATION_NVP(inWorld);
-    
-    return stringStream.str();
+    switch (inFormat)
+    {
+        case kBinary:
+            {
+                ::boost::archive::binary_oarchive binaryArchive(inStream);
+                binaryArchive << BOOST_SERIALIZATION_NVP(inWorld);
+            }
+            break;
+
+        case kXML:
+            {
+                ::boost::archive::xml_oarchive xmlArchive(inStream);
+                xmlArchive << BOOST_SERIALIZATION_NVP(inWorld);
+            }
+            break;
+    }
 }
 
 // static
 World*
-World::worldFromXMLString(const std::string& inString)
+World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inFormat)
 {
-    std::istringstream stringStream(inString);
+    World* braveNewWorld = NULL;
 
-    ::boost::archive::xml_iarchive xmlArchive(stringStream);
+    switch (inFormat)
+    {
+        case kBinary:
+            {
+                ::boost::archive::binary_iarchive binaryArchive(inStream);
+                binaryArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+            }
+            break;
 
-    World* braveNewWorld;
-    xmlArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
-    return braveNewWorld;
-}
+        case kXML:
+            {
+                ::boost::archive::xml_iarchive xmlArchive(inStream);
+                xmlArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+            }
+            break;
+    }
 
-// static
-std::string
-World::dataFromWorld(const World* inWorld)
-{
-    std::ostringstream stringStream;
-    
-    ::boost::archive::binary_oarchive binaryArchive(stringStream);
-    binaryArchive << BOOST_SERIALIZATION_NVP(inWorld);
-    
-    return stringStream.str();
-}
-
-// static
-World*
-World::worldFromData(const std::string& inString)
-{
-    std::istringstream stringStream(inString);
-
-    ::boost::archive::binary_iarchive binaryArchive(stringStream);
-
-    World* braveNewWorld;
-    binaryArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
     return braveNewWorld;
 }
 

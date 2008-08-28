@@ -80,5 +80,13 @@ namespace MacTierra {
 - (void)setWorldWithXMLData:(NSData*)inData;
 
 
+- (BOOL)writeBinaryDataToFile:(NSURL*)inFileURL;
+- (BOOL)readWorldFromBinaryFile:(NSURL*)inFileURL;
+
+- (BOOL)writeXMLDataToFile:(NSURL*)inFileURL;
+- (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL;
+
+
+
 
 @end
