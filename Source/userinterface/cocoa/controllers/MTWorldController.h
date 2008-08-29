@@ -71,6 +71,7 @@ namespace MacTierra {
 - (void)seedWithAncestor;
 
 - (IBAction)editSoupSettings:(id)sender;
+- (IBAction)newEmptySoup:(id)sender;
 - (IBAction)newSoupShowingSettings:(id)sender;
 
 - (IBAction)toggleRunning:(id)sender;

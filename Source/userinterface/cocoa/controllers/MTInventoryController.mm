@@ -81,7 +81,6 @@ using namespace MacTierra;
     if (!inventory)
         return [NSArray array];
 
-    const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
     if (!mGenotypes)
         [self updateGenotypesArray];
     

@@ -68,7 +68,10 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     }
     else
     {
-        [worldController performSelector:@selector(newSoupShowingSettings:) withObject:nil afterDelay:0];
+        if (self.startEmpty)
+            [worldController newEmptySoup:nil];
+        else
+            [worldController performSelector:@selector(newSoupShowingSettings:) withObject:nil afterDelay:0];
     }
     
     [super windowControllerDidLoadNib:aController];

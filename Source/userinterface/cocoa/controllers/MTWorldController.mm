@@ -286,6 +286,15 @@ using namespace MacTierra;
           contextInfo:NULL];
 }
 
+- (IBAction)newEmptySoup:(id)sender
+{
+    const u_int32_t kEmptySoupSize = 256 * 1024;
+    MacTierra::World* newWorld = new World();
+    newWorld->setSettings(MacTierra::Settings::zeroMutationSettings());
+    newWorld->initializeSoup(kEmptySoupSize);
+    [self setWorld:newWorld];
+}
+
 - (IBAction)newSoupShowingSettings:(id)sender
 {
     self.creatingNewSoup = YES;
