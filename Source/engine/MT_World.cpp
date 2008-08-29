@@ -422,24 +422,29 @@ World::noteInstructionCopy()
 {
     if (mCopyErrorPending)  // just did one
     {
-        RandomLib::ExponentialDistribution<double> expDist;
-        int32_t copyErrorDelay;
-        do
-        {
-            copyErrorDelay = expDist(mRNG, mSettings.meanCopyErrorInterval());
-        } while (copyErrorDelay <= 0);
-        
-        mNextCopyError = copyErrorDelay;
+        computeNextCopyError();
         mCopiesSinceLastError = 0;
         mCopyErrorPending = false;
     }
     else
     {
         ++mCopiesSinceLastError;
-        mCopyErrorPending = (mCopiesSinceLastError == mNextCopyError);
+        mCopyErrorPending = (mCopiesSinceLastError >= mNextCopyError);
     }
 }
 
+void
+World::computeNextCopyError()
+{
+    RandomLib::ExponentialDistribution<double> expDist;
+    int32_t copyErrorDelay;
+    do
+    {
+        copyErrorDelay = expDist(mRNG, mSettings.meanCopyErrorInterval());
+    } while (copyErrorDelay <= 0);
+    
+    mNextCopyError = copyErrorDelay;
+}
 
 void
 World::handleBirth(Creature* inParent, Creature* inChild)
@@ -529,6 +534,14 @@ World::instructionFlaw(u_int64_t inInstructionCount)
 {
     int32_t theFlaw = mRNG.Boolean() ? 1 : -1;
 
+    computeNextInstructionFlaw(inInstructionCount);
+    
+    return theFlaw;
+}
+
+void
+World::computeNextInstructionFlaw(u_int64_t inInstructionCount)
+{
     RandomLib::ExponentialDistribution<double> expDist;
     int64_t flawDelay;
     do 
@@ -537,8 +550,6 @@ World::instructionFlaw(u_int64_t inInstructionCount)
     } while (flawDelay <= 0);
 
     mNextFlawInstruction = inInstructionCount + flawDelay;
-    
-    return theFlaw;
 }
 
 void
@@ -550,6 +561,12 @@ World::cosmicRay(u_int64_t inInstructionCount)
     inst = mutateInstruction(inst, mSettings.mutationType());
     mSoup->setInstructionAtAddress(target, inst);
     
+    computeNextCosmicRay(inInstructionCount);
+}
+
+void
+World::computeNextCosmicRay(u_int64_t inInstructionCount)
+{
     RandomLib::ExponentialDistribution<double> expDist;
     int64_t cosmicDelay;
     do
@@ -591,7 +608,17 @@ void
 World::setSettings(const Settings& inSettings)
 {
     mSettings = inSettings;
-    // FIXME: recompute next flaw, copy error, cosmic ray times
+
+    u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
+    
+    if (mSettings.cosmicRate() > 0.0)
+        computeNextCosmicRay(instructionCount);
+
+    if (mSettings.flawRate() > 0.0)
+        computeNextInstructionFlaw(instructionCount);
+
+    if (mSettings.copyErrorRate() > 0.0)
+        computeNextCopyError();
 }
 
 #pragma mark -

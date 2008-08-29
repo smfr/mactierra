@@ -45,6 +45,9 @@ using namespace MacTierra;
 @synthesize instructionsPerSecond;
 @synthesize selectedCreature;
 
+@synthesize worldSettings;
+@synthesize creatingNewSoup;
+
 + (void)initialize
 {
     [self setKeys:[NSArray arrayWithObject:@"running"]
@@ -80,25 +83,6 @@ using namespace MacTierra;
     return mSoupView;
 }
 
-- (void)createSoup:(u_int32_t)inSize
-{
-    World* newWorld = new World();
-
-    Settings    settings;
-    settings.setFlawRate(8.34E-4);
-    settings.setCosmicRate(7.634E-9, inSize);
-    settings.setCopyErrorRate(1.0E-3);
-    settings.setSliceSizeVariance(2);
-    settings.setSizeSelection(0.9);
-    settings.setMutationType(Settings::kBitFlip);
-
-    newWorld->setSettings(settings);
-    
-    newWorld->initializeSoup(inSize);
-    
-    [self setWorld:newWorld];
-}
-
 - (void)setWorld:(World*)inWorld
 {
     if (inWorld != mWorld)
@@ -121,11 +105,6 @@ using namespace MacTierra;
     // seed the soup
     if (mWorld)
         mWorld->insertCreature(mWorld->soupSize() / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
-}
-
-- (IBAction)showSettings:(id)sender
-{
-    [mSoupSettingsPanelController showSettings:sender];
 }
 
 - (IBAction)toggleRunning:(id)sender
@@ -286,6 +265,86 @@ using namespace MacTierra;
     // FIXME: need to do this on setSelectedCreature too
     if (selectedCreature)
         [mCreatureSoupView setSelectedRanges:[NSArray arrayWithObject:[NSValue valueWithRange:selectedCreature.soupSelectionRange]]];
+}
+
+#pragma mark -
+
+// Settings panel
+- (IBAction)editSoupSettings:(id)sender
+{
+    NSAssert(mWorld, @"Should have world already");
+
+    self.creatingNewSoup = NO;
+
+    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorld->settings()] autorelease];
+    self.worldSettings.soupSize = mWorld->soupSize();
+    
+    [NSApp beginSheet:mSettingsPanel
+       modalForWindow:[document windowForSheet]
+        modalDelegate:self
+       didEndSelector:@selector(soupSettingsPanelDidEnd:returnCode:contextInfo:)
+          contextInfo:NULL];
+}
+
+- (IBAction)newSoupShowingSettings:(id)sender
+{
+    self.creatingNewSoup = YES;
+
+    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:MacTierra::Settings::mediumMutationSettings(256 * 1024)] autorelease];
+    self.worldSettings.creatingNewSoup = YES;
+    self.worldSettings.soupSizePreset = k256K;
+    self.worldSettings.seedWithAncestor = YES;
+
+    [NSApp beginSheet:mSettingsPanel
+       modalForWindow:[document windowForSheet]
+        modalDelegate:self
+       didEndSelector:@selector(soupSettingsPanelDidEnd:returnCode:contextInfo:)
+          contextInfo:NULL];
+}
+
+- (void)soupSettingsPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSOKButton)
+    {
+        const MacTierra::Settings* theSettings = worldSettings.settings;
+        BOOST_ASSERT(theSettings);
+
+        if (self.creatingNewSoup)
+        {
+            BOOST_ASSERT(!mWorld);
+            
+            MacTierra::World* newWorld = new World();
+            newWorld->setSettings(*worldSettings.settings);
+            newWorld->initializeSoup(worldSettings.soupSize);
+            [self setWorld:newWorld];
+            
+            if (worldSettings.seedWithAncestor)
+                [self seedWithAncestor];
+        }
+        else
+        {
+            mWorld->setSettings(*theSettings);
+        }
+    }
+    [sheet orderOut:nil];
+    self.worldSettings = nil;
+}
+
+- (IBAction)zeroMutationRates:(id)sender
+{
+    worldSettings.cosmicRate = 0.0;
+    worldSettings.flawRate = 0.0;
+    worldSettings.copyErrorRate = 0.0;
+}
+
+- (IBAction)okSettingsPanel:(id)sender
+{
+    [NSApp endSheet:mSettingsPanel returnCode:NSOKButton];
+}
+
+- (IBAction)cancelSettingsPanel:(id)sender
+{
+    [NSApp endSheet:mSettingsPanel returnCode:NSCancelButton];
 }
 
 #pragma mark -

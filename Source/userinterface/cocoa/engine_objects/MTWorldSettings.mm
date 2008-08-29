@@ -26,6 +26,9 @@
 @implementation MTWorldSettings
 
 @synthesize soupSize;
+@synthesize soupSizePreset;
+@synthesize creatingNewSoup;
+@synthesize seedWithAncestor;
 @synthesize mutationDefaults;
 @synthesize flawLevel;
 @synthesize cosmicMutationLevel;
@@ -38,6 +41,11 @@
 
     [self setKeys:[NSArray arrayWithObject:@"copyErrorRate"]
                                 triggerChangeNotificationsForDependentKey:@"meanCopyErrorInterval"];
+
+    [self setKeys:[NSArray arrayWithObject:@"soupSizePreset"]
+                                triggerChangeNotificationsForDependentKey:@"soupSize"];
+    [self setKeys:[NSArray arrayWithObject:@"soupSize"]
+                                triggerChangeNotificationsForDependentKey:@"soupSizePreset"];
 
 /*
     [self setKeys:[NSArray arrayWithObject:@"cosmicRate"]
@@ -71,12 +79,53 @@
     [super dealloc];
 }
 
+
+- (NSUInteger)soupSizeFromPreset:(ESoupSizePreset)inVal
+{
+    switch(inVal)
+    {
+        case k64K:      return 64 * 1024;
+        case k128K:     return 128 * 1024;
+        case k256K:     return 256 * 1024;
+        case k512K:     return 512 * 1024;
+        case k1M:       return 1024 * 1024;
+        case k2M:       return 2 * 1024 * 1024;
+        case k4M:       return 4 * 1024 * 1024;
+        default:
+            break;
+    }
+    NSAssert(0, @"Unknown soup size preset");
+    return 256 * 1024;
+}
+
+- (ESoupSizePreset)presetFromSoupSize:(NSUInteger)inSoupSize
+{
+    switch (inSoupSize)
+    {
+        case (64 * 1024):           return k64K;
+        case (128 * 1024):          return k128K;
+        case (256 * 1024):          return k256K;
+        case (512 * 1024):          return k512K;
+        case (1024 * 1024):         return k1M;
+        case (2 * 1024 * 1024):     return k2M;
+        case (4 * 1024 * 1024):     return k4M;
+    }
+    return kOtherSize;
+}
+
 - (void)setSoupSize:(NSUInteger)inSize
 {
     [self willChangeValueForKey:@"soupSize"];
     soupSize = inSize;
     mSettings->updateWithSoupSize(soupSize);
+    soupSizePreset = [self presetFromSoupSize:inSize];
     [self didChangeValueForKey:@"soupSize"];
+}
+
+- (void)setSoupSizePreset:(ESoupSizePreset)inVal
+{
+    self.soupSize = [self soupSizeFromPreset:inVal];
+    soupSizePreset = inVal;
 }
 
 - (const MacTierra::Settings*)settings
@@ -369,12 +418,12 @@
 {
     switch (inLevel)
     {
-        case kNone:     return @"none";
-        case kLow:      return @"low";
-        case kMedium:   return @"medium";
-        case kHigh:     return @"high";
-        case kVeryHigh: return @"very-high";
-        case kOther:    return @"";
+        case kNone:         return @"none";
+        case kLow:          return @"low";
+        case kMedium:       return @"medium";
+        case kHigh:         return @"high";
+        case kVeryHigh:     return @"very-high";
+        case kOtherRate:    return @"";
     }
     return @"";
 }

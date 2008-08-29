@@ -20,6 +20,25 @@ class Settings
 {
 public:
 
+    static Settings zeroMutationSettings()
+    {
+        Settings theSettings;
+        return theSettings;
+    }
+
+    static Settings mediumMutationSettings(u_int32_t inSoupSize)
+    {
+        Settings theSettings;
+        
+        theSettings.setFlawRate(8.34E-4);
+        theSettings.setCosmicRate(7.634E-9, inSoupSize);
+        theSettings.setCopyErrorRate(1.0E-3);
+        theSettings.setSliceSizeVariance(2);
+        theSettings.setSizeSelection(0.9);
+        
+        return theSettings;
+    }
+    
     Settings();
     
     // update computed settings values that depend on soup size

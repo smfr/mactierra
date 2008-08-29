@@ -16,7 +16,7 @@ namespace MacTierra {
 @class MTCreature;
 @class MTInventoryController;
 @class MTSoupView;
-@class MTSoupSettingsPanelController;
+@class MTWorldSettings;
 
 @interface MTWorldController : NSObject
 {
@@ -26,9 +26,14 @@ namespace MacTierra {
     IBOutlet NSTableView*   mInventoryTableView;
 
     IBOutlet MTInventoryController*  mInventoryController;
-    IBOutlet MTSoupSettingsPanelController*  mSoupSettingsPanelController;
 
     IBOutlet NSTextView*    mCreatureSoupView;
+    
+    // settings panel
+    IBOutlet NSPanel*       mSettingsPanel;
+
+    MTWorldSettings*        worldSettings;
+    BOOL                    creatingNewSoup;
     
     MacTierra::World*       mWorld;
 
@@ -50,7 +55,11 @@ namespace MacTierra {
 
 @property (assign) BOOL running;
 
-@property (readonly) MacTierra::World* world;
+// for settings panel
+@property (retain) MTWorldSettings* worldSettings;
+@property (assign) BOOL creatingNewSoup;
+
+//@property (readonly) MacTierra::World* world;
 
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;
@@ -59,16 +68,15 @@ namespace MacTierra {
 
 @property (readonly) NSString* playPauseButtonTitle;
 
-- (void)createSoup:(u_int32_t)inSize;
 - (void)seedWithAncestor;
 
-- (IBAction)showSettings:(id)sender;
+- (IBAction)editSoupSettings:(id)sender;
+- (IBAction)newSoupShowingSettings:(id)sender;
 
 - (IBAction)toggleRunning:(id)sender;
 - (IBAction)step:(id)sender;
 
 - (IBAction)exportInventory:(id)sender;
-
 
 - (void)documentClosing;
 
@@ -86,6 +94,13 @@ namespace MacTierra {
 - (BOOL)writeXMLDataToFile:(NSURL*)inFileURL;
 - (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL;
 
+
+
+// for settings panel
+- (IBAction)zeroMutationRates:(id)sender;
+
+- (IBAction)okSettingsPanel:(id)sender;
+- (IBAction)cancelSettingsPanel:(id)sender;
 
 
 

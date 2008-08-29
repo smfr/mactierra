@@ -97,7 +97,7 @@ protected:
 
     bool            timeForFlaw(u_int64_t inInstructionCount) const
     {
-        return (mSettings.flawRate() > 0 && inInstructionCount == mNextFlawInstruction);
+        return (mSettings.flawRate() > 0.0 && inInstructionCount == mNextFlawInstruction);
     }
     
     bool            timeForCosmicRay(u_int64_t inInstructionCount) const
@@ -112,8 +112,13 @@ protected:
     void            handleDeath(Creature* inCreature);
 
     int32_t         instructionFlaw(u_int64_t inInstructionCount);
-    void            cosmicRay(u_int64_t inInstructionCount);
+    void            computeNextInstructionFlaw(u_int64_t inInstructionCount);
 
+    void            cosmicRay(u_int64_t inInstructionCount);
+    void            computeNextCosmicRay(u_int64_t inInstructionCount);
+
+    void            computeNextCopyError();
+    
     // these add and remove from the time slicer and reaper queues.
     void            creatureAdded(Creature* inCreature);
     void            creatureRemoved(Creature* inCreature);

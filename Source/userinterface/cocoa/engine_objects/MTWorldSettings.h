@@ -10,13 +10,25 @@
 
 #import "MT_Settings.h"
 
+typedef enum ESoupSizePreset {
+    k64K,
+    k128K,
+    k256K,
+    k512K,
+    k1M,
+    k2M,
+    k4M,
+    kOtherSize
+} ESoupSizePreset;
+
+
 typedef enum EMutationRate {
     kNone,
     kLow,
     kMedium,
     kHigh,
     kVeryHigh,
-    kOther
+    kOtherRate
 } EMutationRate;
 
 @interface MTWorldSettings : NSObject
@@ -24,6 +36,9 @@ typedef enum EMutationRate {
     MacTierra::Settings*    mSettings;
     
     NSUInteger              soupSize;
+    ESoupSizePreset         soupSizePreset;
+    BOOL                    creatingNewSoup;
+    BOOL                    seedWithAncestor;
     
     EMutationRate           flawLevel;
     EMutationRate           cosmicMutationLevel;
@@ -36,6 +51,9 @@ typedef enum EMutationRate {
 @property (readonly) const MacTierra::Settings* settings;
 
 @property (assign) NSUInteger soupSize;
+@property (assign) ESoupSizePreset soupSizePreset;
+@property (assign) BOOL creatingNewSoup;
+@property (assign) BOOL seedWithAncestor;
 
 @property (assign) MacTierra::Settings::ETimeSliceType timeSliceType;
 

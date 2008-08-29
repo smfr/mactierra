@@ -68,9 +68,7 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     }
     else
     {
-        [worldController createSoup:(256 * 1024)];
-        if (!startEmpty)
-            [worldController seedWithAncestor];
+        [worldController performSelector:@selector(newSoupShowingSettings:) withObject:nil afterDelay:0];
     }
     
     [super windowControllerDidLoadNib:aController];
@@ -128,7 +126,7 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 
 - (IBAction)showSettings:(id)sender
 {
-    [worldController showSettings:sender];
+    [worldController editSoupSettings:sender];
 }
 
 - (IBAction)toggleRunning:(id)sender

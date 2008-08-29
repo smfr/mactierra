@@ -26,11 +26,11 @@ Settings::Settings()
 , mSizeSelection(1.0)
 , mLeannessSelection(false)
 , mReapThreshold(0.8)
-, mMutationType(kAddOrDec)
+, mMutationType(kBitFlip)
 , mGlobalWritesAllowed(false)
 , mTransferRegistersToOffspring(false)
 , mClearDaughterCells(false)
-, mClearReapedCreatures(true)
+, mClearReapedCreatures(false)
 , mDaughterAllocation(kPreferredAlloc)
 {
 }
