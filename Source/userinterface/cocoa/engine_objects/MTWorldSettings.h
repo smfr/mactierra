@@ -39,6 +39,7 @@ typedef enum EMutationRate {
     ESoupSizePreset         soupSizePreset;
     BOOL                    creatingNewSoup;
     BOOL                    seedWithAncestor;
+    u_int32_t               randomSeed;
     
     EMutationRate           flawLevel;
     EMutationRate           cosmicMutationLevel;
@@ -54,6 +55,8 @@ typedef enum EMutationRate {
 @property (assign) ESoupSizePreset soupSizePreset;
 @property (assign) BOOL creatingNewSoup;
 @property (assign) BOOL seedWithAncestor;
+
+@property (assign) u_int32_t randomSeed;
 
 @property (assign) MacTierra::Settings::ETimeSliceType timeSliceType;
 

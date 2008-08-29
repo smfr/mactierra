@@ -29,6 +29,7 @@
 @synthesize soupSizePreset;
 @synthesize creatingNewSoup;
 @synthesize seedWithAncestor;
+@synthesize randomSeed;
 @synthesize mutationDefaults;
 @synthesize flawLevel;
 @synthesize cosmicMutationLevel;

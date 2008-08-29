@@ -8,6 +8,7 @@
 
 #import "MTWorldController.h"
 
+#import <RandomLib/RandomSeed.hpp>
 #import <fstream>
 
 #import "MTSoupView.h"
@@ -323,7 +324,9 @@ using namespace MacTierra;
             BOOST_ASSERT(!mWorld);
             
             MacTierra::World* newWorld = new World();
+            newWorld->RNG().Reseed(self.worldSettings.randomSeed);
             newWorld->setSettings(*worldSettings.settings);
+            
             newWorld->initializeSoup(worldSettings.soupSize);
             [self setWorld:newWorld];
             
@@ -344,6 +347,11 @@ using namespace MacTierra;
     worldSettings.cosmicRate = 0.0;
     worldSettings.flawRate = 0.0;
     worldSettings.copyErrorRate = 0.0;
+}
+
+- (IBAction)initializeRandomSeed:(id)sender
+{
+    self.worldSettings.randomSeed = RandomLib::RandomSeed::SeedWord();
 }
 
 - (IBAction)okSettingsPanel:(id)sender

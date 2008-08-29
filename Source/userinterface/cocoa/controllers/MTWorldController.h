@@ -96,9 +96,9 @@ namespace MacTierra {
 - (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL;
 
 
-
 // for settings panel
 - (IBAction)zeroMutationRates:(id)sender;
+- (IBAction)initializeRandomSeed:(id)sender;
 
 - (IBAction)okSettingsPanel:(id)sender;
 - (IBAction)cancelSettingsPanel:(id)sender;
