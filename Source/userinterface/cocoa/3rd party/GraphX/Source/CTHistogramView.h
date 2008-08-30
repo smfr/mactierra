@@ -20,27 +20,27 @@
 
 
 @interface CTHistogramView : CTGraphView
-  {
+{
   IBOutlet id <CTHistogramViewDataSource> dataSource;   //object that will give graph values for drawing the curve
   IBOutlet id <CTHistogramViewDelegate  > delegate  ;   //object that will be notified when key events occur
 
-  float bucketWidth;	//Width of Buckets(ranges for frequencies)
+  float bucketWidth;  //Width of Buckets(ranges for frequencies)
   
-  bool drawBorderFlag, drawFillFlag;	//Flags to turn on/off different components of CTGraphView
+  BOOL drawBorderFlag, drawFillFlag;  //Flags to turn on/off different components of CTGraphView
   
   float borderLineWidth;   //width of the curve
   
   NSBezierPath *border;
   NSBezierPath *displacement;
-  }
+}
 
-- (void)drawGraph:(NSRect)rect;		//Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
+- (void)drawGraph:(NSRect)rect;   //Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 
 //Customization Methods
 - (void)setBucketWidth:(float)width;
 
-- (void)setShowBorder:(bool)state;
-- (void)setShowFill  :(bool)state;
+- (void)setShowBorder:(BOOL)state;
+- (void)setShowFill  :(BOOL)state;
 
 - (void)setBorderColor:(NSColor *)color;
 - (void)setFillColor  :(NSColor *)color;
@@ -49,8 +49,8 @@
 //State Methods
 - (float)bucketWidth;
 
-- (bool)showBorder;
-- (bool)showFill  ;
+- (BOOL)showBorder;
+- (BOOL)showFill  ;
 
 - (NSColor *)borderColor;
 - (NSColor *)fillColor  ;

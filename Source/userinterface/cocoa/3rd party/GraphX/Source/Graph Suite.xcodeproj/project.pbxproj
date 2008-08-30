@@ -19,41 +19,13 @@
 		A868ADD50894A6470078843B /* CTHistogramView.h in Headers */ = {isa = PBXBuildFile; fileRef = A856F01206687A39003783EB /* CTHistogramView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A868ADD60894A6470078843B /* CTHistogramView.m in Sources */ = {isa = PBXBuildFile; fileRef = A856F01106687A39003783EB /* CTHistogramView.m */; };
 		A868ADFF0894A70B0078843B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		A8771F44082DC5AA00275FFE /* Graphs.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8771F43082DC5AA00275FFE /* Graphs.icns */; };
 		A8790CD00897578300CED463 /* CTScatterPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8790CCE0897578300CED463 /* CTScatterPlotView.m */; };
 		A8790CD10897578300CED463 /* CTScatterPlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = A8790CCF0897578300CED463 /* CTScatterPlotView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A8AAB042091E9DD900F55214 /* DataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = A8AAB040091E9DD900F55214 /* DataSources.h */; };
 		A8AAB043091E9DD900F55214 /* DataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = A8AAB041091E9DD900F55214 /* DataSources.m */; };
 		A8BD788B09232C230006A598 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A8CF1B000923235F00E21122 /* GraphX.framework */; };
-		A8CF1AA80923220500E21122 /* GraphX.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8CF1AA70923220500E21122 /* GraphX.icns */; };
 		A8CF1B010923235F00E21122 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8CF1B000923235F00E21122 /* GraphX.framework */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXBuildStyle section */
-		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-				DEBUGGING_SYMBOLS = YES;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
-				GCC_OPTIMIZATION_LEVEL = 0;
-				OPTIMIZATION_CFLAGS = "-O0";
-				ZERO_LINK = YES;
-			};
-			name = Development;
-		};
-		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
-				ZERO_LINK = NO;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
 		A868ACAB0894A1D80078843B /* PBXContainerItemProxy */ = {
@@ -92,15 +64,13 @@
 		A856F01206687A39003783EB /* CTHistogramView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTHistogramView.h; sourceTree = SOURCE_ROOT; };
 		A856F03F06687A69003783EB /* CTCurveView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTCurveView.m; sourceTree = SOURCE_ROOT; };
 		A856F04006687A6A003783EB /* CTCurveView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTCurveView.h; sourceTree = SOURCE_ROOT; };
-		A868ACA20894A1A00078843B /* GraphKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "GraphKit-Info.plist"; sourceTree = "<group>"; };
-		A8771F43082DC5AA00275FFE /* Graphs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Graphs.icns; sourceTree = "<group>"; };
+		A868ACA20894A1A00078843B /* GraphKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GraphKit-Info.plist"; sourceTree = "<group>"; };
 		A8790CCE0897578300CED463 /* CTScatterPlotView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTScatterPlotView.m; sourceTree = SOURCE_ROOT; };
 		A8790CCF0897578300CED463 /* CTScatterPlotView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTScatterPlotView.h; sourceTree = SOURCE_ROOT; };
 		A89D0C160894650F0009307B /* CTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTGraphView.h; sourceTree = SOURCE_ROOT; };
 		A89D0C170894650F0009307B /* CTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTGraphView.m; sourceTree = SOURCE_ROOT; };
 		A8AAB040091E9DD900F55214 /* DataSources.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DataSources.h; sourceTree = "<group>"; };
 		A8AAB041091E9DD900F55214 /* DataSources.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DataSources.m; sourceTree = "<group>"; };
-		A8CF1AA70923220500E21122 /* GraphX.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = GraphX.icns; sourceTree = SOURCE_ROOT; };
 		A8CF1B000923235F00E21122 /* GraphX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GraphX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -189,8 +159,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				A8CF1AA70923220500E21122 /* GraphX.icns */,
-				A8771F43082DC5AA00275FFE /* Graphs.icns */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -281,30 +249,6 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
-				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "Graph Suite_Prefix.pch";
-				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
-				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
-				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = Info.plist;
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = "";
-				PRODUCT_NAME = "Graph Suite";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-				WRAPPER_EXTENSION = app;
-			};
 			dependencies = (
 				A868ACAC0894A1D80078843B /* PBXTargetDependency */,
 			);
@@ -325,60 +269,11 @@
 			);
 			buildRules = (
 			);
-			buildSettings = {
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				FRAMEWORK_VERSION = A;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
-				INFOPLIST_FILE = "GraphKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				OPTIMIZATION_CFLAGS = "";
-				OTHER_CFLAGS = "";
-				OTHER_LDFLAGS = (
-					"-framework",
-					Foundation,
-					"-framework",
-					AppKit,
-				);
-				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
-				PRODUCT_NAME = GraphKit;
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = (
-					"-Wmost",
-					"-Wno-four-char-constants",
-					"-Wno-unknown-pragmas",
-				);
-			};
 			dependencies = (
 			);
 			name = GraphX;
 			productName = GraphKit;
 			productReference = A8CF1B000923235F00E21122 /* GraphX.framework */;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleExecutable</key>
-	<string>GraphKit</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.GraphKit</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundlePackageType</key>
-	<string>FMWK</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
-</dict>
-</plist>
-";
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -387,15 +282,11 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = A8F75435088915AC00F072FD /* Build configuration list for PBXProject "Graph Suite" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				4A9504CCFFE6A4B311CA0CBA /* Development */,
-				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
-			);
+			compatibilityVersion = "Xcode 2.4";
 			hasScannedForEncodings = 1;
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Graph Suite */;
 			projectDirPath = "";
+			projectRoot = "";
 			targets = (
 				A868ACA00894A1A00078843B /* GraphX */,
 				8D1107260486CEB800E47090 /* Graph Suite */,
@@ -410,8 +301,6 @@
 			files = (
 				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
-				A8771F44082DC5AA00275FFE /* Graphs.icns in Resources */,
-				A8CF1AA80923220500E21122 /* GraphX.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -485,11 +374,11 @@
 				FRAMEWORK_VERSION = A;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "GraphKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -520,11 +409,11 @@
 				FRAMEWORK_VERSION = A;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "GraphKit-Info.plist";
 				INSTALL_PATH = "@executable_path/../Frameworks";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -556,11 +445,11 @@
 				FRAMEWORK_VERSION = A;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "GraphKit-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -601,7 +490,6 @@
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O0";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "Graph Suite";
@@ -678,6 +566,7 @@
 		A8F75436088915AC00F072FD /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_OPTIMIZATION_LEVEL = 0;
 			};
 			name = Development;
 		};

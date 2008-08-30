@@ -24,7 +24,7 @@
   IBOutlet id <CTScatterPlotViewDataSource> dataSource;   //object that will give graph values for drawing the curve
   IBOutlet id <CTScatterPlotViewDelegate  > delegate  ;   //object that will be notified when key events occur
   
-  bool drawGraphFlag , drawFillFlag;	//Flags to turn on/off different components of CTGraphView
+  BOOL drawGraphFlag , drawFillFlag;	//Flags to turn on/off different components of CTGraphView
   
   float curveLineWidth;   //width of the curve
   
@@ -35,16 +35,16 @@
 - (void)drawGraph:(NSRect)rect;		//Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 
 //Customization Methods
-- (void)setShowCurve :(bool)state;
-- (void)setShowFill  :(bool)state;
+- (void)setShowCurve :(BOOL)state;
+- (void)setShowFill  :(BOOL)state;
 
 - (void)setCurveColor:(NSColor *)color;
 - (void)setFillColor :(NSColor *)color;
 
 
 //State Methods
-- (bool)showCurve;
-- (bool)showFill ;
+- (BOOL)showCurve;
+- (BOOL)showFill ;
 
 - (NSColor *)curveColor;
 - (NSColor *)fillColor ;
