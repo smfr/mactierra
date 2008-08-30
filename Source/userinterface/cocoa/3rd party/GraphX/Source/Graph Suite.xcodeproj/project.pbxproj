@@ -1,0 +1,732 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D1107280486CEB800E47090 /* Graph Suite_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 32CA4F630368D1EE00C91783 /* Graph Suite_Prefix.pch */; };
+		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A868ADCF0894A62F0078843B /* CTGraphView.h in Headers */ = {isa = PBXBuildFile; fileRef = A89D0C160894650F0009307B /* CTGraphView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A868ADD00894A62F0078843B /* CTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = A89D0C170894650F0009307B /* CTGraphView.m */; settings = {ATTRIBUTES = (); }; };
+		A868ADD30894A6470078843B /* CTCurveView.h in Headers */ = {isa = PBXBuildFile; fileRef = A856F04006687A6A003783EB /* CTCurveView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A868ADD40894A6470078843B /* CTCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = A856F03F06687A69003783EB /* CTCurveView.m */; };
+		A868ADD50894A6470078843B /* CTHistogramView.h in Headers */ = {isa = PBXBuildFile; fileRef = A856F01206687A39003783EB /* CTHistogramView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A868ADD60894A6470078843B /* CTHistogramView.m in Sources */ = {isa = PBXBuildFile; fileRef = A856F01106687A39003783EB /* CTHistogramView.m */; };
+		A868ADFF0894A70B0078843B /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A8771F44082DC5AA00275FFE /* Graphs.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8771F43082DC5AA00275FFE /* Graphs.icns */; };
+		A8790CD00897578300CED463 /* CTScatterPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = A8790CCE0897578300CED463 /* CTScatterPlotView.m */; };
+		A8790CD10897578300CED463 /* CTScatterPlotView.h in Headers */ = {isa = PBXBuildFile; fileRef = A8790CCF0897578300CED463 /* CTScatterPlotView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A8AAB042091E9DD900F55214 /* DataSources.h in Headers */ = {isa = PBXBuildFile; fileRef = A8AAB040091E9DD900F55214 /* DataSources.h */; };
+		A8AAB043091E9DD900F55214 /* DataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = A8AAB041091E9DD900F55214 /* DataSources.m */; };
+		A8BD788B09232C230006A598 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A8CF1B000923235F00E21122 /* GraphX.framework */; };
+		A8CF1AA80923220500E21122 /* GraphX.icns in Resources */ = {isa = PBXBuildFile; fileRef = A8CF1AA70923220500E21122 /* GraphX.icns */; };
+		A8CF1B010923235F00E21122 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A8CF1B000923235F00E21122 /* GraphX.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		4A9504CCFFE6A4B311CA0CBA /* Development */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				OPTIMIZATION_CFLAGS = "-O0";
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		4A9504CDFFE6A4B311CA0CBA /* Deployment */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		A868ACAB0894A1D80078843B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A868ACA00894A1A00078843B;
+			remoteInfo = GraphKit;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A83F6E810895D6C8008A2E17 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A8BD788B09232C230006A598 /* GraphX.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* Graph Suite_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Graph Suite_Prefix.pch"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Graph Suite.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Graph Suite.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A856F01106687A39003783EB /* CTHistogramView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTHistogramView.m; sourceTree = SOURCE_ROOT; };
+		A856F01206687A39003783EB /* CTHistogramView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTHistogramView.h; sourceTree = SOURCE_ROOT; };
+		A856F03F06687A69003783EB /* CTCurveView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTCurveView.m; sourceTree = SOURCE_ROOT; };
+		A856F04006687A6A003783EB /* CTCurveView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTCurveView.h; sourceTree = SOURCE_ROOT; };
+		A868ACA20894A1A00078843B /* GraphKit-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = "GraphKit-Info.plist"; sourceTree = "<group>"; };
+		A8771F43082DC5AA00275FFE /* Graphs.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Graphs.icns; sourceTree = "<group>"; };
+		A8790CCE0897578300CED463 /* CTScatterPlotView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTScatterPlotView.m; sourceTree = SOURCE_ROOT; };
+		A8790CCF0897578300CED463 /* CTScatterPlotView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTScatterPlotView.h; sourceTree = SOURCE_ROOT; };
+		A89D0C160894650F0009307B /* CTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = CTGraphView.h; sourceTree = SOURCE_ROOT; };
+		A89D0C170894650F0009307B /* CTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = CTGraphView.m; sourceTree = SOURCE_ROOT; };
+		A8AAB040091E9DD900F55214 /* DataSources.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = DataSources.h; sourceTree = "<group>"; };
+		A8AAB041091E9DD900F55214 /* DataSources.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = DataSources.m; sourceTree = "<group>"; };
+		A8CF1AA70923220500E21122 /* GraphX.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = GraphX.icns; sourceTree = SOURCE_ROOT; };
+		A8CF1B000923235F00E21122 /* GraphX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GraphX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				A8CF1B010923235F00E21122 /* GraphX.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A868AC9F0894A1A00078843B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A868ADFF0894A70B0078843B /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Framework */ = {
+			isa = PBXGroup;
+			children = (
+				A89D0C160894650F0009307B /* CTGraphView.h */,
+				A89D0C170894650F0009307B /* CTGraphView.m */,
+				A856EFEE06687861003783EB /* CurveView */,
+				A856EFFA0668787B003783EB /* HistogramView */,
+				A8BF61B5066EF50100AAAB99 /* ScatterPlotView */,
+			);
+			name = Framework;
+			sourceTree = SOURCE_ROOT;
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Graph Suite.app */,
+				A8CF1B000923235F00E21122 /* GraphX.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Graph Suite */ = {
+			isa = PBXGroup;
+			children = (
+				A868AC9108949F440078843B /* Application */,
+				080E96DDFE201D6D7F000001 /* Framework */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+				A868ACA20894A1A00078843B /* GraphKit-Info.plist */,
+			);
+			name = "Graph Suite";
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				32CA4F630368D1EE00C91783 /* Graph Suite_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A8CF1AA70923220500E21122 /* GraphX.icns */,
+				A8771F43082DC5AA00275FFE /* Graphs.icns */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A856EFEE06687861003783EB /* CurveView */ = {
+			isa = PBXGroup;
+			children = (
+				A856F04006687A6A003783EB /* CTCurveView.h */,
+				A856F03F06687A69003783EB /* CTCurveView.m */,
+			);
+			name = CurveView;
+			sourceTree = SOURCE_ROOT;
+		};
+		A856EFFA0668787B003783EB /* HistogramView */ = {
+			isa = PBXGroup;
+			children = (
+				A856F01206687A39003783EB /* CTHistogramView.h */,
+				A856F01106687A39003783EB /* CTHistogramView.m */,
+			);
+			name = HistogramView;
+			sourceTree = SOURCE_ROOT;
+		};
+		A868AC9108949F440078843B /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				A8AAB040091E9DD900F55214 /* DataSources.h */,
+				A8AAB041091E9DD900F55214 /* DataSources.m */,
+			);
+			name = Application;
+			sourceTree = SOURCE_ROOT;
+		};
+		A8BF61B5066EF50100AAAB99 /* ScatterPlotView */ = {
+			isa = PBXGroup;
+			children = (
+				A8790CCF0897578300CED463 /* CTScatterPlotView.h */,
+				A8790CCE0897578300CED463 /* CTScatterPlotView.m */,
+			);
+			name = ScatterPlotView;
+			sourceTree = SOURCE_ROOT;
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		8D1107270486CEB800E47090 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D1107280486CEB800E47090 /* Graph Suite_Prefix.pch in Headers */,
+				A8AAB042091E9DD900F55214 /* DataSources.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A868AC9C0894A1A00078843B /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A868ADCF0894A62F0078843B /* CTGraphView.h in Headers */,
+				A868ADD30894A6470078843B /* CTCurveView.h in Headers */,
+				A868ADD50894A6470078843B /* CTHistogramView.h in Headers */,
+				A8790CD10897578300CED463 /* CTScatterPlotView.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* Graph Suite */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A8F75431088915AC00F072FD /* Build configuration list for PBXNativeTarget "Graph Suite" */;
+			buildPhases = (
+				8D1107270486CEB800E47090 /* Headers */,
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+				A83F6E810895D6C8008A2E17 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Graph Suite_Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Graph Suite";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			dependencies = (
+				A868ACAC0894A1D80078843B /* PBXTargetDependency */,
+			);
+			name = "Graph Suite";
+			productInstallPath = "$(HOME)/Applications";
+			productName = "Graph Suite";
+			productReference = 8D1107320486CEB800E47090 /* Graph Suite.app */;
+			productType = "com.apple.product-type.application";
+		};
+		A868ACA00894A1A00078843B /* GraphX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A868ACA30894A1A10078843B /* Build configuration list for PBXNativeTarget "GraphX" */;
+			buildPhases = (
+				A868AC9C0894A1A00078843B /* Headers */,
+				A868AC9D0894A1A00078843B /* Resources */,
+				A868AC9E0894A1A00078843B /* Sources */,
+				A868AC9F0894A1A00078843B /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "GraphKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				OPTIMIZATION_CFLAGS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = GraphKit;
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			dependencies = (
+			);
+			name = GraphX;
+			productName = GraphKit;
+			productReference = A8CF1B000923235F00E21122 /* GraphX.framework */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>GraphKit</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.yourcompany.GraphKit</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>FMWK</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+</dict>
+</plist>
+";
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = A8F75435088915AC00F072FD /* Build configuration list for PBXProject "Graph Suite" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				4A9504CCFFE6A4B311CA0CBA /* Development */,
+				4A9504CDFFE6A4B311CA0CBA /* Deployment */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Graph Suite */;
+			projectDirPath = "";
+			targets = (
+				A868ACA00894A1A00078843B /* GraphX */,
+				8D1107260486CEB800E47090 /* Graph Suite */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				A8771F44082DC5AA00275FFE /* Graphs.icns in Resources */,
+				A8CF1AA80923220500E21122 /* GraphX.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A868AC9D0894A1A00078843B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				A8AAB043091E9DD900F55214 /* DataSources.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A868AC9E0894A1A00078843B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A868ADD00894A62F0078843B /* CTGraphView.m in Sources */,
+				A868ADD40894A6470078843B /* CTCurveView.m in Sources */,
+				A868ADD60894A6470078843B /* CTHistogramView.m in Sources */,
+				A8790CD00897578300CED463 /* CTScatterPlotView.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A868ACAC0894A1D80078843B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A868ACA00894A1A00078843B /* GraphX */;
+			targetProxy = A868ACAB0894A1D80078843B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		A868ACA40894A1A10078843B /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DSTROOT = "@executable_path/../Frameworks";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "GraphKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = GraphX;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Development;
+		};
+		A868ACA50894A1A10078843B /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DSTROOT = "$(HOME):Library:Frameworks.textClipping";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "GraphKit-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+					"-seg1addr",
+					0xC0000000,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = YES;
+				PRODUCT_NAME = GraphX;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Deployment;
+		};
+		A868ACA60894A1A10078843B /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DSTROOT = "@executable_path/../Frameworks";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "GraphKit-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				OTHER_REZFLAGS = "";
+				PREBINDING = NO;
+				PRODUCT_NAME = GraphX;
+				SECTORDER_FLAGS = "";
+				SKIP_INSTALL = YES;
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+			};
+			name = Default;
+		};
+		A8F75432088915AC00F072FD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				DEBUGGING_SYMBOLS = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/build/Development\"";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Graph Suite_Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OPTIMIZATION_CFLAGS = "-O0";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Graph Suite";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Development;
+		};
+		A8F75433088915AC00F072FD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/build/Development\"";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Graph Suite_Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Graph Suite";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Deployment;
+		};
+		A8F75434088915AC00F072FD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/build/Development\"";
+				GCC_ENABLE_TRIGRAPHS = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Graph Suite_Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
+				GCC_WARN_UNKNOWN_PRAGMAS = NO;
+				HEADER_SEARCH_PATHS = "";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = "";
+				OTHER_CFLAGS = "";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = "Graph Suite";
+				SECTORDER_FLAGS = "";
+				WARNING_CFLAGS = (
+					"-Wmost",
+					"-Wno-four-char-constants",
+					"-Wno-unknown-pragmas",
+				);
+				WRAPPER_EXTENSION = app;
+			};
+			name = Default;
+		};
+		A8F75436088915AC00F072FD /* Development */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Development;
+		};
+		A8F75437088915AC00F072FD /* Deployment */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Deployment;
+		};
+		A8F75438088915AC00F072FD /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A868ACA30894A1A10078843B /* Build configuration list for PBXNativeTarget "GraphX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A868ACA40894A1A10078843B /* Development */,
+				A868ACA50894A1A10078843B /* Deployment */,
+				A868ACA60894A1A10078843B /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		A8F75431088915AC00F072FD /* Build configuration list for PBXNativeTarget "Graph Suite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8F75432088915AC00F072FD /* Development */,
+				A8F75433088915AC00F072FD /* Deployment */,
+				A8F75434088915AC00F072FD /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+		A8F75435088915AC00F072FD /* Build configuration list for PBXProject "Graph Suite" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A8F75436088915AC00F072FD /* Development */,
+				A8F75437088915AC00F072FD /* Deployment */,
+				A8F75438088915AC00F072FD /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Default;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

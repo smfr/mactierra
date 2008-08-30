@@ -1,0 +1,32 @@
+{
+    IBClasses = (
+        {
+            CLASS = CTCurveView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataSource = id; delegate = id; }; 
+            SUPERCLASS = CTGraphView; 
+        }, 
+        {
+            CLASS = CTGraphView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {window = id; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            CLASS = CTHistogramView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataSource = id; delegate = id; }; 
+            SUPERCLASS = CTGraphView; 
+        }, 
+        {
+            CLASS = CTScatterPlotView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {dataSource = id; delegate = id; }; 
+            SUPERCLASS = CTGraphView; 
+        }, 
+        {CLASS = DataSources; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {CLASS = WindowController; LANGUAGE = ObjC; SUPERCLASS = NSWindowController; }
+    ); 
+    IBVersion = 1; 
+}
