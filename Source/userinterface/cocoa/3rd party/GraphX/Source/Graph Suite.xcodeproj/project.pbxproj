@@ -364,7 +364,7 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		A868ACA40894A1A10078843B /* Development */ = {
+		A868ACA40894A1A10078843B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -378,7 +378,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "GraphKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -397,13 +397,14 @@
 					"-Wno-unknown-pragmas",
 				);
 			};
-			name = Development;
+			name = Debug;
 		};
-		A868ACA50894A1A10078843B /* Deployment */ = {
+		A868ACA50894A1A10078843B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1)";
+				ARCHS_STANDARD_32_BIT_PRE_XCODE_3_1 = "ppc i386";
 				COPY_PHASE_STRIP = YES;
-				DSTROOT = "$(HOME):Library:Frameworks.textClipping";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				FRAMEWORK_VERSION = A;
@@ -434,7 +435,7 @@
 					"-Wno-unknown-pragmas",
 				);
 			};
-			name = Deployment;
+			name = Release;
 		};
 		A868ACA60894A1A10078843B /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -449,7 +450,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
 				INFOPLIST_FILE = "GraphKit-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				INSTALL_PATH = "@executable_path/../Frameworks";
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = (
 					"-framework",
@@ -470,7 +471,7 @@
 			};
 			name = Default;
 		};
-		A8F75432088915AC00F072FD /* Development */ = {
+		A8F75432088915AC00F072FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
@@ -502,9 +503,9 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
-			name = Development;
+			name = Debug;
 		};
-		A8F75433088915AC00F072FD /* Deployment */ = {
+		A8F75433088915AC00F072FD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
@@ -533,7 +534,7 @@
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = NO;
 			};
-			name = Deployment;
+			name = Release;
 		};
 		A8F75434088915AC00F072FD /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -563,18 +564,18 @@
 			};
 			name = Default;
 		};
-		A8F75436088915AC00F072FD /* Development */ = {
+		A8F75436088915AC00F072FD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				GCC_OPTIMIZATION_LEVEL = 0;
 			};
-			name = Development;
+			name = Debug;
 		};
-		A8F75437088915AC00F072FD /* Deployment */ = {
+		A8F75437088915AC00F072FD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 			};
-			name = Deployment;
+			name = Release;
 		};
 		A8F75438088915AC00F072FD /* Default */ = {
 			isa = XCBuildConfiguration;
@@ -588,8 +589,8 @@
 		A868ACA30894A1A10078843B /* Build configuration list for PBXNativeTarget "GraphX" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A868ACA40894A1A10078843B /* Development */,
-				A868ACA50894A1A10078843B /* Deployment */,
+				A868ACA40894A1A10078843B /* Debug */,
+				A868ACA50894A1A10078843B /* Release */,
 				A868ACA60894A1A10078843B /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -598,8 +599,8 @@
 		A8F75431088915AC00F072FD /* Build configuration list for PBXNativeTarget "Graph Suite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A8F75432088915AC00F072FD /* Development */,
-				A8F75433088915AC00F072FD /* Deployment */,
+				A8F75432088915AC00F072FD /* Debug */,
+				A8F75433088915AC00F072FD /* Release */,
 				A8F75434088915AC00F072FD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -608,8 +609,8 @@
 		A8F75435088915AC00F072FD /* Build configuration list for PBXProject "Graph Suite" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A8F75436088915AC00F072FD /* Development */,
-				A8F75437088915AC00F072FD /* Deployment */,
+				A8F75436088915AC00F072FD /* Debug */,
+				A8F75437088915AC00F072FD /* Release */,
 				A8F75438088915AC00F072FD /* Default */,
 			);
 			defaultConfigurationIsVisible = 0;
