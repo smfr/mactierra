@@ -58,6 +58,9 @@
 
 - (void)drawGraph:(NSRect)rect
 {
+  if (!dataSource)
+    return;
+
   const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
   const float xMin = NSMinX(rect);  // for preformance reasons(used often)
   const float yMax = NSMaxY(rect);

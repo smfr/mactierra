@@ -9,7 +9,7 @@
 
 
 //************Curve DataSource
-- (float)yValueForXValue:(double)x
+- (double)yValueForXValue:(double)x
 {
 //  if( (x > -2 && x < -1) || (x > 1 && x < 2) )
 //  return INFINITY;

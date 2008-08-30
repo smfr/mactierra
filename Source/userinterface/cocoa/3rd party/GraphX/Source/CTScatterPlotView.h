@@ -9,20 +9,20 @@
 #import <Cocoa/Cocoa.h>
 #import "CTGraphView.h"
 
-@protocol CTScatterPlotViewDataSource
- - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index;
+@interface NSObject(CTScatterPlotViewDataSource)
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index;
 @end
 
-@protocol CTScatterPlotViewDelegate
+@interface NSObject(CTScatterPlotViewDelegate)
 
 @end
 
 
 
 @interface CTScatterPlotView : CTGraphView
-  {
-  IBOutlet id <CTScatterPlotViewDataSource> dataSource;   //object that will give graph values for drawing the curve
-  IBOutlet id <CTScatterPlotViewDelegate  > delegate  ;   //object that will be notified when key events occur
+{
+  IBOutlet id dataSource;   //object that will give graph values for drawing the curve
+  IBOutlet id delegate  ;   //object that will be notified when key events occur
   
   BOOL drawGraphFlag , drawFillFlag;	//Flags to turn on/off different components of CTGraphView
   
@@ -30,7 +30,10 @@
   
   NSBezierPath *curve;
   NSBezierPath *displacement;
-  }
+}
+
+- (void)setDataSource:(id)inDataSource;
+- (void)setDelegate:(id)inDelegate;
 
 - (void)drawGraph:(NSRect)rect;		//Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 

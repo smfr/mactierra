@@ -9,11 +9,11 @@
 #import <Cocoa/Cocoa.h>
 #import "CTGraphView.h"
 
-@protocol CTHistogramViewDataSource
- - (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit;
+@interface NSObject(CTHistogramViewDataSource)
+- (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit;
 @end
 
-@protocol CTHistogramViewDelegate
+@interface NSObject(CTHistogramViewDelegate)
 
 @end
 
@@ -21,8 +21,8 @@
 
 @interface CTHistogramView : CTGraphView
 {
-  IBOutlet id <CTHistogramViewDataSource> dataSource;   //object that will give graph values for drawing the curve
-  IBOutlet id <CTHistogramViewDelegate  > delegate  ;   //object that will be notified when key events occur
+  IBOutlet id dataSource;   //object that will give graph values for drawing the curve
+  IBOutlet id delegate  ;   //object that will be notified when key events occur
 
   float bucketWidth;  //Width of Buckets(ranges for frequencies)
   
@@ -33,6 +33,9 @@
   NSBezierPath *border;
   NSBezierPath *displacement;
 }
+
+- (void)setDataSource:(id)inDataSource;
+- (void)setDelegate:(id)inDelegate;
 
 - (void)drawGraph:(NSRect)rect;   //Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 

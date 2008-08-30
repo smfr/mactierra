@@ -48,15 +48,33 @@
 
 - (void)dealloc
 {
+  [dataSource release];
+
   [curve release];
   [displacement release];
   
   [super dealloc];
 }
 
+- (void)setDataSource:(id)inDataSource
+{
+    if (inDataSource != dataSource)
+    {
+        [dataSource release];
+        dataSource = [inDataSource retain];
+    }
+}
+
+- (void)setDelegate:(id)inDelegate
+{
+    delegate = inDelegate;
+}
 
 - (void)drawGraph:(NSRect)rect
 {
+  if (!dataSource)
+    return;
+
   const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
   const float xMin = NSMinX(rect);  // for preformance reasons(used often)
   const float yMax = NSMaxY(rect);
@@ -91,16 +109,16 @@
   float h_next;
   
   float gMinRatio = gMin/xratio;
-    float hMinRatio = hMin/yratio;
+  float hMinRatio = hMin/yratio;
   
   float x;
   float y;
   
   [dataSource getPoint:&pointPointer atIndex:index];
   
-  while(g < gMax &&  pointPointer != nil)
+  while (g < gMax &&  pointPointer != nil)
   {
-    while((g < gMax &&  pointPointer != nil) && isnan(h))
+    while ((g < gMax &&  pointPointer != nil) && isnan(h))
     {
       g_next = pointPointer->x;
       h_next = pointPointer->y;
@@ -112,9 +130,9 @@
       {
         x = (g_next)/(xratio) - gMinRatio + xMin;
         
-        if(isfinite(h_next))              //move to the right to the point
+        if (isfinite(h_next))              //move to the right to the point
           y = (h_next)/(yratio) - hMinRatio + yMin;
-        else if(signbit(h_next))            //move to top of screen
+        else if (signbit(h_next))            //move to top of screen
           y = yMax + curveLineWidth;
         else                      //move to bottom of screen
           y = yMin - curveLineWidth;
@@ -210,7 +228,7 @@
       g = g_next;
       h = h_next;
       
-      if(drawFillFlag == YES)
+      if (drawFillFlag)
       {
         //Create New path that wil be filled
         //float lastPoint = [curve currentPoint].x;
@@ -227,12 +245,11 @@
       }
 
       //Draw and fill curve
-      if( drawGraphFlag == YES )
+      if (drawGraphFlag)
       {
         [[graphColors colorWithKey:@"curve"] set];
         [curve stroke];
       }
-      
       
       [curve removeAllPoints];
       [displacement removeAllPoints];

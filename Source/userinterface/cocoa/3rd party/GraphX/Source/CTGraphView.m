@@ -13,7 +13,7 @@
 
 - (id)initWithFrame:(NSRect)frameRect
 {
-  if((self = [super initWithFrame:frameRect]) != nil)
+  if ((self = [super initWithFrame:frameRect]) != nil)
   {
     //Set Default Graph Bounds              //**IMPORTANT NAMING CONVENTION**/
     gMin = -10;   gMax = 10;  gScale = 1;       //Data Point = (g,h)  variables prefixed by g/h refer to data values
@@ -309,7 +309,7 @@
       //draw line at y = yMax
       y = yMax;
     }
-    else if(y < yMin) //if axis is lower than graph draw dashed axis at bottom
+    else if (y < yMin) //if axis is lower than graph draw dashed axis at bottom
     {
       //make line dashed with pattern
       [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
@@ -418,162 +418,168 @@
 
 //*********Customization Methods********************
 - (void)setXMin:(float)bound
-  {
-  if(bound >= gMax)
+{
+  if (bound >= gMax)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
   else
     gMin = bound;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setXMax:(float)bound
-  {
-  if(bound <= gMin)
+{
+  if (bound <= gMin)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
   else
     gMax = bound;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setXScale:(float)scale
-  {
+{
   gScale = scale;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setXMinorLineCount:(unsigned)count
-  {
+{
   xMinorLineCount = count;
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setYMin:(float)bound
-  {
-  if(bound >= hMax)
+{
+  if (bound >= hMax)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
   else
     hMin = bound;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setYMax:(float)bound
-  {
-  if(bound <= hMin)
+{
+  if (bound <= hMin)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
   else
     hMax = bound;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setYScale:(float)scale
-  {
+{
   hScale = scale;
   [self setNeedsDisplay:YES];
-  }
+}
+
 - (void)setYMinorLineCount:(unsigned)count
-  {
+{
   yMinorLineCount = count;
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setShowTitle :(BOOL)state
-  {
+{
   drawTitleFlag  = state;
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setShowXLabel:(BOOL)state
-  {
+{
   drawXLabelFlag = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowXAxis :(BOOL)state
-  {
+{
   drawXAxisFlag  = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowXGrid :(BOOL)state
-  {
+{
   drawXGridFlag  = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowXTickMarks:(BOOL)state
-  {
+{
   drawXTickMarks = state;
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setShowYLabel:(BOOL)state
-  {
+{
   drawYLabelFlag = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowYAxis :(BOOL)state
-  {
+{
   drawYAxisFlag  = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowYGrid :(BOOL)state
-  {
+{
   drawYGridFlag  = state;
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setShowYTickMarks:(BOOL)state
-  {
+{
   drawYTickMarks = state;
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setShowBackground:(BOOL)state
-  {
+{
   drawBackgroundFlag = state;
   [self setNeedsDisplay:YES];
-  }
+}
 
 
 - (void)setXAxisColor :(NSColor *)color
-  {
+{
   [graphColors setColor:color forKey:@"xaxis"];
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setXGridColor :(NSColor *)color
-  {
+{
   [graphColors setColor:color forKey:@"xMajor"];
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setYAxisColor :(NSColor *)color
-  {
+{
   [graphColors setColor:color forKey:@"yaxis"];
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setYGridColor :(NSColor *)color
-  {
+{
   [graphColors setColor:color forKey:@"yMajor"];
   [self setNeedsDisplay:YES];
-  }
+}
 
 - (void)setBackgroundColor:(NSColor *)color
-  {
+{
   [graphColors setColor:color forKey:@"background"];
   [self setNeedsDisplay:YES];
-  }
+}
 
 
 
 - (void)setTitle:(NSAttributedString *)string
-  {
+{
   [title release];
   title = string;
   [title retain];
   
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setXLabel:(NSAttributedString *)string
-  {
+{
   [xlabel release];
   xlabel = string;
   [xlabel retain];
   
   [self setNeedsDisplay:YES];
-  }
+}
 - (void)setYLabel:(NSAttributedString *)string
-  {
+{
   [ylabel release];
   ylabel = string;
   [ylabel retain];
@@ -581,68 +587,68 @@
   [self setNeedsDisplay:YES];
   }
 - (NSAttributedString *)title
-  {return title;}
+{return title;}
 - (NSAttributedString *)xLabel
-  {return xlabel;}
+{return xlabel;}
 - (NSAttributedString *)yLabel
-  {return ylabel;}
+{return ylabel;}
 
 //************State Methods****************
 - (float)xMin
-  {return gMin;}
+{return gMin;}
 - (float)xMax
-  {return gMax;}
+{return gMax;}
 - (float)xScale
-  {return gScale;}
+{return gScale;}
 - (unsigned)xMinorLineCount
-  {return xMinorLineCount;}
+{return xMinorLineCount;}
 
 - (float)yMin
-  {return hMin;}
+{return hMin;}
 - (float)yMax
-  {return hMax;}
+{return hMax;}
 - (float)yScale
-  {return hScale;}
+{return hScale;}
 - (unsigned)yMinorLineCount
-  {return yMinorLineCount;}
+{return yMinorLineCount;}
 
 - (BOOL)showTitle
-  {return drawTitleFlag;}
+{return drawTitleFlag;}
 
 - (BOOL)showXLabel
-  {return drawXLabelFlag;}
+{return drawXLabelFlag;}
 - (BOOL)showXAxis
-  {return drawXAxisFlag;}
+{return drawXAxisFlag;}
 - (BOOL)showXGrid
-  {return drawXGridFlag;}
+{return drawXGridFlag;}
 - (BOOL)showXTickMarks
-  {return drawXTickMarks;}
+{return drawXTickMarks;}
 
 - (BOOL)showYLabel
-  {return drawYLabelFlag;}
+{return drawYLabelFlag;}
 - (BOOL)showYAxis
-  {return drawYAxisFlag;}
+{return drawYAxisFlag;}
 - (BOOL)showYGrid
-  {return drawYGridFlag;}
+{return drawYGridFlag;}
 - (BOOL)showYTickMarks
-  {return drawYTickMarks;}
+{return drawYTickMarks;}
 
 - (BOOL)showBackground
-  {return drawBackgroundFlag;}
+{return drawBackgroundFlag;}
 
 
 - (NSColor *)xAxisColor
-  {return [graphColors colorWithKey:@"xaxis"];}
+{return [graphColors colorWithKey:@"xaxis"];}
 - (NSColor *)xGridColor
-  {return [graphColors colorWithKey:@"xMajor"];}
+{return [graphColors colorWithKey:@"xMajor"];}
 
 - (NSColor *)yAxisColor
-  {return [graphColors colorWithKey:@"yaxis"];}
+{return [graphColors colorWithKey:@"yaxis"];}
 - (NSColor *)yGridColor
-  {return [graphColors colorWithKey:@"yMajor"];}
+{return [graphColors colorWithKey:@"yMajor"];}
 
 - (NSColor *)backgroundColor
-  {return [graphColors colorWithKey:@"background"];}
+{return [graphColors colorWithKey:@"background"];}
 
 
 
