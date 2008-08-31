@@ -11,9 +11,11 @@
 
 namespace MacTierra {
     class World;
+    class PopulationSizeLogger;
 };
 
 @class MTCreature;
+@class MTGraphController;
 @class MTInventoryController;
 @class MTSoupView;
 @class MTWorldSettings;
@@ -26,7 +28,8 @@ namespace MacTierra {
     IBOutlet NSTableView*   mInventoryTableView;
 
     IBOutlet MTInventoryController*  mInventoryController;
-
+    IBOutlet MTGraphController*      mGraphController;
+    
     IBOutlet NSTextView*    mCreatureSoupView;
     
     // settings panel
@@ -37,6 +40,10 @@ namespace MacTierra {
     
     MacTierra::World*       mWorld;
 
+    // temp
+    MacTierra::PopulationSizeLogger* mPopSizeLogger;
+    
+    
     MTCreature*             selectedCreature;
     
     BOOL                    running;
@@ -60,6 +67,9 @@ namespace MacTierra {
 @property (assign) BOOL creatingNewSoup;
 
 //@property (readonly) MacTierra::World* world;
+// temp
+@property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
+
 
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;

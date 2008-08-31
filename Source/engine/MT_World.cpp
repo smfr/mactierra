@@ -47,6 +47,7 @@ World::World()
 , mExecution(NULL)
 , mTimeSlicer(this)
 , mInventory(NULL)
+, mDataCollector(NULL)
 , mCurCreatureCycles(0)
 , mCurCreatureSliceCycles(0)
 , mCopyErrorPending(false)
@@ -64,6 +65,7 @@ World::~World()
     delete mCellMap;
     delete mExecution;
     delete mInventory;
+    delete mDataCollector;
 }
 
 void
@@ -80,6 +82,8 @@ World::initializeSoup(u_int32_t inSoupSize)
     mExecution = new ExecutionUnit0();
     
     mInventory = new Inventory();
+    
+    mDataCollector = new DataCollector();
 }
 
 Creature*
@@ -132,6 +136,12 @@ World::eradicateCreature(Creature* inCreature)
     creatureRemoved(inCreature);
     
     delete inCreature;
+}
+
+uint32_t
+World::numAdultCreatures() const
+{
+    return mTimeSlicer.numCreatures();
 }
 
 void
@@ -204,6 +214,10 @@ World::iterate(u_int32_t inNumCycles)
         if (mCurCreatureCycles < mCurCreatureSliceCycles)
         {
             const u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
+
+            // data collection
+            if (timeForDataCollection(instructionCount))
+                mDataCollector->collectData(instructionCount, this);
 
             // do cosmic rays
             if (timeForCosmicRay(instructionCount))

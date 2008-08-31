@@ -53,6 +53,8 @@ public:
 
     u_int32_t   sizeForThisSlice(const Creature* inCreature, double inSliceSizeVariance);
 
+    u_int32_t   numCreatures() const { return mSlicerList.size(); }
+
     void        printCreatures() const;
 
 private:

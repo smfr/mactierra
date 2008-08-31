@@ -19,6 +19,10 @@
 #import "MT_World.h"
 
 #import "MTCreature.h"
+#import "MT_DataCollection.h"
+#import "MT_DataCollectors.h"
+
+#import "MTGraphController.h"
 #import "MTInventoryController.h"
 #import "MTWorldSettings.h"
 
@@ -97,6 +101,13 @@ using namespace MacTierra;
         
         [mInventoryController setInventory:mWorld ? mWorld->inventory() : NULL];
 
+        if (mWorld)
+        {
+            // set up some logging
+            mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
+            mWorld->dataCollector()->addLogger(mPopSizeLogger);
+        }
+        
         [self updateGenotypes];
     }
 }
@@ -167,6 +178,11 @@ using namespace MacTierra;
 - (MacTierra::World*)world
 {
     return mWorld;
+}
+
+- (MacTierra::PopulationSizeLogger*)popSizeLogger
+{
+    return mPopSizeLogger;
 }
 
 - (double)fullness
@@ -242,6 +258,8 @@ using namespace MacTierra;
     if ([mInventoryTableView window])
         [self updateGenotypes];
 
+    [mGraphController updateGraph];
+    
     [document updateChangeCount:NSChangeDone];
 }
 

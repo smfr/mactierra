@@ -22,6 +22,7 @@
 #include "MT_Engine.h"
 
 #include "MT_CellMap.h"
+#include "MT_DataCollection.h"
 #include "MT_ExecutionUnit.h"
 #include "MT_ExecutionUnit0.h"      // needed for serialization registration
 #include "MT_Inventory.h"
@@ -53,6 +54,8 @@ public:
     const Reaper&       reaper() const  { return mReaper; }
     
     Inventory*          inventory() const   { return mInventory; }
+
+    DataCollector*      dataCollector() const   { return mDataCollector; }
     
     Creature*           createCreature();
     void                eradicateCreature(Creature* inCreature);
@@ -74,6 +77,9 @@ public:
     const Settings&     settings() const { return mSettings; }
     void                setSettings(const Settings& inSettings);
 
+    // data
+    uint32_t            numAdultCreatures() const;
+    
     void                printCreatures() const;
 
     enum EWorldSerializationFormat {
@@ -94,6 +100,11 @@ protected:
 
     // handle the 'mal' instruction
     Creature*       allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
+
+    bool            timeForDataCollection(u_int64_t inInstructionCount) const
+    {
+        return (mDataCollector && mDataCollector->nextCollectionInstructions() == inInstructionCount);
+    }
 
     bool            timeForFlaw(u_int64_t inInstructionCount) const
     {
@@ -147,6 +158,8 @@ private:
         ar & BOOST_SERIALIZATION_NVP(mTimeSlicer);
         ar & BOOST_SERIALIZATION_NVP(mReaper);
         ar & BOOST_SERIALIZATION_NVP(mInventory);
+        
+        // serialize the mDataCollector?
 
         ar & BOOST_SERIALIZATION_NVP(mCurCreatureCycles);
         ar & BOOST_SERIALIZATION_NVP(mCurCreatureSliceCycles);
@@ -185,6 +198,8 @@ protected:
     Reaper          mReaper;
     
     Inventory*      mInventory;
+    
+    DataCollector*  mDataCollector;
 
     // runtime
     u_int32_t       mCurCreatureCycles;         // fAlive
