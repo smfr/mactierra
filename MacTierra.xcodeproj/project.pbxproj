@@ -45,12 +45,22 @@
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */ = {isa = PBXBuildFile; fileRef = 0F992C010E650BCF00EFF4D3 /* Instructions0.clr */; };
+		0F995BC20E68FD3C00AC5089 /* MTGraphController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */; };
+		0F995BEF0E68FF6700AC5089 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
+		0F995C580E69025000AC5089 /* NSViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F995C570E69025000AC5089 /* NSViewAdditions.m */; };
+		0F995C5D0E69029900AC5089 /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */; };
+		0F995CAA0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */; };
+		0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */; };
+		0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */; };
 		0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */; };
 		0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */; };
 		0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */; };
 		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
 		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0F9DEE3E0E57CDCD00E86DD6 /* CPUTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */; };
+		0FA496920E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA496910E69CBA3008750F6 /* MT_DataCollectors.cpp */; };
+		0FA496930E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA496910E69CBA3008750F6 /* MT_DataCollectors.cpp */; };
+		0FA496940E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FA496910E69CBA3008750F6 /* MT_DataCollectors.cpp */; };
 		0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FA56BAA0E5A64E20001E997 /* Localizable.strings */; };
 		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
 		0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB043FA0E5D2FCD0024DF67 /* MTInventoryGenotype.mm */; };
@@ -104,7 +114,6 @@
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
-		0FEDEAE40E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
 		0FEDEAE50E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
 		0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
 		0FFF645E0E4FE38E00404828 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
@@ -115,6 +124,18 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		0F995BFC0E68FF9A00AC5089 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C1660FE840EACC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -361,6 +382,15 @@
 		0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MutationRateDefaults.plist; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
+		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
+		0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGraphController.mm; sourceTree = "<group>"; };
+		0F995BEE0E68FF6700AC5089 /* GraphX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphX.framework; path = Prebuilt/GraphX.framework; sourceTree = SOURCE_ROOT; };
+		0F995C560E69025000AC5089 /* NSViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewAdditions.h; sourceTree = "<group>"; };
+		0F995C570E69025000AC5089 /* NSViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewAdditions.m; sourceTree = "<group>"; };
+		0F995C5B0E69029900AC5089 /* NSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayAdditions.h; sourceTree = "<group>"; };
+		0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSArrayAdditions.m; sourceTree = "<group>"; };
+		0F995CA80E6907EE00AC5089 /* MT_DataCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_DataCollection.h; sourceTree = "<group>"; };
+		0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_DataCollection.cpp; sourceTree = "<group>"; };
 		0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldController.h; sourceTree = "<group>"; };
 		0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldController.mm; sourceTree = "<group>"; };
 		0F9DE5D80E575DB300E86DD6 /* MacTierraDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierraDocument.h; sourceTree = "<group>"; };
@@ -372,6 +402,8 @@
 		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0F9DEE250E57CD4600E86DD6 /* CPUTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUTests.h; sourceTree = "<group>"; };
 		0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTests.cpp; sourceTree = "<group>"; };
+		0FA496900E69CBA3008750F6 /* MT_DataCollectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_DataCollectors.h; sourceTree = "<group>"; };
+		0FA496910E69CBA3008750F6 /* MT_DataCollectors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_DataCollectors.cpp; sourceTree = "<group>"; };
 		0FA56BAA0E5A64E20001E997 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInstructionCountFormatter.h; sourceTree = "<group>"; };
 		0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInstructionCountFormatter.m; sourceTree = "<group>"; };
@@ -476,6 +508,7 @@
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 				0F3210460E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */,
+				0F995BEF0E68FF6700AC5089 /* GraphX.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -804,6 +837,8 @@
 			children = (
 				0FB044290E5D325B0024DF67 /* MTInventoryController.h */,
 				0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */,
+				0F995BC00E68FD3C00AC5089 /* MTGraphController.h */,
+				0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */,
 				0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */,
 				0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */,
 			);
@@ -835,6 +870,10 @@
 		0FA56D280E5A87FA0001E997 /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				0F995C5B0E69029900AC5089 /* NSArrayAdditions.h */,
+				0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */,
+				0F995C560E69025000AC5089 /* NSViewAdditions.h */,
+				0F995C570E69025000AC5089 /* NSViewAdditions.m */,
 				0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */,
 				0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */,
 				0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */,
@@ -858,6 +897,10 @@
 				0FBB06760E5A984B007F2A6B /* MT_Cpu.cpp */,
 				0FBB06850E5A984B007F2A6B /* MT_Creature.h */,
 				0FBB06790E5A984B007F2A6B /* MT_Creature.cpp */,
+				0F995CA80E6907EE00AC5089 /* MT_DataCollection.h */,
+				0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */,
+				0FA496900E69CBA3008750F6 /* MT_DataCollectors.h */,
+				0FA496910E69CBA3008750F6 /* MT_DataCollectors.cpp */,
 				0FBB06770E5A984B007F2A6B /* MT_ExecutionUnit.h */,
 				0FBB067F0E5A984B007F2A6B /* MT_ExecutionUnit.cpp */,
 				0FBB06860E5A984B007F2A6B /* MT_ExecutionUnit0.h */,
@@ -938,6 +981,7 @@
 				0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 				0F9DE6540E57795B00E86DD6 /* OpenGL.framework */,
+				0F995BEE0E68FF6700AC5089 /* GraphX.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -1059,6 +1103,7 @@
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "MacTierra" */;
 			buildPhases = (
 				8D15AC2B0486D014006FF6A4 /* Resources */,
+				0F995BFC0E68FF9A00AC5089 /* CopyFiles */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
 			);
@@ -1158,8 +1203,9 @@
 				0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */,
 				0F13F88E0E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */,
 				0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */,
-				0FEDEAE40E62728000DEF441 /* MTWorldSettings.mm in Sources */,
 				0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
+				0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
+				0FA496940E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1186,6 +1232,8 @@
 				0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */,
 				0FEDEAE50E62728000DEF441 /* MTWorldSettings.mm in Sources */,
 				0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
+				0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
+				0FA496930E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1222,6 +1270,11 @@
 				0FB6C5DD0E61EAC60030536C /* MT_Settings.cpp in Sources */,
 				0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */,
 				0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
+				0F995BC20E68FD3C00AC5089 /* MTGraphController.mm in Sources */,
+				0F995C580E69025000AC5089 /* NSViewAdditions.m in Sources */,
+				0F995C5D0E69029900AC5089 /* NSArrayAdditions.m in Sources */,
+				0F995CAA0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
+				0FA496920E69CBA3008750F6 /* MT_DataCollectors.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1344,6 +1397,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Prebuilt\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -1365,6 +1422,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/Prebuilt\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
