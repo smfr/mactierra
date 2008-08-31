@@ -233,7 +233,9 @@ using namespace MacTierra;
     {
         const CreatureRange& curCell = *it;
         const Creature* curCreature = curCell.mData;
-        
+        if (curCreature->isEmbryo())
+            continue;
+
         address_t instPointer = curCreature->referencedLocation();
         bool isInCreature = curCreature->containsAddress(instPointer, soupSize);
 
