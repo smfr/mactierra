@@ -103,7 +103,7 @@ SlicerTests::runTest()
     for (u_int32_t i = 20; i < 1000; ++i)
     {
         testCreature->setLength(i);
-        testCreature->setSliceSize(mSlicer->initialSliceSizeForCreature(testCreature, 1));
+        testCreature->setSliceSize(mSlicer->initialSliceSizeForCreature(testCreature, mWorld->settings()));
         cout << "Length " << i << ": " << testCreature->sliceSize() << " actual:" << mSlicer->sizeForThisSlice(testCreature, kSliceSizeVariance) << endl;
     }
 

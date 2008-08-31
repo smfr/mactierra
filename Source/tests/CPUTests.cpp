@@ -37,11 +37,7 @@ CPUTests::setUp()
 {
     mWorld = new World();
     
-    mWorld->setFlawRate(0.0);
-    mWorld->setCosmicRate(0.0);
-    mWorld->setCopyErrorRate(0.0);
-    mWorld->setSliceSizeVariance(0);
-    mWorld->setDaughterAllocationStrategy(World::kPreferredAlloc);
+    mWorld->setSettings(Settings::zeroMutationSettings());
     
     mWorld->initializeSoup(kSoupSize);
 }
