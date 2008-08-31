@@ -34,11 +34,12 @@
 //************ScatterPlot DataSource
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
-  int factor = 8;
+  int factor = 10000;
   int variablility = 10;
+  const double xMax = 10000.0;
   
-  float x = (float)index*10/factor;
-  float y = 10*((float)(Random()%variablility)+index*index+variablility*.75)/(1.75*variablility+factor*factor);
+  float x = (float)index * xMax / factor;
+  float y = 10 * ((float)(Random()%variablility)+index*index+variablility*.75)/(1.75*variablility+factor*factor);
   
   
 //  if( (x > -2 && x < -1) || (x > 1 && x < 2) )

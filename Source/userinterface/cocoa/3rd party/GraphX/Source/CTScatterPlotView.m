@@ -123,7 +123,7 @@
       g_next = pointPointer->x;
       h_next = pointPointer->y;
       
-      if(isnan(h_next))
+      if (isnan(h_next))
       {
       }
       else
@@ -236,8 +236,8 @@
         [displacement appendBezierPath:curve];
         
         //move curve to x axis, then go across it to the begining of the segment
-        [displacement lineToPoint:NSMakePoint(x,yorigin)];
-        [displacement lineToPoint:NSMakePoint(firstPoint,yorigin)];
+        [displacement lineToPoint:NSMakePoint(x, yorigin)];
+        [displacement lineToPoint:NSMakePoint(firstPoint, yorigin)];
         
         //fill area under curve
         [[graphColors colorWithKey:@"fill"] set];
