@@ -10,20 +10,36 @@
 
 @class MTWorldController;
 
+
+typedef enum ESoupStatistic {
+    kPopulationSize = 1,
+    kMeanCreatureSize,
+    kNumGenotypes,
+    kMeanOffspring,
+    kCommonestGenotypeFitness,
+
+    kCreatureSizeFrequencies
+    
+} ESoupStatistic;
+
+
+
 @interface MTGraphController : NSObject
 {
     IBOutlet MTWorldController*  mWorldController;
     IBOutlet NSView*    mGraphContainerView;
-
-    // temp
-    NSValue*            mDataValue;
-    u_int32_t           mCollectionInterval;
     
+    NSArray*            mGraphAdaptors;
     NSArray*            mGraphTypes;
+    
+    NSInteger           currentGraphIndex;
 }
 
+// returns arrays of dicts with enum and readable names
 @property (readonly) NSArray* availableGraphTypes;
+@property (assign) NSInteger currentGraphIndex;
 
+- (void)worldChanged;
 - (void)updateGraph;
 
 @end

@@ -12,12 +12,14 @@
 namespace MacTierra {
     class World;
     class PopulationSizeLogger;
+    class MeanCreatureSizeLogger;
 };
 
 @class MTCreature;
 @class MTGraphController;
 @class MTInventoryController;
 @class MTSoupView;
+@class MTWorldThread;
 @class MTWorldSettings;
 
 @interface MTWorldController : NSObject
@@ -42,15 +44,21 @@ namespace MacTierra {
 
     // temp
     MacTierra::PopulationSizeLogger* mPopSizeLogger;
+    MacTierra::MeanCreatureSizeLogger* mMeanSizeLogger;
     
+    // threading-related
+    MTWorldThread*          worldThread;
+    NSLock*                 worldLock;
     
     MTCreature*             selectedCreature;
     
-    BOOL                    running;
-    NSTimer*                mRunTimer;      // hacky
+    BOOL                    worldRunning;
+    NSTimer*                mUpdateTimer;
     
     u_int64_t               mLastInstructions;
+    NSInteger               mLastNumCreatures;
     CFAbsoluteTime          mLastInstTime;
+    double                  mLastFullness;
 
     double                  instructionsPerSecond;
 }
@@ -60,15 +68,20 @@ namespace MacTierra {
 
 @property (retain) MTCreature* selectedCreature;
 
-@property (assign) BOOL running;
+// threading
+@property (retain) MTWorldThread* worldThread;
+@property (retain) NSLock* worldLock;
+
+@property (assign) BOOL worldRunning;
 
 // for settings panel
 @property (retain) MTWorldSettings* worldSettings;
 @property (assign) BOOL creatingNewSoup;
 
 //@property (readonly) MacTierra::World* world;
-// temp
+// temp. Move to graph controller?
 @property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
+@property (readonly) MacTierra::MeanCreatureSizeLogger* meanSizeLogger;
 
 
 @property (assign) double instructionsPerSecond;
@@ -113,6 +126,8 @@ namespace MacTierra {
 - (IBAction)okSettingsPanel:(id)sender;
 - (IBAction)cancelSettingsPanel:(id)sender;
 
-
+// threading
+- (void)lockWorld;
+- (void)unlockWorld;
 
 @end

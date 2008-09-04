@@ -28,16 +28,40 @@
 
 using namespace MacTierra;
 
-
 @interface MTWorldController(Private)
 
-- (void)startRunTimer;
-- (void)stopRunTimer;
+- (void)startUpdateTimer;
+- (void)stopUpdateTimer;
 - (void)setWorld:(World*)inWorld;
 
 - (void)updateSoup;
 - (void)updateGenotypes;
 - (void)updateDebugPanel;
+
+- (void)terminateWorldThread;
+- (void)createWorldThread;
+- (void)runWorld;
+- (void)pauseWorld;
+- (void)iterate:(NSUInteger)inNumCycles;
+
+@end
+
+#pragma mark -
+
+@interface MTWorldThread : NSThread
+{
+    MTWorldController*  mWorldController;       // not retained
+    NSCondition*        runningCondition;
+    BOOL                running;
+}
+
+- (id)initWithWorldController:(MTWorldController*)inController;
+
+@property (retain) NSCondition* runningCondition;
+@property (assign) BOOL running;
+
+- (void)run;
+- (void)pause;
 
 @end
 
@@ -46,16 +70,18 @@ using namespace MacTierra;
 @implementation MTWorldController
 
 @synthesize document;
-@synthesize running;
+@synthesize worldRunning;
 @synthesize instructionsPerSecond;
 @synthesize selectedCreature;
 
 @synthesize worldSettings;
 @synthesize creatingNewSoup;
+@synthesize worldThread;
+@synthesize worldLock;
 
 + (void)initialize
 {
-    [self setKeys:[NSArray arrayWithObject:@"running"]
+    [self setKeys:[NSArray arrayWithObject:@"worldRunning"]
                                 triggerChangeNotificationsForDependentKey:@"playPauseButtonTitle"];
 }
 
@@ -63,6 +89,7 @@ using namespace MacTierra;
 {
     if ((self = [super init]))
     {
+        worldLock = [[NSLock alloc] init];
     }
     return self;
 }
@@ -70,11 +97,12 @@ using namespace MacTierra;
 - (void)dealloc
 {
     self.selectedCreature = nil;
-    
     [mSoupView setWorld:NULL];
     [mSoupView release];
     
     delete mWorld;
+
+    self.worldLock = nil;
     [super dealloc];
 }
 
@@ -92,6 +120,8 @@ using namespace MacTierra;
 {
     if (inWorld != mWorld)
     {
+        [self terminateWorldThread];
+        
         [mSoupView setWorld:nil];
         delete mWorld;
         [mInventoryController setInventory:nil];
@@ -99,15 +129,25 @@ using namespace MacTierra;
         mWorld = inWorld;
         [mSoupView setWorld:mWorld];
         
+        [self createWorldThread];
+        
         [mInventoryController setInventory:mWorld ? mWorld->inventory() : NULL];
 
         if (mWorld)
         {
+            const NSUInteger kMaxDataPoints = 500;
+            
             // set up some logging
             mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
+            mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
             mWorld->dataCollector()->addLogger(mPopSizeLogger);
+
+            mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
+            mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
+            mWorld->dataCollector()->addLogger(mMeanSizeLogger);
         }
         
+        [mGraphController worldChanged];
         [self updateGenotypes];
     }
 }
@@ -121,18 +161,21 @@ using namespace MacTierra;
 
 - (IBAction)toggleRunning:(id)sender
 {
-    if (running)
+    if (worldRunning)
     {
-        [self stopRunTimer];
-        self.running = NO;
+        [self stopUpdateTimer];
+        [self pauseWorld];
+        self.worldRunning = NO;
+
         // hack to update genotypes on pause
         [self updateGenotypes];
         [self updateDebugPanel];
     }
     else
     {
-        [self startRunTimer];
-        self.running = YES;
+        [self startUpdateTimer];
+        [self runWorld];
+        self.worldRunning = YES;
     }
 }
 
@@ -172,7 +215,7 @@ using namespace MacTierra;
 
 - (NSString*)playPauseButtonTitle
 {
-    return running ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
+    return worldRunning ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
 }
 
 - (MacTierra::World*)world
@@ -185,25 +228,31 @@ using namespace MacTierra;
     return mPopSizeLogger;
 }
 
+- (MacTierra::MeanCreatureSizeLogger*)meanSizeLogger
+{
+    return mMeanSizeLogger;
+}
+
+
 - (double)fullness
 {
-    return mWorld ? mWorld->cellMap()->fullness() : 0.0;
+    return mLastFullness;
 }
 
 - (u_int64_t)totalInstructions
 {
-    return mWorld ? mWorld->timeSlicer().instructionsExecuted() : 0;
+    return mLastInstructions;
 }
 
 - (NSInteger)numberOfCreatures
 {
-    return mWorld ? mWorld->cellMap()->numCreatures() : 0;
+    return mLastNumCreatures;
 }
 
 - (void)documentClosing
 {
     // have to break ref cycles
-    [self stopRunTimer];
+    [self stopUpdateTimer];
     
     [self setWorld:NULL];
     self.selectedCreature = nil;
@@ -211,11 +260,12 @@ using namespace MacTierra;
 
 #pragma mark -
 
-- (void)startRunTimer
+- (void)startUpdateTimer
 {
-    mRunTimer = [[NSTimer scheduledTimerWithTimeInterval:0.01
+    const NSTimeInterval kUpdateInterval = 0.25;
+    mUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:kUpdateInterval
                                                   target:self
-                                                selector:@selector(runTimerFired:)
+                                                selector:@selector(updateTimerFired:)
                                                 userInfo:nil
                                                  repeats:YES] retain];       // retain cycle
 
@@ -223,43 +273,45 @@ using namespace MacTierra;
     mLastInstructions = mWorld->timeSlicer().instructionsExecuted();
 }
 
-- (void)stopRunTimer
+- (void)stopUpdateTimer
 {
-    [mRunTimer invalidate];
-    [mRunTimer release];
-    mRunTimer = nil;
+    [mUpdateTimer invalidate];
+    [mUpdateTimer release];
+    mUpdateTimer = nil;
 }
 
-- (void)runTimerFired:(NSTimer*)inTimer
+- (void)updateTimerFired:(NSTimer*)inTimer
 {
     [self willChangeValueForKey:@"fullness"];
     [self willChangeValueForKey:@"totalInstructions"];
     [self willChangeValueForKey:@"numberOfCreatures"];
     
-    const u_int32_t kCycleCount = 100000;
-    if (mWorld)
-        mWorld->iterate(kCycleCount);
+    [self lockWorld];
+    {
+        u_int64_t curInstructions = mWorld->timeSlicer().instructionsExecuted();
+        CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
-    u_int64_t curInstructions = mWorld->timeSlicer().instructionsExecuted();
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
+        self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
+        
+        mLastInstTime = currentTime;
+        mLastInstructions = curInstructions;
+        mLastNumCreatures = mWorld->cellMap()->numCreatures();
+        mLastFullness = mWorld->cellMap()->fullness();
+        
+        [self updateSoup];
+        
+        // hack to avoid slowing things down too much
+        if ([mInventoryTableView window])
+            [self updateGenotypes];
 
-    self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
-    
-    mLastInstTime = currentTime;
-    mLastInstructions = curInstructions;
-    
-    [self updateSoup];
+        [mGraphController updateGraph];
+    }
+    [self unlockWorld];
 
     [self didChangeValueForKey:@"fullness"];
     [self didChangeValueForKey:@"totalInstructions"];
     [self didChangeValueForKey:@"numberOfCreatures"];
-    
-    // hack to avoid slowing things down too much
-    if ([mInventoryTableView window])
-        [self updateGenotypes];
 
-    [mGraphController updateGraph];
-    
     [document updateChangeCount:NSChangeDone];
 }
 
@@ -384,6 +436,52 @@ using namespace MacTierra;
 
 #pragma mark -
 
+- (void)createWorldThread
+{
+    self.worldThread = [[MTWorldThread alloc] initWithWorldController:self];
+    [worldThread start];
+}
+
+- (void)terminateWorldThread
+{
+    if (worldThread)
+    {
+        [worldThread run];
+        [worldThread cancel];
+        while (![worldThread isFinished])
+            [NSThread sleepForTimeInterval:0.001];
+        self.worldThread = nil;
+    }
+}
+
+- (void)runWorld
+{
+    [worldThread run];
+}
+
+- (void)pauseWorld
+{
+    [worldThread pause];
+}
+
+- (void)iterate:(NSUInteger)inNumCycles
+{
+    if (mWorld)
+        mWorld->iterate(inNumCycles);
+}
+
+- (void)lockWorld
+{
+    [worldLock lock];
+}
+
+- (void)unlockWorld
+{
+    [worldLock unlock];
+}
+
+#pragma mark -
+
 - (NSData*)worldData
 {
     if (!mWorld)
@@ -490,5 +588,63 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     return YES;
 }
 
+@end
+
+@implementation MTWorldThread
+
+@synthesize runningCondition;
+@synthesize running;
+
+- (id)initWithWorldController:(MTWorldController*)inController
+{
+    if ((self = [super init]))
+    {
+        mWorldController = inController;
+        [self setName:@"World thread"];
+        runningCondition = [[NSCondition alloc] init];
+        running = false;
+    }
+    return self;
+}
+
+- (void)dealloc
+{
+    self.runningCondition = nil;
+    [super dealloc];
+}
+
+- (void)main
+{
+    while (1)
+    {
+        [runningCondition lock];
+        while (!running)
+            [runningCondition wait];
+
+        if ([self isCancelled])
+            break;
+
+        const NSUInteger kNumCycles = 10000;
+        [mWorldController iterate:kNumCycles];
+
+        [runningCondition unlock];
+    }
+}
+
+- (void)run
+{
+    [runningCondition lock];
+    running = YES;
+    [runningCondition signal];
+    [runningCondition unlock];
+}
+
+- (void)pause
+{
+    [runningCondition lock];
+    running = NO;
+    [runningCondition signal];
+    [runningCondition unlock];
+}
 
 @end

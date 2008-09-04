@@ -103,6 +103,8 @@ public:
     double      fullness() const;
     u_int32_t   numCreatures() const { return mCells.size(); }
 
+    u_int32_t   totalAdultSize(u_int32_t& outNumAdults) const;
+    
     void        printCreatures() const;
 
     // public for testing

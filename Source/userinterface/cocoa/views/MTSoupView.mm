@@ -119,6 +119,8 @@ using namespace MacTierra;
 
 - (void)drawRect:(NSRect)inDirtyRect
 {
+    [mWorldController lockWorld];
+
     [super drawRect:inDirtyRect];
     
     [NSGraphicsContext saveGraphicsState];
@@ -131,6 +133,8 @@ using namespace MacTierra;
         [self drawInstructionPointers:inDirtyRect];
 
     [NSGraphicsContext restoreGraphicsState];
+
+    [mWorldController unlockWorld];
 }
 
 - (void)setScalingCTM

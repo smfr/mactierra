@@ -26,6 +26,7 @@
 
 #include <boost/serialization/serialization.hpp>
 
+
 #include "MT_Cellmap.h"
 #include "MT_Creature.h"
 #include "MT_ExecutionUnit0.h"
@@ -144,6 +145,14 @@ World::numAdultCreatures() const
     return mTimeSlicer.numCreatures();
 }
 
+double
+World::meanCreatureSize() const
+{
+    u_int32_t numAdults;
+    u_int32_t totalSize = mCellMap->totalAdultSize(numAdults);
+    return (double)totalSize / numAdults;
+}
+
 void
 World::printCreatures() const
 {
@@ -156,7 +165,6 @@ World::printCreatures() const
         cout << curCreature->creatureID() << " " << curCreature->creatureName() << endl;
     }
 }
-
 
 Creature*
 World::insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength)

@@ -323,6 +323,30 @@ CellMap::fullness() const
     return (double)mSpaceUsed / mSize;
 }
 
+u_int32_t
+CellMap::totalAdultSize(u_int32_t& outNumAdults) const
+{
+    u_int32_t totalSize = 0;
+    u_int32_t numAdults = 0;
+    
+    // we could keep running totals if we are notified when creatures are born and die
+    for (CreatureList::const_iterator it = mCells.begin();
+         it != mCells.end();
+         ++it)
+    {
+        CreatureRange   cell = (*it);
+        const Creature*       creature = cell.mData;
+        if (!creature->isEmbryo())
+        {
+            ++numAdults;
+            totalSize += cell.length();
+        }
+    }
+    
+    outNumAdults = numAdults;
+    return totalSize;
+}
+
 void
 CellMap::printCreatures() const
 {

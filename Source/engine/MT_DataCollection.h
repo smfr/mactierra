@@ -29,19 +29,24 @@ public:
     }
     virtual ~DataLogger() {}
 
-    void            collect(u_int64_t inInstructionCount, const World* inWorld)
-    {
-        mLastCollectionTime = inInstructionCount;
-        collectData(inInstructionCount, inWorld);
-    }
+    // override to do special processing before/after data collection
+    virtual void collect(u_int64_t inInstructionCount, const World* inWorld);
     
     u_int64_t       lastCollectionTime() const { return mLastCollectionTime; }
 
 protected:
 
+    // subclasses should override to collect their type of data
     virtual void    collectData(u_int64_t inInstructionCount, const World* inWorld) = 0;
 
+    friend class DataCollector;
+    
+    void            setCollector(DataCollector* inCollector) { mOwningCollector = inCollector; }
+    DataCollector*  collector() const { return mOwningCollector; }
+    
 protected:
+    
+    DataCollector*  mOwningCollector;
     u_int64_t       mLastCollectionTime;
 };
 
@@ -57,7 +62,7 @@ public:
 };
 
 
-
+// The DataCollector runs all of the installed loggers at the given collection interval.
 class DataCollector
 {
 public:
@@ -73,6 +78,7 @@ public:
     void            setCollectionInterval(u_int64_t inInterval, u_int64_t inCurrentInstructionCount);
 
     void            addLogger(DataLogger* inLogger);
+    bool            removeLogger(DataLogger* inLogger);
 
 protected:
     

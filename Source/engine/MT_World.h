@@ -16,6 +16,8 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 
+#include <boost/thread.hpp>
+
 #define HAVE_BOOST_SERIALIZATION 1
 #include <RandomLib/Random.hpp>
 
@@ -66,7 +68,7 @@ public:
     // execute one cycle for the current creature; at the end if its slice, execute all other creatures
     // and then step the same creature again
     void                stepCreature(Creature* inCreature);
-    
+
     RandomLib::Random&  RNG()   { return mRNG; }
 
     bool                copyErrorPending() const { return mCopyErrorPending; }
@@ -79,6 +81,7 @@ public:
 
     // data
     uint32_t            numAdultCreatures() const;
+    double              meanCreatureSize() const;   // counts adults only
     
     void                printCreatures() const;
 
@@ -133,7 +136,6 @@ protected:
     // these add and remove from the time slicer and reaper queues.
     void            creatureAdded(Creature* inCreature);
     void            creatureRemoved(Creature* inCreature);
-
 
 private:
     friend class ::boost::serialization::access;
@@ -205,15 +207,12 @@ protected:
     u_int32_t       mCurCreatureCycles;         // fAlive
     u_int32_t       mCurCreatureSliceCycles;    // fCurCpuSliceSize
 
-
-
     bool            mCopyErrorPending;
     u_int32_t       mCopiesSinceLastError;
     u_int32_t       mNextCopyError;
 
     u_int64_t       mNextFlawInstruction;
-    u_int64_t       mNextCosmicRayInstruction;
-
+    u_int64_t       mNextCosmicRayInstruction;    
 };
 
 

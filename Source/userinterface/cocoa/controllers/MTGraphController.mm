@@ -6,6 +6,8 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
+#import "NSAttributedStringAdditions.h"
+
 #import "MTGraphController.h"
 
 #import <algorithm>
@@ -28,96 +30,296 @@
 
 #pragma mark -
 
-
-@implementation MTGraphController
-
-- (void)awakeFromNib
+@interface MTGraphAdapter : NSObject
 {
-    [self setupLineGraph];
+    MTGraphController*          mController;    // not owned (it owns us)
+    MacTierra::DataLogger*      dataLogger;     // owned by the world controller
+    CTGraphView*                graphView;
+}
+
+@property (retain) CTGraphView* graphView;
+@property (assign) MacTierra::DataLogger* dataLogger;
+
++ (NSDictionary*)axisLabelAttributes;
+
+- (id)initWithGraphController:(MTGraphController*)inController dataLogger:(MacTierra::DataLogger*)inLogger;
+- (void)setupGraph;
+- (void)updateGraph;
+
+@end
+
+#pragma mark -
+
+static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
+{
+    if (inMaxValue == 0.0)
+    {
+        *outNumDivisions = 5;
+        return 1.0;
+    }
+    
+    // map the value to between 0.1 and 1
+    double dec = log10(inMaxValue);
+    double power = pow(10.0, ceil(dec));
+    double mapped = inMaxValue / power;
+    
+    double max;
+    if (mapped <= 0.2)
+    {
+        max = 0.2 * power;
+        *outNumDivisions = 4;
+    }
+    else if (mapped <= 0.5)
+    {
+        max = 0.5 * power;
+        *outNumDivisions = 5;
+    }
+    else
+    {
+        max = 1.0 * power;
+        *outNumDivisions = 5;
+    }
+    
+    return max;
+}
+
+@implementation MTGraphAdapter
+
+@synthesize dataLogger;
+@synthesize graphView;
+
++ (NSDictionary*)axisLabelAttributes
+{
+    static NSDictionary* sLabelAttributes = nil;
+    
+    if (!sLabelAttributes)
+    {
+        NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setAlignment:NSCenterTextAlignment];
+    
+        sLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+                [NSFont fontWithName:@"Lucida Grande" size:11], NSFontAttributeName,
+                                                        pStyle, NSParagraphStyleAttributeName,
+                                                                nil] retain];
+        [pStyle release];
+    }
+    return sLabelAttributes;
+}
+
+- (id)initWithGraphController:(MTGraphController*)inController dataLogger:(MacTierra::DataLogger*)inLogger
+{
+    if ((self = [super init]))
+    {
+        mController = inController;
+        dataLogger = inLogger;
+    }
+    return self;
 }
 
 - (void)dealloc
 {
-    [mDataValue release];
+    self.graphView = nil;
+    [super dealloc];
+}
+
+- (void)setupGraph
+{
+    // for subclassers
+}
+
+- (void)updateGraph
+{
+    // for subclassers
+}
+
+@end
+
+#pragma mark -
+
+@interface MTPopulationSizeGraphAdapter : MTGraphAdapter
+@end
+
+@implementation MTPopulationSizeGraphAdapter
+
+- (void)setupGraph
+{
+    NSAssert(!graphView, @"Should not have created graph view yet");
+    
+    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    [graphView setShowXTickMarks:NO];
+    [graphView setShowTitle:NO];
+    [graphView setShowYLabel:NO];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [(CTScatterPlotView*)graphView setDataSource:self];
+}
+
+- (void)updateGraph
+{
+    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
+
+    MacTierra::PopulationSizeLogger* popSizeLogger = dynamic_cast<MacTierra::PopulationSizeLogger*>(dataLogger);
+    if (!popSizeLogger) return;
+
+    [graphView setXMin:0.0];
+    [graphView setXMax:std::max((double)popSizeLogger->dataCount(), 1.0)];
+
+    u_int32_t numDivisions;
+    double yMax = graphAxisMax(popSizeLogger->maxValue(), &numDivisions);
+    [graphView setYMax:yMax];
+    [graphView setYScale:yMax / numDivisions];
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+{
+    MacTierra::PopulationSizeLogger* popSizeLogger = dynamic_cast<MacTierra::PopulationSizeLogger*>(dataLogger);
+    if (popSizeLogger && index < popSizeLogger->dataCount())
+    {
+        *(*point) = NSMakePoint(index, popSizeLogger->data()[index]);
+        return;
+    }
+    
+    *point = NULL;
+}
+
+@end
+
+#pragma mark -
+
+@interface MTCreatureSizeGraphAdapter : MTGraphAdapter
+@end
+
+@implementation MTCreatureSizeGraphAdapter
+
+- (void)setupGraph
+{
+    NSAssert(!graphView, @"Should not have created graph view yet");
+    
+    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    [graphView setShowXTickMarks:NO];
+    [graphView setShowTitle:NO];
+    [graphView setShowYLabel:NO];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [(CTScatterPlotView*)graphView setDataSource:self];
+}
+
+- (void)updateGraph
+{
+    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
+
+    MacTierra::MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MacTierra::MeanCreatureSizeLogger*>(dataLogger);
+    if (!creatureSizeLogger) return;
+
+    [graphView setXMin:0.0];
+    [graphView setXMax:std::max((double)creatureSizeLogger->dataCount(), 1.0)];
+
+    u_int32_t numDivisions;
+    double yMax = graphAxisMax(creatureSizeLogger->maxValue(), &numDivisions);
+    [graphView setYMax:yMax];
+    [graphView setYScale:yMax / numDivisions];
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+{
+    MacTierra::MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MacTierra::MeanCreatureSizeLogger*>(dataLogger);
+    if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
+    {
+        *(*point) = NSMakePoint(index, creatureSizeLogger->data()[index]);
+        return;
+    }
+    
+    *point = NULL;
+}
+
+@end
+
+#pragma mark -
+
+NSString* const kGraphLabelKey      = @"graph_label";
+NSString* const kGraphTypeKey       = @"graph_type";
+NSString* const kGraphAdaptorKey    = @"graph_adaptor";
+
+@implementation MTGraphController
+
+@synthesize currentGraphIndex;
+
+- (void)awakeFromNib
+{
+    self.currentGraphIndex = 0;
+}
+
+- (void)dealloc
+{
+    [mGraphAdaptors release];
+    [mGraphTypes release];
     [super dealloc];
 }
 
 - (NSArray*)availableGraphTypes
 {
-    return mGraphTypes;
+    return [NSArray arrayWithObjects:
+
+        [NSDictionary dictionaryWithObjectsAndKeys:
+            NSLocalizedString(@"PopulationSize", @""), kGraphLabelKey,
+                                                       nil],
+    
+        [NSDictionary dictionaryWithObjectsAndKeys:
+                NSLocalizedString(@"MeanCreatureSize", @""), kGraphLabelKey,
+                                                       nil],
+        nil];
 }
 
 #pragma mark -
 
-- (void)setupLineGraph
+- (void)setupGraphAdaptors
 {
-    CTScatterPlotView* graphView = [[CTScatterPlotView alloc] initWithFrame:[mGraphContainerView bounds]];
-    [graphView setDataSource:self];
+    [mGraphAdaptors release]; mGraphAdaptors = nil;
 
-    [mGraphContainerView addFullSubview:graphView replaceExisting:YES fill:YES];
-    [graphView release];
+    NSMutableArray*     adaptors = [NSMutableArray array];
+    
+    if (mWorldController.popSizeLogger)
+    {
+        MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.popSizeLogger];
+        [popSizeGrapher setupGraph];
+        [adaptors addObject:popSizeGrapher];
+        [popSizeGrapher release];
+    }
+    
+    if (mWorldController.meanSizeLogger)
+    {
+        MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.meanSizeLogger];
+        [creatureSizeGrapher setupGraph];
+        [adaptors addObject:creatureSizeGrapher];
+        [creatureSizeGrapher release];
+    }
+    
+    mGraphAdaptors = [adaptors retain];
 }
 
-- (void)setupBarGraph
+- (void)worldChanged
 {
-    CTHistogramView* graphView = [[CTHistogramView alloc] initWithFrame:[mGraphContainerView bounds]];
-    [graphView setDataSource:self];
-
-    [mGraphContainerView addFullSubview:graphView replaceExisting:YES fill:YES];
-    [graphView release];
+    [self setupGraphAdaptors];
+    self.currentGraphIndex = 0;
 }
 
 - (void)updateGraph
 {
-    // FIXME: assume line graph for now
-    CTGraphView*    graphView = (CTGraphView*)[mGraphContainerView firstSubview];
+    [[mGraphAdaptors objectAtIndex:currentGraphIndex] updateGraph];
+}
 
-    MacTierra::PopulationSizeLogger* popSizeLogger = mWorldController.popSizeLogger;
-    if (!popSizeLogger) return;
+- (void)switchToAdaptor:(MTGraphAdapter*)inNewAdaptor
+{
+    if (inNewAdaptor)
+    {
+        [mGraphContainerView addFullSubview:[inNewAdaptor graphView] replaceExisting:YES fill:YES];
+    }
+}
 
-    std::vector<u_int32_t>* dataPtr = new std::vector<u_int32_t>(popSizeLogger->data());
-
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)dataPtr->size(), 1.0)];
-
-    // FIXME: compute
-    [graphView setYMax:3000.0];
-    [graphView setYScale:500.0];
-
-    mCollectionInterval = popSizeLogger->lastCollectionTime() / dataPtr->size();
+- (void)setCurrentGraphIndex:(NSInteger)inIndex
+{
+    currentGraphIndex = inIndex;
     
-    [mDataValue release];
-    mDataValue = [[NSValue valueWithPointer:dataPtr] retain];
+    [self switchToAdaptor:[mGraphAdaptors objectAtIndex:currentGraphIndex]];
 }
-
-#pragma mark -
-
-// data source methods
-
-// histogram
- - (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit
-{
-    return 0.0f;
-}
-
-// scatter plot
-- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
-{
-    if (mDataValue)
-    {
-        std::vector<u_int32_t>* dataPtr = (std::vector<u_int32_t>*)[mDataValue pointerValue];
-
-        if (index < (*dataPtr).size())
-            *(*point) = NSMakePoint(index, (*dataPtr)[index]);
-        else
-            *point = NULL;
-    }
-    else
-    {
-        *point = NULL;
-    }
-}
-
 
 
 @end
