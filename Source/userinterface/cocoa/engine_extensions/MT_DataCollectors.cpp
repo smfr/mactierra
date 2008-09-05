@@ -8,16 +8,17 @@
  */
 
 #include "MT_DataCollectors.h"
-
 #include "MT_World.h"
 
 namespace MacTierra {
+
+using namespace std;
 
 // collectData is called on the engine thread
 void
 PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
-    appendValue(inWorld->numAdultCreatures());
+    appendValue(inInstructionCount, inWorld->numAdultCreatures());
 }
 
 #pragma mark -
@@ -26,7 +27,7 @@ PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const World* inW
 void
 MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
-    appendValue(inWorld->meanCreatureSize());
+    appendValue(inInstructionCount, inWorld->meanCreatureSize());
 }
 
 

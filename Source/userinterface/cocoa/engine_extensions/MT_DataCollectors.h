@@ -27,10 +27,11 @@ class SimpleDataLogger : public DataLogger
 {
 public:
     typedef T data_type;
+    typedef std::pair<u_int64_t, data_type> data_pair;
 
     SimpleDataLogger()
-    : mCollectionInterval(1)
-    , mCollectionCount(0)
+    : mNextCollectionInstructions(0)
+    , mCollectionInterval(1)
     , mMaxDataCount(ULONG_MAX)
     , mMaxValue(0)
     {
@@ -38,8 +39,7 @@ public:
 
     virtual void collect(u_int64_t inInstructionCount, const World* inWorld)
     {
-        ++mCollectionCount;
-        if ((mCollectionCount % mCollectionInterval) == 0)
+        if (inInstructionCount >= mNextCollectionInstructions)
         {
             DataLogger::collect(inInstructionCount, inWorld);
         
@@ -47,12 +47,12 @@ public:
             if (dataCount() > maxDataCount())
                 pruneData();
             
-            mCollectionCount = 0;
+            mNextCollectionInstructions = inInstructionCount + mCollectionInterval;
         }
     }
 
     // engine needs to be locked while using this data
-    const std::vector<data_type>& data() const { return mData; }
+    const std::vector<data_pair>& data() const { return mData; }
     
     u_int32_t   dataCount() const { return mData.size(); }
 
@@ -77,32 +77,52 @@ protected:
         {
             // copy to a new vector rather than removing every other entry,
             // would would be slow
-            std::vector<data_type> newData;
+            std::vector<data_pair> newData;
             const size_t dataSize = mData.size();
             newData.reserve(dataSize / 2);
 
-            for (size_t i = 0; i < dataSize / 2; ++i)
+            for (size_t i = 0; i <= dataSize / 2; ++i)
                 newData.push_back(mData[2 * i]);
-                
+            
             mData = newData;
             // now collect half as often
-            ++mCollectionInterval;
+            mCollectionInterval *= 2;
         }
     }
 
-    void appendValue(data_type inValue)
+/*
+    void printData()
     {
-        mData.push_back(inValue);
+        std::cout << "Data" << std::endl;
+        const size_t dataSize = mData.size();
+        for (size_t i = 0; i < dataSize; ++i)
+        {
+            const data_pair& curData = mData[i];
+            std::cout << curData.first << "  " << curData.second << std::endl;
+        }
+    }
+*/    
+
+    void appendValue(u_int64_t inInstructionCount, data_type inValue)
+    {
+        mData.push_back(data_pair(inInstructionCount, inValue));
         mMaxValue = std::max(inValue, mMaxValue);
     }
     
+    virtual void collectorChanged()
+    {
+        if (mOwningCollector)
+            mCollectionInterval = mOwningCollector->collectionInterval();
+    }
+
 protected:
 
+    u_int64_t       mNextCollectionInstructions;
     u_int32_t       mCollectionInterval;
     u_int32_t       mCollectionCount;
 
     u_int32_t       mMaxDataCount;
-    std::vector<data_type>  mData;
+    std::vector<data_pair>  mData;
     data_type               mMaxValue;
 };
 

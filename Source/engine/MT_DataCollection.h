@@ -41,9 +41,15 @@ protected:
 
     friend class DataCollector;
     
-    void            setCollector(DataCollector* inCollector) { mOwningCollector = inCollector; }
+    void            setCollector(DataCollector* inCollector)
+    {
+        mOwningCollector = inCollector;
+        collectorChanged();
+    }
     DataCollector*  collector() const { return mOwningCollector; }
-    
+
+    virtual void    collectorChanged() {}
+
 protected:
     
     DataCollector*  mOwningCollector;

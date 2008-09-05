@@ -174,7 +174,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::PopulationSizeLogger* popSizeLogger = dynamic_cast<MacTierra::PopulationSizeLogger*>(dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
     {
-        *(*point) = NSMakePoint(index, popSizeLogger->data()[index]);
+        *(*point) = NSMakePoint(index, popSizeLogger->data()[index].second);
         return;
     }
     
@@ -223,7 +223,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MacTierra::MeanCreatureSizeLogger*>(dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
-        *(*point) = NSMakePoint(index, creatureSizeLogger->data()[index]);
+        *(*point) = NSMakePoint(index, creatureSizeLogger->data()[index].second);
         return;
     }
     
