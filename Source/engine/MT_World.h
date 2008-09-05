@@ -64,7 +64,7 @@ public:
     
     Creature*           insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
     
-    void                iterate(uint32_t inNumCycles);
+    void                iterate(u_int32_t inNumCycles);
     // execute one cycle for the current creature; at the end if its slice, execute all other creatures
     // and then step the same creature again
     void                stepCreature(Creature* inCreature);
@@ -79,8 +79,11 @@ public:
     const Settings&     settings() const { return mSettings; }
     void                setSettings(const Settings& inSettings);
 
+    void                setInitialRandomSeed(u_int32_t inIntialSeed);
+    u_int32_t           initialRandomSeed() const { return mInitialRandomSeed; }
+
     // data
-    uint32_t            numAdultCreatures() const;
+    u_int32_t           numAdultCreatures() const;
     double              meanCreatureSize() const;   // counts adults only
     
     void                printCreatures() const;
@@ -147,6 +150,8 @@ private:
 
         ar & BOOST_SERIALIZATION_NVP(mSettings);
 
+        ar & BOOST_SERIALIZATION_NVP(mInitialRandomSeed);
+
         ar & BOOST_SERIALIZATION_NVP(mRNG);
         ar & BOOST_SERIALIZATION_NVP(mSoupSize);
         
@@ -178,7 +183,8 @@ private:
 protected:
 
     Settings            mSettings;
-
+    u_int32_t           mInitialRandomSeed;
+    
     mutable RandomLib::Random   mRNG;
 
     u_int32_t           mSoupSize;

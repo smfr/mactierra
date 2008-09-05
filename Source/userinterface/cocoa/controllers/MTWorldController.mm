@@ -349,6 +349,7 @@ using namespace MacTierra;
 
     self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorld->settings()] autorelease];
     self.worldSettings.soupSize = mWorld->soupSize();
+    self.worldSettings.randomSeed = mWorld->initialRandomSeed();
     
     [NSApp beginSheet:mSettingsPanel
        modalForWindow:[document windowForSheet]
@@ -394,7 +395,7 @@ using namespace MacTierra;
             BOOST_ASSERT(!mWorld);
             
             MacTierra::World* newWorld = new World();
-            newWorld->RNG().Reseed(self.worldSettings.randomSeed);
+            newWorld->setInitialRandomSeed(self.worldSettings.randomSeed);
             newWorld->setSettings(*worldSettings.settings);
             
             newWorld->initializeSoup(worldSettings.soupSize);

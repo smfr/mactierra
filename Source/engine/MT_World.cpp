@@ -40,7 +40,8 @@ namespace MacTierra {
 using namespace std;
 
 World::World()
-: mRNG(0)
+: mInitialRandomSeed(0)
+, mRNG(0)
 , mSoupSize(0)
 , mSoup(NULL)
 , mCellMap(NULL)
@@ -139,7 +140,7 @@ World::eradicateCreature(Creature* inCreature)
     delete inCreature;
 }
 
-uint32_t
+u_int32_t
 World::numAdultCreatures() const
 {
     return mTimeSlicer.numCreatures();
@@ -641,6 +642,13 @@ World::setSettings(const Settings& inSettings)
 
     if (mSettings.copyErrorRate() > 0.0)
         computeNextCopyError();
+}
+
+void
+World::setInitialRandomSeed(u_int32_t inIntialSeed)
+{
+    mInitialRandomSeed = inIntialSeed;
+    mRNG.Reseed(mInitialRandomSeed);
 }
 
 #pragma mark -
