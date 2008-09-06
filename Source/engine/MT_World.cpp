@@ -40,8 +40,7 @@ namespace MacTierra {
 using namespace std;
 
 World::World()
-: mInitialRandomSeed(0)
-, mRNG(0)
+: mRNG(0)
 , mSoupSize(0)
 , mSoup(NULL)
 , mCellMap(NULL)
@@ -58,6 +57,7 @@ World::World()
 , mNextFlawInstruction(0)
 , mNextCosmicRayInstruction(0)
 {
+    mDataCollector = new DataCollector();
 }
 
 World::~World()
@@ -84,8 +84,6 @@ World::initializeSoup(u_int32_t inSoupSize)
     mExecution = new ExecutionUnit0();
     
     mInventory = new Inventory();
-    
-    mDataCollector = new DataCollector();
 }
 
 Creature*
@@ -647,8 +645,16 @@ World::setSettings(const Settings& inSettings)
 void
 World::setInitialRandomSeed(u_int32_t inIntialSeed)
 {
-    mInitialRandomSeed = inIntialSeed;
-    mRNG.Reseed(mInitialRandomSeed);
+    mRNG.Reseed(inIntialSeed);
+}
+
+u_int32_t
+World::initialRandomSeed() const
+{
+    // this assumes that we seeded with just one word
+    const std::vector<RandomLib::RandomSeed::seed_type>& originalSeed = mRNG.Seed();
+    BOOST_ASSERT(originalSeed.size() == 1);
+    return originalSeed[0];
 }
 
 #pragma mark -

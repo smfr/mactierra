@@ -80,7 +80,7 @@ public:
     void                setSettings(const Settings& inSettings);
 
     void                setInitialRandomSeed(u_int32_t inIntialSeed);
-    u_int32_t           initialRandomSeed() const { return mInitialRandomSeed; }
+    u_int32_t           initialRandomSeed() const;
 
     // data
     u_int32_t           numAdultCreatures() const;
@@ -150,8 +150,6 @@ private:
 
         ar & BOOST_SERIALIZATION_NVP(mSettings);
 
-        ar & BOOST_SERIALIZATION_NVP(mInitialRandomSeed);
-
         ar & BOOST_SERIALIZATION_NVP(mRNG);
         ar & BOOST_SERIALIZATION_NVP(mSoupSize);
         
@@ -183,7 +181,6 @@ private:
 protected:
 
     Settings            mSettings;
-    u_int32_t           mInitialRandomSeed;
     
     mutable RandomLib::Random   mRNG;
 

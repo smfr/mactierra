@@ -39,6 +39,7 @@
 		0F3210450E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F3210460E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F63B1020E5E6A54005793DE /* MTDocumentController.m */; };
+		0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */; };
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
@@ -70,6 +71,10 @@
 		0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB90D330E52A72900449CC6 /* CellMapTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90D320E52A72900449CC6 /* CellMapTests.cpp */; };
+		0FB9C4410E72336000E6EBFD /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FB9C4400E72336000E6EBFD /* Readme.txt */; };
+		0FB9C4490E72338500E6EBFD /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FB9C4480E72338500E6EBFD /* TODO.txt */; };
+		0FB9C4C50E723E4000E6EBFD /* MTValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */; };
+		0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */; };
 		0FBA70ED0E6FA7D30027FB29 /* NSAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */; };
 		0FBB06870E5A984B007F2A6B /* MT_TimeSlicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */; };
 		0FBB06880E5A984B007F2A6B /* MT_CellMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06710E5A984B007F2A6B /* MT_CellMap.cpp */; };
@@ -133,6 +138,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -385,7 +391,7 @@
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
 		0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGraphController.mm; sourceTree = "<group>"; };
-		0F995BEE0E68FF6700AC5089 /* GraphX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphX.framework; path = Prebuilt/GraphX.framework; sourceTree = SOURCE_ROOT; };
+		0F995BEE0E68FF6700AC5089 /* GraphX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphX.framework; path = build/Release/GraphX.framework; sourceTree = "<group>"; };
 		0F995C560E69025000AC5089 /* NSViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewAdditions.h; sourceTree = "<group>"; };
 		0F995C570E69025000AC5089 /* NSViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewAdditions.m; sourceTree = "<group>"; };
 		0F995C5B0E69029900AC5089 /* NSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayAdditions.h; sourceTree = "<group>"; };
@@ -420,6 +426,12 @@
 		0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Settings.cpp; sourceTree = "<group>"; };
 		0FB90D310E52A72900449CC6 /* CellMapTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMapTests.h; sourceTree = "<group>"; };
 		0FB90D320E52A72900449CC6 /* CellMapTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CellMapTests.cpp; sourceTree = "<group>"; };
+		0FB9C4400E72336000E6EBFD /* Readme.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.txt; sourceTree = "<group>"; };
+		0FB9C4480E72338500E6EBFD /* TODO.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = TODO.txt; sourceTree = "<group>"; };
+		0FB9C4C30E723E4000E6EBFD /* MTValueTransformers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTValueTransformers.h; sourceTree = "<group>"; };
+		0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTValueTransformers.mm; sourceTree = "<group>"; };
+		0FB9C4E20E7241F300E6EBFD /* MTApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTApplicationController.h; sourceTree = "<group>"; };
+		0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTApplicationController.m; sourceTree = "<group>"; };
 		0FBA70EB0E6FA7D30027FB29 /* NSAttributedStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringAdditions.h; sourceTree = "<group>"; };
 		0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringAdditions.m; sourceTree = "<group>"; };
 		0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_TimeSlicer.cpp; sourceTree = "<group>"; };
@@ -926,6 +938,8 @@
 				0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */,
 				0FBA70EB0E6FA7D30027FB29 /* NSAttributedStringAdditions.h */,
 				0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */,
+				0FB9C4C30E723E4000E6EBFD /* MTValueTransformers.h */,
+				0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */,
 				0F995C560E69025000AC5089 /* NSViewAdditions.h */,
 				0F995C570E69025000AC5089 /* NSViewAdditions.m */,
 				0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */,
@@ -1000,6 +1014,15 @@
 				0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */,
 			);
 			path = engine_objects;
+			sourceTree = "<group>";
+		};
+		0FB9C4DF0E7241E700E6EBFD /* application */ = {
+			isa = PBXGroup;
+			children = (
+				0FB9C4E20E7241F300E6EBFD /* MTApplicationController.h */,
+				0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */,
+			);
+			path = application;
 			sourceTree = "<group>";
 		};
 		0FBEC0610E56AFA800ABB516 /* mactierra */ = {
@@ -1143,6 +1166,8 @@
 		2A37F4AAFDCFA73011CA2CEA /* MacTierra */ = {
 			isa = PBXGroup;
 			children = (
+				0FB9C4400E72336000E6EBFD /* Readme.txt */,
+				0FB9C4480E72338500E6EBFD /* TODO.txt */,
 				0F13F9F70E5FD95000D8E649 /* boost */,
 				0FFF64300E4FE34C00404828 /* RandomLib */,
 				0FAC2F910E4F75FE00CB068B /* engine */,
@@ -1159,6 +1184,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				0FB9C4DF0E7241E700E6EBFD /* application */,
 				0F9DE5DB0E575DB800E86DD6 /* views */,
 				0F9DE5D30E575DAD00E86DD6 /* controllers */,
 				0F9DE5D70E575DB300E86DD6 /* document */,
@@ -1307,6 +1333,8 @@
 				0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */,
 				0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */,
 				0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */,
+				0FB9C4410E72336000E6EBFD /* Readme.txt in Resources */,
+				0FB9C4490E72338500E6EBFD /* TODO.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1409,6 +1437,8 @@
 				0F995CAA0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0FADF3E30E6E480000775949 /* MT_DataCollectors.cpp in Sources */,
 				0FBA70ED0E6FA7D30027FB29 /* NSAttributedStringAdditions.m in Sources */,
+				0FB9C4C50E723E4000E6EBFD /* MTValueTransformers.mm in Sources */,
+				0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
