@@ -38,6 +38,7 @@ using namespace MacTierra;
 - (void)updateSoup;
 - (void)updateGenotypes;
 - (void)updateDebugPanel;
+- (void)updateDisplay;
 
 - (void)terminateWorldThread;
 - (void)createWorldThread;
@@ -149,7 +150,7 @@ using namespace MacTierra;
         }
         
         [mGraphController worldChanged];
-        [self updateGenotypes];
+        [self updateDisplay];
     }
 }
 
@@ -300,6 +301,14 @@ using namespace MacTierra;
 
 - (void)updateTimerFired:(NSTimer*)inTimer
 {
+    [self updateDisplay];
+    [document updateChangeCount:NSChangeDone];
+}
+
+- (void)updateDisplay
+{
+    if (!mWorld) return;
+
     [self willChangeValueForKey:@"fullness"];
     [self willChangeValueForKey:@"totalInstructions"];
     [self willChangeValueForKey:@"numberOfCreatures"];
@@ -329,8 +338,6 @@ using namespace MacTierra;
     [self didChangeValueForKey:@"fullness"];
     [self didChangeValueForKey:@"totalInstructions"];
     [self didChangeValueForKey:@"numberOfCreatures"];
-
-    [document updateChangeCount:NSChangeDone];
 }
 
 - (void)updateSoup
