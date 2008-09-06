@@ -630,7 +630,6 @@ World::wasDeserialized()
 #pragma mark -
 
 // Settings
-
 void
 World::setSettings(const Settings& inSettings)
 {

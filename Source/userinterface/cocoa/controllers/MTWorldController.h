@@ -13,6 +13,7 @@ namespace MacTierra {
     class World;
     class PopulationSizeLogger;
     class MeanCreatureSizeLogger;
+    class GenotypeFrequencyDataLogger;
 };
 
 @class MTCreature;
@@ -45,6 +46,7 @@ namespace MacTierra {
     // temp
     MacTierra::PopulationSizeLogger* mPopSizeLogger;
     MacTierra::MeanCreatureSizeLogger* mMeanSizeLogger;
+    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
     
     // threading-related
     MTWorldThread*          worldThread;
@@ -80,6 +82,7 @@ namespace MacTierra {
 // temp. Move to graph controller?
 @property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
 @property (readonly) MacTierra::MeanCreatureSizeLogger* meanSizeLogger;
+@property (readonly) MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyLogger;
 
 
 @property (assign) double instructionsPerSecond;

@@ -10,6 +10,8 @@
 #ifndef MT_DataCollectors_h_
 #define MT_DataCollectors_h_
 
+#include <string>
+
 #include "MT_DataCollection.h"
 
 namespace MacTierra {
@@ -21,7 +23,7 @@ namespace MacTierra {
 
 
 // This data logger collects up to maxDataCount, then prunes the data, throwing
-// away every other datum, to conserve memory and make the graphing quicker.
+// away every other data point, to conserve memory and make the graphing quicker.
 template <class T>
 class SimpleDataLogger : public DataLogger
 {
@@ -142,6 +144,69 @@ public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
 };
+
+
+// Logging tempalate for histogram data. These loggers replace the data each time.
+template <class T>
+class HistogramDataLogger : public DataLogger
+{
+public:
+
+    typedef T data_type;
+    typedef std::pair<data_type, u_int32_t> data_pair;
+
+    HistogramDataLogger()
+    : mMaxBuckets(10)
+    {
+    }
+    
+    ~HistogramDataLogger()
+    {
+    }
+
+    // engine needs to be locked while using this data
+    const std::vector<data_pair>& data() const { return mData; }
+    
+    u_int32_t   dataCount() const { return mData.size(); }
+    u_int32_t   maxFrequency() const
+    {
+        u_int32_t maxValue = 0;
+        for (size_t i = 0; i < mData.size(); ++i)
+            maxValue = std::max(maxValue, mData[i].second);
+        return maxValue;
+    }
+
+    void        setMaxBuckets(u_int32_t inMax) { mMaxBuckets = inMax; }
+
+protected:
+
+    std::vector<data_pair>  mData;
+
+    u_int32_t   mMaxBuckets;
+};
+
+
+class GenotypeFrequencyDataLogger : public HistogramDataLogger<std::string>
+{
+public:
+
+    // collectData is called on the engine thread
+    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+
+protected:
+    
+};
+
+// pair is a bucket range
+typedef std::pair<u_int32_t, u_int32_t> range_pair;
+class SizeHistogramDataLogger : public HistogramDataLogger<range_pair>
+{
+public:
+
+    // collectData is called on the engine thread
+    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+};
+
 
 
 

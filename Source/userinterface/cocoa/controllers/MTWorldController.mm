@@ -147,6 +147,9 @@ using namespace MacTierra;
             mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
             mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
             mWorld->dataCollector()->addLogger(mMeanSizeLogger);
+
+            mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
+            mWorld->dataCollector()->addLogger(mGenotypeFrequencyLogger);
         }
         
         [mGraphController worldChanged];
@@ -220,6 +223,10 @@ using namespace MacTierra;
     return mMeanSizeLogger;
 }
 
+- (MacTierra::GenotypeFrequencyDataLogger*)genotypeFrequencyLogger;
+{
+    return mGenotypeFrequencyLogger;
+}
 
 - (double)fullness
 {

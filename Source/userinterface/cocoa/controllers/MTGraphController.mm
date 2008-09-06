@@ -234,6 +234,58 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
+@interface MTGenotypeFrequencyGraphAdapter : MTGraphAdapter
+@end
+
+@implementation MTGenotypeFrequencyGraphAdapter
+
+- (void)setupGraph
+{
+    NSAssert(!graphView, @"Should not have created graph view yet");
+    
+    self.graphView = [[[CTHistogramView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    [graphView setShowXTickMarks:NO];
+    [graphView setShowTitle:NO];
+    [graphView setShowYLabel:NO];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [(CTHistogramView*)graphView setDataSource:self];
+}
+
+- (void)updateGraph
+{
+    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
+
+    MacTierra::GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<MacTierra::GenotypeFrequencyDataLogger*>(dataLogger);
+    if (!genotypeLogger) return;
+
+    [graphView setXMin:0.0];
+    [graphView setXMax:std::max((double)genotypeLogger->dataCount(), 1.0)];
+    [(CTHistogramView*)graphView setBucketWidth:1.0];     // fake buckets
+
+    u_int32_t numDivisions;
+    double yMax = graphAxisMax(genotypeLogger->maxFrequency(), &numDivisions);
+    [graphView setYMax:yMax];
+    [graphView setYScale:yMax / numDivisions];
+}
+
+- (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit
+{
+    u_int32_t index = (u_int32_t)floor(lowerBound);
+
+    MacTierra::GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<MacTierra::GenotypeFrequencyDataLogger*>(dataLogger);
+    if (!genotypeLogger) return 0.0f;
+    
+    if (index >= genotypeLogger->dataCount())
+        return 0.0f;
+
+    u_int32_t datum = genotypeLogger->data()[index].second;
+    return (float)datum;
+}
+
+@end
+
+#pragma mark -
+
 NSString* const kGraphLabelKey      = @"graph_label";
 NSString* const kGraphTypeKey       = @"graph_type";
 NSString* const kGraphAdaptorKey    = @"graph_adaptor";
@@ -265,6 +317,11 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
         [NSDictionary dictionaryWithObjectsAndKeys:
                 NSLocalizedString(@"MeanCreatureSize", @""), kGraphLabelKey,
                                                        nil],
+
+        [NSDictionary dictionaryWithObjectsAndKeys:
+                NSLocalizedString(@"GenotypeFrequencies", @""), kGraphLabelKey,
+                                                       nil],
+
         nil];
 }
 
@@ -290,6 +347,14 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
         [creatureSizeGrapher setupGraph];
         [adaptors addObject:creatureSizeGrapher];
         [creatureSizeGrapher release];
+    }
+    
+    if (mWorldController.genotypeFrequencyLogger)
+    {
+        MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.genotypeFrequencyLogger];
+        [genotypeFrequencyGrapher setupGraph];
+        [adaptors addObject:genotypeFrequencyGrapher];
+        [genotypeFrequencyGrapher release];
     }
     
     mGraphAdaptors = [adaptors retain];
