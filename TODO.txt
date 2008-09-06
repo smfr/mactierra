@@ -21,6 +21,7 @@ Make inventory more useful (keep "successful" genotypes in the list)
 Highlight creatures when selected in inventory
 Accept text drags to "compile" creatures
 Add ability to control update rate.
+Lock soup while saving
 
 Command-line tool
 -----------------
