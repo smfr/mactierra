@@ -32,6 +32,7 @@ using namespace MacTierra;
 
 - (void)startUpdateTimer;
 - (void)stopUpdateTimer;
+- (void)setRunning:(BOOL)inRunning;
 - (void)setWorld:(World*)inWorld;
 
 - (void)updateSoup;
@@ -63,6 +64,9 @@ using namespace MacTierra;
 - (void)run;
 - (void)pause;
 
+- (void)lock;
+- (void)unlock;
+
 @end
 
 #pragma mark -
@@ -77,7 +81,6 @@ using namespace MacTierra;
 @synthesize worldSettings;
 @synthesize creatingNewSoup;
 @synthesize worldThread;
-@synthesize worldLock;
 
 + (void)initialize
 {
@@ -89,7 +92,6 @@ using namespace MacTierra;
 {
     if ((self = [super init]))
     {
-        worldLock = [[NSLock alloc] init];
     }
     return self;
 }
@@ -102,7 +104,6 @@ using namespace MacTierra;
     
     delete mWorld;
 
-    self.worldLock = nil;
     [super dealloc];
 }
 
@@ -161,22 +162,7 @@ using namespace MacTierra;
 
 - (IBAction)toggleRunning:(id)sender
 {
-    if (worldRunning)
-    {
-        [self stopUpdateTimer];
-        [self pauseWorld];
-        self.worldRunning = NO;
-
-        // hack to update genotypes on pause
-        [self updateGenotypes];
-        [self updateDebugPanel];
-    }
-    else
-    {
-        [self startUpdateTimer];
-        [self runWorld];
-        self.worldRunning = YES;
-    }
+    [self setRunning:!worldRunning];
 }
 
 - (IBAction)step:(id)sender
@@ -252,13 +238,45 @@ using namespace MacTierra;
 - (void)documentClosing
 {
     // have to break ref cycles
-    [self stopUpdateTimer];
+    [self setRunning:NO];    
     
     [self setWorld:NULL];
     self.selectedCreature = nil;
 }
 
+- (void)clearWorld
+{
+    // have to break ref cycles
+    [self setRunning:NO];    
+
+    [self setWorld:NULL];
+    self.selectedCreature = nil;
+}
+
 #pragma mark -
+
+- (void)setRunning:(BOOL)inRunning
+{
+    if (inRunning == worldRunning)
+        return;
+
+    if (inRunning)
+    {
+        [self startUpdateTimer];
+        [self runWorld];
+        self.worldRunning = YES;
+    }
+    else
+    {
+        [self stopUpdateTimer];
+        [self pauseWorld];
+        self.worldRunning = NO;
+
+        // hack to update genotypes on pause
+        [self updateGenotypes];
+        [self updateDebugPanel];
+    }
+}
 
 - (void)startUpdateTimer
 {
@@ -473,12 +491,12 @@ using namespace MacTierra;
 
 - (void)lockWorld
 {
-    [worldLock lock];
+    [worldThread lock];
 }
 
 - (void)unlockWorld
 {
-    [worldLock unlock];
+    [worldThread unlock];
 }
 
 #pragma mark -
@@ -491,7 +509,9 @@ using namespace MacTierra;
 //    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
 
     std::ostringstream stringStream;
-    World::worldToStream(mWorld, stringStream, World::kBinary);
+    [self lockWorld];
+        World::worldToStream(mWorld, stringStream, World::kBinary);
+    [self unlockWorld];
 
 //    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
 //    NSLog(@"Serializaing world took %f milliseconds", (endTime - startTime) * 1000.0);
@@ -515,7 +535,9 @@ using namespace MacTierra;
         return nil;
 
     std::ostringstream stringStream;
-    World::worldToStream(mWorld, stringStream, World::kXML);
+    [self lockWorld];
+        World::worldToStream(mWorld, stringStream, World::kXML);
+    [self unlockWorld];
 
     return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
 }
@@ -548,7 +570,11 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         return NO;
 
     std::ofstream fileStream(filePath.c_str());
-    World::worldToStream(mWorld, fileStream, World::kBinary);
+
+    [self lockWorld];
+        World::worldToStream(mWorld, fileStream, World::kBinary);
+    [self unlockWorld];
+
     return YES;
 }
 
@@ -572,7 +598,10 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         return NO;
 
     std::ofstream fileStream(filePath.c_str());
-    World::worldToStream(mWorld, fileStream, World::kXML);
+    [self lockWorld];
+        World::worldToStream(mWorld, fileStream, World::kXML);
+    [self unlockWorld];
+
     return YES;
 }
 
@@ -645,6 +674,16 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     [runningCondition lock];
     running = NO;
     [runningCondition signal];
+    [runningCondition unlock];
+}
+
+- (void)lock
+{
+    [runningCondition lock];
+}
+
+- (void)unlock
+{
     [runningCondition unlock];
 }
 

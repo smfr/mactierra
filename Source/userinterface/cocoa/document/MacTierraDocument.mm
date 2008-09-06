@@ -110,6 +110,8 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     BOOL succeeded = NO;
     if (reverting)
     {
+        [worldController clearWorld];
+
         if ([typeName isEqualToString:kBinarySoupDocumentType])
             succeeded = [worldController readWorldFromBinaryFile:self.pendingFileURL];
         else if ([typeName isEqualToString:kXMLSoupDocumentType])

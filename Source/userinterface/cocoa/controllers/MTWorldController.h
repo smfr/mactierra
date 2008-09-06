@@ -48,7 +48,6 @@ namespace MacTierra {
     
     // threading-related
     MTWorldThread*          worldThread;
-    NSLock*                 worldLock;
     
     MTCreature*             selectedCreature;
     
@@ -70,7 +69,6 @@ namespace MacTierra {
 
 // threading
 @property (retain) MTWorldThread* worldThread;
-@property (retain) NSLock* worldLock;
 
 @property (assign) BOOL worldRunning;
 
@@ -103,6 +101,7 @@ namespace MacTierra {
 - (IBAction)exportInventory:(id)sender;
 
 - (void)documentClosing;
+- (void)clearWorld;
 
 // save and restore
 - (NSData*)worldData;

@@ -111,33 +111,31 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-        ar & BOOST_SERIALIZATION_NVP(mTimeSliceType);
-        ar & BOOST_SERIALIZATION_NVP(mConstantSliceSize);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("time_slice_type", mTimeSliceType);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("constant_slice_size", mConstantSliceSize);
 
-        ar & BOOST_SERIALIZATION_NVP(mSliceSizeVariance);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size_variance", mSliceSizeVariance);
 
-        ar & BOOST_SERIALIZATION_NVP(mCopyErrorRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanCopyErrorInterval);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copy_error_rate", mCopyErrorRate);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_copy_error_interval", mMeanCopyErrorInterval);
 
-        ar & BOOST_SERIALIZATION_NVP(mFlawRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanFlawInterval);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("flaw_rate", mFlawRate);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_flaw_interval", mMeanFlawInterval);
 
-        ar & BOOST_SERIALIZATION_NVP(mCosmicRate);
-        ar & BOOST_SERIALIZATION_NVP(mMeanCosmicTimeInterval);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cosmic_rate", mCosmicRate);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_cosmic_time_interval", mMeanCosmicTimeInterval);
 
-        ar & BOOST_SERIALIZATION_NVP(mSizeSelection);
-        ar & BOOST_SERIALIZATION_NVP(mLeannessSelection);
-        ar & BOOST_SERIALIZATION_NVP(mReapThreshold);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("size_selection", mSizeSelection);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("leanness_selection", mLeannessSelection);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("reap_threshold", mReapThreshold);
 
-        ar & BOOST_SERIALIZATION_NVP(mLeannessSelection);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mutation_type", mMutationType);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("global_writes_allowed", mGlobalWritesAllowed);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("transfer_register_contents_to_offspring", mTransferRegistersToOffspring);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("clear_daughter_cells", mClearDaughterCells);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("clear_reaped_creatures", mClearReapedCreatures);
 
-        ar & BOOST_SERIALIZATION_NVP(mMutationType);
-        ar & BOOST_SERIALIZATION_NVP(mGlobalWritesAllowed);
-        ar & BOOST_SERIALIZATION_NVP(mTransferRegistersToOffspring);
-        ar & BOOST_SERIALIZATION_NVP(mClearDaughterCells);
-        ar & BOOST_SERIALIZATION_NVP(mClearReapedCreatures);
-
-        ar & BOOST_SERIALIZATION_NVP(mDaughterAllocation);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter_allocation_type", mDaughterAllocation);
     }
 
 protected:

@@ -65,11 +65,11 @@ private:
     {
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(Genotype);
         
-        ar & BOOST_SERIALIZATION_NVP(mNumAlive);
-        ar & BOOST_SERIALIZATION_NVP(mNumEverLived);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("num_alive", mNumAlive);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("num_ever", mNumEverLived);
 
-        ar & BOOST_SERIALIZATION_NVP(mOriginInstructions);
-        ar & BOOST_SERIALIZATION_NVP(mOriginGenerations);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("origin_time", mOriginInstructions);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("origin_generations", mOriginGenerations);
     }
 
 protected:
@@ -118,14 +118,14 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-        ar & BOOST_SERIALIZATION_NVP(mNumSpeciesEver);
-        ar & BOOST_SERIALIZATION_NVP(mNumSpeciesCurrent);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("total_species", mNumSpeciesEver);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("current_species", mNumSpeciesCurrent);
 
-        ar & BOOST_SERIALIZATION_NVP(mSpeciationCount);
-        ar & BOOST_SERIALIZATION_NVP(mExtinctionCount);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("speciation", mSpeciationCount);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("extinction", mExtinctionCount);
 
-        ar & BOOST_SERIALIZATION_NVP(mInventoryMap);
-        ar & BOOST_SERIALIZATION_NVP(mGenotypeSizeMap);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("map", mInventoryMap);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("size_map", mGenotypeSizeMap);
     }
     
 protected:

@@ -68,9 +68,9 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-        ar & BOOST_SERIALIZATION_NVP(mStart);
-        ar & BOOST_SERIALIZATION_NVP(mLength);
-        ar & BOOST_SERIALIZATION_NVP(mData);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("start", mStart);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", mData);
     }
     
 };
@@ -127,8 +127,8 @@ private:
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
         // size is passed in via the ctor
-        ar & BOOST_SERIALIZATION_NVP(mSpaceUsed);
-        ar & BOOST_SERIALIZATION_NVP(mCells);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("space_used", mSpaceUsed);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cells", mCells);
     }
     
 protected:
@@ -150,7 +150,7 @@ inline void save_construct_data(Archive& ar, const MacTierra::CellMap* inCellMap
 {
     // save data required to construct instance
     u_int32_t soupSize = inCellMap->size();
-    ar << BOOST_SERIALIZATION_NVP(soupSize);
+    ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", soupSize);
 }
 
 template<class Archive>
@@ -158,7 +158,7 @@ inline void load_construct_data(Archive& ar, MacTierra::CellMap* inCellMap, cons
 {
     // retrieve data from archive required to construct new instance
     u_int32_t soupSize;
-    ar >> BOOST_SERIALIZATION_NVP(soupSize);
+    ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", soupSize);
     // invoke inplace constructor to initialize instance of my_class
     ::new(inCellMap)MacTierra::CellMap(soupSize);
 }

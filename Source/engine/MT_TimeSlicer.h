@@ -62,49 +62,49 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void save(Archive& ar, const unsigned int version) const
     {
-        ar & BOOST_SERIALIZATION_NVP(mWorld);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("world", mWorld);
 
-        ar << BOOST_SERIALIZATION_NVP(mLastCycleInstructions);
-        ar << BOOST_SERIALIZATION_NVP(mTotalInstructions);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("last_cycle_instructions", mLastCycleInstructions);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("total_instructions", mTotalInstructions);
 
         // push a size
         size_t listSize = mSlicerList.size();
-        ar << BOOST_SERIALIZATION_NVP(listSize);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("list_size", listSize);
 
         // save the reaper list by hand (can't work the template fu to do it via serialization)
         for (SlicerList::const_iterator it = mSlicerList.cbegin(); it != mSlicerList.cend(); ++it)
         {
             const Creature* curCreature = &(*it);
-            ar << BOOST_SERIALIZATION_NVP(curCreature);
+            ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", curCreature);
         }
 
         // push the current creature
         Creature* currentCreature = &(*mCurrentItem);
-        ar << BOOST_SERIALIZATION_NVP(currentCreature);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature", currentCreature);
     }
 
     template<class Archive> void load(Archive& ar, const unsigned int version)
     {
-        ar >> BOOST_SERIALIZATION_NVP(mWorld);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("world", mWorld);
 
-        ar >> BOOST_SERIALIZATION_NVP(mLastCycleInstructions);
-        ar >> BOOST_SERIALIZATION_NVP(mTotalInstructions);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("last_cycle_instructions", mLastCycleInstructions);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("total_instructions", mTotalInstructions);
 
         // read the size
         size_t listSize;
-        ar >> BOOST_SERIALIZATION_NVP(listSize);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("list_size", listSize);
         
         // rebuild the list
         for (size_t i = 0; i < listSize; ++i)
         {
             Creature* curCreature;
-            ar >> BOOST_SERIALIZATION_NVP(curCreature);
+            ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", curCreature);
             mSlicerList.push_back(*curCreature);
         }
         
         // read the current creature
         Creature* currentCreature;
-        ar >> BOOST_SERIALIZATION_NVP(currentCreature);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature", currentCreature);
         mCurrentItem = mSlicerList.iterator_to(*currentCreature);
     }
 

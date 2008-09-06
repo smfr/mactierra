@@ -54,24 +54,24 @@ private:
     {
         // push a size
         size_t listSize = mReaperList.size();
-        ar << BOOST_SERIALIZATION_NVP(listSize);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("list_size", listSize);
 
         // save the reaper list by hand (can't work the template fu to do it via serialization)
         for (ReaperList::const_iterator it = mReaperList.cbegin(); it != mReaperList.cend(); ++it)
         {
             const Creature* curCreature = &(*it);
-            ar << BOOST_SERIALIZATION_NVP(curCreature);
+            ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", curCreature);
         }
     }
 
     template<class Archive> void load(Archive& ar, const unsigned int version)
     {
         size_t listSize;
-        ar >> BOOST_SERIALIZATION_NVP(listSize);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("list_size", listSize);
         for (size_t i = 0; i < listSize; ++i)
         {
             Creature* curCreature;
-            ar >> BOOST_SERIALIZATION_NVP(curCreature);
+            ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", curCreature);
             mReaperList.push_back(*curCreature);
         }
     }

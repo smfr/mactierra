@@ -668,14 +668,14 @@ World::worldToStream(const World* inWorld, std::ostream& inStream, EWorldSeriali
         case kBinary:
             {
                 ::boost::archive::binary_oarchive binaryArchive(inStream);
-                binaryArchive << BOOST_SERIALIZATION_NVP(inWorld);
+                binaryArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", inWorld);
             }
             break;
 
         case kXML:
             {
                 ::boost::archive::xml_oarchive xmlArchive(inStream);
-                xmlArchive << BOOST_SERIALIZATION_NVP(inWorld);
+                xmlArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", inWorld);
             }
             break;
     }
@@ -692,14 +692,14 @@ World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inForma
         case kBinary:
             {
                 ::boost::archive::binary_iarchive binaryArchive(inStream);
-                binaryArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+                binaryArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", braveNewWorld);
             }
             break;
 
         case kXML:
             {
                 ::boost::archive::xml_iarchive xmlArchive(inStream);
-                xmlArchive >> BOOST_SERIALIZATION_NVP(braveNewWorld);
+                xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", braveNewWorld);
             }
             break;
     }

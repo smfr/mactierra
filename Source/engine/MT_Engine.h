@@ -45,5 +45,11 @@ typedef u_int32_t address_t;
 } // namespace MacTierra
 
 
+// Utility macro for boost serialization
+#define MT_BOOST_MEMBER_SERIALIZATION_NVP(name, memberVar)                              \
+    boost::serialization::make_nvp(name, memberVar)
+
+
+
 #endif // MT_Engine_h
 

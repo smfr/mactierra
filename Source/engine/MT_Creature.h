@@ -176,68 +176,68 @@ private:
     {
         // mReaperListHook and mSlicerListHook are saved by the slicer and reaper lists
 
-        ar << BOOST_SERIALIZATION_NVP(mID);
-        ar << BOOST_SERIALIZATION_NVP(mGenotype);
-        ar << BOOST_SERIALIZATION_NVP(mGenotypeDivergence);
-        ar << BOOST_SERIALIZATION_NVP(mCPU);
-        ar << BOOST_SERIALIZATION_NVP(mSoup);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("id", mID);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
-        ar << BOOST_SERIALIZATION_NVP(mDaughter);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
         bool dividing = mDividing;
-        ar << BOOST_SERIALIZATION_NVP(dividing);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", dividing);
         bool born = mBorn;
-        ar << BOOST_SERIALIZATION_NVP(born);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("born", born);
 
-        ar << BOOST_SERIALIZATION_NVP(mLength);
-        ar << BOOST_SERIALIZATION_NVP(mLocation);
-        ar << BOOST_SERIALIZATION_NVP(mSliceSize);
-        ar << BOOST_SERIALIZATION_NVP(mLastInstruction);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size", mSliceSize);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("last_instruction", mLastInstruction);
 
-        ar << BOOST_SERIALIZATION_NVP(mInstructionsToLastOffspring);
-        ar << BOOST_SERIALIZATION_NVP(mTotalInstructionsExecuted);
-        ar << BOOST_SERIALIZATION_NVP(mBirthInstructions);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("insts_to_last_offspring", mInstructionsToLastOffspring);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("total_insts", mTotalInstructionsExecuted);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_time", mBirthInstructions);
 
-        ar << BOOST_SERIALIZATION_NVP(mNumErrors);
-        ar << BOOST_SERIALIZATION_NVP(mMovesToLastOffspring);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("num_errors", mNumErrors);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("moves_to_last_offspring", mMovesToLastOffspring);
 
-        ar << BOOST_SERIALIZATION_NVP(mNumOffspring);
-        ar << BOOST_SERIALIZATION_NVP(mNumIdenticalOffspring);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("num_offspring", mNumOffspring);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("num_identical_offspring", mNumIdenticalOffspring);
 
-        ar << BOOST_SERIALIZATION_NVP(mGeneration);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("generation", mGeneration);
     }
 
     template<class Archive> void load(Archive& ar, const unsigned int version)
     {
         // mReaperListHook and mSlicerListHook are filled in when the slicer and reaper lists load
 
-        ar >> BOOST_SERIALIZATION_NVP(mID);
-        ar >> BOOST_SERIALIZATION_NVP(mGenotype);
-        ar >> BOOST_SERIALIZATION_NVP(mGenotypeDivergence);
-        ar >> BOOST_SERIALIZATION_NVP(mCPU);
-        ar >> BOOST_SERIALIZATION_NVP(mSoup);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("id", mID);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
-        ar >> BOOST_SERIALIZATION_NVP(mDaughter);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
         bool dividing;
-        ar >> BOOST_SERIALIZATION_NVP(dividing); mDividing = dividing;
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", dividing); mDividing = dividing;
         bool born;
-        ar >> BOOST_SERIALIZATION_NVP(born); mBorn = born;
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("born", born); mBorn = born;
 
-        ar >> BOOST_SERIALIZATION_NVP(mLength);
-        ar >> BOOST_SERIALIZATION_NVP(mLocation);
-        ar >> BOOST_SERIALIZATION_NVP(mSliceSize);
-        ar >> BOOST_SERIALIZATION_NVP(mLastInstruction);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size", mSliceSize);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("last_instruction", mLastInstruction);
 
-        ar >> BOOST_SERIALIZATION_NVP(mInstructionsToLastOffspring);
-        ar >> BOOST_SERIALIZATION_NVP(mTotalInstructionsExecuted);
-        ar >> BOOST_SERIALIZATION_NVP(mBirthInstructions);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("insts_to_last_offspring", mInstructionsToLastOffspring);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("total_insts", mTotalInstructionsExecuted);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_time", mBirthInstructions);
 
-        ar >> BOOST_SERIALIZATION_NVP(mNumErrors);
-        ar >> BOOST_SERIALIZATION_NVP(mMovesToLastOffspring);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("num_errors", mNumErrors);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("moves_to_last_offspring", mMovesToLastOffspring);
 
-        ar >> BOOST_SERIALIZATION_NVP(mNumOffspring);
-        ar >> BOOST_SERIALIZATION_NVP(mNumIdenticalOffspring);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("num_offspring", mNumOffspring);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("num_identical_offspring", mNumIdenticalOffspring);
 
-        ar >> BOOST_SERIALIZATION_NVP(mGeneration);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("generation", mGeneration);
     }
 
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)

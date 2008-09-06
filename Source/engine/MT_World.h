@@ -148,33 +148,33 @@ private:
         ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
         ar.register_type(static_cast<InventoryGenotype *>(NULL));
 
-        ar & BOOST_SERIALIZATION_NVP(mSettings);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("settings", mSettings);
 
-        ar & BOOST_SERIALIZATION_NVP(mRNG);
-        ar & BOOST_SERIALIZATION_NVP(mSoupSize);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("random_number_generator", mRNG);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", mSoupSize);
         
-        ar & BOOST_SERIALIZATION_NVP(mSoup);
-        ar & BOOST_SERIALIZATION_NVP(mCellMap);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cell_map", mCellMap);
 
-        ar & BOOST_SERIALIZATION_NVP(mNextCreatureID);
-        ar & BOOST_SERIALIZATION_NVP(mCreatureIDMap);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_creature_id", mNextCreatureID);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("creature_id_map", mCreatureIDMap);
 
-        ar & BOOST_SERIALIZATION_NVP(mExecution);
-        ar & BOOST_SERIALIZATION_NVP(mTimeSlicer);
-        ar & BOOST_SERIALIZATION_NVP(mReaper);
-        ar & BOOST_SERIALIZATION_NVP(mInventory);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("isa", mExecution);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("timeslicer", mTimeSlicer);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("reaper", mReaper);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("inventory", mInventory);
         
         // serialize the mDataCollector?
 
-        ar & BOOST_SERIALIZATION_NVP(mCurCreatureCycles);
-        ar & BOOST_SERIALIZATION_NVP(mCurCreatureSliceCycles);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature_cycles", mCurCreatureCycles);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature_slice_cycles", mCurCreatureSliceCycles);
 
-        ar & BOOST_SERIALIZATION_NVP(mCopyErrorPending);
-        ar & BOOST_SERIALIZATION_NVP(mCopiesSinceLastError);
-        ar & BOOST_SERIALIZATION_NVP(mNextCopyError);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copy_error_pending", mCopyErrorPending);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copies_since_last_error", mCopiesSinceLastError);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_copy_error_time", mNextCopyError);
 
-        ar & BOOST_SERIALIZATION_NVP(mNextFlawInstruction);
-        ar & BOOST_SERIALIZATION_NVP(mNextCosmicRayInstruction);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_flaw_time", mNextFlawInstruction);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_cosmic_ray_time", mNextCosmicRayInstruction);
     }
 
 

@@ -67,14 +67,14 @@ private:
     {
         // mSoupSize is archived separately to allow for construction
         ::boost::serialization::binary_object soupObject = ::boost::serialization::make_binary_object(mSoup, mSoupSize);
-        ar << BOOST_SERIALIZATION_NVP(soupObject);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_contents", soupObject);
     }
 
     template<class Archive> void load(Archive& ar, const unsigned int version)
     {
         // mSoupSize is archived separately to allow for construction
         ::boost::serialization::binary_object soupObject(mSoup, mSoupSize);
-        ar >> BOOST_SERIALIZATION_NVP(soupObject);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_contents", soupObject);
     }
 
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)

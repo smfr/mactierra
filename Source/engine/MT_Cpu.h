@@ -63,11 +63,11 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
     {
-        ar & BOOST_SERIALIZATION_NVP(mRegisters);
-        ar & BOOST_SERIALIZATION_NVP(mStack);
-        ar & BOOST_SERIALIZATION_NVP(mStackPointer);
-        ar & BOOST_SERIALIZATION_NVP(mInstructionPointer);
-        ar & BOOST_SERIALIZATION_NVP(mFlag);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("registers", mRegisters);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("stack", mStack);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("sp", mStackPointer);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("ip", mInstructionPointer);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("flag", mFlag);
     }
     
 public:
