@@ -221,7 +221,7 @@ namespace RandomLib {
      **********************************************************************/
     result_type Ran() throw() {
       if (_ptr >= N)
-	Next();
+        Next();
       result_type y = _state[_ptr];
       _ptr += _stride;
 
@@ -268,7 +268,7 @@ namespace RandomLib {
     // r.StepCount( 1); r.StepCount(-1);  _ptr == 0, _rounds ==  0
     // r.StepCount(-1); r.StepCount( 1);  _ptr == N, _rounds == -1
     { return Count() == r.Count() && _seed == r._seed &&
-	_stride == r._stride; }
+        _stride == r._stride; }
     /**
      * Test inequality of two Random objects.  See Random::operator==
      **********************************************************************/
@@ -388,9 +388,9 @@ namespace RandomLib {
       // been cast into unsigned.  In reality the stride should be no more than
       // 10-100.
       if (n == 0 || n > UNINIT/2)
-	throw std::invalid_argument("RandomEngine: Invalid stride");
+        throw std::invalid_argument("RandomEngine: Invalid stride");
       if (k >= n)
-	throw std::invalid_argument("RandomEngine: Invalid index");
+        throw std::invalid_argument("RandomEngine: Invalid index");
       _stride = n;
       StepCount(k);
     }
@@ -423,7 +423,7 @@ namespace RandomLib {
      **********************************************************************/
     void Next() throw() {
       if (_ptr == UNINIT)
-	Init();
+        Init();
       _rounds += _ptr/N;
       Algorithm::Transition(_ptr/N, _statev);
       _ptr %= N;
@@ -455,17 +455,17 @@ namespace RandomLib {
     template<class Archive> void save(Archive& ar, const unsigned int) const {
       u64::type _version = version;
       u32::type _eversion = Algorithm::version,
-	_mversion = Mixer::version,
-	_checksum = Check(_version, _eversion, _mversion);
+        _mversion = Mixer::version,
+        _checksum = Check(_version, _eversion, _mversion);
       ar & boost::serialization::make_nvp("version" , _version )
-	&  boost::serialization::make_nvp("eversion", _eversion)
-	&  boost::serialization::make_nvp("mversion", _mversion)
-	&  boost::serialization::make_nvp("seed"    , _seed    )
-	&  boost::serialization::make_nvp("ptr"     , _ptr     )
-	&  boost::serialization::make_nvp("stride"  , _stride  );
+        &  boost::serialization::make_nvp("eversion", _eversion)
+        &  boost::serialization::make_nvp("mversion", _mversion)
+        &  boost::serialization::make_nvp("seed"    , _seed    )
+        &  boost::serialization::make_nvp("ptr"     , _ptr     )
+        &  boost::serialization::make_nvp("stride"  , _stride  );
       if (_ptr != UNINIT)
-	ar & boost::serialization::make_nvp("rounds", _rounds  )
-	  &  boost::serialization::make_nvp("state" , _state   );
+        ar & boost::serialization::make_nvp("rounds", _rounds  )
+          &  boost::serialization::make_nvp("state" , _state   );
       ar & boost::serialization::make_nvp("checksum", _checksum);
     }
     /**
@@ -476,18 +476,18 @@ namespace RandomLib {
       u64::type _version;
       u32::type _eversion, _mversion, _checksum;
       ar & boost::serialization::make_nvp("version" , _version  )
-	&  boost::serialization::make_nvp("eversion", _eversion )
-	&  boost::serialization::make_nvp("mversion", _mversion );
+        &  boost::serialization::make_nvp("eversion", _eversion )
+        &  boost::serialization::make_nvp("mversion", _mversion );
       RandomEngine<Algorithm, Mixer> t(std::vector<seed_type>(0));
       ar & boost::serialization::make_nvp("seed"    , t._seed   )
-	&  boost::serialization::make_nvp("ptr"     , t._ptr    )
-	&  boost::serialization::make_nvp("stride"  , t._stride );
+        &  boost::serialization::make_nvp("ptr"     , t._ptr    )
+        &  boost::serialization::make_nvp("stride"  , t._stride );
       if (t._ptr != UNINIT)
-	ar & boost::serialization::make_nvp("rounds", t._rounds )
-	  &  boost::serialization::make_nvp("state" , t._state  );
+        ar & boost::serialization::make_nvp("rounds", t._rounds )
+          &  boost::serialization::make_nvp("state" , t._state  );
       ar & boost::serialization::make_nvp("checksum", _checksum );
       if (t.Check(_version, _eversion, _mversion) != _checksum)
-	throw std::out_of_range("RandomEngine: Checksum failure");
+        throw std::out_of_range("RandomEngine: Checksum failure");
       _seed.reserve(t._seed.size());
       *this = t;
     }
@@ -509,4 +509,4 @@ namespace RandomLib {
 
 } // namespace RandomLib
 
-#endif	// RANDOMENGINE_HPP
+#endif  // RANDOMENGINE_HPP

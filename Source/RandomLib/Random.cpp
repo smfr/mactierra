@@ -51,17 +51,17 @@
 
 #include "RandomLib/Random.hpp"
 
-#include <fstream>		// For SeedWord reading /dev/urandom
-#include <ctime>		// For SeedWord calling time()
-#include <sstream>		// For formatting in Write32/Read32
-#include <iomanip>		// For formatting in Write32/Read32
+#include <fstream>              // For SeedWord reading /dev/urandom
+#include <ctime>                // For SeedWord calling time()
+#include <sstream>              // For formatting in Write32/Read32
+#include <iomanip>              // For formatting in Write32/Read32
 #if !WINDOWS
-#include <sys/time.h>		// For SeedWord calling gettimeofday
-#include <unistd.h>		// For SeedWord calling getpid(), gethostid()
+#include <sys/time.h>           // For SeedWord calling gettimeofday
+#include <unistd.h>             // For SeedWord calling getpid(), gethostid()
 #else
-#include <windows.h>		// For SeedWord calling high prec timer
+#include <windows.h>            // For SeedWord calling high prec timer
 #include <winbase.h>
-#include <process.h>		// For SeedWord calling getpid()
+#include <process.h>            // For SeedWord calling getpid()
 #define getpid _getpid
 #define strtoull strtoul
 #define gmtime_r(t,g) gmtime_s(g,t)
@@ -84,7 +84,7 @@ namespace RandomLib {
 
   template<>
   void Random_u32::Write32(std::ostream& os, bool bin, int& cnt,
-			   Random_u32::type x)
+                           Random_u32::type x)
     throw(std::ios::failure) {
     if (bin) {
       unsigned char buf[4];
@@ -101,8 +101,8 @@ namespace RandomLib {
       std::ostringstream str;
       // No spacing before or after
       if (cnt > 0)
-	// Newline every longsperline longs
-	str << (cnt % longsperline ? ' ' : '\n');
+        // Newline every longsperline longs
+        str << (cnt % longsperline ? ' ' : '\n');
       str << std::hex << x;
       os << str.str();
       ++cnt;
@@ -117,7 +117,7 @@ namespace RandomLib {
       is.read(reinterpret_cast<char *>(buf), 4);
       // Use network order -- most significant byte first
       x = Random_u32::type(buf[0]) << 24 | Random_u32::type(buf[1]) << 16 |
-	Random_u32::type(buf[2]) << 8 | Random_u32::type(buf[3]);
+        Random_u32::type(buf[2]) << 8 | Random_u32::type(buf[3]);
     } else {
       std::string s;
       is >> std::ws >> s;
@@ -131,7 +131,7 @@ namespace RandomLib {
 
   template<>
   void Random_u64::Write32(std::ostream& os, bool bin, int& cnt,
-			   Random_u64::type x)
+                           Random_u64::type x)
     throw(std::ios::failure) {
     Random_u32::Write32(os, bin, cnt, Random_u32::cast(x >> 32));
     Random_u32::Write32(os, bin, cnt, Random_u32::cast(x      ));
@@ -153,17 +153,17 @@ namespace RandomLib {
     // Check that the assumptions made about the capabilities of the number
     // system are valid.
     STATIC_ASSERT(std::numeric_limits<seed_type>::radix == 2 &&
-		  !std::numeric_limits<seed_type>::is_signed &&
-		  std::numeric_limits<seed_type>::digits >= 32,
-		  "seed_type is a bad type");
+                  !std::numeric_limits<seed_type>::is_signed &&
+                  std::numeric_limits<seed_type>::digits >= 32,
+                  "seed_type is a bad type");
     u32::type t = 0;
     // Linux has /dev/urandom to initialize the seed randomly.  (Use
     // /dev/urandom instead of /dev/random because it does not block.)
     {
       std::ifstream f("/dev/urandom", std::ios::binary | std::ios::in);
       if (f.good()) {
-	// Read 32 bits from /dev/urandom
-	f.read(reinterpret_cast<char *>(&t), sizeof(t));
+        // Read 32 bits from /dev/urandom
+        f.read(reinterpret_cast<char *>(&t), sizeof(t));
       }
     }
     std::vector<seed_type> v = SeedVector();
@@ -179,12 +179,12 @@ namespace RandomLib {
 #if !WINDOWS
       timeval tv;
       if (gettimeofday(&tv, 0) == 0)
-	v.push_back(seed_t::cast(tv.tv_usec));
+        v.push_back(seed_t::cast(tv.tv_usec));
 #else
       LARGE_INTEGER taux;
       if (QueryPerformanceCounter((LARGE_INTEGER *)&taux)) {
-	v.push_back(seed_t::cast(taux.LowPart));
-	v.push_back(seed_t::cast(taux.HighPart));
+        v.push_back(seed_t::cast(taux.LowPart));
+        v.push_back(seed_t::cast(taux.HighPart));
       }
 #endif
     }
@@ -217,7 +217,7 @@ namespace RandomLib {
     while (true) {
       p = s.find_first_of("0123456789", p);
       if (p == std::string::npos)
-	break;
+        break;
       v.push_back(seed_t::cast(std::strtoull(c + p, &q, 0)));
       p = q - c;
     }
@@ -231,41 +231,41 @@ namespace RandomLib {
     // On exit we have _ptr == N.
 
     STATIC_ASSERT(std::numeric_limits<typename mixer_t::type>::radix == 2 &&
-		  !std::numeric_limits<typename mixer_t::type>::is_signed &&
-		  std::numeric_limits<typename mixer_t::type>::digits >=
-		  int(mixer_t::width),
-		  "mixer_type is a bad type");
+                  !std::numeric_limits<typename mixer_t::type>::is_signed &&
+                  std::numeric_limits<typename mixer_t::type>::digits >=
+                  int(mixer_t::width),
+                  "mixer_type is a bad type");
 
     STATIC_ASSERT(std::numeric_limits<result_type>::radix == 2 &&
-		  !std::numeric_limits<result_type>::is_signed &&
-		  std::numeric_limits<result_type>::digits >= width,
-		  "engine_type is a bad type");
+                  !std::numeric_limits<result_type>::is_signed &&
+                  std::numeric_limits<result_type>::digits >= width,
+                  "engine_type is a bad type");
 
     STATIC_ASSERT(mixer_t::width == 32 || mixer_t::width == 64,
-		  "Mixer width must be 32 or 64");
+                  "Mixer width must be 32 or 64");
 
     STATIC_ASSERT(width == 32 || width == 64,
-		  "Algorithm width must be 32 or 64");
+                  "Algorithm width must be 32 or 64");
 
     // If the bit-widths are the same then the data sizes must be the same.
     STATIC_ASSERT(!(mixer_t::width == width) ||
-		  sizeof(_stateu) == sizeof(_state),
-		  "Same bit-widths but different storage");
+                  sizeof(_stateu) == sizeof(_state),
+                  "Same bit-widths but different storage");
 
     // Repacking assumes that narrower data type is at least as wasteful than
     // the broader one.
     STATIC_ASSERT(!(mixer_t::width < width) ||
-		  sizeof(_stateu) >= sizeof(_state),
-		  "Narrow data type uses less storage");
+                  sizeof(_stateu) >= sizeof(_state),
+                  "Narrow data type uses less storage");
 
     STATIC_ASSERT(!(mixer_t::width > width) ||
-		  sizeof(_stateu) <= sizeof(_state),
-		  "Narrow data type uses less storage");
+                  sizeof(_stateu) <= sizeof(_state),
+                  "Narrow data type uses less storage");
 
     // Require that _statev and _state are aligned since no repacking is done
     // when calling Transition
     STATIC_ASSERT(sizeof(_statev) == sizeof(_state),
-		  "Storage mismatch with internal engine data type");
+                  "Storage mismatch with internal engine data type");
 
     // Convert the seed into state
     Mixer::SeedToState(_seed, _stateu, NU);
@@ -273,14 +273,14 @@ namespace RandomLib {
     // Pack into _state
     if (mixer_t::width < width) {
       for (size_t i = 0; i < N; ++i)
-	// Assume 2:1 LSB packing
-	_state[i] = result_type(_stateu[2*i]) |
-	  result_type(_stateu[2*i + 1]) <<
-	  (mixer_t::width < width ? mixer_t::width : 0);
+        // Assume 2:1 LSB packing
+        _state[i] = result_type(_stateu[2*i]) |
+          result_type(_stateu[2*i + 1]) <<
+          (mixer_t::width < width ? mixer_t::width : 0);
     } else if (mixer_t::width > width) {
       for (size_t i = N; i--;)
-	// Assume 1:2 LSB packing
-	_state[i] = result_t::cast(_stateu[i>>1] >> width * (i&1u));
+        // Assume 1:2 LSB packing
+        _state[i] = result_t::cast(_stateu[i>>1] >> width * (i&1u));
     } // Otherwise the union takes care of it
 
     Algorithm::NormalizeState(_state);
@@ -291,7 +291,7 @@ namespace RandomLib {
 
   template<class Algorithm, class Mixer> Random_u32::type
   RandomEngine<Algorithm, Mixer>::Check(u64::type v, u32::type e,
-					 u32::type m) const
+                                         u32::type m) const
     throw(std::out_of_range) {
     if (v != version)
       throw std::out_of_range(Name() + ": Unknown version");
@@ -305,9 +305,9 @@ namespace RandomLib {
     u32::CheckSum(m, check);
     u32::CheckSum(u32::type(_seed.size()), check);
     for (std::vector<seed_type>::const_iterator n = _seed.begin();
-	 n != _seed.end(); ++n) {
+         n != _seed.end(); ++n) {
       if (*n != seed_t::cast(*n))
-	throw std::out_of_range(Name() + ": Illegal seed value");
+        throw std::out_of_range(Name() + ": Illegal seed value");
       u32::CheckSum(u32::type(*n), check);
     }
     u32::CheckSum(_ptr, check);
@@ -316,7 +316,7 @@ namespace RandomLib {
     u32::CheckSum(_stride, check);
     if (_ptr != UNINIT) {
       if (_ptr >= N + _stride)
-	throw std::out_of_range(Name() + ": Invalid pointer");
+        throw std::out_of_range(Name() + ": Invalid pointer");
       u64::CheckSum(_rounds, check);
       Algorithm::CheckState(_state, check);
     }
@@ -334,7 +334,7 @@ namespace RandomLib {
     u32::Read32(is, bin, t);
     _seed.resize(size_t(t));
     for (std::vector<seed_type>::iterator n = _seed.begin();
-	 n != _seed.end(); ++n) {
+         n != _seed.end(); ++n) {
       u32::Read32(is, bin, t);
       *n = seed_type(t);
     }
@@ -351,7 +351,7 @@ namespace RandomLib {
       _rounds <<= 63 - std::numeric_limits<long long>::digits;
       _rounds >>= 63 - std::numeric_limits<long long>::digits;
       for (unsigned i = 0; i < N; ++i)
-	result_t::Read32(is, bin, _state[i]);
+        result_t::Read32(is, bin, _state[i]);
     }
     u32::Read32(is, bin, t);
     if (t != Check(versionr, versione, versionm))
@@ -360,7 +360,7 @@ namespace RandomLib {
 
   template<typename Algorithm, typename Mixer>
   void RandomEngine<Algorithm, Mixer>::Save(std::ostream& os,
-					    bool bin) const
+                                            bool bin) const
     throw(std::ios::failure) {
     u32::type check = Check(version, Algorithm::version, Mixer::version);
     int c = 0;
@@ -369,14 +369,14 @@ namespace RandomLib {
     u32::Write32(os, bin, c, Mixer::version);
     u32::Write32(os, bin, c, u32::type(_seed.size()));
     for (std::vector<seed_type>::const_iterator n = _seed.begin();
-	 n != _seed.end(); ++n)
+         n != _seed.end(); ++n)
       u32::Write32(os, bin, c, u32::type(*n));
     u32::Write32(os, bin, c, _ptr);
     u32::Write32(os, bin, c, _stride);
     if (_ptr != UNINIT) {
       u64::Write32(os, bin, c, u64::type(_rounds));
       for (unsigned i = 0; i < N; ++i)
-	result_t::Write32(os, bin, c, _state[i]);
+        result_t::Write32(os, bin, c, _state[i]);
     }
     u32::Write32(os, bin, c, check);
   }
@@ -412,7 +412,7 @@ namespace RandomLib {
     result_type x = g();
     if (SelfTestResult(0) && x != SelfTestResult(1))
       throw std::out_of_range(Name() + ": Incorrect result with seed " +
-			      g.SeedString());
+                              g.SeedString());
     seed_type s[] = {0x1234U, 0x5678U, 0x9abcU, 0xdef0U};
     //    seed_type s[] = {1, 2, 3, 4};
     g.Reseed(s, s+4);
@@ -441,11 +441,11 @@ namespace RandomLib {
       h.SetCount(1000000-1);
       x = h();
       if (SelfTestResult(0) && x != SelfTestResult(2))
-	throw std::out_of_range(Name() + ": Incorrect result with seed " +
-				h.SeedString());
+        throw std::out_of_range(Name() + ": Incorrect result with seed " +
+                                h.SeedString());
       g.SetCount(1000000);
       if (h != g)
-	throw std::out_of_range(Name() + ": Comparison failure");
+        throw std::out_of_range(Name() + ": Comparison failure");
     }
   }
 
@@ -517,7 +517,7 @@ namespace RandomLib {
 
   template<class RandomType> void MixerMT0<RandomType>::
   SeedToState(const std::vector<RandomSeed::seed_type>& seed,
-	      mixer_type state[], unsigned n) throw() {
+              mixer_type state[], unsigned n) throw() {
     // Adapted from
     // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c
     // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/VERSIONS/C-LANG/mt19937-64.c
@@ -533,25 +533,25 @@ namespace RandomLib {
     }
     if (s > 0) {
       const unsigned m = mixer_t::width / 32,
-	s2 = (s + m - 1)/m;
+        s2 = (s + m - 1)/m;
       unsigned i1 = 1;
       r = state[0];
       for (unsigned k = (n > s2 ? n : s2), j = 0;
-	   k; --k, i1 = i1 == n - 1 ? 1 : i1 + 1, // i1 = i1 + 1 mod n - 1
-	     j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
-	r = state[i1] ^ c * (r ^ r >> w - 2);
-	r += j + mixer_type(seed[m * j]) +
-	  (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
-	   mixer_type(seed[m * j + 1]) << w - 32);
-	r &= mask;
-	state[i1] = r;
+           k; --k, i1 = i1 == n - 1 ? 1 : i1 + 1, // i1 = i1 + 1 mod n - 1
+             j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
+        r = state[i1] ^ c * (r ^ r >> w - 2);
+        r += j + mixer_type(seed[m * j]) +
+          (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
+           mixer_type(seed[m * j + 1]) << w - 32);
+        r &= mask;
+        state[i1] = r;
       }
       for (unsigned k = n - 1; k; --k,
-	     i1 = i1 == n - 1 ? 1 : i1 + 1) { // i1 = i1 + 1 mod n - 1
-	r = state[i1] ^ d * (r ^ r >> w - 2);
-	r -= i1;
-	r &= mask;
-	state[i1] = r;
+             i1 = i1 == n - 1 ? 1 : i1 + 1) { // i1 = i1 + 1 mod n - 1
+        r = state[i1] ^ d * (r ^ r >> w - 2);
+        r -= i1;
+        r &= mask;
+        state[i1] = r;
       }
       state[0] = typename mixer_t::type(1) << w - 1;
     }
@@ -559,7 +559,7 @@ namespace RandomLib {
 
   template<class RandomType> void MixerMT1<RandomType>::
   SeedToState(const std::vector<RandomSeed::seed_type>& seed,
-	      mixer_type state[], unsigned n) throw() {
+              mixer_type state[], unsigned n) throw() {
     // This is the algorithm given in the seed_seq class described in
     // http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2006/n2079.pdf It is
     // a modification of
@@ -577,43 +577,43 @@ namespace RandomLib {
     }
     if (s > 0) {
       const unsigned m = mixer_t::width / 32,
-	s2 = (s + m - 1)/m;
+        s2 = (s + m - 1)/m;
       unsigned i1 = 0;
       for (unsigned k = (n > s2 ? n : s2), j = 0;
-	   k; --k, i1 = i1 == n - 1 ? 0 : i1 + 1, // i1 = i1 + 1 mod n
-	     j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
-	r = state[i1] ^ c * (r ^ r >> w - 2);
-	r += j + mixer_type(seed[m * j]) +
-	  (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
-	   mixer_type(seed[m * j + 1]) << w - 32);
-	r &= mask;
-	state[i1] = r;
+           k; --k, i1 = i1 == n - 1 ? 0 : i1 + 1, // i1 = i1 + 1 mod n
+             j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
+        r = state[i1] ^ c * (r ^ r >> w - 2);
+        r += j + mixer_type(seed[m * j]) +
+          (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
+           mixer_type(seed[m * j + 1]) << w - 32);
+        r &= mask;
+        state[i1] = r;
       }
       for (unsigned k = n; k; --k,
-	     i1 = i1 == n - 1 ? 0 : i1 + 1) { // i1 = i1 + 1 mod n
-	r = state[i1] ^ d * (r ^ r >> w - 2);
-	r -= i1;
-	r &= mask;
-	state[i1] = r;
+             i1 = i1 == n - 1 ? 0 : i1 + 1) { // i1 = i1 + 1 mod n
+        r = state[i1] ^ d * (r ^ r >> w - 2);
+        r -= i1;
+        r &= mask;
+        state[i1] = r;
       }
     }
   }
 
   void MixerSFMT::SeedToState(const std::vector<RandomSeed::seed_type>& seed,
-				 mixer_type state[], unsigned n)
+                                 mixer_type state[], unsigned n)
     throw() {
     // This is adapted from the routine init_by_array by Mutsuo Saito given in
     // http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/SFMT-src-1.2.tar.gz
 
     if (n == 0)
-      return;			// Nothing to do
+      return;                   // Nothing to do
 
     const unsigned s = unsigned(seed.size()),
       // Add treatment of small n with lag = (n - 1)/2 for n <= 7.  In
       // particular, the first operation (xor or plus) in each for loop
       // involves three distinct indices for n > 2.
       lag = n >= 623 ? 11 : (n >= 68 ? 7 : (n >= 39 ? 5 :
-					    (n >= 7 ? 3 : (n - 1)/2))),
+                                            (n >= 7 ? 3 : (n - 1)/2))),
       // count = max( s + 1, n )
       count = s + 1 > n ? s + 1 : n;
 
@@ -623,9 +623,9 @@ namespace RandomLib {
     unsigned i = 0, k = (n - lag) / 2, l = k + lag;
     mixer_type r = state[n - 1];
     for (unsigned j = 0; j < count; ++j,
-	   i = i == n - 1 ? 0 : i + 1,
-	   k = k == n - 1 ? 0 : k + 1,
-	   l = l == n - 1 ? 0 : l + 1) {
+           i = i == n - 1 ? 0 : i + 1,
+           k = k == n - 1 ? 0 : k + 1,
+           l = l == n - 1 ? 0 : l + 1) {
       // Here r = state[(j - 1) mod n]
       //      i = j mod n
       //      k = (j + (n - lag)/2) mod n
@@ -640,9 +640,9 @@ namespace RandomLib {
     }
 
     for (unsigned j = n; j; --j,
-	   i = i == n - 1 ? 0 : i + 1,
-	   k = k == n - 1 ? 0 : k + 1,
-	   l = l == n - 1 ? 0 : l + 1) {
+           i = i == n - 1 ? 0 : i + 1,
+           k = k == n - 1 ? 0 : k + 1,
+           l = l == n - 1 ? 0 : l + 1) {
       // Here r = state[(i - 1) mod n]
       //      k = (i + (n - lag)/2) mod n
       //      l = (i + (n - lag)/2 + lag) mod n
@@ -662,8 +662,8 @@ namespace RandomLib {
 
   // Here, input is I, J = I + 1, K = I + M; output is I = I + N (mod N)
 
-#define MT19937_STEP(I, J, K) statev[I] = statev[K] ^		\
-    (statev[J] & engine_type(1) ? magic : engine_type(0)) ^	\
+#define MT19937_STEP(I, J, K) statev[I] = statev[K] ^           \
+    (statev[J] & engine_type(1) ? magic : engine_type(0)) ^     \
     (statev[I] & upper | statev[J] & lower) >> 1
 
   // The code is cleaned up a little from Hagita's Fortran version by getting
@@ -673,11 +673,11 @@ namespace RandomLib {
   // Here input is J = I + N - 1, K = I + M - 1, and p = y[I] (only the high
   // bits are used); output _state[I] and p = y[I - 1].
 
-#define MT19937_REVSTEP(I, J, K) {				\
-    engine_type q = statev[J] ^ statev[K], s = q >> width - 1;	\
-    q = (q ^ (s ? magic : engine_type(0))) << 1 | s;		\
-    statev[I] = p & upper | q & lower;				\
-    p = q;							\
+#define MT19937_REVSTEP(I, J, K) {                              \
+    engine_type q = statev[J] ^ statev[K], s = q >> width - 1;  \
+    q = (q ^ (s ? magic : engine_type(0))) << 1 | s;            \
+    statev[I] = p & upper | q & lower;                          \
+    p = q;                                                      \
   }
 
   template<class RandomType>
@@ -685,22 +685,22 @@ namespace RandomLib {
     throw() {
     if (count > 0)
       for (; count; --count) {
-	// This ONLY uses high bit of statev[0]
-	unsigned i = 0;
-	for (; i < N - M; ++i) MT19937_STEP(i, i + 1, i + M    );
-	for (; i < N - 1; ++i) MT19937_STEP(i, i + 1, i + M - N);
-	MT19937_STEP(N - 1, 0, M - 1); // i = N - 1
+        // This ONLY uses high bit of statev[0]
+        unsigned i = 0;
+        for (; i < N - M; ++i) MT19937_STEP(i, i + 1, i + M    );
+        for (; i < N - 1; ++i) MT19937_STEP(i, i + 1, i + M - N);
+        MT19937_STEP(N - 1, 0, M - 1); // i = N - 1
       }
     else if (count < 0)
       for (; count; ++count) {
-	// This ONLY uses high bit of statev[0]
-	engine_type p = statev[0];
-	// Fix low bits of statev[0] and compute y[-1]
-	MT19937_REVSTEP(0, N - 1, M - 1); // i = N
-	unsigned i = N - 1;
-	for (; i > N - M; --i) MT19937_REVSTEP(i, i - 1, i + M - 1 - N);
-	for (; i        ; --i) MT19937_REVSTEP(i, i - 1, i + M - 1    );
-	MT19937_REVSTEP(0, N - 1, M - 1); // i = 0
+        // This ONLY uses high bit of statev[0]
+        engine_type p = statev[0];
+        // Fix low bits of statev[0] and compute y[-1]
+        MT19937_REVSTEP(0, N - 1, M - 1); // i = N
+        unsigned i = N - 1;
+        for (; i > N - M; --i) MT19937_REVSTEP(i, i - 1, i + M - 1 - N);
+        for (; i        ; --i) MT19937_REVSTEP(i, i - 1, i + M - 1    );
+        MT19937_REVSTEP(0, N - 1, M - 1); // i = 0
       }
   }
 
@@ -712,7 +712,7 @@ namespace RandomLib {
 
     // Perform the MT-specific sanity check on the resulting state ensuring
     // that the significant 19937 bits are not all zero.
-    state[0] &= upper;	// Mask out unused bits
+    state[0] &= upper;  // Mask out unused bits
     unsigned i = 0;
     while (i < N && state[i] == 0)
       ++i;
@@ -730,7 +730,7 @@ namespace RandomLib {
 
   template<class RandomType>
   void MT19937<RandomType>::CheckState(const engine_type state[],
-				       Random_u32::type& check)
+                                       Random_u32::type& check)
     throw(std::out_of_range) {
     engine_type x = 0;
     Random_u32::type c = check;
@@ -785,19 +785,19 @@ namespace RandomLib {
   // The order of instructions has been rearranged to increase the
   // speed slightly
 
-#define SFMT19937_STEP128(I, J) {			\
-    internal_type x = _mm_load_si128(statev + I),	\
-      y = _mm_srli_epi32(statev[J], 11),		\
-      z = _mm_srli_si128(s, 1);				\
-    s = _mm_slli_epi32(r, 18);				\
-    z = _mm_xor_si128(z, x);				\
-    x = _mm_slli_si128(x, 1);				\
-    z = _mm_xor_si128(z, s);				\
-    y = _mm_and_si128(y, m);				\
-    z = _mm_xor_si128(z, x);				\
-    s = r;						\
-    r = _mm_xor_si128(z, y);				\
-    _mm_store_si128(statev + I, r);			\
+#define SFMT19937_STEP128(I, J) {                       \
+    internal_type x = _mm_load_si128(statev + I),       \
+      y = _mm_srli_epi32(statev[J], 11),                \
+      z = _mm_srli_si128(s, 1);                         \
+    s = _mm_slli_epi32(r, 18);                          \
+    z = _mm_xor_si128(z, x);                            \
+    x = _mm_slli_si128(x, 1);                           \
+    z = _mm_xor_si128(z, s);                            \
+    y = _mm_and_si128(y, m);                            \
+    z = _mm_xor_si128(z, x);                            \
+    s = r;                                              \
+    r = _mm_xor_si128(z, y);                            \
+    _mm_store_si128(statev + I, r);                     \
   }
 
   // This undoes SFMT19937_STEP.  Trivially, we have
@@ -825,19 +825,19 @@ namespace RandomLib {
   // across calls as with SFMT19937_STEPNN and (2) w A^15 is slower to compute
   // than w A.
 
-#define SFMT19937_REVSTEP128(I, J, K, L) {		\
-    internal_type x = _mm_load_si128(statev + I),	\
-      y = _mm_srli_epi32(statev[J], 11),		\
-      z = _mm_slli_epi32(statev[L], 18);		\
-    y = _mm_and_si128(y, m);				\
-    x = _mm_xor_si128(x, _mm_srli_si128(statev[K], 1));	\
-    x = _mm_xor_si128(x, z);				\
-    x = _mm_xor_si128(x, y);				\
-    x = _mm_xor_si128(_mm_slli_si128(x, 8), x);		\
-    x = _mm_xor_si128(_mm_slli_si128(x, 4), x);		\
-    x = _mm_xor_si128(_mm_slli_si128(x, 2), x);		\
-    x = _mm_xor_si128(_mm_slli_si128(x, 1), x);		\
-    _mm_store_si128(statev + I, x);			\
+#define SFMT19937_REVSTEP128(I, J, K, L) {              \
+    internal_type x = _mm_load_si128(statev + I),       \
+      y = _mm_srli_epi32(statev[J], 11),                \
+      z = _mm_slli_epi32(statev[L], 18);                \
+    y = _mm_and_si128(y, m);                            \
+    x = _mm_xor_si128(x, _mm_srli_si128(statev[K], 1)); \
+    x = _mm_xor_si128(x, z);                            \
+    x = _mm_xor_si128(x, y);                            \
+    x = _mm_xor_si128(_mm_slli_si128(x, 8), x);         \
+    x = _mm_xor_si128(_mm_slli_si128(x, 4), x);         \
+    x = _mm_xor_si128(_mm_slli_si128(x, 2), x);         \
+    x = _mm_xor_si128(_mm_slli_si128(x, 1), x);         \
+    _mm_store_si128(statev + I, x);                     \
   }
 
   template<class RandomType>
@@ -846,23 +846,23 @@ namespace RandomLib {
     const internal_type m = _mm_set_epi32(magic3, magic2, magic1, magic0);
     if (count > 0) {
       internal_type s = _mm_load_si128(statev + N128 - 2),
-	r = _mm_load_si128(statev + N128 - 1);
+        r = _mm_load_si128(statev + N128 - 1);
       for (; count; --count) {
-	unsigned i = 0;
-	for (; i + M128 < N128; ++i) SFMT19937_STEP128(i, i + M128       );
-	for (; i < N128       ; ++i) SFMT19937_STEP128(i, i + M128 - N128);
+        unsigned i = 0;
+        for (; i + M128 < N128; ++i) SFMT19937_STEP128(i, i + M128       );
+        for (; i < N128       ; ++i) SFMT19937_STEP128(i, i + M128 - N128);
       }
     } else if (count < 0)
       for (; count; ++count) {
-	unsigned i = N128;
-	for (; i + M128 > N128;) {
-	  --i; SFMT19937_REVSTEP128(i, i + M128 - N128, i - 2, i - 1);
-	}
-	for (; i > 2;) {
-	  --i; SFMT19937_REVSTEP128(i, i + M128, i - 2, i - 1);
-	}
-	SFMT19937_REVSTEP128(1, M128 + 1, N128 - 1, 0       ); // i = 1
-	SFMT19937_REVSTEP128(0, M128    , N128 - 2, N128 - 1); // i = 0
+        unsigned i = N128;
+        for (; i + M128 > N128;) {
+          --i; SFMT19937_REVSTEP128(i, i + M128 - N128, i - 2, i - 1);
+        }
+        for (; i > 2;) {
+          --i; SFMT19937_REVSTEP128(i, i + M128, i - 2, i - 1);
+        }
+        SFMT19937_REVSTEP128(1, M128 + 1, N128 - 1, 0       ); // i = 1
+        SFMT19937_REVSTEP128(0, M128    , N128 - 2, N128 - 1); // i = 0
       }
   }
 
@@ -881,30 +881,30 @@ namespace RandomLib {
 
 #define ALTIVEC_PERM(X, P) vec_perm(X, P, P)
 
-#define SFMT19937_STEP128(I, J) {				\
-    internal_type x = statev[I],				\
-      z = vec_xor(vec_xor(ALTIVEC_PERM(s, right1), x),		\
-		  vec_sl(r, bitleft));				\
-    s = r;							\
-    r = vec_xor(z,						\
-		vec_xor(ALTIVEC_PERM(x, left1),			\
-			vec_and(vec_sr(statev[J], bitright),	\
-				magic)));			\
-    statev[I] = r;						\
+#define SFMT19937_STEP128(I, J) {                               \
+    internal_type x = statev[I],                                \
+      z = vec_xor(vec_xor(ALTIVEC_PERM(s, right1), x),          \
+                  vec_sl(r, bitleft));                          \
+    s = r;                                                      \
+    r = vec_xor(z,                                              \
+                vec_xor(ALTIVEC_PERM(x, left1),                 \
+                        vec_and(vec_sr(statev[J], bitright),    \
+                                magic)));                       \
+    statev[I] = r;                                              \
   }
 
-#define SFMT19937_REVSTEP128(I, J, K, L) {		\
-    internal_type x = statev[I],			\
-      y = vec_sr(statev[J], bitright),			\
-      z = vec_sl(statev[L], bitleft);			\
-    y = vec_and(y, magic);				\
-    x = vec_xor(x, ALTIVEC_PERM(statev[K], right1));	\
-    x = vec_xor(x, z);					\
-    x = vec_xor(x, y);					\
-    x = vec_xor(ALTIVEC_PERM(x, left8), x);		\
-    x = vec_xor(ALTIVEC_PERM(x, left4), x);		\
-    x = vec_xor(ALTIVEC_PERM(x, left2), x);		\
-    statev[I] = vec_xor(ALTIVEC_PERM(x, left1), x);	\
+#define SFMT19937_REVSTEP128(I, J, K, L) {              \
+    internal_type x = statev[I],                        \
+      y = vec_sr(statev[J], bitright),                  \
+      z = vec_sl(statev[L], bitleft);                   \
+    y = vec_and(y, magic);                              \
+    x = vec_xor(x, ALTIVEC_PERM(statev[K], right1));    \
+    x = vec_xor(x, z);                                  \
+    x = vec_xor(x, y);                                  \
+    x = vec_xor(ALTIVEC_PERM(x, left8), x);             \
+    x = vec_xor(ALTIVEC_PERM(x, left4), x);             \
+    x = vec_xor(ALTIVEC_PERM(x, left2), x);             \
+    statev[I] = vec_xor(ALTIVEC_PERM(x, left1), x);     \
   }
 
   template<class RandomType>
@@ -947,31 +947,31 @@ namespace RandomLib {
       (vector unsigned char)(15,0,1,2,3,4,5,6, 17,8,9,10,11,12,13,14);
     if (count > 0) {
       internal_type s = statev[N128 - 2],
-	r = statev[N128 - 1];
+        r = statev[N128 - 1];
       for (; count; --count) {
-	unsigned i = 0;
-	for (; i + M128 < N128; ++i) SFMT19937_STEP128(i, i + M128       );
-	for (; i < N128       ; ++i) SFMT19937_STEP128(i, i + M128 - N128);
+        unsigned i = 0;
+        for (; i + M128 < N128; ++i) SFMT19937_STEP128(i, i + M128       );
+        for (; i < N128       ; ++i) SFMT19937_STEP128(i, i + M128 - N128);
       }
     } else if (count < 0) {
       // leftN shifts left by N bytes.
       const vector unsigned char left2 = width == 32 ?
-	(vector unsigned char)(2,3,22,22, 6,7,0,1, 10,11,4,5, 14,15,8,9) :
-	(vector unsigned char)(2,3,4,5,6,7,30,30, 10,11,12,13,14,15,0,1),
-	left4 = width == 32 ?
-	(vector unsigned char)(20,20,20,20, 0,1,2,3, 4,5,6,7, 8,9,10,11) :
-	(vector unsigned char)(4,5,6,7,28,28,28,28, 12,13,14,15,0,1,2,3),
-	left8 = (vector unsigned char)(24,24,24,24,24,24,24,24,0,1,2,3,4,5,6,7);
+        (vector unsigned char)(2,3,22,22, 6,7,0,1, 10,11,4,5, 14,15,8,9) :
+        (vector unsigned char)(2,3,4,5,6,7,30,30, 10,11,12,13,14,15,0,1),
+        left4 = width == 32 ?
+        (vector unsigned char)(20,20,20,20, 0,1,2,3, 4,5,6,7, 8,9,10,11) :
+        (vector unsigned char)(4,5,6,7,28,28,28,28, 12,13,14,15,0,1,2,3),
+        left8 = (vector unsigned char)(24,24,24,24,24,24,24,24,0,1,2,3,4,5,6,7);
       for (; count; ++count) {
-	unsigned i = N128;
-	for (; i + M128 > N128;) {
-	  --i; SFMT19937_REVSTEP128(i, i + M128 - N128, i - 2, i - 1);
-	}
-	for (; i > 2;) {
-	  --i; SFMT19937_REVSTEP128(i, i + M128, i - 2, i - 1);
-	}
-	SFMT19937_REVSTEP128(1, M128 + 1, N128 - 1, 0       ); // i = 1
-	SFMT19937_REVSTEP128(0, M128    , N128 - 2, N128 - 1); // i = 0
+        unsigned i = N128;
+        for (; i + M128 > N128;) {
+          --i; SFMT19937_REVSTEP128(i, i + M128 - N128, i - 2, i - 1);
+        }
+        for (; i > 2;) {
+          --i; SFMT19937_REVSTEP128(i, i + M128, i - 2, i - 1);
+        }
+        SFMT19937_REVSTEP128(1, M128 + 1, N128 - 1, 0       ); // i = 1
+        SFMT19937_REVSTEP128(0, M128    , N128 - 2, N128 - 1); // i = 0
       }
     }
   }
@@ -982,55 +982,55 @@ namespace RandomLib {
 
 #else  // neither HAVE_SSE2 or HAVE_ALTIVEC
 
-#define SFMT19937_STEP32(I, J) {				\
-    internal_type t = statev[I] ^ statev[I] << 8 ^		\
-      statev[J] >> 11 & magic0 ^				\
-      (s0 >> 8 | s1 << 24) ^ r0 << 18;				\
-    s0 = r0; r0 = t & mask;					\
-    t = statev[I + 1] ^						\
-      (statev[I + 1] << 8 | statev[I] >> 24) ^			\
-      statev[J + 1] >> 11 & magic1 ^				\
-      (s1 >> 8 | s2 << 24) ^ r1 << 18;				\
-    s1 = r1; r1 = t & mask;					\
-    t = statev[I + 2] ^						\
-      (statev[I + 2] << 8 | statev[I + 1] >> 24) ^		\
-      statev[J + 2] >> 11 & magic2 ^				\
-      (s2 >> 8 | s3 << 24) ^ r2 << 18;				\
-    s2 = r2; r2 = t & mask;					\
-    t = statev[I + 3] ^						\
-      (statev[I + 3] << 8 | statev[I + 2] >> 24) ^		\
-      statev[J + 3] >> 11 & magic3 ^ s3 >> 8 ^ r3 << 18;	\
-    s3 = r3; r3 = t & mask;					\
-    statev[I    ] = r0; statev[I + 1] = r1;			\
-    statev[I + 2] = r2; statev[I + 3] = r3;			\
+#define SFMT19937_STEP32(I, J) {                                \
+    internal_type t = statev[I] ^ statev[I] << 8 ^              \
+      statev[J] >> 11 & magic0 ^                                \
+      (s0 >> 8 | s1 << 24) ^ r0 << 18;                          \
+    s0 = r0; r0 = t & mask;                                     \
+    t = statev[I + 1] ^                                         \
+      (statev[I + 1] << 8 | statev[I] >> 24) ^                  \
+      statev[J + 1] >> 11 & magic1 ^                            \
+      (s1 >> 8 | s2 << 24) ^ r1 << 18;                          \
+    s1 = r1; r1 = t & mask;                                     \
+    t = statev[I + 2] ^                                         \
+      (statev[I + 2] << 8 | statev[I + 1] >> 24) ^              \
+      statev[J + 2] >> 11 & magic2 ^                            \
+      (s2 >> 8 | s3 << 24) ^ r2 << 18;                          \
+    s2 = r2; r2 = t & mask;                                     \
+    t = statev[I + 3] ^                                         \
+      (statev[I + 3] << 8 | statev[I + 2] >> 24) ^              \
+      statev[J + 3] >> 11 & magic3 ^ s3 >> 8 ^ r3 << 18;        \
+    s3 = r3; r3 = t & mask;                                     \
+    statev[I    ] = r0; statev[I + 1] = r1;                     \
+    statev[I + 2] = r2; statev[I + 3] = r3;                     \
   }
 
-#define SFMT19937_REVSTEP32(I, J, K, L) {			\
-    internal_type						\
-      t0 = (statev[I] ^ statev[J] >> 11 & magic0 ^		\
-	    (statev[K] >> 8 | statev[K + 1] << 24) ^		\
-	    statev[L] << 18) & mask,				\
-      t1 = (statev[I + 1] ^					\
-	    statev[J + 1] >> 11 & magic1 ^			\
-	    (statev[K + 1] >> 8 | statev[K + 2] << 24) ^	\
-	    statev[L + 1] << 18) & mask,			\
-      t2 = (statev[I + 2] ^					\
-	    statev[J + 2] >> 11 & magic2 ^			\
-	    (statev[K + 2] >> 8 | statev[K + 3] << 24) ^	\
-	    statev[L + 2] << 18) & mask,			\
-      t3 = (statev[I + 3] ^					\
-	    statev[J + 3] >> 11 & magic3 ^			\
-	    statev[K + 3] >> 8 ^				\
-	    statev[L + 3] << 18) & mask;			\
-    t3 ^= t1; t2 ^= t0; t3 ^= t2; t2 ^= t1; t1 ^= t0;		\
-    t3 ^= t2 >> 16 | t3 << 16 & mask;				\
-    t2 ^= t1 >> 16 | t2 << 16 & mask;				\
-    t1 ^= t0 >> 16 | t1 << 16 & mask;				\
-    t0 ^=            t0 << 16 & mask;				\
-    statev[I    ] = t0 ^             t0 << 8 & mask;		\
-    statev[I + 1] = t1 ^ (t0 >> 24 | t1 << 8 & mask);		\
-    statev[I + 2] = t2 ^ (t1 >> 24 | t2 << 8 & mask);		\
-    statev[I + 3] = t3 ^ (t2 >> 24 | t3 << 8 & mask);		\
+#define SFMT19937_REVSTEP32(I, J, K, L) {                       \
+    internal_type                                               \
+      t0 = (statev[I] ^ statev[J] >> 11 & magic0 ^              \
+            (statev[K] >> 8 | statev[K + 1] << 24) ^            \
+            statev[L] << 18) & mask,                            \
+      t1 = (statev[I + 1] ^                                     \
+            statev[J + 1] >> 11 & magic1 ^                      \
+            (statev[K + 1] >> 8 | statev[K + 2] << 24) ^        \
+            statev[L + 1] << 18) & mask,                        \
+      t2 = (statev[I + 2] ^                                     \
+            statev[J + 2] >> 11 & magic2 ^                      \
+            (statev[K + 2] >> 8 | statev[K + 3] << 24) ^        \
+            statev[L + 2] << 18) & mask,                        \
+      t3 = (statev[I + 3] ^                                     \
+            statev[J + 3] >> 11 & magic3 ^                      \
+            statev[K + 3] >> 8 ^                                \
+            statev[L + 3] << 18) & mask;                        \
+    t3 ^= t1; t2 ^= t0; t3 ^= t2; t2 ^= t1; t1 ^= t0;           \
+    t3 ^= t2 >> 16 | t3 << 16 & mask;                           \
+    t2 ^= t1 >> 16 | t2 << 16 & mask;                           \
+    t1 ^= t0 >> 16 | t1 << 16 & mask;                           \
+    t0 ^=            t0 << 16 & mask;                           \
+    statev[I    ] = t0 ^             t0 << 8 & mask;            \
+    statev[I + 1] = t1 ^ (t0 >> 24 | t1 << 8 & mask);           \
+    statev[I + 2] = t2 ^ (t1 >> 24 | t2 << 8 & mask);           \
+    statev[I + 3] = t3 ^ (t2 >> 24 | t3 << 8 & mask);           \
  }
 
   template<>
@@ -1039,23 +1039,23 @@ namespace RandomLib {
     if (count > 0) {
       // x[i+N] = g(x[i], x[i+M], x[i+N-2], x[i,N-1])
       internal_type
-	s0 = statev[N - 8], s1 = statev[N - 7],
-	s2 = statev[N - 6], s3 = statev[N - 5],
-	r0 = statev[N - 4], r1 = statev[N - 3],
-	r2 = statev[N - 2], r3 = statev[N - 1];
+        s0 = statev[N - 8], s1 = statev[N - 7],
+        s2 = statev[N - 6], s3 = statev[N - 5],
+        r0 = statev[N - 4], r1 = statev[N - 3],
+        r2 = statev[N - 2], r3 = statev[N - 1];
       for (; count; --count) {
-	unsigned i = 0;
-	for (; i + M < N; i += R) SFMT19937_STEP32(i, i + M    );
-	for (; i < N    ; i += R) SFMT19937_STEP32(i, i + M - N);
+        unsigned i = 0;
+        for (; i + M < N; i += R) SFMT19937_STEP32(i, i + M    );
+        for (; i < N    ; i += R) SFMT19937_STEP32(i, i + M - N);
       }
     } else if (count < 0)
       for (; count; ++count) {
       unsigned i = N;
       for (; i + M > N;) {
-	i -= R; SFMT19937_REVSTEP32(i, i + M - N, i - 2 * R, i - R);
+        i -= R; SFMT19937_REVSTEP32(i, i + M - N, i - 2 * R, i - R);
       }
       for (; i > 2 * R;) {
-	i -= R; SFMT19937_REVSTEP32(i, i + M    , i - 2 * R, i - R);
+        i -= R; SFMT19937_REVSTEP32(i, i + M    , i - 2 * R, i - R);
       }
       SFMT19937_REVSTEP32(R, M + R, N -     R, 0    ); // i = R
       SFMT19937_REVSTEP32(0, M    , N - 2 * R, N - R); // i = 0
@@ -1065,17 +1065,17 @@ namespace RandomLib {
 #undef SFMT19937_STEP32
 #undef SFMT19937_REVSTEP32
 
-#define SFMT19937_STEP64(I, J) {			\
-    internal_type t = statev[I] ^ statev[I] << 8 ^	\
-      statev[J] >> 11 & magic0 ^			\
-      (s0 >> 8 | s1 << 56) ^ r0 << 18 & mask18;		\
-    s0 = r0; r0 = t & mask;				\
-    t = statev[I + 1] ^					\
-      (statev[I + 1] << 8 | statev[I] >> 56) ^		\
-      statev[J + 1] >> 11 & magic1 ^			\
-      s1 >> 8 ^ r1 << 18 & mask18;			\
-    s1 = r1; r1 = t & mask;				\
-    statev[I] = r0; statev[I + 1] = r1;			\
+#define SFMT19937_STEP64(I, J) {                        \
+    internal_type t = statev[I] ^ statev[I] << 8 ^      \
+      statev[J] >> 11 & magic0 ^                        \
+      (s0 >> 8 | s1 << 56) ^ r0 << 18 & mask18;         \
+    s0 = r0; r0 = t & mask;                             \
+    t = statev[I + 1] ^                                 \
+      (statev[I + 1] << 8 | statev[I] >> 56) ^          \
+      statev[J + 1] >> 11 & magic1 ^                    \
+      s1 >> 8 ^ r1 << 18 & mask18;                      \
+    s1 = r1; r1 = t & mask;                             \
+    statev[I] = r0; statev[I + 1] = r1;                 \
   }
 
   // In combining the left and right shifts to simulate a 128-bit shift we
@@ -1083,20 +1083,20 @@ namespace RandomLib {
   // >> 56 instead of t1 ^ t1 << 8 | t0 >> 56) and this speeds up the code if
   // used in some places.
 
-#define SFMT19937_REVSTEP64(I, J, K, L) {			\
-    internal_type						\
-      t0 = statev[I] ^ statev[J] >> 11 & magic0 ^		\
-      (statev[K] >> 8 | statev[K + 1] << 56 & mask)		\
-      ^ statev[L] << 18 & mask18,				\
-      t1 = statev[I + 1] ^ statev[J + 1] >> 11 & magic1 ^	\
-      statev[K + 1] >> 8 ^ statev[L + 1] << 18 & mask18;	\
-    t1 ^= t0;							\
-    t1 ^= t0 >> 32 ^ t1 << 32 & mask;				\
-    t0 ^=            t0 << 32 & mask;				\
-    t1 ^= t0 >> 48 ^ t1 << 16 & mask;				\
-    t0 ^=            t0 << 16 & mask;				\
-    statev[I    ] = t0 ^            t0 << 8 & mask;		\
-    statev[I + 1] = t1 ^ t0 >> 56 ^ t1 << 8 & mask;		\
+#define SFMT19937_REVSTEP64(I, J, K, L) {                       \
+    internal_type                                               \
+      t0 = statev[I] ^ statev[J] >> 11 & magic0 ^               \
+      (statev[K] >> 8 | statev[K + 1] << 56 & mask)             \
+      ^ statev[L] << 18 & mask18,                               \
+      t1 = statev[I + 1] ^ statev[J + 1] >> 11 & magic1 ^       \
+      statev[K + 1] >> 8 ^ statev[L + 1] << 18 & mask18;        \
+    t1 ^= t0;                                                   \
+    t1 ^= t0 >> 32 ^ t1 << 32 & mask;                           \
+    t0 ^=            t0 << 32 & mask;                           \
+    t1 ^= t0 >> 48 ^ t1 << 16 & mask;                           \
+    t0 ^=            t0 << 16 & mask;                           \
+    statev[I    ] = t0 ^            t0 << 8 & mask;             \
+    statev[I + 1] = t1 ^ t0 >> 56 ^ t1 << 8 & mask;             \
  }
 
   template<>
@@ -1105,31 +1105,31 @@ namespace RandomLib {
     // x[i+N] = g(x[i], x[i+M], x[i+N-2], x[i,N-1])
     if (count > 0) {
       internal_type
-	s0 = statev[N - 4], s1 = statev[N - 3],
-	r0 = statev[N - 2], r1 = statev[N - 1];
+        s0 = statev[N - 4], s1 = statev[N - 3],
+        r0 = statev[N - 2], r1 = statev[N - 1];
       for (; count; --count) {
-	unsigned i = 0;
-	for (; i + M < N; i += R) SFMT19937_STEP64(i, i + M    );
-	for (; i < N    ; i += R) SFMT19937_STEP64(i, i + M - N);
+        unsigned i = 0;
+        for (; i + M < N; i += R) SFMT19937_STEP64(i, i + M    );
+        for (; i < N    ; i += R) SFMT19937_STEP64(i, i + M - N);
       }
     } else if (count < 0)
       for (; count; ++count) {
-	unsigned i = N;
-	for (; i + M > N;) {
-	  i -= R; SFMT19937_REVSTEP64(i, i + M - N, i - 2 * R, i - R);
-	}
-	for (; i > 2 * R;) {
-	  i -= R; SFMT19937_REVSTEP64(i, i + M    , i - 2 * R, i - R);
-	}
-	SFMT19937_REVSTEP64(R, M + R, N -     R, 0    ); // i = R
-	SFMT19937_REVSTEP64(0, M    , N - 2 * R, N - R); // i = 0
+        unsigned i = N;
+        for (; i + M > N;) {
+          i -= R; SFMT19937_REVSTEP64(i, i + M - N, i - 2 * R, i - R);
+        }
+        for (; i > 2 * R;) {
+          i -= R; SFMT19937_REVSTEP64(i, i + M    , i - 2 * R, i - R);
+        }
+        SFMT19937_REVSTEP64(R, M + R, N -     R, 0    ); // i = R
+        SFMT19937_REVSTEP64(0, M    , N - 2 * R, N - R); // i = 0
       }
   }
 
 #undef SFMT19937_STEP64
 #undef SFMT19937_REVSTEP64
 
-#endif	// HAVE_SSE2
+#endif  // HAVE_SSE2
 
   template<>
   void SFMT19937<Random_u32>::NormalizeState(engine_type state[]) throw () {
@@ -1139,7 +1139,7 @@ namespace RandomLib {
     for (unsigned s = 16; s; s >>= 1)
       inner ^= inner >> s;
     STATIC_ASSERT(PARITY_LSB < 32 && PARITY0 & 1u << PARITY_LSB,
-		  "inconsistent PARITY_LSB or PARITY0");
+                  "inconsistent PARITY_LSB or PARITY0");
     // Now inner & 1 is the parity of the number of 1 bits in w_0 & p.
     if ((inner & 1u) == 0)
       // Change bit of w_0 corresponding to LSB of PARITY
@@ -1153,7 +1153,7 @@ namespace RandomLib {
     for (unsigned s = 32; s; s >>= 1)
       inner ^= inner >> s;
     STATIC_ASSERT(PARITY_LSB < 64 && PARITY0 & 1u << PARITY_LSB,
-		  "inconsistent PARITY_LSB or PARITY0");
+                  "inconsistent PARITY_LSB or PARITY0");
     // Now inner & 1 is the parity of the number of 1 bits in w_0 & p.
     if ((inner & 1u) == 0)
       // Change bit of w_0 corresponding to LSB of PARITY
@@ -1162,7 +1162,7 @@ namespace RandomLib {
 
   template<class RandomType>
   void SFMT19937<RandomType>::CheckState(const engine_type state[],
-					 Random_u32::type& check)
+                                         Random_u32::type& check)
     throw(std::out_of_range) {
     engine_type x = 0;
     Random_u32::type c = check;
@@ -1232,145 +1232,145 @@ namespace RandomLib {
     1/75557863725914323419136.f, // 2^-76
     1/37778931862957161709568.f, // 2^-75
     1/18889465931478580854784.f, // 2^-74
-    1/9444732965739290427392.f,	// 2^-73
-    1/4722366482869645213696.f,	// 2^-72
-    1/2361183241434822606848.f,	// 2^-71
-    1/1180591620717411303424.f,	// 2^-70
-    1/590295810358705651712.f,	// 2^-69
-    1/295147905179352825856.f,	// 2^-68
-    1/147573952589676412928.f,	// 2^-67
-    1/73786976294838206464.f,	// 2^-66
-    1/36893488147419103232.f,	// 2^-65
+    1/9444732965739290427392.f, // 2^-73
+    1/4722366482869645213696.f, // 2^-72
+    1/2361183241434822606848.f, // 2^-71
+    1/1180591620717411303424.f, // 2^-70
+    1/590295810358705651712.f,  // 2^-69
+    1/295147905179352825856.f,  // 2^-68
+    1/147573952589676412928.f,  // 2^-67
+    1/73786976294838206464.f,   // 2^-66
+    1/36893488147419103232.f,   // 2^-65
 #endif
-    1/18446744073709551616.f,	// 2^-64
-    1/9223372036854775808.f,	// 2^-63
-    1/4611686018427387904.f,	// 2^-62
-    1/2305843009213693952.f,	// 2^-61
-    1/1152921504606846976.f,	// 2^-60
-    1/576460752303423488.f,	// 2^-59
-    1/288230376151711744.f,	// 2^-58
-    1/144115188075855872.f,	// 2^-57
-    1/72057594037927936.f,	// 2^-56
-    1/36028797018963968.f,	// 2^-55
-    1/18014398509481984.f,	// 2^-54
-    1/9007199254740992.f,	// 2^-53
-    1/4503599627370496.f,	// 2^-52
-    1/2251799813685248.f,	// 2^-51
-    1/1125899906842624.f,	// 2^-50
-    1/562949953421312.f,	// 2^-49
-    1/281474976710656.f,	// 2^-48
-    1/140737488355328.f,	// 2^-47
-    1/70368744177664.f,		// 2^-46
-    1/35184372088832.f,		// 2^-45
-    1/17592186044416.f,		// 2^-44
-    1/8796093022208.f,		// 2^-43
-    1/4398046511104.f,		// 2^-42
-    1/2199023255552.f,		// 2^-41
-    1/1099511627776.f,		// 2^-40
-    1/549755813888.f,		// 2^-39
-    1/274877906944.f,		// 2^-38
-    1/137438953472.f,		// 2^-37
-    1/68719476736.f,		// 2^-36
-    1/34359738368.f,		// 2^-35
-    1/17179869184.f,		// 2^-34
-    1/8589934592.f,		// 2^-33
-    1/4294967296.f,		// 2^-32
-    1/2147483648.f,		// 2^-31
-    1/1073741824.f,		// 2^-30
-    1/536870912.f,		// 2^-29
-    1/268435456.f,		// 2^-28
-    1/134217728.f,		// 2^-27
-    1/67108864.f,		// 2^-26
-    1/33554432.f,		// 2^-25
-    1/16777216.f,		// 2^-24
-    1/8388608.f,		// 2^-23
-    1/4194304.f,		// 2^-22
-    1/2097152.f,		// 2^-21
-    1/1048576.f,		// 2^-20
-    1/524288.f,			// 2^-19
-    1/262144.f,			// 2^-18
-    1/131072.f,			// 2^-17
-    1/65536.f,			// 2^-16
-    1/32768.f,			// 2^-15
-    1/16384.f,			// 2^-14
-    1/8192.f,			// 2^-13
-    1/4096.f,			// 2^-12
-    1/2048.f,			// 2^-11
-    1/1024.f,			// 2^-10
-    1/512.f,			// 2^-9
-    1/256.f,			// 2^-8
-    1/128.f,			// 2^-7
-    1/64.f,			// 2^-6
-    1/32.f,			// 2^-5
-    1/16.f,			// 2^-4
-    1/8.f,			// 2^-3
-    1/4.f,			// 2^-2
-    1/2.f,			// 2^-1
-    1.f,			// 2^0
-    2.f,			// 2^1
-    4.f,			// 2^2
-    8.f,			// 2^3
-    16.f,			// 2^4
-    32.f,			// 2^5
-    64.f,			// 2^6
-    128.f,			// 2^7
-    256.f,			// 2^8
-    512.f,			// 2^9
-    1024.f,			// 2^10
-    2048.f,			// 2^11
-    4096.f,			// 2^12
-    8192.f,			// 2^13
-    16384.f,			// 2^14
-    32768.f,			// 2^15
-    65536.f,			// 2^16
-    131072.f,			// 2^17
-    262144.f,			// 2^18
-    524288.f,			// 2^19
-    1048576.f,			// 2^20
-    2097152.f,			// 2^21
-    4194304.f,			// 2^22
-    8388608.f,			// 2^23
-    16777216.f,			// 2^24
-    33554432.f,			// 2^25
-    67108864.f,			// 2^26
-    134217728.f,		// 2^27
-    268435456.f,		// 2^28
-    536870912.f,		// 2^29
-    1073741824.f,		// 2^30
-    2147483648.f,		// 2^31
-    4294967296.f,		// 2^32
-    8589934592.f,		// 2^33
-    17179869184.f,		// 2^34
-    34359738368.f,		// 2^35
-    68719476736.f,		// 2^36
-    137438953472.f,		// 2^37
-    274877906944.f,		// 2^38
-    549755813888.f,		// 2^39
-    1099511627776.f,		// 2^40
-    2199023255552.f,		// 2^41
-    4398046511104.f,		// 2^42
-    8796093022208.f,		// 2^43
-    17592186044416.f,		// 2^44
-    35184372088832.f,		// 2^45
-    70368744177664.f,		// 2^46
-    140737488355328.f,		// 2^47
-    281474976710656.f,		// 2^48
-    562949953421312.f,		// 2^49
-    1125899906842624.f,		// 2^50
-    2251799813685248.f,		// 2^51
-    4503599627370496.f,		// 2^52
-    9007199254740992.f,		// 2^53
-    18014398509481984.f,	// 2^54
-    36028797018963968.f,	// 2^55
-    72057594037927936.f,	// 2^56
-    144115188075855872.f,	// 2^57
-    288230376151711744.f,	// 2^58
-    576460752303423488.f,	// 2^59
-    1152921504606846976.f,	// 2^60
-    2305843009213693952.f,	// 2^61
-    4611686018427387904.f,	// 2^62
-    9223372036854775808.f,	// 2^63
-    18446744073709551616.f,	// 2^64
+    1/18446744073709551616.f,   // 2^-64
+    1/9223372036854775808.f,    // 2^-63
+    1/4611686018427387904.f,    // 2^-62
+    1/2305843009213693952.f,    // 2^-61
+    1/1152921504606846976.f,    // 2^-60
+    1/576460752303423488.f,     // 2^-59
+    1/288230376151711744.f,     // 2^-58
+    1/144115188075855872.f,     // 2^-57
+    1/72057594037927936.f,      // 2^-56
+    1/36028797018963968.f,      // 2^-55
+    1/18014398509481984.f,      // 2^-54
+    1/9007199254740992.f,       // 2^-53
+    1/4503599627370496.f,       // 2^-52
+    1/2251799813685248.f,       // 2^-51
+    1/1125899906842624.f,       // 2^-50
+    1/562949953421312.f,        // 2^-49
+    1/281474976710656.f,        // 2^-48
+    1/140737488355328.f,        // 2^-47
+    1/70368744177664.f,         // 2^-46
+    1/35184372088832.f,         // 2^-45
+    1/17592186044416.f,         // 2^-44
+    1/8796093022208.f,          // 2^-43
+    1/4398046511104.f,          // 2^-42
+    1/2199023255552.f,          // 2^-41
+    1/1099511627776.f,          // 2^-40
+    1/549755813888.f,           // 2^-39
+    1/274877906944.f,           // 2^-38
+    1/137438953472.f,           // 2^-37
+    1/68719476736.f,            // 2^-36
+    1/34359738368.f,            // 2^-35
+    1/17179869184.f,            // 2^-34
+    1/8589934592.f,             // 2^-33
+    1/4294967296.f,             // 2^-32
+    1/2147483648.f,             // 2^-31
+    1/1073741824.f,             // 2^-30
+    1/536870912.f,              // 2^-29
+    1/268435456.f,              // 2^-28
+    1/134217728.f,              // 2^-27
+    1/67108864.f,               // 2^-26
+    1/33554432.f,               // 2^-25
+    1/16777216.f,               // 2^-24
+    1/8388608.f,                // 2^-23
+    1/4194304.f,                // 2^-22
+    1/2097152.f,                // 2^-21
+    1/1048576.f,                // 2^-20
+    1/524288.f,                 // 2^-19
+    1/262144.f,                 // 2^-18
+    1/131072.f,                 // 2^-17
+    1/65536.f,                  // 2^-16
+    1/32768.f,                  // 2^-15
+    1/16384.f,                  // 2^-14
+    1/8192.f,                   // 2^-13
+    1/4096.f,                   // 2^-12
+    1/2048.f,                   // 2^-11
+    1/1024.f,                   // 2^-10
+    1/512.f,                    // 2^-9
+    1/256.f,                    // 2^-8
+    1/128.f,                    // 2^-7
+    1/64.f,                     // 2^-6
+    1/32.f,                     // 2^-5
+    1/16.f,                     // 2^-4
+    1/8.f,                      // 2^-3
+    1/4.f,                      // 2^-2
+    1/2.f,                      // 2^-1
+    1.f,                        // 2^0
+    2.f,                        // 2^1
+    4.f,                        // 2^2
+    8.f,                        // 2^3
+    16.f,                       // 2^4
+    32.f,                       // 2^5
+    64.f,                       // 2^6
+    128.f,                      // 2^7
+    256.f,                      // 2^8
+    512.f,                      // 2^9
+    1024.f,                     // 2^10
+    2048.f,                     // 2^11
+    4096.f,                     // 2^12
+    8192.f,                     // 2^13
+    16384.f,                    // 2^14
+    32768.f,                    // 2^15
+    65536.f,                    // 2^16
+    131072.f,                   // 2^17
+    262144.f,                   // 2^18
+    524288.f,                   // 2^19
+    1048576.f,                  // 2^20
+    2097152.f,                  // 2^21
+    4194304.f,                  // 2^22
+    8388608.f,                  // 2^23
+    16777216.f,                 // 2^24
+    33554432.f,                 // 2^25
+    67108864.f,                 // 2^26
+    134217728.f,                // 2^27
+    268435456.f,                // 2^28
+    536870912.f,                // 2^29
+    1073741824.f,               // 2^30
+    2147483648.f,               // 2^31
+    4294967296.f,               // 2^32
+    8589934592.f,               // 2^33
+    17179869184.f,              // 2^34
+    34359738368.f,              // 2^35
+    68719476736.f,              // 2^36
+    137438953472.f,             // 2^37
+    274877906944.f,             // 2^38
+    549755813888.f,             // 2^39
+    1099511627776.f,            // 2^40
+    2199023255552.f,            // 2^41
+    4398046511104.f,            // 2^42
+    8796093022208.f,            // 2^43
+    17592186044416.f,           // 2^44
+    35184372088832.f,           // 2^45
+    70368744177664.f,           // 2^46
+    140737488355328.f,          // 2^47
+    281474976710656.f,          // 2^48
+    562949953421312.f,          // 2^49
+    1125899906842624.f,         // 2^50
+    2251799813685248.f,         // 2^51
+    4503599627370496.f,         // 2^52
+    9007199254740992.f,         // 2^53
+    18014398509481984.f,        // 2^54
+    36028797018963968.f,        // 2^55
+    72057594037927936.f,        // 2^56
+    144115188075855872.f,       // 2^57
+    288230376151711744.f,       // 2^58
+    576460752303423488.f,       // 2^59
+    1152921504606846976.f,      // 2^60
+    2305843009213693952.f,      // 2^61
+    4611686018427387904.f,      // 2^62
+    9223372036854775808.f,      // 2^63
+    18446744073709551616.f,     // 2^64
   };
 #endif
 

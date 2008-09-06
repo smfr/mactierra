@@ -15,8 +15,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include <algorithm>		// For std::transform
-#include <sstream>		// For VectorToString
+#include <algorithm>            // For std::transform
+#include <sstream>              // For VectorToString
 #include "RandomLib/RandomType.hpp"
 
 namespace RandomLib {
@@ -171,11 +171,11 @@ namespace RandomLib {
       std::ostringstream os;
       os << "[";
       for (typename std::vector<IntType>::const_iterator n = v.begin();
-	   n != v.end(); ++n) {
-	if (n != v.begin())
-	  os << ",";
-	// Normalize in case this is called by user.
-	os << seed_t::cast(*n);
+           n != v.end(); ++n) {
+        if (n != v.begin())
+          os << ",";
+        // Normalize in case this is called by user.
+        os << seed_t::cast(*n);
       }
       os << "]";
       return os.str();
@@ -207,4 +207,4 @@ namespace RandomLib {
 
 } // namespace RandomLib
 
-#endif	// RANDOMSEED_HPP
+#endif  // RANDOMSEED_HPP
