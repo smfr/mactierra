@@ -1,0 +1,9 @@
+File Name   Archive            Description
+------------------------------------------------------------------------------
+MANIFEST       1      this shipping list
+Makefile       1      make file for the product
+README         1      read this file first
+options.3      1      man page for the Options(3C++) library
+options.C      1      implementation of the Options(3C++) library
+options.h      2      definition of the Options(3C++) library
+testopts.C     2      test program for the library

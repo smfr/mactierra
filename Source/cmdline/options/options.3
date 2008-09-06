@@ -1,0 +1,617 @@
+.\"---------- TO PRINT, USE: {n,t}roff -man file ----------
+.if n .po 1
+.if n .ll 78
+.\"-----------------------------------
+.ds NM \f4Options\fP
+.de XS
+. RS
+. nf
+. ft 4
+..
+.de XE
+. ft R
+. fi
+. RE
+..
+.ds -- \-\|\-
+.ds C+ C\s-2\v'-1.5p'\(pl\(pl\v'+1.5p'\s+2
+.ds .. .\^.\^.
+.\"-------------------------------------------
+.\" The following "strings" should correspond to where the CmdLine files
+.\" have been installed.  "i" is where the include files where installed
+.\" and "l" is where the object-library is installed. You should change
+.\" the definition of these macros if they are not installed in the 
+.\" places indicated below.
+.\"-------------------------------------------
+.ds i /usr/local/include
+.ds l /usr/local/lib
+.\"-----------------------------------
+.TH Options 3\*(C+
+.\"-----------------------------------
+.SH NAME
+Options  \- A \*(C+ class for parsing command-line options
+.\"-----------------------------------
+.SH SYNOPSIS
+The following are all defined in the include file \f4<options.h>\fP:
+
+.nf
+.ft 4
+.ps -2
+// Abstract class to iterate through options/arguments
+//
+class OptIter {
+public:
+   OptIter(void);
+   virtual ~OptIter(void);
+
+.vs -2
+      // curr() returns the current item in the iterator without
+      // advancing on to the next item. If we are at the end of items
+      // then NULL is returned.
+.vs +2
+   virtual const char * curr(void) = 0;
+
+      // next() advances to the next item.
+   virtual void next(void) = 0;
+
+.vs -2
+      // operator() returns the current item in the iterator and then
+      // advances on to the next item. If we are at the end of items
+      // then NULL is returned.
+.vs +2
+   virtual const char * operator()(void);
+} ;
+
+// Abstract class for a rewindable OptIter
+//
+class OptIterRwd : public OptIter {
+public:
+   OptIterRwd(void);
+   virtual ~OptIterRwd(void);
+
+   virtual const char * curr(void) = 0;
+   virtual void next(void) = 0;
+   virtual const char * operator()(void) = 0;
+
+      // rewind() resets the "current-element" to the first one in the "list"
+   virtual void rewind(void) = 0;
+} ;
+
+.vs -2
+// Class to iterate through an array of tokens. The array may be terminated
+// by NULL or a count containing the number of tokens may be given.
+//
+.vs +2
+class OptArgvIter : public OptIterRwd {
+public:
+   OptArgvIter(const char * const argv[]);
+   OptArgvIter(int argc, const char * const argv[]);
+   virtual ~OptArgvIter(void);
+   virtual const char * curr(void);
+   virtual void next(void);
+   virtual const char * operator()(void);
+   virtual void rewind(void);
+
+      // index returns the current index to use for argv[]
+   int index(void);
+} ;
+
+
+// Class to iterate through a string containing delimiter-separated tokens
+//
+class OptStrTokIter : public OptIterRwd {
+public:
+   OptStrTokIter(const char * tokens, const char * delimiters =0);
+   virtual ~OptStrTokIter(void);
+   virtual const char * curr(void);
+   virtual void next(void);
+   virtual const char * operator()(void);
+   virtual void rewind(void);
+
+.vs -2
+      // delimiters() with NO arguments returns the current set of delimiters,
+      // If an argument is given then it is used as the new set of delimiters.
+.vs +2
+   const char * delimiters(void);
+   void delimiters(const char * delims);
+} ;
+
+
+.vs -2
+   // OptIstreamIter is a class for iterating over arguments that come
+   // from an input stream. Each line of the input stream is considered
+   // to be a set of white-space separated tokens. If the the first
+   // non-white character on a line is '#' ('!' for VMS systems) then
+   // the line is considered a comment and is ignored.
+   //
+   // *Note:: If a line is more than 1022 characters in length then we
+   // treat it as if it were several lines of length 1022 or less.
+   //
+   // *Note:: The string tokens returned by this iterator are pointers
+   //         to temporary buffers which may not necessarily stick around
+   //         for too long after the call to curr() or operator(), hence
+   //         if you need the string value to persist - you will need to
+   //         make a copy.
+   //
+.vs +2
+class OptIstreamIter : public OptIter {
+private:
+   istream & is ;
+   OptStrTokIter * tok_iter ;
+
+   void
+   fill(void);
+
+public:
+   static const unsigned  MAX_LINE_LEN ;
+
+   OptIstreamIter(istream & input);
+
+   virtual
+   ~OptIstreamIter(void);
+
+   virtual const char *
+   curr(void);
+
+   virtual void
+   next(void);
+
+   virtual const char *
+   operator()(void);
+} ;
+
+
+.vs -2
+// Class to hold option-specifications and parsing-specifications
+//
+.vs +2
+class Options {
+public:
+      // Flags to control parsing behavior
+   enum OptCtrl {
+      DEFAULT    = 0x00,  // Default setting
+      ANYCASE    = 0x01,  // Ignore case when matching short-options
+      QUIET      = 0x02,  // Dont print error messages
+      PLUS       = 0x04,  // Allow "+" as a long-option prefix
+      SHORT_ONLY = 0x08,  // Dont accept long-options
+      LONG_ONLY  = 0x10,  // Dont accept short-options
+.vs -2
+                            // (also allows "-" as a long-option prefix).
+.vs +2
+      NOGUESSING = 0x20,  // Normally, when we see a short (long) option
+.vs -2
+                            // on the command line that doesnt match any
+                            // known short (long) options, then we try to
+                            // "guess" by seeing if it will match any known
+                            // long (short) option. Setting this mask prevents
+                            // this "guessing" from occurring.
+.vs +2
+      PARSE_POS = 0x40    // By default, Options will not present positional
+.vs -2
+                            // command-line arguments to the user and will
+                            // instead stop parsing when the first positonal
+                            // argument has been encountered. If this flag
+                            // is given, Options will present positional
+                            // arguments to the user with a return code of
+                            // POSITIONAL; ENDOPTS will be returned only
+                            // when the end of the argument list is reached.
+.vs +2
+   } ;
+
+      // Error return values for operator()
+   enum OptRC {
+      ENDOPTS    =  0,
+      BADCHAR    = -1,
+      BADKWD     = -2,
+      AMBIGUOUS  = -3,
+      POSITIONAL = -4
+   } ;
+
+   Options(const char * name, const char * const optv[]);
+
+   virtual ~Options(void);
+
+      // name() returns the command name
+   const char * name(void) const;
+
+      // ctrls() (with 1 argument) sets new control settings
+   unsigned ctrls(void) const;
+
+      // ctrls() (with no arguments) returns the existing control settings.
+   void ctrls(unsigned newctrls);
+
+      // reset for another pass to parse for options
+   void
+   reset(void) { nextchar = listopt = NULL; }
+
+.vs -2
+      // usage() prints options usage (followed by any positional arguments
+      // given) on the given outstream
+.vs +2
+   void usage(ostream & os, const char * positionals) const ;
+
+.vs -2
+      // operator() iterates through the arguments as necessary (using the
+      // given iterator) and returns the character value of the option
+      // (or long-option) that it matched. If the option has a value
+      // then the value given may be found in optarg (otherwise optarg
+      // will be NULL).
+      //
+      // 0 is returned upon end-of-options. At this point, "iter" may
+      // be used to process any remaining positional parameters. If the
+      // PARSE_POS control-flag is set then 0 is returned only when all
+      // arguments in "iter" have been exhausted.
+      //
+      // If an invalid option is found then BADCHAR is returned and *optarg
+      // is the unrecognized option character.
+      //
+      // If an invalid long-option is found then BADKWD is returned and optarg
+      // points to the bad long-option.
+      //
+      // If an ambiguous long-option is found then AMBIGUOUS is returned and
+      // optarg points to the ambiguous long-option.
+      //
+      // If the PARSE_POS control-flag is set then POSITIONAL is returned
+      // when a positional argument is encountered and optarg points to
+      // the positonal argument (and "iter" is advanced to the next argument
+      // in the iterator).
+      //
+      // Unless Options::QUIET is used, missing option-arguments and
+      // invalid options (and the like) will automatically cause error
+      // messages to be issued to cerr.
+.vs +2
+   int operator()(OptIter & iter, const char * & optarg) ;
+
+.vs -2
+      // Call this member function after operator() has returned 0
+      // if you want to know whether or not options were explicitly
+      // terminated because "--" appeared on the command-line.
+      //
+.vs +2
+   int
+   explicit_endopts() const ;
+} ;
+
+.ps +2
+.ft R
+.fi
+.\"-----------------------------------
+.SH DESCRIPTION
+.PP
+The Options constructor expects a command-name (usually \f4argv[0]\fP) and
+a pointer to an array of strings.  The last element in this array \fImust\fP
+be NULL. Each non-NULL string in the array must have the following format:
+
+.in +5
+The 1st character must be the option-name (`c' for a \fB\-c\fP option).
+
+The 2nd character must be one of `\f4|\fP', `?', `:', `*', or `+'.
+
+.in +3
+`\f4|\fP'	\tindicates that the option takes \fIno\fP argument;
+.br
+`?'	\tindicates that the option takes an \fIoptional\fP argument;
+.br
+`:'	\tindicates that the option takes a \fIrequired\fP argument;
+.br
+`*'	\tindicates that the option takes \fIzero or more\fP arguments;
+.br
+`+'	\tindicates that the option takes \fIone or more\fP arguments;
+.br
+.in -3
+
+The remainder of the string must be the long-option name.
+
+.PP
+If desired, the long-option name may be followed by one or more
+spaces and then by the name of the option value. This name will
+be used when printing usage messages. If the option-value-name
+is not given then the string "<value>" will be used in usage
+messages.
+
+.PP
+One may use a space to indicate that a particular option does not
+have a corresponding long-option.  For example, \f4"c: "\fP (or \f4"c:"\fP)
+means the \fB\-c\fP option takes a value and has \fIno\fP corresponding
+long-option.
+
+.PP
+To specify a long-option that has no corresponding single-character
+option is a bit trickier: \f4Options::operator()\fP still needs an
+``\fIoption character\fP'' to return when that option is matched. One may
+use a whitespace character or a non-printable character as the
+single-character option in such a case. (hence \f4" |hello"\fP would
+only match \fB\-\|\-hello\fP).
+.in -5
+
+.SS Exceptions to the Above:
+.PP
+If the first character of the string is `\-', then the rest of the
+string must correspond to the above format, and the option is
+considered to be a "hidden" option. This means it will be parsed
+when actually matching options from the command line, but it will
+\fInot\fP show-up if a usage message is printed using the \f4usage()\fP
+member function. Such an example might be \f4"-h|hidden"\fP. If
+you want to use an "dummy" options (options that are not parsed,
+but that to show up in the usage message), you can specify them
+along with any positional parameters to the \f4usage()\fP member
+function.
+
+If the second character of the string is \f4'\\0'\fP then it is assumed
+that there is no corresponding long-option and that the option
+takes no argument (hence \f4"f"\fP, and \f4"f| "\fP are equivalent).
+
+.SS Examples:
+.br
+.nf
+.ft 4
+.in +5
+const char * optv[] = {
+    "c:count   <number>",
+    "s?str     <string>",
+    "x",
+    " |hello",
+    "g+groups  <newsgroup>",
+    NULL
+} ;
+.in -5
+.ft R
+.fi
+
+\f4optv[]\fP now corresponds to the following:
+
+.na
+.TP 18
+Usage: \fBcmdname\fP
+[\fB\-c\fP\f4|\fP\fB\-\|\-count\fP\ \fInumber\fP]
+[\fB\-s\fP\f4|\fP\fB\-\|\-str\fP\ [\fIstring\fP]]
+[\fB\-x\fP]
+[\fB\-\|\-hello\fP]
+[\fB\-g\fP\f4|\fP\fB\-\|\-groups\fP\ \fInewsgroup\fP\ ...]
+.ad
+
+.PP
+Long-option names are matched case-insensitive and only a unique prefix
+of the name needs to be specified.
+
+Option-name characters are case-sensitive!
+
+.\"-----------------------------------
+.SH EXAMPLE
+.nf
+.ft 4
+#include <stdlib.h>
+#include <iostream.h>
+#include <options.h>
+
+static const char * optv[] = {
+   "H|help",
+   "c:count   <number>",
+   "s?str     <string>",
+   "x",
+   " |hello",
+   "g+groups  <newsgroup>",
+   NULL
+} ;
+
+main(int argc, char * argv[]) {
+   int  optchar;
+   const char * optarg;
+   const char * str = "default_string";
+   int  count = 0, xflag = 0, hello = 0;
+   int  errors = 0, ngroups = 0;
+
+   Options  opts(*argv, optv);
+   OptArgvIter  iter(--argc, ++argv);
+
+   while( optchar = opts(iter, optarg) ) {
+      switch (optchar) {
+      case 'H' :
+         opts.usage(cout, "files ...");
+         exit(0);
+         break;
+      case 'g' :
+         ++ngroups; break;  // the groupname is in "optarg"
+      case 's' :
+         str = optarg; break;
+      case 'x' :
+         ++xflag; break;
+      case ' ' :
+         ++hello; break;
+      case 'c' :
+         if (optarg == NULL)  ++errors;
+         else  count = (int) atol(optarg);
+         break;
+      default :  ++errors; break;
+      } //switch
+   }
+
+   if (errors || (iter.index() == argc)) {
+      if (! errors) {
+         cerr << opts.name() << ": no filenames given." << endl ;
+      }
+      opts.usage(cerr, "files ...");
+      exit(1);
+   }
+
+   cout << "xflag=" << ((xflag) ? "ON"  : "OFF") << endl
+        << "hello=" << ((hello) ? "YES" : "NO") << endl
+        << "count=" << count << endl
+        << "str=\\"" << ((str) ? str : "No value given!") << "\\"" << endl
+        << "ngroups=" << ngroups << endl ;
+
+   if (iter.index() < argc) {
+      cout << "files=" ;
+      for (int i = iter.index() ; i < argc ; i++) {
+         cout << "\\"" << argv[i] << "\\" " ;
+      }
+      cout << endl ;
+   }
+}
+
+.ft R
+.fi
+
+.\"-----------------------------------
+.SH PARSING
+Although, much of the parsing behavior of \*(NM can be configured at run-time
+there are some \fIcommon rules\fP that are used when parsing command-line
+arguments.  Many of these so called \fIrules\fP are just a formalization
+of things that have become an informal standard over the years.
+
+.SS "LONG AND SHORT OPTIONS"
+.RS
+By default, \*(NM will allow both single-character options \fIand\fP
+keywords (long-options) to be matched on the command-line.
+Under Unix, a single character option is prefixed by the string ``\-''.
+and a long-option is prefixed by the string ``\*(--'' (although the prefix
+``+'' may also be used if desired).  If a token on the command-line exactly
+matches the string ``\*(--'', then all further matching of options (both
+long and short) are disabled and any remaining arguments are considered to
+be positional parameters (even if they look like options).
+
+If short-option processing is disabled, then the prefix ``\-'' may be used
+to indicate a long-option (the ``\*(--'' prefix will still be accepted).
+
+.SS "OPTION MATCHING"
+.RS
+Short-option matching is case-sensitive. Long-options are always matched 
+case-insensitive and only a unique prefix of the long-option name needs
+to be given in order for it to be matched successfully.
+.RE
+
+.SS "SPECIFYING VALUES TO OPTIONS"
+.RS
+By default, \*(NM will allow the value for an option to be in the
+same command-line token as the option itself, or in a separate
+command-line token.  For short-options, specifying the value in
+the same token simply means immediately following the option
+character with the intended value as in "\fB\-c\fIvalue\fR".
+For long-options, specifying the value in the same token requires
+that the value be separated from the keyword name by an equal-sign
+(`=') or by a colon (`:') as in ``\fB\*(--keyword\fP=\fIvalue\fP''
+or ``\fB\*(--keyword\fP:\fIvalue\fP''.
+.RE
+
+.SS "INTERMIXING OPTIONS WITH POSITIONAL PARAMETERS"
+.RS
+By default, \*(NM will assume that a positional argument denotes the end
+of all options on the command-line. If however, you wish to intermix
+positional arguments between options on the command-line, then you may
+use the \f4Options::PARSE_POS\fP control flag to tell \*(NM to parse
+positional arguments as well as options. When this flag is set,
+\f4Options::operator()\fP will present any and all positional parameters
+on the command-line to the user by returning a value of
+\f4Options::POSITIONAL\fP and having \f4optarg\fP point to the text of
+the positional argument (the argument iterator will already have been
+advanced to the next element on the command-line by this time).
+
+If you wish to process all the positional arguments after processing all
+the options, you have to resort slightly more effort. Since \*(NM uses
+an abstract iterator interface to enable it to easily parse arguments
+from input sources other than an array, it can \fBnot\fP assume that it
+knows anything about the structure of the argument source. Thus, \*(NM
+is not capable of permuting the \f4argv[]\fP array like the GNU
+\f4getoptlong()\fP function. However, this can easily be remedied by
+using the \f4Options::PARSE_POS\fP control flag and modifying
+\f4argv[]\fP yourself:
+
+.nf
+.ft 4
+
+   main(int argc, char *argv[]) {
+      Options  opts(*argv, optv);
+      OptArgvIter  iter(--argc, ++argv);
+      char *optarg, *str = NULL;
+      int  errors = 0, xflag = 0, count = 1;
+      int  npos = 0;
+   
+      opts.ctrls(Options::PARSE_POS);
+      while( char optchar = opts(iter, optarg) ) {
+         switch (optchar) {
+         case 's' :
+            str = optarg; break;
+         case 'x' :
+            ++xflag; break;
+         case 'c' :
+            if (optarg == NULL)  ++errors;
+            else  count = (int) atol(optarg);
+            break;
+         case Options::POSITIONAL :
+             // Push all positional arguments to the front. Note that
+             // we could swap argv[npos] with argv[iter.index() - 1]
+             // (assuming we have made sure they arent in fact one and
+             // the same) if we dont want to lose its previous value.
+            argv[npos++] = optarg;
+            break;
+         default :  ++errors; break;
+         } //switch
+      }
+
+      // Now argv[0] .. argv[npos - 1] contains the positional arguments
+      for (int i = 0; i < npos; ++i) {
+         // handle positional argument in argv[i] ...
+      }
+   }
+
+.ft R
+.fi
+
+The above simply replaces the beginning elements in \f4argv[]\fP with an
+argument that have already been parsed, thus moving all the positional
+parameters to the front. If you prefer not to lose the already parsed
+options, you could do a number of different things. You could simply
+perform a swap instead of a replacement (as is mentioned in the comment
+above) or you could allocate a new array to hold the positional arguments,
+or you could go to the effort of turly permuting \f4argv[]\fP yourself.
+
+.RE
+
+.\"-----------------------------------
+.SH CAVEAT
+Because of the way in which multi-valued options and options with optional
+values are handled, it is \fInot\fP possible to supply a value to an
+option in a separate argument (different \f4argv[]\fP element) if the
+value is \fIoptional\fP and begins with a `\-'. What this means is that
+if an option \fB\-s\fP takes an optional value value and you wish to supply
+a value of ``\f4-foo\fP'' then you must specify this on the command-line as
+``\f4\-s\-foo\fP'' instead of ``\f4\-s \-foo\fP'' because the latter
+will be considered to be two separate sets of options.
+
+A multi-valued option is terminated by another option or by the end-of
+options. The following are all equivalent (if \fB\-l\fP is a multi-valued
+option and \fB\-x\fP is an option that takes no value):
+
+.nf
+.in +5
+.ft 4
+cmdname -x -l item1 item2 item3 -- arg1 arg2 arg3
+cmdname -x -litem1 -litem2 -litem3 -- arg1 arg2 arg3
+cmdname -l item1 item2 item3 -x arg1 arg2 arg3
+.ft R
+.in -5
+.fi
+
+.\"-----------------------------------
+.SH FILES
+.PP
+.IP \f4\*i/options.h\fP
+\*(C+ include file which contains the definition of an option-iterator class,
+and argument-iterator classes.
+
+.IP \f4\*l/liboptions.a\fP
+The object library for \*(NM(3\*(C+).
+
+.PP
+When compiling your source (on Unix systems), you may need to use
+the \fB\-I\f4\*i\fR option. When linking your objects,
+you may need to use the \fB\-L\f4\*l\fR option in conjunction
+with the \fB\-l\f4options\fR option.
+
+.\"-----------------------------------
+.SH SEE ALSO
+\f4<options.h>\fP
+
+.\"-----------------------------------
+.SH AUTHOR
+Brad Appleton, Software Tools Developer, <\f4bradapp@enteract.com\fP>.

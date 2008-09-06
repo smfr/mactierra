@@ -75,6 +75,7 @@
 		0FB9C4490E72338500E6EBFD /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FB9C4480E72338500E6EBFD /* TODO.txt */; };
 		0FB9C4C50E723E4000E6EBFD /* MTValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */; };
 		0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */; };
+		0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C5DF0E72536600E6EBFD /* options.cpp */; };
 		0FBA70ED0E6FA7D30027FB29 /* NSAttributedStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */; };
 		0FBB06870E5A984B007F2A6B /* MT_TimeSlicer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */; };
 		0FBB06880E5A984B007F2A6B /* MT_CellMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB06710E5A984B007F2A6B /* MT_CellMap.cpp */; };
@@ -432,6 +433,8 @@
 		0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTValueTransformers.mm; sourceTree = "<group>"; };
 		0FB9C4E20E7241F300E6EBFD /* MTApplicationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTApplicationController.h; sourceTree = "<group>"; };
 		0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTApplicationController.m; sourceTree = "<group>"; };
+		0FB9C5DF0E72536600E6EBFD /* options.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = options.cpp; sourceTree = "<group>"; };
+		0FB9C5E00E72536600E6EBFD /* options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = options.h; sourceTree = "<group>"; };
 		0FBA70EB0E6FA7D30027FB29 /* NSAttributedStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSAttributedStringAdditions.h; sourceTree = "<group>"; };
 		0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSAttributedStringAdditions.m; sourceTree = "<group>"; };
 		0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_TimeSlicer.cpp; sourceTree = "<group>"; };
@@ -1025,9 +1028,20 @@
 			path = application;
 			sourceTree = "<group>";
 		};
+		0FB9C5DB0E72536600E6EBFD /* options */ = {
+			isa = PBXGroup;
+			children = (
+				0FB9C5E00E72536600E6EBFD /* options.h */,
+				0FB9C5DF0E72536600E6EBFD /* options.cpp */,
+			);
+			name = options;
+			path = Source/cmdline/options;
+			sourceTree = "<group>";
+		};
 		0FBEC0610E56AFA800ABB516 /* mactierra */ = {
 			isa = PBXGroup;
 			children = (
+				0FB9C5DB0E72536600E6EBFD /* options */,
 				0FBEC0650E56AFCF00ABB516 /* mactierra.h */,
 				0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */,
 			);
@@ -1395,6 +1409,7 @@
 				0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */,
 				0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
 				0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
+				0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

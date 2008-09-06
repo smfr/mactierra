@@ -1,0 +1,267 @@
+
+ WHAT IS THIS?
+ =============
+ This is "Options", a C++ library for parsing Unix-style command-line options.
+ Options understands options and gnu-long-options and the parsing behavior is
+ somewhat configurable. See the documentation (or the file <options.h>) for a
+ complete description.
+
+ You "declare" your options by declaring an array of strings like so:
+
+        const char * optv[] = {
+            "c:count <number>",
+            "s?str   <string>",
+            "x|xmode",
+            NULL
+        } ;
+  
+ Note the character (one of ':', '?', '|', '*', or '+') between the short
+ and long name of the option. It specifies the option type:
+
+        '|' -- indicates that the option takes NO argument;
+        '?' -- indicates that the option takes an OPTIONAL argument;
+        ':' -- indicates that the option takes a REQUIRED argument;
+        '*' -- indicates that the option takes 0 or more arguments;
+        '+' -- indicates that the option takes 1 or more arguments;
+
+ Using the above example, optv[] now corresponds to the following:
+
+        progname [-c <number>] [-s [<string>]] [-x]
+
+ Using long-options, optv corresponds to the following ("-" or "+" may
+ be used instead of "--" as the prefix):
+  
+        progname [--count <number>] [--str [<string>]] [--xmode]
+
+ Now you can iterate over your options like so:
+
+      #include <stdlib.h>
+      #include <options.h>
+
+      main(int argc, char *argv[]) {
+         Options  opts(*argv, optv);
+         OptArgvIter  iter(--argc, ++argv);
+         const char *optarg, *str = NULL;
+         int  errors = 0, xflag = 0, count = 1;
+      
+         while( char optchar = opts(iter, optarg) ) {
+            switch (optchar) {
+            case 's' :
+               str = optarg; break;
+            case 'x' :
+               ++xflag; break;
+            case 'c' :
+               if (optarg == NULL)  ++errors;
+               else  count = (int) atol(optarg);
+               break;
+            default :  ++errors; break;
+            } //switch
+         }
+         ...  // process the rest of the arguments in "iter"
+      }
+
+
+ If you want Options to parse your positional arguments too (in case they
+ are intermingled in with your options) then you can do that too by turning
+ on a special control-flag:
+
+      #include <stdlib.h>
+      #include <options.h>
+
+      main(int argc, char *argv[]) {
+         Options  opts(*argv, optv);
+         OptArgvIter  iter(--argc, ++argv);
+         const char *optarg, *str = NULL;
+         int  errors = 0, xflag = 0, count = 1;
+      
+         opts.ctrls(Options::PARSE_POS);
+         while( char optchar = opts(iter, optarg) ) {
+            switch (optchar) {
+            case 's' :
+               str = optarg; break;
+            case 'x' :
+               ++xflag; break;
+            case 'c' :
+               if (optarg == NULL)  ++errors;
+               else  count = (int) atol(optarg);
+               break;
+            case Options::POSITIONAL :
+               // handle positional arguments here ...
+               // (optarg points to the positional argument)
+               break;
+            default :  ++errors; break;
+            } //switch
+         }
+      }
+
+ Options makes use of an abstract argument-iterator object to access your
+ command-line arguments. Pre-defined iterator types are provided for
+ parsing options from an array (typically argv[]), an input stream, and
+ a field-delimited string (using strtok(3C)). This is convenient for
+ parsing configurations options from a start-up file or an environment
+ variable. A side-effect of this however is that Options cannot assume
+ the argument source is necessarily argv[] (which is the normal case).
+ This means that it cannot permute the argument list (like GNU getoptlong)
+ to process all options ahead of positional arguments when the two
+ are intermixed on the command-line. This can easily be accomodated however
+ by rearranging the argv[] yourself as follows:
+
+      main(int argc, char *argv[]) {
+         Options  opts(*argv, optv);
+         OptArgvIter  iter(--argc, ++argv);
+         char *optarg, *str = NULL;
+         int  errors = 0, xflag = 0, count = 1;
+         int  npos = 0;
+      
+         opts.ctrls(Options::PARSE_POS);
+         while( char optchar = opts(iter, optarg) ) {
+            switch (optchar) {
+            case 's' :
+               str = optarg; break;
+            case 'x' :
+               ++xflag; break;
+            case 'c' :
+               if (optarg == NULL)  ++errors;
+               else  count = (int) atol(optarg);
+               break;
+            case Options::POSITIONAL :
+                // Push all positional arguments to the front. Note that
+                // we could swap argv[npos] with argv[iter.index() - 1]
+                // (assuming we have made sure they arent in fact one and
+                // the same) if we dont want to lose its previous value.
+               argv[npos++] = optarg;
+               break;
+            default :  ++errors; break;
+            } //switch
+         }
+
+         // Now argv[0] .. argv[npos - 1] contains the positional arguments
+         for (int i = 0; i < npos; ++i) {
+            // handle positional argument in argv[i] ...
+         }
+      }
+
+ The above simply replaces the beginning elements in argv[] with an
+ argument that have already been parsed, thus moving all the positional
+ parameters to the front. If you prefer not to lose the already parsed
+ options, you could do a number of different things. You could simply
+ perform a swap instead of a replacement (as is mentioned in the comment
+ above) or you could allocate a new array to hold the positional arguments,
+ or you could go to the effort of truly permuting argv[] yourself.
+
+ AUTHOR
+ ======
+ Brad Appleton, Software Tools Developer
+   mailto:bradapp@enteract.com
+   http://www.enteract.com/~bradapp
+
+
+ COPY/REUSE POLICY
+ =================
+ Permission is hereby granted to freely copy and redistribute this
+ software, provided that the author is clearly credited in all copies
+ and derivations. Neither the names of the authors nor that of their
+ employers may be used to endorse or promote products derived from this
+ software without specific written permission.
+
+
+ DISCLAIMER
+ ==========
+ This software is provided ``As Is'' and without any express or implied
+ warranties.  Neither the authors nor any of their employers (including
+ any of their subsidiaries and subdivisions) are responsible for maintaining
+ or supporting this software or for any consequences resulting from the
+ use of this software, no matter how awful, even if they arise from flaws
+ in the software.
+
+
+ CONTENTS
+ ========
+ See the file "MANIFEST" in the distribution for a complete list and
+ description of all the files included in this release.
+
+
+ REQUIREMENTS
+ ============
+ This software should compile on most Unix platforms with a C++ compiler
+ with little or no difficulty.
+
+
+ PORTING
+ =======
+ Options uses the AT&T C++ iostream library.  Beyond that, all the
+ #include files it uses are assumed to have the contents specified by
+ the ANSI-C standard and are assumed to have #ifdef __cplusplus statements
+ for when they are being included by C++ files.  Options assumes the
+ existence of the following system header files:
+
+         <stdarg.h>
+         <stdlib.h>
+         <string.h>
+         <ctype.h>
+         <iostream.h>
+
+  Other porting problems you may experience are as follows:
+
+    - you may need to compile with -DMSWIN for Microsoft Windows
+    - you may need to compile with -DOS2 for OS/2
+    - you may need to compile with -DMSDOS for MS-DOS
+    - you may need to use <varargs.h> instead of <stdarg.h>
+
+ You will need to tweak the Makefile a tad in order to make it work
+ for your C++ compiler.
+
+
+ BUGS
+ ====
+ Please send all bug reports to Brad Appleton <bradapp@enteract.com>.
+ Dont forget to mention which version of Options you have and which
+ operating system and C++ compiler you are using.
+
+
+ ACKNOWLEDGEMENTS
+ ================
+ Options is a complete C++ re-write of an ANSI-C package named "getopts"
+ that I wrote for the FSF that was posted on one of the "gnu" newsgroups
+ (I think it was the group gnu.utils.bug) in February of 1992.  Many thanks
+ to David J. MacKenzie for his input.  Options provides many more features
+ than "getopts" did.  If you want the original "getopts" package (which
+ has since been vastly enhanced) then send me e-mail.
+
+
+ PATCHLEVEL
+ ==========
+ The is release 1 of Options at patchlevel 5.
+
+
+ HISTORY
+ =======
+ 07/21/92		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ First release.
+
+ 03/23/93		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ - Made some changes for compiling with g++
+ - Added OptIstreamIter class
+
+ 10/08/93		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ - Added "hidden" options
+
+ 02/08/94		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ - Added OptionSpec class to options.C
+ - Permitted use of stdio instead of iostreams via #ifdef USE_STDIO
+
+ 03/08/94		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ - Completed support for USE_STDIO
+ - Added #ifdef NO_USAGE for people who always want to print their own usage
+ - Added Options::reset() member function
+ - Fixed stupid NULL pointer error in OptionsSpec class
+
+ 07/31/97		Brad Appleton		<bradapp@enteract.com>
+ -----------------------------------------------------------------------------
+ - Added POSITIONAL return value and PARSE_POS control flag
+
