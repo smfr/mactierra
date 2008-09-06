@@ -1,0 +1,30 @@
+Engine
+------
+
+Switch from RandomLib to Boost for RNG?
+Optimize template searching
+Limit range of IP from creature (enforce locality of reference)
+
+Cocoa front-end
+---------------
+
+Fix thread-safety issues when using data from the collectors.
+Fix crash when the observed creature gets deleted.
+Improve genotype identification.
+Add more types of data collection
+Add ability to edit random seed in the middle of a run
+Implement persistent genotype store ("genebank").
+Improve drag feedback.
+Improve soup display.
+Implement tracking of a lineage
+Make inventory more useful (keep "successful" genotypes in the list)
+Highlight creatures when selected in inventory
+Accept text drags to "compile" creatures
+Add ability to control update rate.
+
+Command-line tool
+-----------------
+
+Needs basic work.
+Hook up commandline args
+Add ability to save the soup every N instructions
