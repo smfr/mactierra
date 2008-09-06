@@ -21,11 +21,18 @@ Make inventory more useful (keep "successful" genotypes in the list)
 Highlight creatures when selected in inventory
 Accept text drags to "compile" creatures
 Add ability to control update rate.
-Lock soup while saving
 
+GraphX:
+    Draw axis values
+    Label histogram columns
+    Enhance histogram to not assume frequency buckets
+    Re-write to use Obj-C properties
+    Optimize line graph drawing (split drawing/data fetching, cache the bezier)
+    
 Command-line tool
 -----------------
 
 Needs basic work.
-Hook up commandline args
+Hook up more commandline args
 Add ability to save the soup every N instructions
+Allow loading settings from a file
