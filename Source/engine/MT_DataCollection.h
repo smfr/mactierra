@@ -79,7 +79,8 @@ public:
     void            collectData(u_int64_t inInstructionCount, const World* inWorld);
     
     u_int64_t       nextCollectionInstructions() const { return mNextCollectionInstructions; }
-
+    void            setNextCollectionInstructions(u_int64_t inInst) { mNextCollectionInstructions = inInst; }
+    
     u_int64_t       collectionInterval() const { return mCollectionInterval; }
     void            setCollectionInterval(u_int64_t inInterval, u_int64_t inCurrentInstructionCount);
 

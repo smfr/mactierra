@@ -140,6 +140,8 @@ protected:
     void            creatureAdded(Creature* inCreature);
     void            creatureRemoved(Creature* inCreature);
 
+    void            wasDeserialized();
+    
 private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int version)
@@ -176,7 +178,6 @@ private:
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_flaw_time", mNextFlawInstruction);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_cosmic_ray_time", mNextCosmicRayInstruction);
     }
-
 
 protected:
 

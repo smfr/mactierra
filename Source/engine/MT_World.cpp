@@ -621,6 +621,12 @@ World::creatureRemoved(Creature* inCreature)
     mCreatureIDMap.erase(inCreature->creatureID());
 }
 
+void
+World::wasDeserialized()
+{
+    mDataCollector->setNextCollectionInstructions(mTimeSlicer.instructionsExecuted());
+}
+
 #pragma mark -
 
 // Settings
@@ -704,6 +710,7 @@ World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inForma
             break;
     }
 
+    braveNewWorld->wasDeserialized();
     return braveNewWorld;
 }
 
