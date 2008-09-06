@@ -17,6 +17,7 @@
 #include "options.h"
 
 #include "MT_World.h"
+#include "MT_Settings.h"
 #include "MT_Ancestor.h"
 
 using namespace MacTierra;
@@ -35,6 +36,7 @@ static const char * const kOptionsList[] = {
     "r:random-seed <number>",   // optional
     "f:in-soup-file",
     "o:out-soup-file",
+    "x:xml-format",
     NULL
 };
 
@@ -50,6 +52,7 @@ extern "C" int main(int argc, char* argv[])
     u_int64_t duration = 0;
     string  inputSoupFilePath;
     string  outputSoupFilePath;
+    bool useXMLFormat = false;
 
     int  optchar;
     const char * optarg;
@@ -102,6 +105,10 @@ extern "C" int main(int argc, char* argv[])
                     outputSoupFilePath = optarg;
                 break;
 
+            case 'x':
+                useXMLFormat = true;
+                break;
+
             default: 
                 ++errors;
                 break;
@@ -133,7 +140,6 @@ extern "C" int main(int argc, char* argv[])
         std::ifstream fileStream(inputSoupFilePath.c_str());
         // FIXME: sniff the file to determine the type
         theWorld = World::worldFromStream(fileStream, World::kXML);
-
     }
     else
     {
@@ -142,6 +148,7 @@ extern "C" int main(int argc, char* argv[])
 
         theWorld = new World();
         theWorld->initializeSoup(soupSize);
+        theWorld->setSettings(Settings::mediumMutationSettings(soupSize));
         theWorld->setInitialRandomSeed(randomSeed);
 
         // seed the soup
@@ -156,7 +163,7 @@ extern "C" int main(int argc, char* argv[])
     if (outputSoupFilePath.length() > 0)
     {
         ofstream outputStream(outputSoupFilePath.c_str());
-        World::worldToStream(theWorld, outputStream, World::kXML);
+        World::worldToStream(theWorld, outputStream, useXMLFormat ? World::kXML : World::kBinary);
     }
     
     delete theWorld;
