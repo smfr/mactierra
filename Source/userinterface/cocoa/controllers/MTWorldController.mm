@@ -199,10 +199,12 @@ using namespace MacTierra;
 {
     if (mWorld && returnCode == NSOKButton)
     {
+        [self lockWorld];
         NSString* filePath = [sheet filename];
         
         std::ofstream outFileStream([filePath fileSystemRepresentation]);
         mWorld->inventory()->writeToStream(outFileStream);
+        [self unlockWorld];
     }
 }
 
