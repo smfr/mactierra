@@ -9,47 +9,138 @@
 
 #import "CTGraphView.h"
 
+
+@interface CTGraphView(Private)
+
+- (float)titleHeight ;   //Gives amount of space used by Title(at the top of the graph) - if drawTitleFlag is NO then it will give a height of 0
+- (float)xLabelHeight;   //Gives amount of space used by XAxis Label size depends on if flag is set
+- (float)yLabelWidth ;   //Gives amount of space used by YAxis Label size depends on if flag is set
+
+- (void)drawTitle :(NSRect)rect;    //Will draw title at the top of the Graph
+- (void)drawXLabel:(NSRect)rect;    //Will draw X Axis Label - if Flag is set
+- (void)drawYLabel:(NSRect)rect;    //Will draw Y Axis Label - if Flag is set
+
+- (void)drawBackground:(NSRect)rect;//Fills the Graph Region
+
+- (void)drawXGrid:(NSRect)rect;     //Will draw Vertical Gridlines
+- (void)drawYGrid:(NSRect)rect;     //Will draw Horizontal Gridlines
+
+- (void)drawXAxis:(NSRect)rect;     //Will draw X Axis line, tick marks, numbers
+- (void)drawYAxis:(NSRect)rect;     //Will draw Y Axis line, tick marks, numbers
+
+@end
+
+#pragma mark -
+
 @implementation CTGraphView
+
+@synthesize xMin;
+@synthesize xMax;
+@synthesize xScale;
+@synthesize xMinorLineCount;
+
+@synthesize yMin;
+@synthesize yMax;
+@synthesize yScale;
+@synthesize yMinorLineCount;
+
+@synthesize showTitle;
+@synthesize showBackground;
+
+@synthesize showXLabel;
+@synthesize showXAxis;
+@synthesize showXValues;
+@synthesize showXGrid;
+@synthesize showXTickMarks;
+
+@synthesize showYLabel;
+@synthesize showYAxis;
+@synthesize showYValues;
+@synthesize showYGrid;
+@synthesize showYTickMarks;
+
+@synthesize title;
+@synthesize xLabel;
+@synthesize yLabel;
+
++ (NSDictionary*)axisLabelAttributes
+{
+    static NSDictionary* sAxisLabelAttributes = nil;
+
+    if (!sAxisLabelAttributes)
+    {
+        NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setAlignment:NSCenterTextAlignment];
+
+        sAxisLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+            [NSFont paletteFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
+                                               [NSColor blackColor], NSForegroundColorAttributeName,
+                                                             pStyle, NSParagraphStyleAttributeName,
+                                                                    nil] retain];
+        [pStyle release];
+    }
+    return sAxisLabelAttributes;
+}
+
++ (NSDictionary*)titleAttributes
+{
+    static NSDictionary* sAxisLabelAttributes = nil;
+
+    if (!sAxisLabelAttributes)
+    {
+        NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setAlignment:NSCenterTextAlignment];
+
+        sAxisLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+              [NSFont boldSystemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,
+                                               [NSColor blackColor], NSForegroundColorAttributeName,
+                                                             pStyle, NSParagraphStyleAttributeName,
+                                                                    nil] retain];
+        [pStyle release];
+    }
+    return sAxisLabelAttributes;
+}
 
 - (id)initWithFrame:(NSRect)frameRect
 {
   if ((self = [super initWithFrame:frameRect]) != nil)
   {
-    //Set Default Graph Bounds              //**IMPORTANT NAMING CONVENTION**/
-    gMin = -10;   gMax = 10;  gScale = 1;       //Data Point = (g,h)  variables prefixed by g/h refer to data values
-    hMin = -10;   hMax = 10;  hScale = 1;       //PixelPoint = (x,y)  variables prefixed by x/y refer to pixel coordinates
+    // Set Default Graph Bounds
+    xMin = -10;   xMax = 10;  xScale = 1;
+    yMin = -10;   yMax = 10;  yScale = 1;
 
-    
-    //Set Default Colors
+    // Set Default Colors
     graphColors = [[NSColorList alloc] initWithName:@"Graph Colors"];
-      [graphColors setColor:[ NSColor whiteColor ] forKey:@"background"];
-      [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"xMajor"  ];
-      [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"yMajor"  ];
-      [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"xMinor"  ];
-      [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"yMinor"  ];
-      [graphColors setColor:[ NSColor blackColor ] forKey:@"xaxis"     ];
-      [graphColors setColor:[ NSColor blackColor ] forKey:@"yaxis"     ];
+    [graphColors setColor:[ NSColor whiteColor ] forKey:@"background"];
+    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"xMajor"  ];
+    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"yMajor"  ];
+    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"xMinor"  ];
+    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"yMinor"  ];
+    [graphColors setColor:[ NSColor blackColor ] forKey:@"xaxis"     ];
+    [graphColors setColor:[ NSColor blackColor ] forKey:@"yaxis"     ];
     
-    
-    
-    //Set Default Strings
-    NSMutableParagraphStyle *pStyle = [[NSMutableParagraphStyle alloc] init];[pStyle setAlignment:NSCenterTextAlignment]; //lets me make text centered in String Attributes - now using manually centered text
-    xlabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont paletteFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName, [NSColor blackColor], NSForegroundColorAttributeName, pStyle, NSParagraphStyleAttributeName,nil]];
-    ylabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont paletteFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName, [NSColor blackColor], NSForegroundColorAttributeName, pStyle, NSParagraphStyleAttributeName,nil]];
-    title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[NSDictionary dictionaryWithObjectsAndKeys:[NSFont boldSystemFontOfSize:[NSFont systemFontSize  ]], NSFontAttributeName, [NSColor blackColor], NSForegroundColorAttributeName, pStyle, NSParagraphStyleAttributeName,nil]];
-    
+    // Set Default Strings
+    xLabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[CTGraphView axisLabelAttributes]];
+    yLabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[CTGraphView axisLabelAttributes]];
+
+    title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[CTGraphView titleAttributes]];
     
     //Set Flags
-    drawXAxisFlag  = YES; drawYAxisFlag    = YES;
-    drawXTickMarks = YES; drawYTickMarks     = YES;
-    drawXNumsFlag  = NO ; drawYNumsFlag      = NO ;
-    drawXGridFlag  = YES; drawYGridFlag      = YES;
-    drawXLabelFlag = YES; drawYLabelFlag     = YES;
-    drawTitleFlag  = YES; drawBackgroundFlag = YES;
+    showTitle  = YES;
+    showBackground = YES;
 
-    
-    //Set Drawing Constants
-    labelPadding   = 2;
+    showXAxis  = YES;
+    showXValues = YES;
+    showXGrid = YES;
+    showXTickMarks = YES;
+
+    showYAxis  = YES;
+    showYValues = YES;
+    showYGrid = YES;
+    showYTickMarks = YES;
+
+    // Set Drawing Constants
+    labelPadding     = 2;
     titlePadding     = 4;
     
     xMinorLineCount  = 0;
@@ -59,8 +150,8 @@
     minorLineWidth   = 1;
     axisLineWidth    = 1;
     
-    lineDashPattern[0]  = 4;  //segment painted with stroke color
-    lineDashPattern[1]  = 5;  //segment not painted with a color
+    lineDashPattern[0]  = 4;  // segment painted with stroke color
+    lineDashPattern[1]  = 5;  // segment not painted with a color
   }
   
   return self;
@@ -69,12 +160,16 @@
 - (void)dealloc
 {
   [graphColors release];
+  self.xLabel = nil;
+  self.yLabel = nil;
+  self.title = nil;
+
   [super dealloc];
 }
 
 - (float)titleHeight
 {
-  if (drawTitleFlag)
+  if (showTitle)
     return [title size].height + titlePadding;
 
   return 0;
@@ -82,17 +177,17 @@
 
 - (float)xLabelHeight
 {
-  if (drawXLabelFlag)
-    return [xlabel size].height + labelPadding;
+  if (showXLabel)
+    return [xLabel size].height + labelPadding;
 
   return 0;
 }
 
 - (float)yLabelWidth
 {
-  [ylabel size];
-  if (drawYLabelFlag)
-    return [ylabel size].height + labelPadding;
+  [yLabel size];
+  if (showYLabel)
+    return [yLabel size].height + labelPadding;
 
   return 0;
 }
@@ -139,20 +234,21 @@
   
 - (void)drawTitle:(NSRect)rect;
 {
-  if (drawTitleFlag)
-  [title drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMaxY(rect) - [title size].height, NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [title size].height)];
+  if (showTitle)
+    [title drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMaxY(rect) - [title size].height, NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [title size].height)];
 }
 
 - (void)drawXLabel:(NSRect)rect
 {
-  if (drawXLabelFlag)
-    [xlabel drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMinY(rect), NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [xlabel size].height)];
+  if (showXLabel)
+    [xLabel drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMinY(rect), NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [xLabel size].height)];
 }
 
 - (void)drawYLabel:(NSRect)rect
 {
-  if (drawYLabelFlag)
-  {
+    if (!showYLabel)
+        return;
+
     NSAffineTransform *transform = [NSAffineTransform transform];
     NSGraphicsContext *context   = [NSGraphicsContext currentContext];
   
@@ -161,16 +257,15 @@
     [context saveGraphicsState];
     [transform concat];
   
-    [ylabel drawInRect:NSMakeRect( [self xLabelHeight], -[ylabel size].height, NSMaxY(rect) - [self titleHeight] - [self xLabelHeight], [ylabel size].height)];
+    [yLabel drawInRect:NSMakeRect( [self xLabelHeight], -[yLabel size].height, NSMaxY(rect) - [self titleHeight] - [self xLabelHeight], [yLabel size].height)];
 
     [context restoreGraphicsState];
-  }
 }
 
 
 - (void)drawBackground:(NSRect)rect
 {
-  if (drawBackgroundFlag)
+  if (showBackground)
   {
     [[graphColors colorWithKey:@"background"] set];
     NSRectFill(rect);
@@ -180,84 +275,82 @@
 
 - (void)drawXGrid:(NSRect)rect
 {
-  if (drawXGridFlag)
-  {
+    if (!showXGrid)
+        return;
+
     NSBezierPath *majorGridLines = [[NSBezierPath alloc] init]; //creates series of lines that will be gridlines on x
     NSBezierPath *minorGridLines = [[NSBezierPath alloc] init];
     NSBezierPath *tickMarks      = [[NSBezierPath alloc] init];
-    
-    const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
-    const float xMin = NSMinX(rect);  // for preformance reasons(used often)
-    const float yMax = NSMaxY(rect);
-    const float yMin = NSMinY(rect);
-    
-    const float xratio = (gMax - gMin)/(xMax - xMin); //ratio ÆData/ÆCoordinate -> dg/dx
-    
-    const float xorigin = (0 - gMin)/(xratio) + xMin; //x component of the origin
-    
-    const float xScale = gScale / xratio; //transform scale
-    
+
+    const float maxXBounds = NSMaxX(rect);  //bounds of graph - stored as constants
+    const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
+    const float maxYBounds = NSMaxY(rect);
+    const float minYBounds = NSMinY(rect);
+
+    const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+
+    const float xorigin = (0 - xMin)/xratio + minXBounds; //x component of the origin
+
+    const float scaleX = xScale / xratio; //transform scale
+
     float x;   //view coordinate x
-    
-    for (x = xorigin - floor((xorigin-xMin+1)/xScale)*xScale; x <= xMax+xScale; x += xScale) //Begin 1 scale unit outside of graph
+
+    for (x = xorigin - floor((xorigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) //Begin 1 scale unit outside of graph
     {                                         //End 1 scale unit outside of graph
-      [majorGridLines moveToPoint:NSMakePoint(x,yMax)];
-      [majorGridLines lineToPoint:NSMakePoint(x,yMin)];
+      [majorGridLines moveToPoint:NSMakePoint(x, maxYBounds)];
+      [majorGridLines lineToPoint:NSMakePoint(x, minYBounds)];
       
       float minor;
-      
-      for(minor = 1; minor < xMinorLineCount; minor++)
+      for (minor = 1; minor < xMinorLineCount; minor++)
       {
-        [minorGridLines moveToPoint:NSMakePoint(x+minor/xMinorLineCount*xScale,yMax)];
-        [minorGridLines lineToPoint:NSMakePoint(x+minor/xMinorLineCount*xScale,yMin)];
+        [minorGridLines moveToPoint:NSMakePoint(x + minor / xMinorLineCount * scaleX, maxYBounds)];
+        [minorGridLines lineToPoint:NSMakePoint(x + minor / xMinorLineCount * scaleX, minYBounds)];
       }
     }
-    
+
     [[graphColors colorWithKey:@"xMajor"] set];       //set color for grindlines
     [majorGridLines setLineWidth:majorLineWidth];     //make line width consistent with env. variable
     [majorGridLines stroke];
-    
+
     [[graphColors colorWithKey:@"xMinor"] set];       //set color for grindlines
     [minorGridLines setLineWidth:minorLineWidth];     //make line width consistent with env. variable
     [minorGridLines stroke];
-    
+
     [majorGridLines release];
     [minorGridLines release];
     [tickMarks release];
-  }
 }
 
 - (void)drawYGrid:(NSRect)rect
 {
-  if (drawYGridFlag)
-  {
+    if (!showYGrid)
+        return;
+
     NSBezierPath *majorGridLines = [[NSBezierPath alloc] init]; //creates series of lines that will be gridlines on y
     NSBezierPath *minorGridLines = [[NSBezierPath alloc] init];
     
-    const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
-    const float xMin = NSMinX(rect);  // for preformance reasons(used often)
-    const float yMax = NSMaxY(rect);
-    const float yMin = NSMinY(rect);
+    const float maxXBounds = NSMaxX(rect);  //bounds of graph - stored as constants
+    const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
+    const float maxYBounds = NSMaxY(rect);
+    const float minYBounds = NSMinY(rect);
 
-    const float yratio = (hMax - hMin)/(yMax - yMin); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
 
-    const float yorigin = (0 - hMin)/(yratio) + yMin; //y component of the origin
+    const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
 
-    const float yScale = hScale / yratio; //transform scale
+    const float scaleY = yScale / yratio; //transform scale
     
     float  y;   //view coordinate y
-    
-    for(y = yorigin - floor((yorigin-yMin)/yScale+1)*yScale; y <= yMax+yScale; y += yScale) //Begin 1 scale unit outside of graph
-      {                                         //End 1 scale unit outside of graph
-      [majorGridLines moveToPoint:NSMakePoint(xMax,y)];
-      [majorGridLines lineToPoint:NSMakePoint(xMin,y)];
+    for (y = yorigin - floor((yorigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
+    {                                         //End 1 scale unit outside of graph
+      [majorGridLines moveToPoint:NSMakePoint(maxXBounds,y)];
+      [majorGridLines lineToPoint:NSMakePoint(minXBounds,y)];
       
       float minor;
-      
-      for(minor=1; minor < yMinorLineCount; minor++)
+      for (minor = 1; minor < yMinorLineCount; minor++)
       {
-        [minorGridLines moveToPoint:NSMakePoint(xMax, y+minor/yMinorLineCount*yScale)];
-        [minorGridLines lineToPoint:NSMakePoint(xMin, y+minor/yMinorLineCount*yScale)];
+        [minorGridLines moveToPoint:NSMakePoint(maxXBounds, y + minor / yMinorLineCount * scaleY)];
+        [minorGridLines lineToPoint:NSMakePoint(minXBounds, y + minor / yMinorLineCount * scaleY)];
       }
     }
     
@@ -272,13 +365,13 @@
     
     [majorGridLines release];
     [minorGridLines release];
-  }
 }
 
 - (void)drawXAxis:(NSRect)rect
 {
-  if (drawXAxisFlag)
-  {
+    if (!showXAxis)
+        return;
+
     //Create Axis Path & Format it
     NSBezierPath *axis      = [[NSBezierPath alloc] init];
     NSBezierPath *tickMarks = [[NSBezierPath alloc] init];
@@ -287,47 +380,47 @@
     [tickMarks setLineWidth:axisLineWidth];
     
     //find y coordinate where h = 0 - use abbreviated transformation
-    const float xMax = NSMaxX(rect);
-    const float xMin = NSMinX(rect);
-    const float yMax = NSMaxY(rect);
-    const float yMin = NSMinY(rect);
+    const float maxXBounds = NSMaxX(rect);
+    const float minXBounds = NSMinX(rect);
+    const float maxYBounds = NSMaxY(rect);
+    const float minYBounds = NSMinY(rect);
     
-    const float xratio = (gMax - gMin)/(xMax - xMin); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
     
-    const float xorigin = (0 - gMin)/(xratio) + xMin; //x component of the origin
+    const float xorigin = (0 - xMin)/xratio + minXBounds; //x component of the origin
     
-    const float xScale = gScale / xratio; //transform scale
+    const float scaleX = xScale / xratio; //transform scale
       
-    float y = (0 - hMin)/((hMax - hMin)/(yMax - yMin)) + yMin;
+    float y = (0 - yMin)/((yMax - yMin)/(maxYBounds - minYBounds)) + minYBounds;
     
     //draw axis
-    if (y > yMax)  //if axis is higher than graph draw dashed axis at top
+    if (y > maxYBounds)  //if axis is higher than graph draw dashed axis at top
     {
       //make line dashed with pattern
       [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
       
-      //draw line at y = yMax
-      y = yMax;
+      //draw line at y = maxYBounds
+      y = maxYBounds;
     }
-    else if (y < yMin) //if axis is lower than graph draw dashed axis at bottom
+    else if (y < minYBounds) //if axis is lower than graph draw dashed axis at bottom
     {
       //make line dashed with pattern
       [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
           
       //draw line at y = yMain
-      y = yMin;
+      y = minYBounds;
     }
     
-    [axis moveToPoint:NSMakePoint(xMin,y)];
-    [axis lineToPoint:NSMakePoint(xMax,y)];
+    [axis moveToPoint:NSMakePoint(minXBounds,y)];
+    [axis lineToPoint:NSMakePoint(maxXBounds,y)];
     
-    if (drawXTickMarks)
+    if (showXTickMarks)
     {
       float x;
-      for(x = xorigin - floor((xorigin-xMin+1)/xScale)*xScale; x <= xMax+xScale; x += xScale) //Begin 1 scale unit outside of graph
-        {                                         //End 1 scale unit outside of graph
-        [tickMarks moveToPoint:NSMakePoint(x,y-3)];
-        [tickMarks lineToPoint:NSMakePoint(x,y+3)];
+      for (x = xorigin - floor((xorigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) //Begin 1 scale unit outside of graph
+      {                                         //End 1 scale unit outside of graph
+        [tickMarks moveToPoint:NSMakePoint(x, y - 3)];
+        [tickMarks lineToPoint:NSMakePoint(x, y + 3)];
       }
     }
     
@@ -336,14 +429,14 @@
       
     [axis      release];
     [tickMarks release];
-  }
 }
 
 
 - (void)drawYAxis:(NSRect)rect
 {
-  if (drawYAxisFlag)
-  {
+    if (!showYAxis)
+        return;
+
     //Create Axis Path & Format it
     NSBezierPath *axis      = [[NSBezierPath alloc] init];
     NSBezierPath *tickMarks = [[NSBezierPath alloc] init];
@@ -352,47 +445,47 @@
     [tickMarks setLineWidth:axisLineWidth];
     
     //find y coordinate where h = 0 - use abbreviated transformation
-    const float xMax = NSMaxX(rect);
-    const float xMin = NSMinX(rect);
-    const float yMax = NSMaxY(rect);
-    const float yMin = NSMinY(rect);
+    const float maxXBounds = NSMaxX(rect);
+    const float minXBounds = NSMinX(rect);
+    const float maxYBounds = NSMaxY(rect);
+    const float minYBounds = NSMinY(rect);
     
-    const float yratio = (hMax - hMin)/(yMax - yMin); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
 
-    const float yorigin = (0 - hMin)/(yratio) + yMin; //y component of the origin
+    const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
 
-    const float yScale = hScale / yratio; //transform scale
+    const float scaleY = yScale / yratio; //transform scale
     
-    float x = (0 - gMin)/((gMax - gMin)/(xMax - xMin)) + xMin;
+    float x = (0 - minXBounds)/((xMax - minXBounds)/(maxXBounds - minXBounds)) + minXBounds;
     
     //draw axis
-    if (x > xMax)  //if axis is higher than graph draw dashed axis at top
+    if (x > maxXBounds)  //if axis is higher than graph draw dashed axis at top
     {
       //make line dashed with pattern
       [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
       
-      //draw line at x = xMax
-      x = xMax;
+      //draw line at x = maxXBounds
+      x = maxXBounds;
     }
-    else if (x < xMin) //if axis is lower than graph draw dashed axis at bottom
+    else if (x < minXBounds) //if axis is lower than graph draw dashed axis at bottom
     {
       //make line dashed with pattern
       [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
           
-      //draw line at x = xMin
-      x = xMin;
-      }
+      //draw line at x = minXBounds
+      x = minXBounds;
+    }
     
-    [axis moveToPoint:NSMakePoint(x,yMin)];
-    [axis lineToPoint:NSMakePoint(x,yMax)];
+    [axis moveToPoint:NSMakePoint(x,minYBounds)];
+    [axis lineToPoint:NSMakePoint(x,maxYBounds)];
     
-    if (drawYTickMarks)
+    if (showYTickMarks)
     {
       float y;
-      for(y = yorigin - floor((yorigin-yMin)/yScale+1)*yScale; y <= yMax+yScale; y += yScale) //Begin 1 scale unit outside of graph
+      for (y = yorigin - floor((yorigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
       {                                         //End 1 scale unit outside of graph
-        [tickMarks moveToPoint:NSMakePoint(x-3,y)];
-        [tickMarks lineToPoint:NSMakePoint(x+3,y)];
+        [tickMarks moveToPoint:NSMakePoint(x - 3, y)];
+        [tickMarks lineToPoint:NSMakePoint(x + 3, y)];
       }
     }
       
@@ -401,7 +494,6 @@
       
     [axis      release];
     [tickMarks release];
-  }
 }
 
 
@@ -419,25 +511,25 @@
 //*********Customization Methods********************
 - (void)setXMin:(float)bound
 {
-  if (bound >= gMax)
+  if (bound >= xMax)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
   else
-    gMin = bound;
+    xMin = bound;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setXMax:(float)bound
 {
-  if (bound <= gMin)
+  if (bound <= xMin)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
   else
-    gMax = bound;
+    xMax = bound;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setXScale:(float)scale
 {
-  gScale = scale;
+  xScale = scale;
   [self setNeedsDisplay:YES];
 }
 
@@ -449,25 +541,25 @@
 
 - (void)setYMin:(float)bound
 {
-  if (bound >= hMax)
+  if (bound >= yMax)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
   else
-    hMin = bound;
+    yMin = bound;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setYMax:(float)bound
 {
-  if (bound <= hMin)
+  if (bound <= yMin)
     [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
   else
-    hMax = bound;
+    yMax = bound;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setYScale:(float)scale
 {
-  hScale = scale;
+  yScale = scale;
   [self setNeedsDisplay:YES];
 }
 
@@ -477,179 +569,163 @@
   [self setNeedsDisplay:YES];
 }
 
-- (void)setShowTitle :(BOOL)state
+- (void)setShowTitle:(BOOL)state
 {
-  drawTitleFlag  = state;
+  showTitle  = state;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setShowXLabel:(BOOL)state
 {
-  drawXLabelFlag = state;
+  showXLabel = state;
   [self setNeedsDisplay:YES];
 }
+
 - (void)setShowXAxis :(BOOL)state
 {
-  drawXAxisFlag  = state;
+  showXAxis  = state;
   [self setNeedsDisplay:YES];
 }
+
+- (void)setShowXValues :(BOOL)state
+{
+  showXValues  = state;
+  [self setNeedsDisplay:YES];
+}
+
 - (void)setShowXGrid :(BOOL)state
 {
-  drawXGridFlag  = state;
+  showXGrid  = state;
   [self setNeedsDisplay:YES];
 }
+
 - (void)setShowXTickMarks:(BOOL)state
 {
-  drawXTickMarks = state;
+  showXTickMarks = state;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setShowYLabel:(BOOL)state
 {
-  drawYLabelFlag = state;
+  showYLabel = state;
   [self setNeedsDisplay:YES];
 }
-- (void)setShowYAxis :(BOOL)state
+
+- (void)setShowYAxis:(BOOL)state
 {
-  drawYAxisFlag  = state;
+  showYAxis  = state;
   [self setNeedsDisplay:YES];
 }
-- (void)setShowYGrid :(BOOL)state
+
+- (void)setShowYValues:(BOOL)state
 {
-  drawYGridFlag  = state;
+  showYValues  = state;
   [self setNeedsDisplay:YES];
 }
+
+- (void)setShowYGrid:(BOOL)state
+{
+  showYGrid  = state;
+  [self setNeedsDisplay:YES];
+}
+
 - (void)setShowYTickMarks:(BOOL)state
 {
-  drawYTickMarks = state;
+  showYTickMarks = state;
   [self setNeedsDisplay:YES];
 }
 
 - (void)setShowBackground:(BOOL)state
 {
-  drawBackgroundFlag = state;
+  showBackground = state;
   [self setNeedsDisplay:YES];
 }
 
 
-- (void)setXAxisColor :(NSColor *)color
+- (NSColor *)xAxisColor
 {
-  [graphColors setColor:color forKey:@"xaxis"];
-  [self setNeedsDisplay:YES];
-}
-- (void)setXGridColor :(NSColor *)color
-{
-  [graphColors setColor:color forKey:@"xMajor"];
-  [self setNeedsDisplay:YES];
+    return [graphColors colorWithKey:@"xaxis"];
 }
 
-- (void)setYAxisColor :(NSColor *)color
+- (void)setXAxisColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"yaxis"];
-  [self setNeedsDisplay:YES];
+    [graphColors setColor:color forKey:@"xaxis"];
+    [self setNeedsDisplay:YES];
 }
-- (void)setYGridColor :(NSColor *)color
+
+- (NSColor *)xGridColor
 {
-  [graphColors setColor:color forKey:@"yMajor"];
-  [self setNeedsDisplay:YES];
+    return [graphColors colorWithKey:@"xMajor"];
+}
+
+- (void)setXGridColor:(NSColor *)color
+{
+    [graphColors setColor:color forKey:@"xMajor"];
+    [self setNeedsDisplay:YES];
+}
+
+- (NSColor *)yAxisColor
+{
+    return [graphColors colorWithKey:@"yaxis"];
+}
+
+- (void)setYAxisColor:(NSColor *)color
+{
+    [graphColors setColor:color forKey:@"yaxis"];
+    [self setNeedsDisplay:YES];
+}
+
+- (NSColor *)yGridColor
+{
+    return [graphColors colorWithKey:@"yMajor"];
+}
+
+- (void)setYGridColor:(NSColor *)color
+{
+    [graphColors setColor:color forKey:@"yMajor"];
+    [self setNeedsDisplay:YES];
+}
+
+- (NSColor *)backgroundColor
+{
+    return [graphColors colorWithKey:@"background"];
 }
 
 - (void)setBackgroundColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"background"];
-  [self setNeedsDisplay:YES];
+    [graphColors setColor:color forKey:@"background"];
+    [self setNeedsDisplay:YES];
 }
-
 
 
 - (void)setTitle:(NSAttributedString *)string
 {
-  [title release];
-  title = string;
-  [title retain];
-  
-  [self setNeedsDisplay:YES];
+    if (string != title)
+    {
+        [title release];
+        title = [string retain];
+        [self setNeedsDisplay:YES];
+    }
 }
+
 - (void)setXLabel:(NSAttributedString *)string
 {
-  [xlabel release];
-  xlabel = string;
-  [xlabel retain];
-  
-  [self setNeedsDisplay:YES];
+    if (string != xLabel)
+    {
+        [xLabel release];
+        xLabel = [string retain];
+        [self setNeedsDisplay:YES];
+    }
 }
+
 - (void)setYLabel:(NSAttributedString *)string
 {
-  [ylabel release];
-  ylabel = string;
-  [ylabel retain];
-  
-  [self setNeedsDisplay:YES];
-  }
-- (NSAttributedString *)title
-{return title;}
-- (NSAttributedString *)xLabel
-{return xlabel;}
-- (NSAttributedString *)yLabel
-{return ylabel;}
-
-//************State Methods****************
-- (float)xMin
-{return gMin;}
-- (float)xMax
-{return gMax;}
-- (float)xScale
-{return gScale;}
-- (unsigned)xMinorLineCount
-{return xMinorLineCount;}
-
-- (float)yMin
-{return hMin;}
-- (float)yMax
-{return hMax;}
-- (float)yScale
-{return hScale;}
-- (unsigned)yMinorLineCount
-{return yMinorLineCount;}
-
-- (BOOL)showTitle
-{return drawTitleFlag;}
-
-- (BOOL)showXLabel
-{return drawXLabelFlag;}
-- (BOOL)showXAxis
-{return drawXAxisFlag;}
-- (BOOL)showXGrid
-{return drawXGridFlag;}
-- (BOOL)showXTickMarks
-{return drawXTickMarks;}
-
-- (BOOL)showYLabel
-{return drawYLabelFlag;}
-- (BOOL)showYAxis
-{return drawYAxisFlag;}
-- (BOOL)showYGrid
-{return drawYGridFlag;}
-- (BOOL)showYTickMarks
-{return drawYTickMarks;}
-
-- (BOOL)showBackground
-{return drawBackgroundFlag;}
-
-
-- (NSColor *)xAxisColor
-{return [graphColors colorWithKey:@"xaxis"];}
-- (NSColor *)xGridColor
-{return [graphColors colorWithKey:@"xMajor"];}
-
-- (NSColor *)yAxisColor
-{return [graphColors colorWithKey:@"yaxis"];}
-- (NSColor *)yGridColor
-{return [graphColors colorWithKey:@"yMajor"];}
-
-- (NSColor *)backgroundColor
-{return [graphColors colorWithKey:@"background"];}
-
-
+    if (string != yLabel)
+    {
+        [yLabel release];
+        yLabel = [string retain];
+        [self setNeedsDisplay:YES];
+    }
+}
 
 @end

@@ -11,6 +11,11 @@
 
 @implementation CTHistogramView
 
+@synthesize bucketWidth;
+
+@synthesize showBorder;
+@synthesize showFill;
+
 - (id)initWithFrame:(NSRect)frameRect
 {
   if ((self = [super initWithFrame:frameRect]) != nil)
@@ -22,10 +27,9 @@
     [graphColors setColor:[ NSColor blackColor ] forKey:@"border"];
     [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"fill"];
       
-    
     //Set Flags
-    drawBorderFlag = YES;
-    drawFillFlag   = YES;
+    showBorder = YES;
+    showFill   = YES;
     
     //Default SuperClass Settings
     [super setXMin:0]; [super setXMax:10];
@@ -49,6 +53,9 @@
 - (void)dealloc
 {
     [dataSource release];
+    [border release];
+    [displacement release];
+    
     [super dealloc];
 }
 
@@ -71,47 +78,42 @@
   if (!dataSource)
     return;
 
-  const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
-  const float xMin = NSMinX(rect);  // for preformance reasons(used often)
-  const float yMax = NSMaxY(rect);
-  const float yMin = NSMinY(rect);
+  const float maxXBounds = NSMaxX(rect);  // bounds of graph - stored as constants
+  const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
+  const float maxYBounds = NSMaxY(rect);
+  const float minYBounds = NSMinY(rect);
   
-  const double xratio = (gMax - gMin)/(xMax - xMin); //ratio ÆData/ÆCoordinate -> dg/dx
-  const double yratio = (hMax - hMin)/(yMax - yMin); //ratio ÆData/ÆCoordinate -> dh/dy
+  const double xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+  const double yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
   
-  const float yorigin = (0 - hMin)/(yratio) + yMin; //y component of the origin
+  const float yorigin = (0 - yMin)/(yratio) + minYBounds; // y component of the origin
   
-    
-  //Create Boxes for Histogram
-  //start by finding the first bucket that needs displaying
-  float lowerBound = 0 - floor((0-gMin)/bucketWidth)*gScale;
+  // Create Boxes for Histogram
+  // start by finding the first bucket that needs displaying
+  float lowerBound = 0 - floor((0 - xMin) / bucketWidth) * xScale;
   float upperLimit = lowerBound + bucketWidth;
-  float frequency;    //number of observations in range
   
-  float x = (lowerBound - gMin)/(xratio) + xMin;
+  float x = (lowerBound - xMin)/(xratio) + minXBounds;
   float y = yorigin;
   
   float x_next = x + (bucketWidth)/(xratio);
   float y_next;
   
-  
   [displacement moveToPoint:NSMakePoint(x,y)];
   
-  while(lowerBound <= gMax)   //Draw bars until no longer in Graph range
+  while (lowerBound <= xMax)   //Draw bars until no longer in Graph range
   {
     //get frequency from DataSource
-    frequency = [dataSource frequencyForBucketWithLowerBound:lowerBound andUpperLimit:upperLimit];
+    float frequency = [dataSource frequencyForBucketWithLowerBound:lowerBound andUpperLimit:upperLimit];
     
     //Calulate values in terms of view
-    y_next = (frequency  - hMin)/(yratio) + yMin;
-    
+    y_next = (frequency  - yMin)/(yratio) + minYBounds;
     
     [displacement lineToPoint:NSMakePoint(x     , y_next)];
     [displacement lineToPoint:NSMakePoint(x_next, y_next)];
     
     [border moveToPoint:NSMakePoint(x , (y < y_next) ? y : y_next)];
     [border lineToPoint:NSMakePoint(x , yorigin)];
-    
     
     y = y_next;
     x = x_next;
@@ -123,13 +125,13 @@
   
   [displacement lineToPoint:NSMakePoint(x , yorigin)];
   
-  if (drawFillFlag == YES )
+  if (showFill)
   {
     [[graphColors colorWithKey:@"fill"] set];
     [displacement fill];
   }
 
-  if (drawBorderFlag == YES )
+  if (showBorder)
   {
     [[graphColors colorWithKey:@"border"] set];
     [border appendBezierPath:displacement];
@@ -141,69 +143,46 @@
 }
 
 
-
 //*********Customization Methods********************
 - (void)setBucketWidth:(float)width;
 {
-  bucketWidth = width;
-  [self setNeedsDisplay:YES];
+    bucketWidth = width;
+    [self setNeedsDisplay:YES];
 }
 
 - (void)setShowBorder:(BOOL)state
 {
-  drawBorderFlag = state;
-  [self setNeedsDisplay:YES];
+    showBorder = state;
+    [self setNeedsDisplay:YES];
 }
 
 - (void)setShowFill:(BOOL)state
 {
-  drawFillFlag = state;
-  [self setNeedsDisplay:YES];
+    showFill = state;
+    [self setNeedsDisplay:YES];
+}
+
+- (NSColor *)borderColor
+{
+    return [graphColors colorWithKey:@"border"];
 }
 
 - (void)setBorderColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"border"];
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setFillColor:(NSColor *)color
-{
-  [graphColors setColor:color forKey:@"fill"];
-  [self setNeedsDisplay:YES];
-}
-
-
-
-
-
-
-//************State Methods****************
-- (float)bucketWidth
-{
-  return bucketWidth;
-}
-
-
-- (BOOL)showBorder
-{
-  return drawBorderFlag;
-}
-
-- (BOOL)showFill
-{
-  return drawFillFlag;
-}
-
-
-- (NSColor *)borderColor
-{
-  return [graphColors colorWithKey:@"border"];
+    [graphColors setColor:color forKey:@"border"];
+    [self setNeedsDisplay:YES];
 }
 
 - (NSColor *)fillColor
 {
-  return [graphColors colorWithKey:@"fill"];
+    return [graphColors colorWithKey:@"fill"];
 }
+
+- (void)setFillColor:(NSColor *)color
+{
+    [graphColors setColor:color forKey:@"fill"];
+    [self setNeedsDisplay:YES];
+}
+
 
 @end

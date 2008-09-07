@@ -36,7 +36,7 @@
 {
   int factor = 10000;
   int variablility = 10;
-  const double xMax = 10000.0;
+  const double xMax = 10.0;
   
   float x = (float)index * xMax / factor;
   float y = 10 * ((float)(Random()%variablility)+index*index+variablility*.75)/(1.75*variablility+factor*factor);

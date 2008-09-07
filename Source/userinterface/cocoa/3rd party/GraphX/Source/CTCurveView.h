@@ -27,42 +27,29 @@
   IBOutlet id <CTCurveViewDelegate  > delegate  ;   //object that will be notified when key events occur
   
   
-  float res;  //Determines number of pixels per point on curve
+  float resolution;  //Determines number of pixels per point on curve
               // Frequency of Point samples taken from DataSource to form the continous curve
               // *has a major effect on preformance - use high values if DataSource method is slow
-  float xres; //Resolution used during graphing process - may be adjusted(lower) from res during live resize for preformance
-  BOOL  approx; //flag for whether or not to allow approximations during live resizes
+  float drawingResolution; //Resolution used during graphing process - may be adjusted(lower) from res during live resize for preformance
+  BOOL  approximateOnLiveResize; //flag for whether or not to allow approximations during live resizes
   
-  
-  BOOL drawGraphFlag , drawFillFlag;  //Flags to turn on/off different components of CTGraphView
+  BOOL showCurve , showFill;	//Flags to turn on/off different components of CTGraphView
   
   float curveLineWidth;   //width of the curve
   
-  NSBezierPath *curve;
-  NSBezierPath *displacement;
+  NSBezierPath* curve;
+  NSBezierPath* displacement;
 }
 
 - (void)drawGraph:(NSRect)rect;   //Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 
-//Customization Methods
-- (void)setRes:(float)resolution;
-- (void)setApproximateOnLiveResize:(BOOL)state;
+@property (assign) float resolution;
+@property (assign) BOOL approximateOnLiveResize;
 
-- (void)setShowCurve :(BOOL)state;
-- (void)setShowFill  :(BOOL)state;
+@property (assign) BOOL showCurve;
+@property (assign) BOOL showFill;
 
-- (void)setCurveColor:(NSColor *)color;
-- (void)setFillColor :(NSColor *)color;
-
-
-//State Methods
-- (float)res;
-- (BOOL)approximateOnLiveResize;
-
-- (BOOL)showCurve;
-- (BOOL)showFill ;
-
-- (NSColor *)curveColor;
-- (NSColor *)fillColor ;
+@property (retain) NSColor* curveColor;
+@property (retain) NSColor* fillColor;
 
 @end

@@ -11,14 +11,20 @@
 
 @implementation CTCurveView
 
+@synthesize resolution;
+@synthesize approximateOnLiveResize;
+
+@synthesize showCurve;
+@synthesize showFill;
+
 - (id)initWithFrame:(NSRect)frameRect
 {
-  if((self = [super initWithFrame:frameRect]) != nil)
+  if ((self = [super initWithFrame:frameRect]) != nil)
   {
     //Set Default Resolution for X (in terms of pixel coordinates - **not in terms of a data value)
-    res = 1;
-    xres = 1;
-    approx = NO;
+    resolution = 1;
+    drawingResolution = 1;
+    approximateOnLiveResize = NO;
     
     //Set Default Colors
     [graphColors setColor:[ NSColor blackColor ] forKey:@"curve"];
@@ -26,8 +32,8 @@
     
     
     //Set Flags
-    drawGraphFlag = YES;
-    drawFillFlag  = YES;
+    showCurve = YES;
+    showFill  = YES;
 
     
     //Set Drawing Constants
@@ -61,46 +67,48 @@
   if (!dataSource)
     return;
 
-  const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
-  const float xMin = NSMinX(rect);  // for preformance reasons(used often)
-  const float yMax = NSMaxY(rect);
-  const float yMin = NSMinY(rect);
+  const float maxXBounds = NSMaxX(rect);  //bounds of graph - stored as constants
+  const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
+  const float maxYBounds = NSMaxY(rect);
+  const float minYBounds = NSMinY(rect);
   
-  const float xratio = (gMax - gMin)/(xMax - xMin); //ratio ÆData/ÆCoordinate -> dg/dx
-  const float yratio = (hMax - hMin)/(yMax - yMin); //ratio ÆData/ÆCoordinate -> dh/dy
+  const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+  const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
   
-  const float xorigin = (0 - gMin)/(xratio) + xMin; //x component of the origin
-  const float yorigin = (0 - hMin)/(yratio) + yMin; //y component of the origin
+  const float xorigin = (0 - xMin)/(xratio) + minXBounds; //x component of the origin
+  const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
   
   //Create Curve Path then Draw Curve and Fill Area underneath
   
-  //start by convert xres(a pixel increment) to gres(a graph value increment)
+  //start by convert drawingResolution(a pixel increment) to gres(a graph value increment)
   // this uses a method similar to the linear transformation from above(drawing the xgrid)
-  float gres = xres * (gMax - gMin)/(xMax - xMin);
-  
+  float gres = drawingResolution * (xMax - xMin)/(maxXBounds - minXBounds);
+  if (gres <= 0)
+    gres = 1.0;
+
   //will now start sampling graph values to form graph points, then converting them to pixel points,
   //and finally feeding them into the curve
   //
-  //Sampling will begin at gMin and finish off at gMax
+  //Sampling will begin at xMin and finish off at xMax
   //  any points that return null will be ignored
   
   //the sample data point's coordinates
-  float g = gMin - gres;
+  float g = xMin - gres;
   float h = NAN; 
   
   float g_next;
   float h_next;
   
-  float gMinRatio = gMin/xratio;
-  float hMinRatio = hMin/yratio;
+  float gMinRatio = xMin/xratio;
+  float hMinRatio = yMin/yratio;
   
   float x;
   float y;
   
-  while(g < gMax)
+  while(g < xMax)
   {
     //NaN Segment (keep continuing until a graphable point is reached)
-    while(g < gMax && isnan(h))
+    while(g < xMax && isnan(h))
     {
       g_next = g + gres;
       h_next = [dataSource yValueForXValue:g_next];
@@ -112,14 +120,14 @@
       //If the NaN Segment has ended - begin drawing points
       else
       {
-        x = (g_next)/(xratio) - gMinRatio + xMin;
+        x = (g_next)/(xratio) - gMinRatio + minXBounds;
         
         if(isfinite(h_next))              //move to the right to the point
-          y = (h_next)/(yratio) - hMinRatio + yMin;
+          y = (h_next)/(yratio) - hMinRatio + minYBounds;
         else if(signbit(h_next))            //move to top of screen
-          y = yMax + curveLineWidth;
+          y = maxYBounds + curveLineWidth;
         else                      //move to bottom of screen
-          y = yMin - curveLineWidth;
+          y = minYBounds - curveLineWidth;
           
         [curve moveToPoint:NSMakePoint(x,y)];
       }
@@ -129,17 +137,17 @@
     }
     
     //Make sure we aren't ending with NaN
-    if (g >= gMax && isnan(h))
+    if (g >= xMax && isnan(h))
       break;
     
-    float firstPoint = g/(xratio) - gMinRatio + xMin;
+    float firstPoint = g/(xratio) - gMinRatio + minXBounds;
     [delegate hasDrawnFirstSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xorigin,yorigin)];
     
     
     //Graphable Line Segment continue until NaN segment is once again reached
     while (!isnan(h))
     {
-      while (g < gMax && isfinite(h))
+      while (g < xMax && isfinite(h))
       {
         g_next = g + gres;
         h_next = [dataSource yValueForXValue:g_next];
@@ -156,13 +164,13 @@
           
           if(isfinite(h_next))              //line to the right to the point
           {
-            x = (g_next)/(xratio) - gMinRatio + xMin;
-            y = (h_next)/(yratio) - hMinRatio + yMin;
+            x = (g_next)/(xratio) - gMinRatio + minXBounds;
+            y = (h_next)/(yratio) - hMinRatio + minYBounds;
           }
           else if(signbit(h_next))            //line to top of screen
-            y = yMax + curveLineWidth;
+            y = maxYBounds + curveLineWidth;
           else                      //line to bottom of screen
-            y = yMin - curveLineWidth;
+            y = minYBounds - curveLineWidth;
           
           
           [curve lineToPoint:NSMakePoint(x,y)];
@@ -172,7 +180,7 @@
         h = h_next;
       }
       
-      while(!isfinite(h) && !isnan(h) && g <= gMax)
+      while(!isfinite(h) && !isnan(h) && g <= xMax)
       {
         g_next = g + gres;
         h_next = [dataSource yValueForXValue:g_next];
@@ -187,20 +195,20 @@
         //Next point is valid - draw a line to it
         else if(!isnan(h_next))
         {
-          x = (g_next)/(xratio) - gMinRatio + xMin;
-          y = signbit(h) ? yMax+curveLineWidth : yMin-curveLineWidth;
+          x = (g_next)/(xratio) - gMinRatio + minXBounds;
+          y = signbit(h) ? maxYBounds+curveLineWidth : minYBounds-curveLineWidth;
           
           [curve lineToPoint:NSMakePoint(x,y)];
           
           //Next point is valid - draw a line to it
-          x = (g_next)/(xratio) - gMinRatio + xMin;
+          x = (g_next)/(xratio) - gMinRatio + minXBounds;
           
           if (isfinite(h_next))              //move to the right to the point
-            y = (h_next)/(yratio) - hMinRatio + yMin;
+            y = (h_next)/(yratio) - hMinRatio + minYBounds;
           else if (signbit(h_next))            //move to top of screen
-            y = yMax + curveLineWidth;
+            y = maxYBounds + curveLineWidth;
           else                      //move to bottom of screen
-            y = yMin - curveLineWidth;
+            y = minYBounds - curveLineWidth;
             
           [curve lineToPoint:NSMakePoint(x,y)];
         }
@@ -209,7 +217,7 @@
         h = h_next;
         }
         
-        if (isnan(h_next) || g >= gMax)
+        if (isnan(h_next) || g >= xMax)
           break;
     }
     
@@ -219,7 +227,7 @@
     g = g_next;
     h = h_next;
     
-    if (drawFillFlag == YES)
+    if (showFill)
     {
       //Create New path that wil be filled
       [displacement appendBezierPath:curve];
@@ -234,7 +242,7 @@
     }
 
     //Draw and fill curve
-    if( drawGraphFlag == YES )
+    if (showCurve)
     {
       [[graphColors colorWithKey:@"curve"] set];
       [curve stroke];
@@ -248,90 +256,57 @@
 
 - (void)viewWillStartLiveResize
 {
-  if(approx == YES)
-    xres = res*9;
+    if (approximateOnLiveResize)
+        drawingResolution = resolution * 9;
 }
 
 - (void)viewDidEndLiveResize
 {
-  xres = res;
-  [self setNeedsDisplay:YES];
+    drawingResolution = approximateOnLiveResize;
+    [self setNeedsDisplay:YES];
 }
-
-
 
 
 //*********Customization Methods********************
-- (void)setRes:(float)resolution
+- (void)setRes:(float)inResolution
 {
-  res = resolution;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setApproximateOnLiveResize:(BOOL)state
-{
-  approx = state;
+    resolution = inResolution;
+    [self setNeedsDisplay:YES];
 }
 
 - (void)setShowCurve:(BOOL)state
 {
-  drawGraphFlag = state;
-  [self setNeedsDisplay:YES];
+    showCurve = state;
+    [self setNeedsDisplay:YES];
 }
 
 - (void)setShowFill:(BOOL)state
 {
-  drawFillFlag = state;
-  [self setNeedsDisplay:YES];
+    showFill = state;
+    [self setNeedsDisplay:YES];
 }
 
+- (NSColor *)curveColor
+{
+    return [graphColors colorWithKey:@"curve"];
+}
 
 - (void)setCurveColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"curve"];
-  [self setNeedsDisplay:YES];
+    [graphColors setColor:color forKey:@"curve"];
+    [self setNeedsDisplay:YES];
+}
+
+- (NSColor *)fillColor
+{
+    return [graphColors colorWithKey:@"fill"];
 }
 
 - (void)setFillColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"fill"];
-  [self setNeedsDisplay:YES];
+    [graphColors setColor:color forKey:@"fill"];
+    [self setNeedsDisplay:YES];
 }
 
-
-
-
-
-
-//************State Methods****************
-- (float)res;
-{
-  return res;
-}
-- (BOOL)approximateOnLiveResize
-{
-  return approx;
-}
-
-
-- (BOOL)showCurve
-{
-  return drawGraphFlag;
-}
-- (BOOL)showFill
-{
-  return drawFillFlag;
-}
-
-
-
-- (NSColor *)curveColor
-{
-  return [graphColors colorWithKey:@"curve"];
-}
-- (NSColor *)fillColor
-{
-  return [graphColors colorWithKey:@"fill"];
-}
 
 @end

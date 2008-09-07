@@ -11,6 +11,9 @@
 
 @implementation CTScatterPlotView
 
+@synthesize showCurve;
+@synthesize showFill;
+
 - (id)initWithFrame:(NSRect)frameRect
 {
   if((self = [super initWithFrame:frameRect]) != nil)
@@ -21,8 +24,8 @@
     
     
     //Set Flags
-    drawGraphFlag  = YES;
-    drawFillFlag   = YES;
+    showCurve  = YES;
+    showFill   = YES;
     
     //Default SuperClass Settings
     [super setXMin:0]; [super setXMax:10];
@@ -75,23 +78,23 @@
   if (!dataSource)
     return;
 
-  const float xMax = NSMaxX(rect);  //bounds of graph - stored as constants
-  const float xMin = NSMinX(rect);  // for preformance reasons(used often)
-  const float yMax = NSMaxY(rect);
-  const float yMin = NSMinY(rect);
+  const float maxXBounds = NSMaxX(rect);  //bounds of graph - stored as constants
+  const float minXBounds = NSMinX(rect);  // for preformance reasons (used often)
+  const float maxYBounds = NSMaxY(rect);
+  const float minYBounds = NSMinY(rect);
   
-  const float xratio = (gMax - gMin)/(xMax - xMin); //ratio ÆData/ÆCoordinate -> dg/dx
-  const float yratio = (hMax - hMin)/(yMax - yMin); //ratio ÆData/ÆCoordinate -> dh/dy
+  const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+  const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
   
-  const float xorigin = (0 - gMin)/(xratio) + xMin; //x component of the origin
-  const float yorigin = (0 - hMin)/(yratio) + yMin; //y component of the origin
+  //const float xorigin = (0 - xMin)/(xratio) + minXBounds; //x component of the origin
+  const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
   
   //Create Curve Path then Draw Curve and Fill Area underneath
   
   //will now start sampling graph values to form graph points, then converting them to pixel points,
   //and finally feeding them into the curve
   //
-  //Sampling will begin at gMin and finish off at gMax
+  //Sampling will begin at xMin and finish off at xMax
   //  any points that return null will be ignored
   
   //the sample data point's coordinates
@@ -102,23 +105,23 @@
   
   NSPoint *pointPointer = &tmp;
   
-  float g = gMin;
+  float g = xMin;
   float h = NAN; 
   
   float g_next;
   float h_next;
   
-  float gMinRatio = gMin/xratio;
-  float hMinRatio = hMin/yratio;
+  float xMinRatio = xMin / xratio;
+  float hMinRatio = yMin / yratio;
   
   float x;
   float y;
   
   [dataSource getPoint:&pointPointer atIndex:index];
   
-  while (g < gMax &&  pointPointer != nil)
+  while (g < xMax &&  pointPointer != nil)
   {
-    while ((g < gMax &&  pointPointer != nil) && isnan(h))
+    while ((g < xMax &&  pointPointer != nil) && isnan(h))
     {
       g_next = pointPointer->x;
       h_next = pointPointer->y;
@@ -128,14 +131,14 @@
       }
       else
       {
-        x = (g_next)/(xratio) - gMinRatio + xMin;
+        x = (g_next)/(xratio) - xMinRatio + minXBounds;
         
         if (isfinite(h_next))              //move to the right to the point
-          y = (h_next)/(yratio) - hMinRatio + yMin;
+          y = (h_next)/(yratio) - hMinRatio + minYBounds;
         else if (signbit(h_next))            //move to top of screen
-          y = yMax + curveLineWidth;
+          y = maxYBounds + curveLineWidth;
         else                      //move to bottom of screen
-          y = yMin - curveLineWidth;
+          y = minYBounds - curveLineWidth;
           
         [curve moveToPoint:NSMakePoint(x,y)];
       }
@@ -146,14 +149,14 @@
     }
     
     //Make sure we aren't ending with NaN
-    if (g >= gMax && isnan(h))
+    if (g >= xMax && isnan(h))
       break;
     
-    float firstPoint = g/(xratio) - gMinRatio + xMin;
+    float firstPoint = g/(xratio) - xMinRatio + minXBounds;
     
     while(!isnan(h))
     {
-      while((g < gMax &&  pointPointer != nil) && isfinite(h))
+      while((g < xMax &&  pointPointer != nil) && isfinite(h))
       {
         g_next = pointPointer->x;
         h_next = pointPointer->y;
@@ -168,13 +171,13 @@
           
           if(isfinite(h_next))              //line to the right to the point
           {
-            x = (g_next)/(xratio) - gMinRatio + xMin;
-            y = (h_next)/(yratio) - hMinRatio + yMin;
+            x = (g_next)/(xratio) - xMinRatio + minXBounds;
+            y = (h_next)/(yratio) - hMinRatio + minYBounds;
           }
           else if(signbit(h_next))            //line to top of screen
-            y = yMax + curveLineWidth;
+            y = maxYBounds + curveLineWidth;
           else                      //line to bottom of screen
-            y = yMin - curveLineWidth;
+            y = minYBounds - curveLineWidth;
           
           
           [curve lineToPoint:NSMakePoint(x,y)];
@@ -185,7 +188,7 @@
         [dataSource getPoint:&pointPointer atIndex:(++index)];
       }
       
-      while(!isfinite(h) && !isnan(h) && (g < gMax &&  pointPointer != nil))
+      while(!isfinite(h) && !isnan(h) && (g < xMax &&  pointPointer != nil))
       {
         g_next = pointPointer->x;
         h_next = pointPointer->y;
@@ -197,20 +200,20 @@
         //Next point is valid - draw a line to it
         else if(!isnan(h_next))
         {
-          x = (g_next)/(xratio) - gMinRatio + xMin;
-          y = signbit(h) ? yMax+curveLineWidth : yMin-curveLineWidth;
+          x = (g_next)/(xratio) - xMinRatio + minXBounds;
+          y = signbit(h) ? maxYBounds + curveLineWidth : minYBounds - curveLineWidth;
           
           [curve lineToPoint:NSMakePoint(x,y)];
           
           //Next point is valid - draw a line to it
-          x = (g_next)/(xratio) - gMinRatio + xMin;
+          x = (g_next)/(xratio) - xMinRatio + minXBounds;
           
           if(isfinite(h_next))              //move to the right to the point
-            y = (h_next)/(yratio) - hMinRatio + yMin;
+            y = (h_next)/(yratio) - hMinRatio + minYBounds;
           else if(signbit(h_next))            //move to top of screen
-            y = yMax + curveLineWidth;
+            y = maxYBounds + curveLineWidth;
           else                      //move to bottom of screen
-            y = yMin - curveLineWidth;
+            y = minYBounds - curveLineWidth;
           
           [curve lineToPoint:NSMakePoint(x,y)];
         }
@@ -220,7 +223,7 @@
         [dataSource getPoint:&pointPointer atIndex:(++index)];
       }
         
-        if (isnan(h_next) || (g >= gMax || pointPointer == nil))
+        if (isnan(h_next) || (g >= xMax || pointPointer == nil))
           break;
       }
       
@@ -228,7 +231,7 @@
       g = g_next;
       h = h_next;
       
-      if (drawFillFlag)
+      if (showFill)
       {
         //Create New path that wil be filled
         //float lastPoint = [curve currentPoint].x;
@@ -245,7 +248,7 @@
       }
 
       //Draw and fill curve
-      if (drawGraphFlag)
+      if (showCurve)
       {
         [[graphColors colorWithKey:@"curve"] set];
         [curve stroke];
@@ -258,56 +261,25 @@
 
 
 
-
-
-
-
-
-//*********Customization Methods********************
-- (void)setShowCurve:(BOOL)state
+- (NSColor *)curveColor
 {
-  drawGraphFlag = state;
+    return [graphColors colorWithKey:@"curve"];
 }
-- (void)setShowFill:(BOOL)state
-{
-  drawFillFlag = state;
-}
-
 
 - (void)setCurveColor:(NSColor *)color
 {
-  [graphColors setColor:color forKey:@"curve"];
-}
-- (void)setFillColor:(NSColor *)color
-{
-  [graphColors setColor:color forKey:@"fill"];
+    [graphColors setColor:color forKey:@"curve"];
 }
 
-
-
-
-
-
-//************State Methods****************
-- (BOOL)showCurve
-{
-  return drawGraphFlag;
-}
-
-- (BOOL)showFill
-{
-  return drawFillFlag;
-}
-
-
-
-- (NSColor *)curveColor
-{
-  return [graphColors colorWithKey:@"curve"];
-}
 - (NSColor *)fillColor
 {
-  return [graphColors colorWithKey:@"fill"];
+    return [graphColors colorWithKey:@"fill"];
 }
+
+- (void)setFillColor:(NSColor *)color
+{
+    [graphColors setColor:color forKey:@"fill"];
+}
+
 
 @end

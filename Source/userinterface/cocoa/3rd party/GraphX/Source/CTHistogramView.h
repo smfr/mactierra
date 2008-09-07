@@ -26,12 +26,12 @@
 
   float bucketWidth;  //Width of Buckets(ranges for frequencies)
   
-  BOOL drawBorderFlag, drawFillFlag;  //Flags to turn on/off different components of CTGraphView
+  BOOL showBorder, showFill;  //Flags to turn on/off different components of CTGraphView
   
   float borderLineWidth;   //width of the curve
   
-  NSBezierPath *border;
-  NSBezierPath *displacement;
+  NSBezierPath* border;
+  NSBezierPath* displacement;
 }
 
 - (void)setDataSource:(id)inDataSource;
@@ -39,23 +39,12 @@
 
 - (void)drawGraph:(NSRect)rect;   //Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
 
-//Customization Methods
-- (void)setBucketWidth:(float)width;
+@property (assign) float bucketWidth;
 
-- (void)setShowBorder:(BOOL)state;
-- (void)setShowFill  :(BOOL)state;
+@property (assign) BOOL showBorder;
+@property (assign) BOOL showFill;
 
-- (void)setBorderColor:(NSColor *)color;
-- (void)setFillColor  :(NSColor *)color;
-
-
-//State Methods
-- (float)bucketWidth;
-
-- (BOOL)showBorder;
-- (BOOL)showFill  ;
-
-- (NSColor *)borderColor;
-- (NSColor *)fillColor  ;
+@property (retain) NSColor* borderColor;
+@property (retain) NSColor* fillColor;
 
 @end
