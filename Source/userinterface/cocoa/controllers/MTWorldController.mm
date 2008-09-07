@@ -149,10 +149,10 @@ using namespace MacTierra;
             mWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
 
             mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
-            mGenotypeFrequencyLogger->setMaxBuckets(20);
+            mGenotypeFrequencyLogger->setMaxBuckets(15);
             
             mSizeFrequencyLogger = new SizeHistogramDataLogger();       // FIXME: leaked
-            mSizeFrequencyLogger->setMaxBuckets(20);
+            mSizeFrequencyLogger->setMaxBuckets(15);
         }
         
         [mGraphController worldChanged];

@@ -263,9 +263,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::World* theWorld = inWorldController.world;
     genotypeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
     
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)genotypeLogger->dataCount(), 1.0)];
-    [(CTHistogramView*)graphView setBucketWidth:1.0];     // fake buckets
+    [(CTHistogramView*)graphView setNumberOfBuckets:genotypeLogger->dataCount()];
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(genotypeLogger->maxFrequency(), &numDivisions);
@@ -273,16 +271,15 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView setYScale:yMax / numDivisions];
 }
 
-- (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
 {
-    u_int32_t index = (u_int32_t)floor(lowerBound);
-
     MacTierra::GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<MacTierra::GenotypeFrequencyDataLogger*>(dataLogger);
     if (!genotypeLogger) return 0.0f;
     
     if (index >= genotypeLogger->dataCount())
         return 0.0f;
 
+    *outLabel = [NSString stringWithUTF8String:genotypeLogger->data()[index].first.c_str()];
     u_int32_t datum = genotypeLogger->data()[index].second;
     return (float)datum;
 }
@@ -318,9 +315,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::World* theWorld = inWorldController.world;
     sizeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
     
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)sizeLogger->dataCount(), 1.0)];
-    [(CTHistogramView*)graphView setBucketWidth:1.0];     // fake buckets
+    [(CTHistogramView*)graphView setNumberOfBuckets:sizeLogger->dataCount()];
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(sizeLogger->maxFrequency(), &numDivisions);
@@ -328,16 +323,15 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView setYScale:yMax / numDivisions];
 }
 
-- (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
 {
-    u_int32_t index = (u_int32_t)floor(lowerBound);
-
     MacTierra::SizeHistogramDataLogger* sizeLogger = dynamic_cast<MacTierra::SizeHistogramDataLogger*>(dataLogger);
     if (!sizeLogger) return 0.0f;
     
     if (index >= sizeLogger->dataCount())
         return 0.0f;
 
+    *outLabel = [NSString stringWithFormat:@"%d-%d", sizeLogger->data()[index].first.first, sizeLogger->data()[index].first.second];
     u_int32_t datum = sizeLogger->data()[index].second;
     return (float)datum;
 }
