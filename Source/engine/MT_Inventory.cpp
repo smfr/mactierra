@@ -91,6 +91,10 @@ static std::string incrementString(const std::string& inString)
             ++tempString[pos];
             break;
         }
+        else
+        {
+            tempString[pos] = 'a';
+        }
         --pos;
     }
 
