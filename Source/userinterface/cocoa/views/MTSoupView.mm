@@ -126,6 +126,12 @@ using namespace MacTierra;
     [NSGraphicsContext saveGraphicsState];
     [self setScalingCTM];
 
+    if (showInstructionPointers)
+    {
+        [[NSColor colorWithCalibratedWhite:0.0f alpha:0.5f] set];
+        NSRectFill(NSMakeRect(0, 0, mSoupWidth, mSoupHeight));
+    }
+    
     if (showCells)
         [self drawCells:inDirtyRect];
 
