@@ -20,20 +20,20 @@
 {
   if ((self = [super initWithFrame:frameRect]) != nil)
   {
-    numberOfBuckets = 10;
+    self.numberOfBuckets = 10;
     
     //Set Default Colors
     [graphColors setColor:[ NSColor blackColor ] forKey:@"border"];
     [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"fill"];
       
     //Set Flags
-    showBorder = YES;
-    showFill   = YES;
+    self.showBorder = YES;
+    self.showFill   = YES;
     
     //Default SuperClass Settings
-    [super setXMin:0]; [super setXMax:10];
-    [super setYMin:0]; [super setYMax:10];
-    [super setShowXGrid:NO];
+    self.yMin = 0;
+    self.yMax = 10;
+    self.showXGrid = NO;
     
     //Set Drawing Constants
     borderLineWidth =  1;
@@ -169,8 +169,8 @@
 - (void)setNumberOfBuckets:(NSUInteger)inNumBuckets;
 {
     numberOfBuckets = inNumBuckets;
-    self.yMin = 0;
-    self.yMax = inNumBuckets;
+    self.xMin = 0;
+    self.xMax = inNumBuckets;
     [self setNeedsDisplay:YES];
 }
 
