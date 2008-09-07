@@ -21,13 +21,16 @@
 }
 
 //************Histogram DataSource
- - (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit;
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
 {
-  if (NO)
-    return 0.0f;
-  else
-    return .398942*exp(-.5*pow(((lowerBound + upperLimit)/2-5)/1.5,2))*24;
-  //return pow((upperLimit-5),2) + 50;
+    if (NO)
+        return 8.0f;
+
+    *outLabel = [NSString stringWithFormat:@"%d", index];
+    
+    //return .398942 * exp(-.5 * pow(((index / 10.0f) / 2 - 5) / 1.5, 2)) * 24;
+    //return pow((upperLimit-5),2) + 50;
+    return 0.9 * index;
 }
 
 
@@ -39,7 +42,7 @@
   const double xMax = 10.0;
   
   float x = (float)index * xMax / factor;
-  float y = 10 * ((float)(Random()%variablility)+index*index+variablility*.75)/(1.75*variablility+factor*factor);
+  float y = 10 * ((float)(Random() % variablility) + index * index + variablility * .75) / (1.75 * variablility + factor * factor);
   
   
 //  if( (x > -2 && x < -1) || (x > 1 && x < 2) )

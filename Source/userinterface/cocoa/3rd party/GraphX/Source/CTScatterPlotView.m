@@ -84,10 +84,10 @@
   const float minYBounds = NSMinY(rect);
   
   const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
-  const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+  const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
   
-  //const float xorigin = (0 - xMin)/(xratio) + minXBounds; //x component of the origin
-  const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
+  //const float xOrigin = (0 - xMin)/(xratio) + minXBounds; //x component of the origin
+  const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
   
   //Create Curve Path then Draw Curve and Fill Area underneath
   
@@ -112,7 +112,7 @@
   float h_next;
   
   float xMinRatio = xMin / xratio;
-  float hMinRatio = yMin / yratio;
+  float hMinRatio = yMin / yRatio;
   
   float x;
   float y;
@@ -134,7 +134,7 @@
         x = (g_next)/(xratio) - xMinRatio + minXBounds;
         
         if (isfinite(h_next))              //move to the right to the point
-          y = (h_next)/(yratio) - hMinRatio + minYBounds;
+          y = (h_next)/(yRatio) - hMinRatio + minYBounds;
         else if (signbit(h_next))            //move to top of screen
           y = maxYBounds + curveLineWidth;
         else                      //move to bottom of screen
@@ -172,7 +172,7 @@
           if(isfinite(h_next))              //line to the right to the point
           {
             x = (g_next)/(xratio) - xMinRatio + minXBounds;
-            y = (h_next)/(yratio) - hMinRatio + minYBounds;
+            y = (h_next)/(yRatio) - hMinRatio + minYBounds;
           }
           else if(signbit(h_next))            //line to top of screen
             y = maxYBounds + curveLineWidth;
@@ -209,7 +209,7 @@
           x = (g_next)/(xratio) - xMinRatio + minXBounds;
           
           if(isfinite(h_next))              //move to the right to the point
-            y = (h_next)/(yratio) - hMinRatio + minYBounds;
+            y = (h_next)/(yRatio) - hMinRatio + minYBounds;
           else if(signbit(h_next))            //move to top of screen
             y = maxYBounds + curveLineWidth;
           else                      //move to bottom of screen
@@ -239,8 +239,8 @@
         [displacement appendBezierPath:curve];
         
         //move curve to x axis, then go across it to the begining of the segment
-        [displacement lineToPoint:NSMakePoint(x, yorigin)];
-        [displacement lineToPoint:NSMakePoint(firstPoint, yorigin)];
+        [displacement lineToPoint:NSMakePoint(x, yOrigin)];
+        [displacement lineToPoint:NSMakePoint(firstPoint, yOrigin)];
         
         //fill area under curve
         [[graphColors colorWithKey:@"fill"] set];

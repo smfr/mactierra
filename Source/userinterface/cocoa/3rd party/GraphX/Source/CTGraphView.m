@@ -14,11 +14,22 @@
 
 - (float)titleHeight ;   //Gives amount of space used by Title(at the top of the graph) - if drawTitleFlag is NO then it will give a height of 0
 - (float)xLabelHeight;   //Gives amount of space used by XAxis Label size depends on if flag is set
+- (float)xValueHeight;   //Gives amount of space used by XAxis Label size depends on if flag is set
 - (float)yLabelWidth ;   //Gives amount of space used by YAxis Label size depends on if flag is set
+- (float)maxYValueWidth;
+
+- (float)xAxisSpace;        // space needed for x axis decorations
+- (float)yAxisSpace;        // space needed for y axis decorations
+
+- (float)topSpace;
+- (float)rightSpace;
 
 - (void)drawTitle :(NSRect)rect;    //Will draw title at the top of the Graph
 - (void)drawXLabel:(NSRect)rect;    //Will draw X Axis Label - if Flag is set
 - (void)drawYLabel:(NSRect)rect;    //Will draw Y Axis Label - if Flag is set
+
+- (void)drawXValues:(NSRect)rect;    //Will draw Y Value Labels - if Flag is set
+- (void)drawYValues:(NSRect)rect;    //Will draw Y Value Labels - if Flag is set
 
 - (void)drawBackground:(NSRect)rect;//Fills the Graph Region
 
@@ -34,6 +45,10 @@
 
 @implementation CTGraphView
 
+static const float kYLabelAxisOffset = 2.0f;
+static const float kXLabelAxisOffset = 2.0f;
+static const float kTickMarkLength = 4.0f;
+
 @synthesize xMin;
 @synthesize xMax;
 @synthesize xScale;
@@ -46,6 +61,7 @@
 
 @synthesize showTitle;
 @synthesize showBackground;
+@synthesize externalTickMarks;
 
 @synthesize showXLabel;
 @synthesize showXAxis;
@@ -63,42 +79,83 @@
 @synthesize xLabel;
 @synthesize yLabel;
 
-+ (NSDictionary*)axisLabelAttributes
-{
-    static NSDictionary* sAxisLabelAttributes = nil;
+@synthesize xAxisValueTextAttributes;
+@synthesize yAxisValueTextAttributes;
 
-    if (!sAxisLabelAttributes)
++ (NSDictionary*)defaultXAxisValueAttributes
+{
+    static NSDictionary* sAttributes = nil;
+
+    if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
         [pStyle setAlignment:NSCenterTextAlignment];
 
-        sAxisLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+        sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+             [NSFont systemFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
+                                               [NSColor blackColor], NSForegroundColorAttributeName,
+                                                             pStyle, NSParagraphStyleAttributeName,
+                                                                    nil] retain];
+        [pStyle release];
+    }
+    return sAttributes;
+}
+
++ (NSDictionary*)defaultYAxisValueAttributes
+{
+    static NSDictionary* sAttributes = nil;
+
+    if (!sAttributes)
+    {
+        NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setAlignment:NSRightTextAlignment];
+
+        sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+             [NSFont systemFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
+                                               [NSColor blackColor], NSForegroundColorAttributeName,
+                                                             pStyle, NSParagraphStyleAttributeName,
+                                                                    nil] retain];
+        [pStyle release];
+    }
+    return sAttributes;
+}
+
++ (NSDictionary*)defaultAxisLabelAttributes
+{
+    static NSDictionary* sAttributes = nil;
+
+    if (!sAttributes)
+    {
+        NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setAlignment:NSCenterTextAlignment];
+
+        sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
             [NSFont paletteFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
                                                [NSColor blackColor], NSForegroundColorAttributeName,
                                                              pStyle, NSParagraphStyleAttributeName,
                                                                     nil] retain];
         [pStyle release];
     }
-    return sAxisLabelAttributes;
+    return sAttributes;
 }
 
-+ (NSDictionary*)titleAttributes
++ (NSDictionary*)defaultTitleAttributes
 {
-    static NSDictionary* sAxisLabelAttributes = nil;
+    static NSDictionary* sAttributes = nil;
 
-    if (!sAxisLabelAttributes)
+    if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
         [pStyle setAlignment:NSCenterTextAlignment];
 
-        sAxisLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
+        sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
               [NSFont boldSystemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,
                                                [NSColor blackColor], NSForegroundColorAttributeName,
                                                              pStyle, NSParagraphStyleAttributeName,
                                                                     nil] retain];
         [pStyle release];
     }
-    return sAxisLabelAttributes;
+    return sAttributes;
 }
 
 - (id)initWithFrame:(NSRect)frameRect
@@ -120,14 +177,18 @@
     [graphColors setColor:[ NSColor blackColor ] forKey:@"yaxis"     ];
     
     // Set Default Strings
-    xLabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[CTGraphView axisLabelAttributes]];
-    yLabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[CTGraphView axisLabelAttributes]];
+    xLabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
+    yLabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
 
-    title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[CTGraphView titleAttributes]];
+    title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[CTGraphView defaultTitleAttributes]];
+    
+    self.xAxisValueTextAttributes = [CTGraphView defaultXAxisValueAttributes];
+    self.yAxisValueTextAttributes = [CTGraphView defaultYAxisValueAttributes];
     
     //Set Flags
     showTitle  = YES;
     showBackground = YES;
+    externalTickMarks = YES;
 
     showXAxis  = YES;
     showXValues = YES;
@@ -159,12 +220,14 @@
 
 - (void)dealloc
 {
-  [graphColors release];
-  self.xLabel = nil;
-  self.yLabel = nil;
-  self.title = nil;
+    [graphColors release];
+    self.xLabel = nil;
+    self.yLabel = nil;
+    self.title = nil;
+    self.xAxisValueTextAttributes = nil;
+    self.yAxisValueTextAttributes = nil;
 
-  [super dealloc];
+    [super dealloc];
 }
 
 - (float)titleHeight
@@ -177,20 +240,107 @@
 
 - (float)xLabelHeight
 {
-  if (showXLabel)
-    return [xLabel size].height + labelPadding;
+    if (showXLabel)
+        return [xLabel size].height + labelPadding;
 
-  return 0;
+    return 0;
+}
+
+- (float)xValueHeight
+{
+    float xValHeight = 0.0;
+    float yValSpace = 0.0;
+
+    if (showXValues)
+    {
+        NSMutableAttributedString* xLabelString = [[[NSMutableAttributedString alloc] initWithString:@"99"
+                                                                                         attributes:xAxisValueTextAttributes] autorelease];
+        xValHeight = [xLabelString size].height;
+    }
+
+    if (showYValues)
+    {
+        NSMutableAttributedString* yLabelString = [[[NSMutableAttributedString alloc] initWithString:@"99"
+                                                                                         attributes:yAxisValueTextAttributes] autorelease];
+        yValSpace = [yLabelString size].height / 2.0f;
+    }
+
+    return MAX(xValHeight, yValSpace);
+}
+
+- (float)maxYValueWidth
+{
+    if (showYValues)
+    {
+
+
+        
+        return 20 + kYLabelAxisOffset;      // FIXME compute this
+    }
+    return 0;
 }
 
 - (float)yLabelWidth
 {
-  [yLabel size];
-  if (showYLabel)
-    return [yLabel size].height + labelPadding;
+    if (showYLabel)
+    {
+        [yLabel size];
 
-  return 0;
+        return [yLabel size].height + labelPadding;
+    }
+    return 0;
 }
+
+- (float)xAxisSpace
+{
+    return [self xValueHeight] + [self xLabelHeight] + (externalTickMarks ? kTickMarkLength : 0);
+}
+
+- (float)yAxisSpace
+{
+    return [self maxYValueWidth] + [self yLabelWidth] + (externalTickMarks ? kTickMarkLength : 0);
+}
+
+- (float)topSpace
+{
+    float titleHeight = [self titleHeight];
+    float yValueSpace = 0;
+    if (showYValues)
+    {
+        NSMutableAttributedString* yValueString = [[[NSMutableAttributedString alloc] initWithString:@"99"
+                                                                                         attributes:yAxisValueTextAttributes] autorelease];
+        yValueSpace = [yValueString size].height / 2.0f;
+    }
+    return titleHeight + yValueSpace;
+}
+
+// FIXME: need to subclass for histogram view
+- (float)rightSpace
+{
+    if (showXValues)
+    {
+        NSMutableAttributedString* xValueString = [[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%.6g", xMax]
+                                                                                         attributes:xAxisValueTextAttributes] autorelease];
+        return [xValueString size].width / 2.0f;
+    }
+    return 0.0f;
+}
+
+- (NSRect)graphRectForRect:(NSRect)inRect
+{
+    float tHeight = [self topSpace];
+    float rightSpace = [self rightSpace];
+    float xHeight = [self xAxisSpace];
+    float yWidth  = [self yAxisSpace];
+
+    NSRect graphRect =  NSMakeRect(NSMinX(inRect) + yWidth, NSMinY(inRect) + xHeight, //Make Adjusted Graph
+                                   NSWidth(inRect) - yWidth - rightSpace, NSHeight(inRect) - xHeight - tHeight);
+
+    return NSIntegralRect(graphRect);
+}
+
+
+#pragma mark -
 
 - (void)drawGraph:(NSRect)graphRect
 {
@@ -200,22 +350,18 @@
 - (void)drawRect:(NSRect)inDirtyRect   //mainly function calls to more complex implementation
 {
   NSRect rect = [self bounds];
+
   //First Draw the Title, X/Y Axis & Labels
   [self drawTitle :rect];
   [self drawXLabel:rect];
   [self drawYLabel:rect];
+
+  NSRect graphRect = [self graphRectForRect:rect];
   
-  //Size of X and Y Axis vary (depends on if labels or numbers are drawn) so the Actual Graph's size will vary
-  // Adjust for this by subtracting height of Title & XAxis as well as the width of YAxis from View's Rect
-  
-  float tHeight = [self titleHeight ];   //height of Title
-  float xHeight = [self xLabelHeight];   //height of X Axis Label
-  float yWidth  = [self yLabelWidth ];   //height of Y Axis Label
-  
-  NSRect graphRect =  NSMakeRect(NSMinX (rect) + yWidth, NSMinY(rect)   + xHeight           , //Make Adjusted Graph
-                 NSWidth(rect) - yWidth, NSHeight(rect) - xHeight - tHeight);
-  
-  NSRectClip(graphRect); //don't allow drawing outside of graphRect from this point onward
+  [self drawXValues:graphRect];
+  [self drawYValues:graphRect];
+
+  //NSRectClip(graphRect); // don't allow drawing outside of graphRect from this point onward
   
   //Draw the Background
   [self drawBackground:(graphRect)];
@@ -223,7 +369,7 @@
   //Draw the Grid Lines
   [self drawXGrid:graphRect];
   [self drawYGrid:graphRect];
-  
+
   //Draw Curve and Area
   [self drawGraph:graphRect];
   
@@ -234,14 +380,22 @@
   
 - (void)drawTitle:(NSRect)rect;
 {
-  if (showTitle)
-    [title drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMaxY(rect) - [title size].height, NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [title size].height)];
+    if (showTitle)
+    {
+        float ySpace = [self yAxisSpace];
+        [title drawInRect:NSMakeRect(NSMinX(rect) + ySpace, NSMaxY(rect) - [title size].height,
+                                     NSWidth(rect) - NSMinX(rect) - ySpace, [title size].height)];
+    }
 }
 
 - (void)drawXLabel:(NSRect)rect
 {
-  if (showXLabel)
-    [xLabel drawInRect:NSMakeRect(NSMinX(rect) + [self yLabelWidth], NSMinY(rect), NSWidth(rect) - NSMinX(rect) - [self yLabelWidth], [xLabel size].height)];
+    if (showXLabel)
+    {
+        float ySpace = [self yAxisSpace];
+        [xLabel drawInRect:NSMakeRect(NSMinX(rect) + ySpace, NSMinY(rect),
+                                      NSWidth(rect) - NSMinX(rect) - ySpace, [xLabel size].height)];
+    }
 }
 
 - (void)drawYLabel:(NSRect)rect
@@ -257,19 +411,104 @@
     [context saveGraphicsState];
     [transform concat];
   
-    [yLabel drawInRect:NSMakeRect( [self xLabelHeight], -[yLabel size].height, NSMaxY(rect) - [self titleHeight] - [self xLabelHeight], [yLabel size].height)];
+    [yLabel drawInRect:NSMakeRect([self xAxisSpace], -[yLabel size].height,
+                                  NSMaxY(rect) - [self topSpace] - [self xAxisSpace], [yLabel size].height)];
 
     [context restoreGraphicsState];
 }
 
+- (void)drawXValues:(NSRect)rect
+{
+    if (!showXValues)
+        return;
+
+    const float minXBounds = NSMinX(rect);
+    const float maxXBounds = NSMaxX(rect);
+
+    const float minYBounds = NSMinY(rect);
+//    const float maxYBounds = NSMaxY(rect);
+    
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+
+    float valueHeight = [self xValueHeight];
+    float labelBottom = minYBounds - valueHeight - kXLabelAxisOffset - (externalTickMarks ? kTickMarkLength : 0.0f);
+    
+    NSMutableAttributedString* labelString = [[[NSMutableAttributedString alloc] initWithString:@""
+                                                                                     attributes:xAxisValueTextAttributes] autorelease];
+
+    int numDivisions = (xMax - xMin) / xScale;
+    if (numDivisions > 20)
+        numDivisions = 20;      // HACK
+    
+    int i;
+    for (i = 0; i <= numDivisions; ++i)
+    {
+        float xValue = xMin + i * (xMax - xMin) / numDivisions;
+        float xPos = minXBounds + (xValue - xMin) / xRatio;
+        NSString* formattedString = [[NSString alloc] initWithFormat:@"%.6g", xValue];
+
+        [labelString replaceCharactersInRange:NSMakeRange(0, [labelString length]) withString:formattedString];
+        [labelString setAttributes:xAxisValueTextAttributes range:NSMakeRange(0, [labelString length])];
+
+        [formattedString release];
+        
+        float textWidth = [labelString size].width;
+        NSRect textRect = NSMakeRect(xPos - textWidth / 2.0f, labelBottom,
+                                    textWidth, valueHeight);
+
+        [labelString drawInRect:textRect];
+    }
+}
+
+- (void)drawYValues:(NSRect)rect
+{
+    if (!showYValues)
+        return;
+
+    const float minXBounds = NSMinX(rect);
+    //const float maxXBounds = NSMaxX(rect);
+
+    const float minYBounds = NSMinY(rect);
+    const float maxYBounds = NSMaxY(rect);
+    
+    const float yRatio = (yMax - yMin) / (maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    
+    float maxLabelWidth = [self maxYValueWidth];
+    float labelRightPos = minXBounds - kYLabelAxisOffset - (externalTickMarks ? kTickMarkLength : 0.0f);
+    
+    NSMutableAttributedString* labelString = [[[NSMutableAttributedString alloc] initWithString:@""
+                                                                                     attributes:yAxisValueTextAttributes] autorelease];
+    int numDivisions = (yMax - yMin) / yScale;
+    if (numDivisions > 20)
+        numDivisions = 20;      // HACK
+
+    int i;
+    for (i = 0; i <= numDivisions; ++i)
+    {
+        float yValue = yMin + i * (yMax - yMin) / numDivisions;
+        float yPos = minYBounds + (yValue - yMin) / yRatio;
+        NSString* formattedString = [[NSString alloc] initWithFormat:@"%.6g", yValue];
+
+        [labelString replaceCharactersInRange:NSMakeRange(0, [labelString length]) withString:formattedString];
+        [labelString setAttributes:yAxisValueTextAttributes range:NSMakeRange(0, [labelString length])];
+
+        [formattedString release];
+        
+        float textHeight = [labelString size].height;
+        NSRect textRect = NSMakeRect(labelRightPos - maxLabelWidth, yPos - textHeight / 2.0f,
+                                    maxLabelWidth, textHeight);
+
+        [labelString drawInRect:textRect];
+    }
+}
 
 - (void)drawBackground:(NSRect)rect
 {
-  if (showBackground)
-  {
-    [[graphColors colorWithKey:@"background"] set];
-    NSRectFill(rect);
-  }
+    if (showBackground)
+    {
+        [[graphColors colorWithKey:@"background"] set];
+        NSRectFill(rect);
+    }
 }
 
 
@@ -287,15 +526,15 @@
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
 
-    const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
 
-    const float xorigin = (0 - xMin)/xratio + minXBounds; //x component of the origin
+    const float xOrigin = (0 - xMin)/xRatio + minXBounds; //x component of the origin
 
-    const float scaleX = xScale / xratio; //transform scale
+    const float scaleX = xScale / xRatio; //transform scale
 
     float x;   //view coordinate x
 
-    for (x = xorigin - floor((xorigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) //Begin 1 scale unit outside of graph
+    for (x = xOrigin - floor((xOrigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) //Begin 1 scale unit outside of graph
     {                                         //End 1 scale unit outside of graph
       [majorGridLines moveToPoint:NSMakePoint(x, maxYBounds)];
       [majorGridLines lineToPoint:NSMakePoint(x, minYBounds)];
@@ -334,17 +573,17 @@
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
 
-    const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
 
-    const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
+    const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
 
-    const float scaleY = yScale / yratio; //transform scale
+    const float scaleY = yScale / yRatio; //transform scale
     
     float  y;   //view coordinate y
-    for (y = yorigin - floor((yorigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
+    for (y = yOrigin - floor((yOrigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
     {                                         //End 1 scale unit outside of graph
-      [majorGridLines moveToPoint:NSMakePoint(maxXBounds,y)];
-      [majorGridLines lineToPoint:NSMakePoint(minXBounds,y)];
+      [majorGridLines moveToPoint:NSMakePoint(maxXBounds, y)];
+      [majorGridLines lineToPoint:NSMakePoint(minXBounds, y)];
       
       float minor;
       for (minor = 1; minor < yMinorLineCount; minor++)
@@ -373,8 +612,9 @@
         return;
 
     //Create Axis Path & Format it
-    NSBezierPath *axis      = [[NSBezierPath alloc] init];
-    NSBezierPath *tickMarks = [[NSBezierPath alloc] init];
+    NSBezierPath* axis      = [[NSBezierPath alloc] init];
+    NSBezierPath* tickMarks = [[NSBezierPath alloc] init];
+
     [[graphColors colorWithKey:@"xaxis"] set];
     [axis      setLineWidth:axisLineWidth];
     [tickMarks setLineWidth:axisLineWidth];
@@ -385,13 +625,13 @@
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
     
-    const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
     
-    const float xorigin = (0 - xMin)/xratio + minXBounds; //x component of the origin
+    const float xOrigin = (0 - xMin)/xRatio + minXBounds; //x component of the origin
     
-    const float scaleX = xScale / xratio; //transform scale
+    const float scaleX = xScale / xRatio; //transform scale
       
-    float y = (0 - yMin)/((yMax - yMin)/(maxYBounds - minYBounds)) + minYBounds;
+    float y = (0 - yMin) / ((yMax - yMin)/(maxYBounds - minYBounds)) + minYBounds;
     
     //draw axis
     if (y > maxYBounds)  //if axis is higher than graph draw dashed axis at top
@@ -416,11 +656,14 @@
     
     if (showXTickMarks)
     {
+      float tickYStart = y;
+      float tickYEnd = externalTickMarks ? y - kTickMarkLength : y + kTickMarkLength;
+      
       float x;
-      for (x = xorigin - floor((xorigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) //Begin 1 scale unit outside of graph
-      {                                         //End 1 scale unit outside of graph
-        [tickMarks moveToPoint:NSMakePoint(x, y - 3)];
-        [tickMarks lineToPoint:NSMakePoint(x, y + 3)];
+      for (x = xOrigin - floor((xOrigin - minXBounds + 1) / scaleX) * scaleX; x <= maxXBounds + scaleX; x += scaleX) // Begin 1 scale unit outside of graph
+      {
+        [tickMarks moveToPoint:NSMakePoint(x, tickYStart)];
+        [tickMarks lineToPoint:NSMakePoint(x, tickYEnd)];
       }
     }
     
@@ -450,13 +693,13 @@
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
     
-    const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
 
-    const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
+    const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
 
-    const float scaleY = yScale / yratio; //transform scale
+    const float scaleY = yScale / yRatio; //transform scale
     
-    float x = (0 - minXBounds)/((xMax - minXBounds)/(maxXBounds - minXBounds)) + minXBounds;
+    float x = (0 - xMin)/((xMax - xMin) / (maxXBounds - minXBounds)) + minXBounds;
     
     //draw axis
     if (x > maxXBounds)  //if axis is higher than graph draw dashed axis at top
@@ -476,16 +719,19 @@
       x = minXBounds;
     }
     
-    [axis moveToPoint:NSMakePoint(x,minYBounds)];
-    [axis lineToPoint:NSMakePoint(x,maxYBounds)];
+    [axis moveToPoint:NSMakePoint(x, minYBounds)];
+    [axis lineToPoint:NSMakePoint(x, maxYBounds)];
     
     if (showYTickMarks)
     {
+      float tickXStart = x;
+      float tickXEnd = externalTickMarks ? x - kTickMarkLength : x + kTickMarkLength;
+
       float y;
-      for (y = yorigin - floor((yorigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
+      for (y = yOrigin - floor((yOrigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
       {                                         //End 1 scale unit outside of graph
-        [tickMarks moveToPoint:NSMakePoint(x - 3, y)];
-        [tickMarks lineToPoint:NSMakePoint(x + 3, y)];
+        [tickMarks moveToPoint:NSMakePoint(tickXStart, y)];
+        [tickMarks lineToPoint:NSMakePoint(tickXEnd, y)];
       }
     }
       
@@ -503,9 +749,7 @@
 }
 
 
-
-
-
+#pragma mark -
 
 
 //*********Customization Methods********************
@@ -727,5 +971,19 @@
         [self setNeedsDisplay:YES];
     }
 }
+
+#pragma mark -
+
+- (float)xAxisLabelOffset
+{
+    return kXLabelAxisOffset;
+}
+
+- (float)tickMarkLength
+{
+    return kTickMarkLength;
+}
+
+
 
 @end

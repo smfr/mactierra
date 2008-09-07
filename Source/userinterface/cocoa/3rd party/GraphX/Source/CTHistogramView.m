@@ -11,7 +11,7 @@
 
 @implementation CTHistogramView
 
-@synthesize bucketWidth;
+@synthesize numberOfBuckets;
 
 @synthesize showBorder;
 @synthesize showFill;
@@ -20,8 +20,7 @@
 {
   if ((self = [super initWithFrame:frameRect]) != nil)
   {
-    //Set Default Bucket Width
-    bucketWidth = 1;
+    numberOfBuckets = 10;
     
     //Set Default Colors
     [graphColors setColor:[ NSColor blackColor ] forKey:@"border"];
@@ -73,80 +72,105 @@
     delegate = inDelegate;
 }
 
+- (void)drawXValues:(NSRect)rect
+{
+    // override to do nothing. we draw our own labels
+}
+
+- (void)drawLabel:(NSString*)inLabel forBucket:(NSUInteger)inBucket inRect:(NSRect)inGraphRect
+{
+    const float minXBounds = NSMinX(inGraphRect);  // for preformance reasons(used often)
+    const float maxXBounds = NSMaxX(inGraphRect);  // bounds of graph - stored as constants
+
+    const float minYBounds = NSMinY(inGraphRect);
+
+    float labelWidth = (maxXBounds - minXBounds) / numberOfBuckets;
+    float labelXPos = minXBounds + inBucket * labelWidth;
+    
+    float valueHeight = [self xValueHeight];
+    float labelBottom = minYBounds - valueHeight - self.xAxisLabelOffset - (externalTickMarks ? self.tickMarkLength : 0.0f);
+    
+    NSMutableAttributedString* labelString = [[[NSMutableAttributedString alloc] initWithString:inLabel
+                                                                                     attributes:xAxisValueTextAttributes] autorelease];
+    NSRect textRect = NSMakeRect(labelXPos, labelBottom, labelWidth, valueHeight);
+
+    [labelString drawInRect:textRect];
+}
+
 - (void)drawGraph:(NSRect)rect
 {
-  if (!dataSource)
-    return;
+    if (!dataSource)
+        return;
 
-  const float maxXBounds = NSMaxX(rect);  // bounds of graph - stored as constants
-  const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
-  const float maxYBounds = NSMaxY(rect);
-  const float minYBounds = NSMinY(rect);
-  
-  const double xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
-  const double yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
-  
-  const float yorigin = (0 - yMin)/(yratio) + minYBounds; // y component of the origin
-  
-  // Create Boxes for Histogram
-  // start by finding the first bucket that needs displaying
-  float lowerBound = 0 - floor((0 - xMin) / bucketWidth) * xScale;
-  float upperLimit = lowerBound + bucketWidth;
-  
-  float x = (lowerBound - xMin)/(xratio) + minXBounds;
-  float y = yorigin;
-  
-  float x_next = x + (bucketWidth)/(xratio);
-  float y_next;
-  
-  [displacement moveToPoint:NSMakePoint(x,y)];
-  
-  while (lowerBound <= xMax)   //Draw bars until no longer in Graph range
-  {
-    //get frequency from DataSource
-    float frequency = [dataSource frequencyForBucketWithLowerBound:lowerBound andUpperLimit:upperLimit];
-    
-    //Calulate values in terms of view
-    y_next = (frequency  - yMin)/(yratio) + minYBounds;
-    
-    [displacement lineToPoint:NSMakePoint(x     , y_next)];
-    [displacement lineToPoint:NSMakePoint(x_next, y_next)];
-    
-    [border moveToPoint:NSMakePoint(x , (y < y_next) ? y : y_next)];
-    [border lineToPoint:NSMakePoint(x , yorigin)];
-    
-    y = y_next;
-    x = x_next;
-    x_next += (bucketWidth)/(xratio); 
-    
-    lowerBound  = upperLimit;
-    upperLimit += bucketWidth;
-  }
-  
-  [displacement lineToPoint:NSMakePoint(x , yorigin)];
-  
-  if (showFill)
-  {
-    [[graphColors colorWithKey:@"fill"] set];
-    [displacement fill];
-  }
+    const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
+    const float maxXBounds = NSMaxX(rect);  // bounds of graph - stored as constants
 
-  if (showBorder)
-  {
-    [[graphColors colorWithKey:@"border"] set];
-    [border appendBezierPath:displacement];
-    [border stroke];
-  }
-  
-  [border removeAllPoints];
-  [displacement removeAllPoints];
+    const float minYBounds = NSMinY(rect);
+    const float maxYBounds = NSMaxY(rect);
+
+    const double xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const double yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+
+    const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; // y component of the origin
+
+    const float bucketPixelWidth = (maxXBounds - minXBounds) / numberOfBuckets;
+    
+    // Create Boxes for Histogram
+    float x = minXBounds;
+    float y = yOrigin;
+
+    float x_next = x + (1)/(xRatio);
+    float y_next;
+
+    [displacement moveToPoint:NSMakePoint(x,y)];
+
+    NSUInteger i;
+    for (i = 0; i < numberOfBuckets; ++i)
+    {
+        NSString* label = nil;
+        float frequency = [dataSource frequencyForBucket:i label:&label];
+    
+        y_next = minYBounds + (frequency  - yMin)/(yRatio);
+
+        [displacement lineToPoint:NSMakePoint(x     , y_next)];
+        [displacement lineToPoint:NSMakePoint(x_next, y_next)];
+
+        [border moveToPoint:NSMakePoint(x , (y < y_next) ? y : y_next)];
+        [border lineToPoint:NSMakePoint(x , yOrigin)];
+
+        if (showXValues && label)
+            [self drawLabel:label forBucket:i inRect:rect];
+
+        y = y_next;
+        x = x_next;
+        x_next += bucketPixelWidth;
+    }
+
+    [displacement lineToPoint:NSMakePoint(x , yOrigin)];
+
+    if (showFill)
+    {
+        [[graphColors colorWithKey:@"fill"] set];
+        [displacement fill];
+    }
+
+    if (showBorder)
+    {
+        [[graphColors colorWithKey:@"border"] set];
+        [border appendBezierPath:displacement];
+        [border stroke];
+    }
+
+    [border removeAllPoints];
+    [displacement removeAllPoints];
 }
 
 
-//*********Customization Methods********************
-- (void)setBucketWidth:(float)width;
+- (void)setNumberOfBuckets:(NSUInteger)inNumBuckets;
 {
-    bucketWidth = width;
+    numberOfBuckets = inNumBuckets;
+    self.yMin = 0;
+    self.yMax = inNumBuckets;
     [self setNeedsDisplay:YES];
 }
 

@@ -22,6 +22,9 @@
     NSAttributedString* yLabel;
     NSAttributedString* title;
   
+    NSDictionary* xAxisValueTextAttributes;
+    NSDictionary* yAxisValueTextAttributes;
+
     BOOL showTitle;
     BOOL showBackground;
 
@@ -37,6 +40,8 @@
     BOOL showYGrid;
     BOOL showYTickMarks;
   
+    BOOL externalTickMarks;
+    
     float labelPadding;       //padding(space between)layers in x and y Axis layers and Graph
     float titlePadding;       //padding(space between) Title and Graph
 
@@ -79,6 +84,8 @@
 
 @property (assign) BOOL showBackground;
 
+@property (assign) BOOL externalTickMarks;
+
 @property (retain) NSColor* xAxisColor;
 @property (retain) NSColor* xGridColor;
 
@@ -90,6 +97,14 @@
 @property (copy) NSAttributedString* title;
 @property (copy) NSAttributedString* xLabel;
 @property (copy) NSAttributedString* yLabel;
+
+@property (retain) NSDictionary* xAxisValueTextAttributes;
+@property (retain) NSDictionary* yAxisValueTextAttributes;
+
+// for subclassers
+@property (readonly) float xAxisLabelOffset;
+@property (readonly) float tickMarkLength;
+@property (readonly) float xValueHeight;
 
 
 @end

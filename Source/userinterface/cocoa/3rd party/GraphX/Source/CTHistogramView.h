@@ -10,7 +10,9 @@
 #import "CTGraphView.h"
 
 @interface NSObject(CTHistogramViewDataSource)
-- (float)frequencyForBucketWithLowerBound:(float)lowerBound andUpperLimit:(float)upperLimit;
+
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel;
+
 @end
 
 @interface NSObject(CTHistogramViewDelegate)
@@ -24,7 +26,7 @@
   IBOutlet id dataSource;   //object that will give graph values for drawing the curve
   IBOutlet id delegate  ;   //object that will be notified when key events occur
 
-  float bucketWidth;  //Width of Buckets(ranges for frequencies)
+  NSUInteger numberOfBuckets;
   
   BOOL showBorder, showFill;  //Flags to turn on/off different components of CTGraphView
   
@@ -37,9 +39,9 @@
 - (void)setDataSource:(id)inDataSource;
 - (void)setDelegate:(id)inDelegate;
 
-- (void)drawGraph:(NSRect)rect;   //Draws the Actual Graph - Curve and area under Curve (if Flags are Set)
+- (void)drawGraph:(NSRect)rect;
 
-@property (assign) float bucketWidth;
+@property (assign) NSUInteger numberOfBuckets;
 
 @property (assign) BOOL showBorder;
 @property (assign) BOOL showFill;

@@ -67,16 +67,19 @@
   if (!dataSource)
     return;
 
+  [NSGraphicsContext saveGraphicsState];
+  NSRectClip(rect);
+  
   const float maxXBounds = NSMaxX(rect);  //bounds of graph - stored as constants
   const float minXBounds = NSMinX(rect);  // for preformance reasons(used often)
   const float maxYBounds = NSMaxY(rect);
   const float minYBounds = NSMinY(rect);
   
-  const float xratio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
-  const float yratio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+  const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+  const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
   
-  const float xorigin = (0 - xMin)/(xratio) + minXBounds; //x component of the origin
-  const float yorigin = (0 - yMin)/(yratio) + minYBounds; //y component of the origin
+  const float xOrigin = (0 - xMin)/(xRatio) + minXBounds; //x component of the origin
+  const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
   
   //Create Curve Path then Draw Curve and Fill Area underneath
   
@@ -99,13 +102,13 @@
   float g_next;
   float h_next;
   
-  float gMinRatio = xMin/xratio;
-  float hMinRatio = yMin/yratio;
+  float gMinRatio = xMin/xRatio;
+  float hMinRatio = yMin/yRatio;
   
   float x;
   float y;
   
-  while(g < xMax)
+  while (g < xMax)
   {
     //NaN Segment (keep continuing until a graphable point is reached)
     while(g < xMax && isnan(h))
@@ -116,20 +119,19 @@
       if (isnan(h_next))
       {
       }
-      
       //If the NaN Segment has ended - begin drawing points
       else
       {
-        x = (g_next)/(xratio) - gMinRatio + minXBounds;
+        x = (g_next)/(xRatio) - gMinRatio + minXBounds;
         
         if(isfinite(h_next))              //move to the right to the point
-          y = (h_next)/(yratio) - hMinRatio + minYBounds;
-        else if(signbit(h_next))            //move to top of screen
+          y = (h_next)/(yRatio) - hMinRatio + minYBounds;
+        else if (signbit(h_next))            //move to top of screen
           y = maxYBounds + curveLineWidth;
         else                      //move to bottom of screen
           y = minYBounds - curveLineWidth;
           
-        [curve moveToPoint:NSMakePoint(x,y)];
+        [curve moveToPoint:NSMakePoint(x, y)];
       }
       
       g = g_next;
@@ -140,8 +142,8 @@
     if (g >= xMax && isnan(h))
       break;
     
-    float firstPoint = g/(xratio) - gMinRatio + minXBounds;
-    [delegate hasDrawnFirstSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xorigin,yorigin)];
+    float firstPoint = g/(xRatio) - gMinRatio + minXBounds;
+    [delegate hasDrawnFirstSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xOrigin,yOrigin)];
     
     
     //Graphable Line Segment continue until NaN segment is once again reached
@@ -152,7 +154,7 @@
         g_next = g + gres;
         h_next = [dataSource yValueForXValue:g_next];
         
-        [delegate hasDrawnSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xorigin,yorigin)];
+        [delegate hasDrawnSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xOrigin,yOrigin)];
         
         if (isnan(h_next))
         {
@@ -162,10 +164,10 @@
         else
         {
           
-          if(isfinite(h_next))              //line to the right to the point
+          if (isfinite(h_next))              //line to the right to the point
           {
-            x = (g_next)/(xratio) - gMinRatio + minXBounds;
-            y = (h_next)/(yratio) - hMinRatio + minYBounds;
+            x = (g_next)/(xRatio) - gMinRatio + minXBounds;
+            y = (h_next)/(yRatio) - hMinRatio + minYBounds;
           }
           else if(signbit(h_next))            //line to top of screen
             y = maxYBounds + curveLineWidth;
@@ -185,43 +187,42 @@
         g_next = g + gres;
         h_next = [dataSource yValueForXValue:g_next];
         
-        [delegate hasDrawnSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,h) inRect:rect withOrigin:NSMakePoint(xorigin,yorigin)];
+        [delegate hasDrawnSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,h) inRect:rect withOrigin:NSMakePoint(xOrigin,yOrigin)];
         
-        if(isnan(h_next))
-          {
-          break;
-          }
-        
-        //Next point is valid - draw a line to it
-        else if(!isnan(h_next))
+        if (isnan(h_next))
         {
-          x = (g_next)/(xratio) - gMinRatio + minXBounds;
-          y = signbit(h) ? maxYBounds+curveLineWidth : minYBounds-curveLineWidth;
+          break;
+        }
+        //Next point is valid - draw a line to it
+        else if (!isnan(h_next))
+        {
+          x = g_next / xRatio - gMinRatio + minXBounds;
+          y = signbit(h) ? maxYBounds + curveLineWidth : minYBounds - curveLineWidth;
           
           [curve lineToPoint:NSMakePoint(x,y)];
           
           //Next point is valid - draw a line to it
-          x = (g_next)/(xratio) - gMinRatio + minXBounds;
+          x = g_next / xRatio - gMinRatio + minXBounds;
           
           if (isfinite(h_next))              //move to the right to the point
-            y = (h_next)/(yratio) - hMinRatio + minYBounds;
+            y = h_next / yRatio - hMinRatio + minYBounds;
           else if (signbit(h_next))            //move to top of screen
             y = maxYBounds + curveLineWidth;
           else                      //move to bottom of screen
             y = minYBounds - curveLineWidth;
             
-          [curve lineToPoint:NSMakePoint(x,y)];
+          [curve lineToPoint:NSMakePoint(x, y)];
         }
         
         g = g_next;
         h = h_next;
-        }
+      }
         
-        if (isnan(h_next) || g >= xMax)
-          break;
+      if (isnan(h_next) || g >= xMax)
+        break;
     }
     
-    [delegate hasDrawnLastSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xorigin,yorigin)];
+    [delegate hasDrawnLastSegmentDataPoint:NSMakePoint(g,h) atViewPoint:NSMakePoint(x,y) inRect:rect withOrigin:NSMakePoint(xOrigin,yOrigin)];
     
     //Set points up for next segment
     g = g_next;
@@ -233,8 +234,8 @@
       [displacement appendBezierPath:curve];
       
       //move curve to x axis, then go across it to the begining of the segment
-      [displacement lineToPoint:NSMakePoint(x,yorigin)];
-      [displacement lineToPoint:NSMakePoint(firstPoint,yorigin)];
+      [displacement lineToPoint:NSMakePoint(x, yOrigin)];
+      [displacement lineToPoint:NSMakePoint(firstPoint, yOrigin)];
       
       //fill area under curve
       [[graphColors colorWithKey:@"fill"] set];
@@ -251,6 +252,8 @@
     [curve removeAllPoints];
     [displacement removeAllPoints];
   }
+
+  [NSGraphicsContext restoreGraphicsState];
 }
 
 
@@ -262,7 +265,7 @@
 
 - (void)viewDidEndLiveResize
 {
-    drawingResolution = approximateOnLiveResize;
+    drawingResolution = resolution;
     [self setNeedsDisplay:YES];
 }
 
