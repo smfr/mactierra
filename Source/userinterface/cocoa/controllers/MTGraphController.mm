@@ -263,7 +263,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::World* theWorld = inWorldController.world;
     genotypeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
     
-    [(CTHistogramView*)graphView setNumberOfBuckets:genotypeLogger->dataCount()];
+    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(genotypeLogger->dataCount(), 1U)];
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(genotypeLogger->maxFrequency(), &numDivisions);
@@ -315,7 +315,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MacTierra::World* theWorld = inWorldController.world;
     sizeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
     
-    [(CTHistogramView*)graphView setNumberOfBuckets:sizeLogger->dataCount()];
+    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(sizeLogger->dataCount(), 1U)];
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(sizeLogger->maxFrequency(), &numDivisions);
