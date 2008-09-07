@@ -43,8 +43,8 @@ void
 DataCollector::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
     DataLoggerList::const_iterator it;
-    DataLoggerList::const_iterator end = mLoggers.end();
-    for (it = mLoggers.begin(); it != end; ++it)
+    DataLoggerList::const_iterator end = mPeriodicLoggers.end();
+    for (it = mPeriodicLoggers.begin(); it != end; ++it)
     {
         DataLogger* curLogger = *it;
         curLogger->collect(inInstructionCount, inWorld);
@@ -60,20 +60,20 @@ DataCollector::computeNextCollectionTime(u_int64_t inInstructionCount)
 }
 
 void
-DataCollector::addLogger(DataLogger* inLogger)
+DataCollector::addPeriodicLogger(DataLogger* inLogger)
 {
     inLogger->setCollector(this);
-    mLoggers.push_back(inLogger);
+    mPeriodicLoggers.push_back(inLogger);
 }
 
 bool
 DataCollector::removeLogger(DataLogger* inLogger)
 {
-    DataLoggerList::iterator findIter = find(mLoggers.begin(), mLoggers.end(), inLogger);
-    if (findIter != mLoggers.end())
+    DataLoggerList::iterator findIter = find(mPeriodicLoggers.begin(), mPeriodicLoggers.end(), inLogger);
+    if (findIter != mPeriodicLoggers.end())
     {
         inLogger->setCollector(NULL);
-        mLoggers.erase(findIter);
+        mPeriodicLoggers.erase(findIter);
         return true;
     }
     return false;

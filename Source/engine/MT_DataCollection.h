@@ -84,7 +84,7 @@ public:
     u_int64_t       collectionInterval() const { return mCollectionInterval; }
     void            setCollectionInterval(u_int64_t inInterval, u_int64_t inCurrentInstructionCount);
 
-    void            addLogger(DataLogger* inLogger);
+    void            addPeriodicLogger(DataLogger* inLogger);
     bool            removeLogger(DataLogger* inLogger);
 
 protected:
@@ -97,7 +97,7 @@ protected:
     u_int64_t       mNextCollectionInstructions;
     
     typedef std::vector<DataLogger*> DataLoggerList;
-    DataLoggerList mLoggers;
+    DataLoggerList mPeriodicLoggers;
 };
 
 

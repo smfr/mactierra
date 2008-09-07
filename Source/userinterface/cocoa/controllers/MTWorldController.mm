@@ -142,14 +142,17 @@ using namespace MacTierra;
             // set up some logging
             mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
             mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
-            mWorld->dataCollector()->addLogger(mPopSizeLogger);
+            mWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
 
             mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
             mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
-            mWorld->dataCollector()->addLogger(mMeanSizeLogger);
+            mWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
 
             mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
-            mWorld->dataCollector()->addLogger(mGenotypeFrequencyLogger);
+            mGenotypeFrequencyLogger->setMaxBuckets(20);
+            
+            mSizeFrequencyLogger = new SizeHistogramDataLogger();       // FIXME: leaked
+            mSizeFrequencyLogger->setMaxBuckets(20);
         }
         
         [mGraphController worldChanged];
@@ -226,6 +229,11 @@ using namespace MacTierra;
 - (MacTierra::GenotypeFrequencyDataLogger*)genotypeFrequencyLogger;
 {
     return mGenotypeFrequencyLogger;
+}
+
+- (MacTierra::SizeHistogramDataLogger*)sizeFrequencyLogger
+{
+    return mSizeFrequencyLogger;
 }
 
 - (double)fullness

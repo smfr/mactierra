@@ -10,6 +10,8 @@
 #include <set>
 
 #include "MT_DataCollectors.h"
+
+#include "MT_CellMap.h"
 #include "MT_Inventory.h"
 #include "MT_World.h"
 
@@ -46,13 +48,11 @@ struct aliveReverseSort
 void
 GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
-    Inventory*  inventory = inWorld->inventory();
+    const Inventory*  inventory = inWorld->inventory();
 
-    typedef std::set<const InventoryGenotype*, aliveReverseSort> alive_set;
+    typedef std::multiset<const InventoryGenotype*, aliveReverseSort> alive_set;
     alive_set    commonGenotypeSet;
     
-    u_int32_t minAlive = 1;
-
     // This will be pretty slow for large inventories. Maybe have the inventory move
     // extinct genotypes into a different map?
     Inventory::InventoryMap::const_iterator it, end;
@@ -64,11 +64,7 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
         if (curEntry->numberAlive() == 0)
             continue;
 
-        if (curEntry->numberAlive() >= minAlive)
-        {
-            commonGenotypeSet.insert(curEntry);
-            minAlive = curEntry->numberAlive();
-        }
+        commonGenotypeSet.insert(curEntry);
     }
 
     // now pick the top N
@@ -87,6 +83,48 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
 void
 SizeHistogramDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
+    const CellMap* cellMap = inWorld->cellMap();
+    
+    // first find the max
+    u_int32_t minAdultSize = ULONG_MAX, maxAdultSize = 0;
+    CellMap::CreatureList::const_iterator it, end = cellMap->cells().end();
+    for (it = cellMap->cells().begin();
+         it != end;
+         ++it)
+    {
+        const CreatureRange&    cell = (*it);
+        const Creature*         creature = cell.mData;
+        if (creature->isEmbryo())
+            continue;
+
+        minAdultSize = min(minAdultSize, cell.length());
+        maxAdultSize = max(maxAdultSize, cell.length());
+    }
+    
+    // now build the frequency table
+    u_int32_t sizeRange = max(maxAdultSize - minAdultSize, 1U);
+    u_int32_t bucketSize = ceil((double)sizeRange / mMaxBuckets);
+
+    mData.clear();
+    for (size_t i = 0; i < mMaxBuckets; ++i)
+    {
+        u_int32_t bucketStart   = minAdultSize + i * bucketSize;
+        u_int32_t bucketEnd     = bucketStart + bucketSize - 1;
+        mData.push_back(data_pair(range_pair(bucketStart, bucketEnd), 0));
+    }
+    
+    for (it = cellMap->cells().begin();
+         it != end;
+         ++it)
+    {
+        const CreatureRange&    cell = (*it);
+        const Creature*         creature = cell.mData;
+        if (creature->isEmbryo())
+            continue;
+
+        u_int32_t bucketIndex = (cell.length() - minAdultSize) / bucketSize;
+        ++mData[bucketIndex].second;
+    }
 }
 
 

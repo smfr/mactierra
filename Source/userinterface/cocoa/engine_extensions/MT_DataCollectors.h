@@ -156,7 +156,7 @@ public:
     typedef std::pair<data_type, u_int32_t> data_pair;
 
     HistogramDataLogger()
-    : mMaxBuckets(10)
+    : mMaxBuckets(50)
     {
     }
     

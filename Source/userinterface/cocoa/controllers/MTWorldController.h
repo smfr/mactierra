@@ -14,6 +14,7 @@ namespace MacTierra {
     class PopulationSizeLogger;
     class MeanCreatureSizeLogger;
     class GenotypeFrequencyDataLogger;
+    class SizeHistogramDataLogger;
 };
 
 @class MTCreature;
@@ -47,6 +48,7 @@ namespace MacTierra {
     MacTierra::PopulationSizeLogger* mPopSizeLogger;
     MacTierra::MeanCreatureSizeLogger* mMeanSizeLogger;
     MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
+    MacTierra::SizeHistogramDataLogger* mSizeFrequencyLogger;
     
     // threading-related
     MTWorldThread*          worldThread;
@@ -78,11 +80,12 @@ namespace MacTierra {
 @property (retain) MTWorldSettings* worldSettings;
 @property (assign) BOOL creatingNewSoup;
 
-//@property (readonly) MacTierra::World* world;
+@property (readonly) MacTierra::World* world;
 // temp. Move to graph controller?
 @property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
 @property (readonly) MacTierra::MeanCreatureSizeLogger* meanSizeLogger;
 @property (readonly) MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyLogger;
+@property (readonly) MacTierra::SizeHistogramDataLogger* sizeFrequencyLogger;
 
 
 @property (assign) double instructionsPerSecond;
