@@ -65,7 +65,7 @@
     
     NSInteger high = length;
     NSInteger low  = 0;
-    NSInteger  mid;
+    NSInteger  mid = 0;
     
     while (high > low)
     {
