@@ -49,9 +49,6 @@ protected:
     
     bool            instructionsMatch(address_t inAddress, const instruction_t* inTemplate, u_int32_t inLen)
                     {
-                        if (inAddress + inLen < mSoupSize)
-                            return (memcmp(mSoup + inAddress, inTemplate, inLen) == 0);
-
                         for (u_int32_t i = 0; i < inLen; ++i)
                         {
                             address_t addr = (inAddress + i) % mSoupSize;
