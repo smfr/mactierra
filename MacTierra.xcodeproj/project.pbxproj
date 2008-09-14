@@ -35,6 +35,9 @@
 		0F13FA7E0E5FD98300D8E649 /* xml_oarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3F0E5FD98300D8E649 /* xml_oarchive_impl.ipp */; };
 		0F13FA7F0E5FD98300D8E649 /* xml_wiarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA400E5FD98300D8E649 /* xml_wiarchive_impl.ipp */; };
 		0F13FA800E5FD98300D8E649 /* xml_woarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA410E5FD98300D8E649 /* xml_woarchive_impl.ipp */; };
+		0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
+		0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
+		0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F3210440E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F3210450E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F3210460E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
@@ -59,6 +62,9 @@
 		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
 		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0F9DEE3E0E57CDCD00E86DD6 /* CPUTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */; };
+		0FA54D370E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
+		0FA54D380E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
+		0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
 		0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FA56BAA0E5A64E20001E997 /* Localizable.strings */; };
 		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
 		0FADF3E30E6E480000775949 /* MT_DataCollectors.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FADF3E10E6E480000775949 /* MT_DataCollectors.cpp */; };
@@ -382,6 +388,17 @@
 		0F13FAF20E5FD99600D8E649 /* trivial_value_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = trivial_value_traits.hpp; sourceTree = "<group>"; };
 		0F13FAF30E5FD99600D8E649 /* unordered_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unordered_set.hpp; sourceTree = "<group>"; };
 		0F13FAF40E5FD99600D8E649 /* unordered_set_hook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unordered_set_hook.hpp; sourceTree = "<group>"; };
+		0F1D18FD0E7A2A50008EB764 /* smart_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = smart_ptr.hpp; sourceTree = "<group>"; };
+		0F1D19010E7A2B74008EB764 /* intrusive_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrusive_ptr.hpp; sourceTree = "<group>"; };
+		0F1D19C60E7A2EC1008EB764 /* noncopyable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noncopyable.hpp; sourceTree = "<group>"; };
+		0F1D19D50E7A2F37008EB764 /* Assertions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Assertions.h; sourceTree = "<group>"; };
+		0F1D19D60E7A2F37008EB764 /* Noncopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Noncopyable.h; sourceTree = "<group>"; };
+		0F1D19D70E7A2F37008EB764 /* PassRefPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PassRefPtr.h; sourceTree = "<group>"; };
+		0F1D19D80E7A2F37008EB764 /* RefCounted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCounted.h; sourceTree = "<group>"; };
+		0F1D19D90E7A2F37008EB764 /* RefPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefPtr.h; sourceTree = "<group>"; };
+		0F1D19DC0E7A2F84008EB764 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
+		0F1D19DD0E7A2F8A008EB764 /* AlwaysInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlwaysInline.h; sourceTree = "<group>"; };
+		0F1D1A910E7A3A93008EB764 /* Assertions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assertions.cpp; sourceTree = "<group>"; };
 		0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_serialization-xgcc40-mt-1_36.a"; path = "Source/boost/lib/libboost_serialization-xgcc40-mt-1_36.a"; sourceTree = "<group>"; };
 		0F63B1010E5E6A54005793DE /* MTDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentController.h; sourceTree = "<group>"; };
 		0F63B1020E5E6A54005793DE /* MTDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentController.m; sourceTree = "<group>"; };
@@ -410,6 +427,8 @@
 		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0F9DEE250E57CD4600E86DD6 /* CPUTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUTests.h; sourceTree = "<group>"; };
 		0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTests.cpp; sourceTree = "<group>"; };
+		0FA54D350E7C512F00337C19 /* NSCharacterSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSetAdditions.h; sourceTree = "<group>"; };
+		0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCharacterSetAdditions.m; sourceTree = "<group>"; };
 		0FA56BAA0E5A64E20001E997 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInstructionCountFormatter.h; sourceTree = "<group>"; };
 		0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInstructionCountFormatter.m; sourceTree = "<group>"; };
@@ -630,6 +649,9 @@
 				0F13FABE0E5FD99600D8E649 /* intrusive */,
 				0FB9C6A40E725F6900E6EBFD /* iterator */,
 				0F13FA810E5FD98B00D8E649 /* serialization */,
+				0F1D19010E7A2B74008EB764 /* intrusive_ptr.hpp */,
+				0F1D19C60E7A2EC1008EB764 /* noncopyable.hpp */,
+				0F1D18FD0E7A2A50008EB764 /* smart_ptr.hpp */,
 				0FF381A40E6B517A00780F5B /* thread.hpp */,
 				0FF381A50E6B517A00780F5B /* thread */,
 			);
@@ -923,6 +945,22 @@
 			path = detail;
 			sourceTree = "<group>";
 		};
+		0F1D19D40E7A2F37008EB764 /* wtf */ = {
+			isa = PBXGroup;
+			children = (
+				0F1D19DD0E7A2F8A008EB764 /* AlwaysInline.h */,
+				0F1D19D50E7A2F37008EB764 /* Assertions.h */,
+				0F1D1A910E7A3A93008EB764 /* Assertions.cpp */,
+				0F1D19D60E7A2F37008EB764 /* Noncopyable.h */,
+				0F1D19D70E7A2F37008EB764 /* PassRefPtr.h */,
+				0F1D19DC0E7A2F84008EB764 /* Platform.h */,
+				0F1D19D80E7A2F37008EB764 /* RefCounted.h */,
+				0F1D19D90E7A2F37008EB764 /* RefPtr.h */,
+			);
+			name = wtf;
+			path = Source/wtf;
+			sourceTree = "<group>";
+		};
 		0F9DE5D30E575DAD00E86DD6 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -965,6 +1003,8 @@
 				0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */,
 				0FBA70EB0E6FA7D30027FB29 /* NSAttributedStringAdditions.h */,
 				0FBA70EC0E6FA7D30027FB29 /* NSAttributedStringAdditions.m */,
+				0FA54D350E7C512F00337C19 /* NSCharacterSetAdditions.h */,
+				0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */,
 				0FB9C4C30E723E4000E6EBFD /* MTValueTransformers.h */,
 				0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */,
 				0F995C560E69025000AC5089 /* NSViewAdditions.h */,
@@ -1246,6 +1286,7 @@
 				0FB9C4480E72338500E6EBFD /* TODO.txt */,
 				0F13F9F70E5FD95000D8E649 /* boost */,
 				0FFF64300E4FE34C00404828 /* RandomLib */,
+				0F1D19D40E7A2F37008EB764 /* wtf */,
 				0FAC2F910E4F75FE00CB068B /* engine */,
 				0F0C945E0E51486200B233E8 /* tests */,
 				0FBEC0610E56AFA800ABB516 /* mactierra */,
@@ -1445,6 +1486,8 @@
 				0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */,
 				0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
 				0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
+				0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */,
+				0FA54D370E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1472,6 +1515,8 @@
 				0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
 				0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */,
+				0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */,
+				0FA54D380E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1516,6 +1561,8 @@
 				0FBA70ED0E6FA7D30027FB29 /* NSAttributedStringAdditions.m in Sources */,
 				0FB9C4C50E723E4000E6EBFD /* MTValueTransformers.mm in Sources */,
 				0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */,
+				0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */,
+				0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

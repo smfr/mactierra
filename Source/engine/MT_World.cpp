@@ -86,18 +86,18 @@ World::initializeSoup(u_int32_t inSoupSize)
     mInventory = new Inventory();
 }
 
-Creature*
+PassRefPtr<Creature>
 World::createCreature()
 {
     if (!mSoup)
         return NULL;
 
-    Creature*   theCreature = new Creature(uniqueCreatureID(), mSoup);
+    RefPtr<Creature> theCreature = Creature::create(uniqueCreatureID(), mSoup);
     // mCreatureIDMap is the ultimate owner of creatures. both adults and embryos are entered
     mCreatureIDMap[theCreature->creatureID()] = theCreature;
     
     //cout << "Created creature " << (void*)theCreature << " id: " << theCreature->creatureID() << endl;
-    return theCreature;
+    return theCreature.release();
 }
 
 void
@@ -105,7 +105,7 @@ World::eradicateCreature(Creature* inCreature)
 {
     if (inCreature->isDividing())
     {
-        Creature* daughterCreature = inCreature->daughterCreature();
+        Creature* daughterCreature = const_cast<Creature*>(inCreature->daughterCreature());
         BOOST_ASSERT(daughterCreature);
         
         if (mSettings.clearReapedCreatures())
@@ -118,9 +118,6 @@ World::eradicateCreature(Creature* inCreature)
         
         // remove from id map
         creatureRemoved(daughterCreature);
-
-        // daughter should not be in reaper or slicer yet.
-        delete daughterCreature;
     }
     
     //mReaper.printCreatures();
@@ -135,7 +132,7 @@ World::eradicateCreature(Creature* inCreature)
     // remove from slicer, reaper and id map
     creatureRemoved(inCreature);
     
-    delete inCreature;
+    // no need to delete here; creatures are refcounted.
 }
 
 u_int32_t
@@ -159,19 +156,19 @@ World::printCreatures() const
     CreatureIDMap::const_iterator theEnd = mCreatureIDMap.end();
     for (CreatureIDMap::const_iterator it = mCreatureIDMap.begin(); it != theEnd; ++it)
     {
-        const Creature* curCreature = it->second;
+        const Creature* curCreature = it->second.get();
         BOOST_ASSERT(it->first == curCreature->creatureID());
         cout << curCreature->creatureID() << " " << curCreature->creatureName() << endl;
     }
 }
 
-Creature*
+PassRefPtr<Creature>
 World::insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength)
 {
     if (!mCellMap->spaceAtAddress(inAddress, inLength))
         return NULL;
 
-    Creature* theCreature = createCreature();
+    RefPtr<Creature> theCreature = createCreature();
 
     theCreature->setLocation(inAddress);
     theCreature->setLength(inLength);
@@ -190,17 +187,17 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setGeneration(1);
     theGenotype->creatureBorn();
 
-    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature, mSettings));
+    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature.get(), mSettings));
     theCreature->setReferencedLocation(theCreature->location());
     
-    bool inserted = mCellMap->insertCreature(theCreature);
+    bool inserted = mCellMap->insertCreature(theCreature.get());
     BOOST_ASSERT(inserted);
 
     // add it to the various queues
-    creatureAdded(theCreature);
+    creatureAdded(theCreature.get());
     
     theCreature->onBirth(*this);     // IVF, kinda
-    return theCreature;
+    return theCreature.release();
 }
 
 void
@@ -238,9 +235,9 @@ World::iterate(u_int32_t inNumCycles)
             // TODO: track leanness
 
             // execute the next instruction
-            Creature* daughterCreature = mExecution->execute(*curCreature, *this, flaw);
+            RefPtr<Creature> daughterCreature = mExecution->execute(*curCreature, *this, flaw);
             if (daughterCreature)
-                handleBirth(curCreature, daughterCreature);
+                handleBirth(curCreature, daughterCreature.get());
         
             // if there was an error, adjust in the reaper queue
             if (curCreature->cpu().flag())
@@ -292,18 +289,23 @@ World::iterate(u_int32_t inNumCycles)
     //cout << "Executed " << mTimeSlicer.instructionsExecuted() << " instructions" << endl;
 }
 
-void
-World::stepCreature(Creature* inCreature)
+bool
+World::stepCreature(const Creature* inCreature)
 {
     // if the creature is not in the slicer list, don't do anything
     if (!inCreature->isInSlicerList())
-        return;
+        return false;
 
     // run until this creature is current
     while (mTimeSlicer.currentCreature() != inCreature)
+    {
         iterate(1);
+        if (inCreature->isDead())
+            return false;
+    }
 
     iterate(1);
+    return true;
 }
 
 instruction_t
@@ -347,9 +349,9 @@ World::destroyCreatures()
     CreatureIDMap::const_iterator theEnd = mCreatureIDMap.end();
     for (CreatureIDMap::const_iterator it = mCreatureIDMap.begin(); it != theEnd; ++it)
     {
-        Creature* theCreature = (*it).second;
+        RefPtr<Creature> theCreature = (*it).second.get();
         
-        mCellMap->removeCreature(theCreature);
+        mCellMap->removeCreature(theCreature.get());
 
         if (theCreature->isInSlicerList())
             mTimeSlicer.removeCreature(*theCreature);
@@ -358,7 +360,6 @@ World::destroyCreatures()
             mReaper.removeCreature(*theCreature);
 
         theCreature->clearDaughter();
-        delete theCreature;
     }
 
     mCreatureIDMap.clear();
@@ -366,7 +367,7 @@ World::destroyCreatures()
 
 // this allocates space for the daughter in the cell map,
 // but does not enter it into any lists or change the parent.
-Creature*
+PassRefPtr<Creature>
 World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength)
 {
     int32_t     attempts = 0;
@@ -420,14 +421,14 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
             break;
     }
 
-    Creature*   daughter = NULL;
+    RefPtr<Creature> daughter;
     if (foundLocation)
     {
         daughter = createCreature();
         daughter->setLocation(location);
         daughter->setLength(inDaughterLength);
     
-        bool added = mCellMap->insertCreature(daughter);
+        bool added = mCellMap->insertCreature(daughter.get());
         BOOST_ASSERT(added);
 #ifdef NDEBUG
         if (!added)
@@ -435,7 +436,7 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
 #endif
     }
     
-    return daughter;
+    return daughter.release();
 }
 
 void

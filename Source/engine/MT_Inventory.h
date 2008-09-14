@@ -18,6 +18,8 @@
 #include <boost/serialization/map.hpp>
 #include <boost/serialization/serialization.hpp>
 
+#include <wtf/Noncopyable.h>
+
 #include "MT_Engine.h"
 #include "MT_Genotype.h"
 
@@ -90,7 +92,7 @@ namespace MacTierra {
 
 
 // The inventory tracks the species that are alive now.
-class Inventory
+class Inventory : Noncopyable
 {
 public:
     typedef std::map<GenomeData, InventoryGenotype*> InventoryMap;

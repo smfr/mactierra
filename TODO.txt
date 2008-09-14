@@ -8,7 +8,6 @@ Cocoa front-end
 ---------------
 
 Fix thread-safety issues when using data from the collectors.
-Fix crash when the observed creature gets deleted.
 Add more types of data collection
 Add ability to edit random seed in the middle of a run
 Implement persistent genotype store ("genebank").

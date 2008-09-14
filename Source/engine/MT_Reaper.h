@@ -27,7 +27,7 @@ typedef ::boost::intrusive::list<Creature, ReaperMemberHookOption> ReaperList;
 
 // Reaper queue. Items appended at the end, and move up the more errors they have. Items at the head of
 // the list get reaped.
-class Reaper
+class Reaper : Noncopyable
 {
 public:
     Reaper();

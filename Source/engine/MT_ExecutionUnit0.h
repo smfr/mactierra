@@ -14,6 +14,8 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/export.hpp>
 
+#include <wtf/PassRefPtr.h>
+
 #include "MT_ExecutionUnit.h"
 
 #include "MT_Soup.h"
@@ -31,7 +33,7 @@ public:
     ExecutionUnit0();
     ~ExecutionUnit0();
     
-    virtual Creature* execute(Creature& inCreature, World& inWorld, int32_t inFlaw);
+    virtual PassRefPtr<Creature> execute(Creature& inCreature, World& inWorld, int32_t inFlaw);
 
 
 protected:

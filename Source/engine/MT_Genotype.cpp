@@ -21,6 +21,7 @@ GenomeData::printableGenome() const
  
     // FIXME: this is lame. use streams
     std::string prettyString;
+    prettyString.reserve(mData.length() * 3);
 
     for (u_int32_t i = 0; i < mData.length(); ++i)
     {
@@ -33,24 +34,28 @@ GenomeData::printableGenome() const
     return prettyString;
 }
 
+static inline char toLower(char c)
+{
+    if (c >= 'A' && c <= 'Z')
+        c += ('a' - 'A');
+    return c;
+}
 
 void
 GenomeData::setFromPrintableGenome(const std::string& inString)
 {
-    std::string::const_iterator it = inString.begin();
-    std::string::const_iterator end = inString.end();
-    
+    const size_t len = inString.length();
+
+    mData.reserve(len / 3);
+
     // FIXME: this is lame. use streams
     instruction_t curInst = 0;
     bool gotFirst = false;
-    while (it != end)
+    for (size_t i = 0; i < len; ++i)
     {
-        const char curChar = tolower(*it);
+        const char curChar = toLower(inString[i]);
         if (!isxdigit(curChar))
-        {
-            ++it;
             continue;
-        }
         
         u_int32_t charVal = (curChar < 'a') ? curChar - '0' : curChar - ('a' - 10);
         
@@ -65,7 +70,6 @@ GenomeData::setFromPrintableGenome(const std::string& inString)
             mData.push_back(curInst);
             gotFirst = false;
         }
-        ++it;
     }
 }
 

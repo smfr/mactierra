@@ -52,7 +52,7 @@ using namespace MacTierra;
         showInstructionPointers = NO;
         self.focusedCreatureName = @"";
 
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, nil]];
+        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]];
     }
     return self;
 }
@@ -416,14 +416,9 @@ using namespace MacTierra;
 
     BOOL inserted = NO;
 
-    if ([[pasteboard types] containsObject:kCreaturePasteboardType])
+    MTSerializableCreature* creature = [MTSerializableCreature serializableCreatureFromPasteboard:pasteboard];
+    if (creature)
     {
-        NSData* creatureData = [pasteboard dataForType:kCreaturePasteboardType];
-        if (!creatureData) return NO;
-        
-        MTSerializableCreature* creature = [NSKeyedUnarchiver unarchiveObjectWithData:creatureData];
-        if (!creature) return NO;
-
         NSUInteger creatureLen = [creature.genome length];
         
 //        NSPoint localPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
@@ -437,13 +432,12 @@ using namespace MacTierra;
 
             if (mWorld->cellMap()->spaceAtAddress(soupAddr, creatureLen))
             {
-                Creature* newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[creature.genome bytes], creatureLen);
+                RefPtr<Creature> newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[creature.genome bytes], creatureLen);
                 NSAssert(newCreature, @"Should have been able to insert");
                 inserted = YES;
                 [self setNeedsDisplay:YES];
             }
         }
-        
     }
     return inserted;
 }

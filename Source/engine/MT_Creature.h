@@ -17,6 +17,10 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_member.hpp>
 
+#include <wtf/PassRefPtr.h>
+#include <wtf/RefPtr.h>
+#include <wtf/RefCounted.h>
+
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
 #include "MT_Genotype.h"
@@ -30,7 +34,7 @@ class InventoryGenotype;
 class Soup;
 class World;
 
-class Creature
+class Creature : public RefCounted<Creature>
 {
 public:
     ReaperListHook  mReaperListHook;
@@ -38,7 +42,11 @@ public:
     
 public:
     
-    Creature(creature_id inID, Soup* inOwningSoup);
+    static PassRefPtr<Creature> create(creature_id inID, Soup* inOwningSoup)
+    {
+        return adoptRef(new Creature(inID, inOwningSoup));
+    }
+    
     ~Creature();
 
     // zero out this creature's space in the soup
@@ -93,10 +101,12 @@ public:
     void            startDividing(Creature* inDaughter);
 
     // execute the divide instruction. can set cpu flag
-    Creature*       divide(World& inWorld);
+    PassRefPtr<Creature> divide(World& inWorld);
     
-    bool            isDividing() const          { return mDividing; }
-    Creature*       daughterCreature() const    { return mDaughter; }
+    bool            isDividing() const              { return mDividing; }
+    const Creature* daughterCreature() const        { return mDaughter.get(); }
+
+    bool            isDead() const                  { return mDead; }
 
     void            clearDaughter();
     
@@ -142,10 +152,8 @@ public:
                         return mID == inRHS.creatureID();
                     }
 private:
-    
-    // disallow copy construct and copy
-    Creature& operator=(const Creature& inRHS);
-    Creature(const Creature& inRHS);
+
+    Creature(creature_id inID, Soup* inOwningSoup);
 
     // default ctor for serialization
     Creature()
@@ -183,10 +191,12 @@ private:
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
-        bool dividing = mDividing;
-        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", dividing);
-        bool born = mBorn;
-        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("born", born);
+        bool temp = mDividing;
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", temp);
+        temp = mBorn;
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("born", temp);
+        temp = mDead;
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("dead", temp);
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
@@ -217,10 +227,10 @@ private:
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
-        bool dividing;
-        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", dividing); mDividing = dividing;
-        bool born;
-        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("born", born); mBorn = born;
+        bool temp;
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", temp); mDividing = temp;
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("born", temp); mBorn = temp;
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("dead", temp); mDead = temp;
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
@@ -256,10 +266,11 @@ protected:
     
     Soup*           mSoup;
     
-    Creature*       mDaughter;
+    RefPtr<Creature> mDaughter;
 
     bool            mDividing : 1;
     bool            mBorn : 1;              // false until parent divides
+    bool            mDead : 1;
     
     u_int32_t       mLength;
     address_t       mLocation;          // position in soup

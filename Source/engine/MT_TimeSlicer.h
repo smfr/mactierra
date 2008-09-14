@@ -26,7 +26,7 @@ typedef ::boost::intrusive::list<Creature, SlicerMemberHookOption> SlicerList;
 
 // TimeSlicer maintains a list of creatures for time slicing. New creatures are added before the current
 // creature so that they get time after a full cycle. Time slicer works down the list, then wraps.
-class TimeSlicer
+class TimeSlicer : Noncopyable
 {
 public:
     TimeSlicer(World* inWorld);

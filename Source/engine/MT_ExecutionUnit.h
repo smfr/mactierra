@@ -12,6 +12,8 @@
 
 #include <boost/serialization/serialization.hpp>
 
+#include <wtf/PassRefPtr.h>
+
 #include "MT_Engine.h"
 
 namespace MacTierra {
@@ -30,7 +32,7 @@ public:
     // flaw is -1, 0, or 1
     // FIXME: get flaw from soup?
     // Returns new creature on divide instruction
-    virtual Creature* execute(Creature& inCreature, World& inWorld, int32_t inFlaw) = 0;
+    virtual PassRefPtr<Creature> execute(Creature& inCreature, World& inWorld, int32_t inFlaw) = 0;
 
 private:
     friend class ::boost::serialization::access;

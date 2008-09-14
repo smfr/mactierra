@@ -18,6 +18,10 @@
 
 #include <boost/thread.hpp>
 
+#include <wtf/PassRefPtr.h>
+#include <wtf/RefPtr.h>
+#include <wtf/Noncopyable.h>
+
 #define HAVE_BOOST_SERIALIZATION 1
 #include <RandomLib/Random.hpp>
 
@@ -37,7 +41,7 @@ namespace MacTierra {
 
 class Creature;
 
-class World
+class World : Noncopyable
 {
 friend class ExecutionUnit0;
 public:
@@ -59,15 +63,15 @@ public:
 
     DataCollector*      dataCollector() const   { return mDataCollector; }
     
-    Creature*           createCreature();
+    PassRefPtr<Creature> createCreature();
     void                eradicateCreature(Creature* inCreature);
     
-    Creature*           insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
+    PassRefPtr<Creature> insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
     
     void                iterate(u_int32_t inNumCycles);
     // execute one cycle for the current creature; at the end if its slice, execute all other creatures
-    // and then step the same creature again
-    void                stepCreature(Creature* inCreature);
+    // and then step the same creature again. Return false if the creature could not be stepped (e.g. it died)
+    bool                stepCreature(const Creature* inCreature);
 
     RandomLib::Random&  RNG()   { return mRNG; }
 
@@ -105,7 +109,7 @@ protected:
     void            destroyCreatures();
 
     // handle the 'mal' instruction
-    Creature*       allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
+    PassRefPtr<Creature> allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
 
     bool            timeForDataCollection(u_int64_t inInstructionCount) const
     {
@@ -144,7 +148,7 @@ protected:
     
 private:
     friend class ::boost::serialization::access;
-    template<class Archive> void serialize(Archive& ar, const unsigned int version)
+    template<class Archive> void save(Archive& ar, const unsigned int version) const
     {
         // using BOOST_CLASS_EXPORT_GUID() for these causes a crash on quit
         ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
@@ -159,6 +163,7 @@ private:
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cell_map", mCellMap);
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_creature_id", mNextCreatureID);
+
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("creature_id_map", mCreatureIDMap);
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("isa", mExecution);
@@ -179,6 +184,47 @@ private:
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_cosmic_ray_time", mNextCosmicRayInstruction);
     }
 
+    template<class Archive> void load(Archive& ar, const unsigned int version)
+    {
+        // using BOOST_CLASS_EXPORT_GUID() for these causes a crash on quit
+        ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
+        ar.register_type(static_cast<InventoryGenotype *>(NULL));
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("settings", mSettings);
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("random_number_generator", mRNG);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", mSoupSize);
+        
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cell_map", mCellMap);
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_creature_id", mNextCreatureID);
+        
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("creature_id_map", mCreatureIDMap);
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("isa", mExecution);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("timeslicer", mTimeSlicer);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("reaper", mReaper);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("inventory", mInventory);
+        
+        // serialize the mDataCollector?
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature_cycles", mCurCreatureCycles);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cur_creature_slice_cycles", mCurCreatureSliceCycles);
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copy_error_pending", mCopyErrorPending);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copies_since_last_error", mCopiesSinceLastError);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_copy_error_time", mNextCopyError);
+
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_flaw_time", mNextFlawInstruction);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_cosmic_ray_time", mNextCosmicRayInstruction);
+    }
+
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ::boost::serialization::split_member(ar, *this, file_version);
+    }
+
 protected:
 
     Settings            mSettings;
@@ -194,7 +240,7 @@ protected:
     creature_id         mNextCreatureID;
 
     // creatures hashed by ID
-    typedef std::map<creature_id, Creature*>    CreatureIDMap;
+    typedef std::map<creature_id, RefPtr<Creature> >    CreatureIDMap;
     CreatureIDMap       mCreatureIDMap;
     
     ExecutionUnit*  mExecution;
@@ -219,12 +265,35 @@ protected:
     u_int64_t       mNextCosmicRayInstruction;    
 };
 
-
-
-
-
-
-
 } // namespace MacTierra
+
+
+namespace boost {
+namespace serialization {
+
+template<class Archive>
+void save(Archive& ar, const RefPtr<MacTierra::Creature>& g, const unsigned int version)
+{
+    MacTierra::Creature* creature = g.get();
+    ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", creature);
+}
+
+template<class Archive>
+void load(Archive& ar, RefPtr<MacTierra::Creature>& g, const unsigned int version)
+{
+    MacTierra::Creature* creature;
+    ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("creature", creature);
+    g = creature;
+}
+
+template<class Archive>
+inline void serialize(Archive & ar, RefPtr<MacTierra::Creature>& t, const unsigned int file_version)
+{
+    split_free(ar, t, file_version); 
+}
+
+} // namespace serialization
+} // namespace boost
+
 
 #endif // MT_World_h

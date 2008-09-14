@@ -16,11 +16,13 @@
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_member.hpp>
 
+#include <wtf/Noncopyable.h>
+
 #include "MT_Engine.h"
 
 namespace MacTierra {
 
-class Soup
+class Soup : Noncopyable
 {
 public:
 

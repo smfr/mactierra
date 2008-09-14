@@ -28,10 +28,10 @@ ExecutionUnit0::~ExecutionUnit0()
 {
 }
 
-Creature*
+PassRefPtr<Creature>
 ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
 {
-    Creature* resultCreature = NULL;
+    PassRefPtr<Creature> resultCreature;
 
     Cpu& cpu = inCreature.cpu();
     cpu.clearFlag();
@@ -240,11 +240,11 @@ ExecutionUnit0::memoryAllocate(Creature& inCreature, World& inWorld)
         return;
     }
     
-    Creature*   daughter = inWorld.allocateSpaceForOffspring(inCreature, daughterLength);
+    RefPtr<Creature> daughter = inWorld.allocateSpaceForOffspring(inCreature, daughterLength);
     if (daughter)
     {
         cpu.mRegisters[k_ax] = inCreature.offsetFromAddress(daughter->location());
-        inCreature.startDividing(daughter);
+        inCreature.startDividing(daughter.get());
 
         if (inWorld.settings().clearDaughterCells())
             daughter->clearSpace();

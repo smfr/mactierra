@@ -25,6 +25,7 @@ Creature::Creature(creature_id inID, Soup* inOwningSoup)
 , mDaughter(NULL)
 , mDividing(false)
 , mBorn(false)
+, mDead(false)
 , mLength(0)
 , mLocation(0)
 , mSliceSize(0)
@@ -126,12 +127,12 @@ Creature::startDividing(Creature* inDaughter)
     mDividing = true;
 }
 
-Creature*
+PassRefPtr<Creature>
 Creature::divide(World& inWorld)
 {
     if (mDividing && mMovesToLastOffspring > (kMinPropCopied * mDaughter->length()))
     {
-        Creature*   offspring = mDaughter;
+        RefPtr<Creature> offspring = mDaughter;
 #ifdef RELATIVE_ADDRESSING
         offspring->mCPU.mInstructionPointer = 0;
 #else
@@ -201,12 +202,13 @@ Creature::onBirth(const World& inWorld)
 void
 Creature::onDeath(const World& inWorld)
 {
+    mDead = true;
 }
 
 void
 Creature::clearDaughter()
 {
-    mDaughter = NULL;
+    mDaughter.clear();
     mDividing = false;
 }
 

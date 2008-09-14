@@ -16,16 +16,18 @@ extern NSString* const kCreaturePasteboardType;
 
 @class MTInventoryGenotype;
 
+class CreaturePrivateData;
+
 @interface MTCreature : NSObject
 {
-    MacTierra::Creature*    mCreature;
+    CreaturePrivateData*    mPrivateData;
     
     MTInventoryGenotype*    genotype;
 }
 
 - (id)initWithCreature:(MacTierra::Creature*)inCreature;
 
-@property (readonly) MacTierra::Creature* creature;
+@property (readonly) const MacTierra::Creature* creature;
 
 // we don't even try to make these properties KVC-compliant. Manual updates of the UI are required
 @property (readonly) NSString* name;
@@ -62,6 +64,9 @@ extern NSString* const kCreaturePasteboardType;
 
 @property (retain) NSString* name;
 @property (retain) NSData* genome;
+
++ (id)serializableCreatureFromPasteboard:(NSPasteboard*)inPasteboard;
++ (id)serializableCreatureFromString:(NSString*)inString;
 
 - (id)initWithCoder:(NSCoder *)decoder;
 - (id)initWithName:(NSString *)inName genome:(NSData*)inGenome;
