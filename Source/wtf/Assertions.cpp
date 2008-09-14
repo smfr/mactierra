@@ -46,12 +46,19 @@
 #include <crtdbg.h>
 #endif
 
+#if PLATFORM(MAC)
+// Avoid bringing in CoreFoundation
+#ifndef SUPPORT_OBJ_FORMAT_STRINGS
+#define SUPPORT_OBJ_FORMAT_STRINGS 0
+#endif
+#endif
+
 extern "C" {
 
 WTF_ATTRIBUTE_PRINTF(1, 0)
 static void vprintf_stderr_common(const char* format, va_list args)
 {
-#if PLATFORM(MAC)
+#if PLATFORM(MAC) && SUPPORT_OBJ_FORMAT_STRINGS
     if (strstr(format, "%@")) {
         CFStringRef cfFormat = CFStringCreateWithCString(NULL, format, kCFStringEncodingUTF8);
         CFStringRef str = CFStringCreateWithFormatAndArguments(NULL, NULL, cfFormat, args);

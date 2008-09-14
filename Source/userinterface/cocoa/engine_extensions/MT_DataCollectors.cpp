@@ -53,7 +53,7 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
     typedef std::multiset<const InventoryGenotype*, aliveReverseSort> alive_set;
     alive_set    commonGenotypeSet;
     
-    // This will be pretty slow for large inventories. Maybe have the inventory move
+    // This is slow for large inventories. Maybe have the inventory move
     // extinct genotypes into a different map?
     Inventory::InventoryMap::const_iterator it, end;
     for (it = inventory->inventoryMap().begin(), end = inventory->inventoryMap().end();
@@ -67,7 +67,7 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
         commonGenotypeSet.insert(curEntry);
     }
 
-    // now pick the top N
+    // Now pick the top N
     mData.clear();
     alive_set::const_iterator aliveIt = commonGenotypeSet.begin(), aliveEnd = commonGenotypeSet.end();
     for (u_int32_t i = 0; i < mMaxBuckets && aliveIt != aliveEnd; ++i, ++aliveIt)
@@ -76,7 +76,6 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
         mData.push_back(data_pair(curEntry->name(), curEntry->numberAlive()));
     }
 }
-
 
 #pragma mark -
 

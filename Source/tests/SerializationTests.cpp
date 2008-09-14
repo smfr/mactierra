@@ -72,8 +72,7 @@ SerializationTests::runTest()
     
     TEST_CONDITION(firstGenome == secondGenome);
     
-    
-    Creature* creature1 = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    RefPtr<Creature> creature1 = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     creature1->setLocation(400);
     creature1->setLength(100);
 

@@ -50,24 +50,24 @@ CellMapTests::runTest()
 {
     std::cout << "CellMapTests" << std::endl;
 
-    Creature*   creature1 = mWorld->createCreature();
+    RefPtr<Creature>   creature1 = mWorld->createCreature();
     creature1->setLocation(100);
     creature1->setLength(100);
 
-    Creature*   creature2 = mWorld->createCreature();
+    RefPtr<Creature>   creature2 = mWorld->createCreature();
     creature2->setLocation(200);
     creature2->setLength(100);
 
-    Creature*   creature3 = mWorld->createCreature();
+    RefPtr<Creature>   creature3 = mWorld->createCreature();
     creature3->setLocation(400);
     creature3->setLength(100);
 
     // wrapping creature
-    Creature*   creature4 = mWorld->createCreature();
+    RefPtr<Creature>   creature4 = mWorld->createCreature();
     creature4->setLocation(1000);
     creature4->setLength(100);
 
-    Creature*   creature5 = mWorld->createCreature();
+    RefPtr<Creature>   creature5 = mWorld->createCreature();
     creature5->setLocation(80);
     creature5->setLength(20);
 
@@ -86,7 +86,7 @@ CellMapTests::runTest()
     address_t spaceAddr = 100;
     TEST_CONDITION(cellMap->searchForSpace(spaceAddr, 100, 1024, CellMap::kBothways) && spaceAddr == 100);
 
-    TEST_CONDITION(cellMap->insertCreature(creature1));
+    TEST_CONDITION(cellMap->insertCreature(creature1.get()));
     cellMap->printCreatures();
 
     TEST_CONDITION(cellMap->gapBeforeIndex(0) == (kSoupSize - 100));
@@ -115,15 +115,15 @@ CellMapTests::runTest()
     TEST_CONDITION(!cellMap->creatureAtAddress(200));
     TEST_CONDITION(!cellMap->creatureAtAddress(1023));
 
-    TEST_CONDITION(cellMap->insertCreature(creature4));
+    TEST_CONDITION(cellMap->insertCreature(creature4.get()));
 
     cellMap->printCreatures();
 
     TEST_CONDITION(cellMap->gapBeforeIndex(0) == (100 - (1100 - kSoupSize)));
     TEST_CONDITION(cellMap->gapAfterIndex(0) == (1000 - 200));
 
-    TEST_CONDITION(cellMap->insertCreature(creature3));
-    TEST_CONDITION(cellMap->insertCreature(creature2));
+    TEST_CONDITION(cellMap->insertCreature(creature3.get()));
+    TEST_CONDITION(cellMap->insertCreature(creature2.get()));
 
     cellMap->printCreatures();
 
@@ -147,7 +147,7 @@ CellMapTests::runTest()
     TEST_CONDITION(!cellMap->spaceAtAddress(1020, 6));
     TEST_CONDITION(!cellMap->spaceAtAddress(2, 4));
 
-    TEST_CONDITION(cellMap->insertCreature(creature5));
+    TEST_CONDITION(cellMap->insertCreature(creature5.get()));
 
     cellMap->printCreatures();
 

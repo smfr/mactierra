@@ -55,9 +55,9 @@ SlicerTests::runTest()
 {
     std::cout << "SlicerTests" << std::endl;
 
-    Creature*   creature1 = mWorld->createCreature();
-    Creature*   creature2 = mWorld->createCreature();
-    Creature*   creature3 = mWorld->createCreature();
+    RefPtr<Creature>   creature1 = mWorld->createCreature();
+    RefPtr<Creature>   creature2 = mWorld->createCreature();
+    RefPtr<Creature>   creature3 = mWorld->createCreature();
 
     TEST_CONDITION(creature1 && creature2 && creature3);
     TEST_CONDITION(!mSlicer->currentCreature());
@@ -83,7 +83,7 @@ SlicerTests::runTest()
     mSlicer->printCreatures();
     TEST_CONDITION(mSlicer->currentCreature() == creature1);
 
-    Creature*   creature4 = mWorld->createCreature();
+    RefPtr<Creature>   creature4 = mWorld->createCreature();
     // new creature should be added before the current item
     mSlicer->insertCreature(*creature4);
 
@@ -95,7 +95,7 @@ SlicerTests::runTest()
 
     mSlicer->printCreatures();
 
-    Creature*   testCreature = mWorld->createCreature();
+    RefPtr<Creature>   testCreature = mWorld->createCreature();
     testCreature->setLocation(100);
 
     const double kSliceSizeVariance = 1;
@@ -103,8 +103,8 @@ SlicerTests::runTest()
     for (u_int32_t i = 20; i < 1000; ++i)
     {
         testCreature->setLength(i);
-        testCreature->setSliceSize(mSlicer->initialSliceSizeForCreature(testCreature, mWorld->settings()));
-        cout << "Length " << i << ": " << testCreature->sliceSize() << " actual:" << mSlicer->sizeForThisSlice(testCreature, kSliceSizeVariance) << endl;
+        testCreature->setSliceSize(mSlicer->initialSliceSizeForCreature(testCreature.get(), mWorld->settings()));
+        cout << "Length " << i << ": " << testCreature->sliceSize() << " actual:" << mSlicer->sizeForThisSlice(testCreature.get(), kSliceSizeVariance) << endl;
     }
 
 

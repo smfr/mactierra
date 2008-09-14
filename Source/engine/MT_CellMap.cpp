@@ -146,7 +146,8 @@ CellMap::removeCreature(Creature* inCreature)
         return;
     }
     
-    BOOST_ASSERT(0);
+    // This can happen in tests
+    //BOOST_ASSERT(0);
 }
 
 // distance between start and end going forward (maybe wrapping)

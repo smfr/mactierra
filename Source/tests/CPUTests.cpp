@@ -53,7 +53,7 @@ CPUTests::runTest()
 {
     std::cout << "CPUTests" << std::endl;
     
-    Creature* creature = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    RefPtr<Creature> creature = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
 
     Cpu modelCPU;
     
@@ -137,7 +137,7 @@ CPUTests::runTest()
 
     ++modelCPU.mInstructionPointer;
     
-    Creature* daughter1 = creature->daughterCreature();
+    const Creature* daughter1 = creature->daughterCreature();
     TEST_CONDITION(daughter1 && creature->isDividing());
     TEST_CONDITION(daughter1->location() == 180 && daughter1->length() == 80);
 
@@ -259,7 +259,7 @@ CPUTests::runTest()
     modelCPU.mInstructionPointer = 27;
     TEST_CONDITION(modelCPU == creature->cpu());
     
-    Creature* daughter2 = NULL;
+    const Creature* daughter2 = NULL;
     
     // now keep running and look for the second daughter
     bool done = false;
@@ -285,7 +285,7 @@ CPUTests::runTest()
         
     }
     
-    daughter1->clearDaughter();
+    //daughter1->clearDaughter();
 }
 
 TestRegistration cpuTestReg(new CPUTests);

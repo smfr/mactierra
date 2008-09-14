@@ -50,8 +50,8 @@ ReaperTests::runTest()
     std::cout << "ReaperTests" << std::endl;
 
     creature_id creatureID = 100;
-    Creature*   creature1 = new Creature(++creatureID, mSoup);
-    Creature*   creature2 = new Creature(++creatureID, mSoup);
+    RefPtr<Creature>   creature1 = Creature::create(++creatureID, mSoup);
+    RefPtr<Creature>   creature2 = Creature::create(++creatureID, mSoup);
 
     creature1->setNumErrors(2);
     creature2->setNumErrors(4);
@@ -84,6 +84,8 @@ ReaperTests::runTest()
     TEST_CONDITION(mReaper->headCreature() == creature2);
 
     mReaper->printCreatures();
+
+    mReaper->removeCreature(*creature2);
     
 }
 
