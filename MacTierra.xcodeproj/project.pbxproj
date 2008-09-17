@@ -15,26 +15,6 @@
 		0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F88E0E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */; };
-		0F13FA6D0E5FD98300D8E649 /* archive_pointer_iserializer.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2D0E5FD98300D8E649 /* archive_pointer_iserializer.ipp */; };
-		0F13FA6E0E5FD98300D8E649 /* archive_pointer_oserializer.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2E0E5FD98300D8E649 /* archive_pointer_oserializer.ipp */; };
-		0F13FA6F0E5FD98300D8E649 /* basic_binary_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA2F0E5FD98300D8E649 /* basic_binary_iarchive.ipp */; };
-		0F13FA700E5FD98300D8E649 /* basic_binary_iprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA300E5FD98300D8E649 /* basic_binary_iprimitive.ipp */; };
-		0F13FA710E5FD98300D8E649 /* basic_binary_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA310E5FD98300D8E649 /* basic_binary_oarchive.ipp */; };
-		0F13FA720E5FD98300D8E649 /* basic_binary_oprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA320E5FD98300D8E649 /* basic_binary_oprimitive.ipp */; };
-		0F13FA730E5FD98300D8E649 /* basic_text_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA330E5FD98300D8E649 /* basic_text_iarchive.ipp */; };
-		0F13FA740E5FD98300D8E649 /* basic_text_iprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA340E5FD98300D8E649 /* basic_text_iprimitive.ipp */; };
-		0F13FA750E5FD98300D8E649 /* basic_text_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA350E5FD98300D8E649 /* basic_text_oarchive.ipp */; };
-		0F13FA760E5FD98300D8E649 /* basic_text_oprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA360E5FD98300D8E649 /* basic_text_oprimitive.ipp */; };
-		0F13FA770E5FD98300D8E649 /* basic_xml_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA380E5FD98300D8E649 /* basic_xml_iarchive.ipp */; };
-		0F13FA780E5FD98300D8E649 /* basic_xml_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA390E5FD98300D8E649 /* basic_xml_oarchive.ipp */; };
-		0F13FA790E5FD98300D8E649 /* text_iarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3A0E5FD98300D8E649 /* text_iarchive_impl.ipp */; };
-		0F13FA7A0E5FD98300D8E649 /* text_oarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3B0E5FD98300D8E649 /* text_oarchive_impl.ipp */; };
-		0F13FA7B0E5FD98300D8E649 /* text_wiarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3C0E5FD98300D8E649 /* text_wiarchive_impl.ipp */; };
-		0F13FA7C0E5FD98300D8E649 /* text_woarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3D0E5FD98300D8E649 /* text_woarchive_impl.ipp */; };
-		0F13FA7D0E5FD98300D8E649 /* xml_iarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3E0E5FD98300D8E649 /* xml_iarchive_impl.ipp */; };
-		0F13FA7E0E5FD98300D8E649 /* xml_oarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA3F0E5FD98300D8E649 /* xml_oarchive_impl.ipp */; };
-		0F13FA7F0E5FD98300D8E649 /* xml_wiarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA400E5FD98300D8E649 /* xml_wiarchive_impl.ipp */; };
-		0F13FA800E5FD98300D8E649 /* xml_woarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F13FA410E5FD98300D8E649 /* xml_woarchive_impl.ipp */; };
 		0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
@@ -45,6 +25,10 @@
 		0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */; };
+		0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */; };
+		0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */; };
+		0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F960B070E80C6250007D1D5 /* GenebankWindow.xib */; };
+		0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */; };
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
@@ -62,8 +46,6 @@
 		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
 		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0F9DEE3E0E57CDCD00E86DD6 /* CPUTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */; };
-		0FA54D370E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
-		0FA54D380E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
 		0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
 		0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FA56BAA0E5A64E20001E997 /* Localizable.strings */; };
 		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
@@ -77,8 +59,6 @@
 		0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB90D330E52A72900449CC6 /* CellMapTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB90D320E52A72900449CC6 /* CellMapTests.cpp */; };
-		0FB9C4410E72336000E6EBFD /* Readme.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FB9C4400E72336000E6EBFD /* Readme.txt */; };
-		0FB9C4490E72338500E6EBFD /* TODO.txt in Resources */ = {isa = PBXBuildFile; fileRef = 0FB9C4480E72338500E6EBFD /* TODO.txt */; };
 		0FB9C4C50E723E4000E6EBFD /* MTValueTransformers.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4C40E723E4000E6EBFD /* MTValueTransformers.mm */; };
 		0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C4E30E7241F300E6EBFD /* MTApplicationController.m */; };
 		0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB9C5DF0E72536600E6EBFD /* options.cpp */; };
@@ -137,6 +117,23 @@
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0FA527EF0E7D7CDC004D840D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0F0C94980E514AD700B233E8;
+			remoteInfo = TestRunner;
+		};
+		0FA527F10E7D7CDC004D840D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516;
+			remoteInfo = mactierra;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		0F995BFC0E68FF9A00AC5089 /* CopyFiles */ = {
@@ -405,6 +402,12 @@
 		0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MutationRateDefaults.plist; sourceTree = "<group>"; };
+		0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Genebank.xcdatamodel; sourceTree = "<group>"; };
+		0F960A5D0E80B9270007D1D5 /* MTGenebankController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankController.h; sourceTree = "<group>"; };
+		0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankController.mm; sourceTree = "<group>"; };
+		0F960B080E80C6250007D1D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/GenebankWindow.xib; sourceTree = "<group>"; };
+		0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankWindowController.h; sourceTree = "<group>"; };
+		0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGenebankWindowController.m; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
@@ -961,6 +964,18 @@
 			path = Source/wtf;
 			sourceTree = "<group>";
 		};
+		0F960A4B0E80B8650007D1D5 /* genebank */ = {
+			isa = PBXGroup;
+			children = (
+				0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */,
+				0F960A5D0E80B9270007D1D5 /* MTGenebankController.h */,
+				0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */,
+				0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */,
+				0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */,
+			);
+			path = genebank;
+			sourceTree = "<group>";
+		};
 		0F9DE5D30E575DAD00E86DD6 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1304,6 +1319,7 @@
 				0FB9C4DF0E7241E700E6EBFD /* application */,
 				0F9DE5DB0E575DB800E86DD6 /* views */,
 				0F9DE5D30E575DAD00E86DD6 /* controllers */,
+				0F960A4B0E80B8650007D1D5 /* genebank */,
 				0F9DE5D70E575DB300E86DD6 /* document */,
 				0FADF3E00E6E480000775949 /* engine_extensions */,
 				0FB043F60E5D2FB60024DF67 /* engine_objects */,
@@ -1325,6 +1341,7 @@
 				089C165FFE840EACC02AAC07 /* InfoPlist.strings */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
+				0F960B070E80C6250007D1D5 /* GenebankWindow.xib */,
 				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
 				0FCA24600E61115700F37B71 /* MacTierra.icns */,
 				0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */,
@@ -1389,6 +1406,8 @@
 			buildRules = (
 			);
 			dependencies = (
+				0FA527F00E7D7CDC004D840D /* PBXTargetDependency */,
+				0FA527F20E7D7CDC004D840D /* PBXTargetDependency */,
 			);
 			name = MacTierra;
 			productInstallPath = "$(HOME)/Applications";
@@ -1425,33 +1444,12 @@
 				1DDD582C0DA1D0D100B32029 /* MacTierraDocument.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
 				0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */,
-				0F13FA6D0E5FD98300D8E649 /* archive_pointer_iserializer.ipp in Resources */,
-				0F13FA6E0E5FD98300D8E649 /* archive_pointer_oserializer.ipp in Resources */,
-				0F13FA6F0E5FD98300D8E649 /* basic_binary_iarchive.ipp in Resources */,
-				0F13FA700E5FD98300D8E649 /* basic_binary_iprimitive.ipp in Resources */,
-				0F13FA710E5FD98300D8E649 /* basic_binary_oarchive.ipp in Resources */,
-				0F13FA720E5FD98300D8E649 /* basic_binary_oprimitive.ipp in Resources */,
-				0F13FA730E5FD98300D8E649 /* basic_text_iarchive.ipp in Resources */,
-				0F13FA740E5FD98300D8E649 /* basic_text_iprimitive.ipp in Resources */,
-				0F13FA750E5FD98300D8E649 /* basic_text_oarchive.ipp in Resources */,
-				0F13FA760E5FD98300D8E649 /* basic_text_oprimitive.ipp in Resources */,
-				0F13FA770E5FD98300D8E649 /* basic_xml_iarchive.ipp in Resources */,
-				0F13FA780E5FD98300D8E649 /* basic_xml_oarchive.ipp in Resources */,
-				0F13FA790E5FD98300D8E649 /* text_iarchive_impl.ipp in Resources */,
-				0F13FA7A0E5FD98300D8E649 /* text_oarchive_impl.ipp in Resources */,
-				0F13FA7B0E5FD98300D8E649 /* text_wiarchive_impl.ipp in Resources */,
-				0F13FA7C0E5FD98300D8E649 /* text_woarchive_impl.ipp in Resources */,
-				0F13FA7D0E5FD98300D8E649 /* xml_iarchive_impl.ipp in Resources */,
-				0F13FA7E0E5FD98300D8E649 /* xml_oarchive_impl.ipp in Resources */,
-				0F13FA7F0E5FD98300D8E649 /* xml_wiarchive_impl.ipp in Resources */,
-				0F13FA800E5FD98300D8E649 /* xml_woarchive_impl.ipp in Resources */,
 				0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */,
 				0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */,
 				0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */,
 				0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */,
 				0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */,
-				0FB9C4410E72336000E6EBFD /* Readme.txt in Resources */,
-				0FB9C4490E72338500E6EBFD /* TODO.txt in Resources */,
+				0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1487,7 +1485,6 @@
 				0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
 				0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */,
-				0FA54D370E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1516,7 +1513,6 @@
 				0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */,
 				0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */,
-				0FA54D380E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1563,10 +1559,26 @@
 				0FB9C4E40E7241F300E6EBFD /* MTApplicationController.m in Sources */,
 				0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */,
 				0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
+				0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */,
+				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
+				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0FA527F00E7D7CDC004D840D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0F0C94980E514AD700B233E8 /* TestRunner */;
+			targetProxy = 0FA527EF0E7D7CDC004D840D /* PBXContainerItemProxy */;
+		};
+		0FA527F20E7D7CDC004D840D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0FBEC0420E56AF7A00ABB516 /* mactierra */;
+			targetProxy = 0FA527F10E7D7CDC004D840D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165FFE840EACC02AAC07 /* InfoPlist.strings */ = {
@@ -1575,6 +1587,15 @@
 				089C1660FE840EACC02AAC07 /* English */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		0F960B070E80C6250007D1D5 /* GenebankWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0F960B080E80C6250007D1D5 /* English */,
+			);
+			name = GenebankWindow.xib;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */ = {

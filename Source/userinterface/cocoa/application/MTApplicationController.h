@@ -8,9 +8,18 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MTGenebankController;
+@class MTGenebankWindowController;
 
 @interface MTApplicationController : NSObject
 {
+    MTGenebankController*       mGenebankController;
+    
+    MTGenebankWindowController* mGenebankWindowController;
 }
+
+- (MTGenebankController*)genebankController;
+
+- (IBAction)showGenebankWindow:(id)sender;
 
 @end

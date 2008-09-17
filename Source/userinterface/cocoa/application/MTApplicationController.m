@@ -10,6 +10,8 @@
 
 #import "MTValueTransformers.h"
 
+#import "MTGenebankController.h"
+#import "MTGenebankWindowController.h"
 
 @implementation MTApplicationController
 
@@ -19,6 +21,31 @@
     MTUnsignedIntValueTransformer* unsignedIntVT = [[[MTUnsignedIntValueTransformer alloc] init] autorelease];
     [NSValueTransformer setValueTransformer:unsignedIntVT
                                     forName:@"UnsignedIntValueTransformer"];
+}
+
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+    mGenebankController = [MTGenebankController sharedGenebankController];
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+    [mGenebankController synchronize];
+}
+
+- (MTGenebankController*)genebankController
+{
+    return mGenebankController;
+}
+
+- (IBAction)showGenebankWindow:(id)sender
+{
+    if (!mGenebankWindowController)
+    {
+        mGenebankWindowController = [[MTGenebankWindowController alloc] initWithWindowNibName:@"GenebankWindow"];
+        [mGenebankWindowController showWindow:sender];
+    }
 }
 
 @end

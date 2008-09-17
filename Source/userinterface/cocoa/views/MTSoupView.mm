@@ -23,6 +23,7 @@ using namespace MacTierra;
 - (void)drawCells:(NSRect)inDirtyRect;
 - (void)drawInstructionPointers:(NSRect)inDirtyRect;
 
+- (CGRect)soupRect;
 - (CGPoint)soupAddressToSoupPoint:(address_t)inAddr;
 - (address_t)soupPointToSoupAddress:(CGPoint)inPoint;
 
@@ -75,7 +76,9 @@ using namespace MacTierra;
         
         [self setGLOptions];
     }
+
     [self setNeedsDisplay:YES];
+    [[self window] invalidateCursorRectsForView:self];
 }
 
 - (MacTierra::World*)world
@@ -284,12 +287,16 @@ using namespace MacTierra;
     return CGAffineTransformInvert([self soupToViewTransform]);
 }
 
-- (BOOL)viewPointInSoup:(CGPoint)inPoint
+- (CGRect)soupRect
 {
     CGRect soupExtent = zoomToFit ? CGRectMake(0, 0, mGlWidth, mGlHeight)
                                   : CGRectMake((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
+    return soupExtent;
+}
 
-    return CGRectContainsPoint(soupExtent, inPoint);
+- (BOOL)viewPointInSoup:(CGPoint)inPoint
+{
+    return CGRectContainsPoint([self soupRect], inPoint);
 }
 
 - (CGPoint)viewPointToSoupPoint:(CGPoint)inPoint
@@ -303,6 +310,16 @@ using namespace MacTierra;
 - (CGPoint)soupPointToViewPoint:(CGPoint)inPoint
 {
     return CGPointApplyAffineTransform(inPoint, [self soupToViewTransform]);
+}
+
+- (void)setZoomToFit:(BOOL)inZoom
+{
+    if (inZoom != zoomToFit)
+    {
+        [[self window] invalidateCursorRectsForView:self];
+        [self setNeedsDisplay:YES];
+        zoomToFit = inZoom;
+    }
 }
 
 #pragma mark -
@@ -386,6 +403,11 @@ using namespace MacTierra;
                  source:self
               slideBack:YES];
     }
+}
+
+- (void)resetCursorRects
+{
+    [self addCursorRect:NSRectFromCGRect([self soupRect]) cursor:[NSCursor crosshairCursor]];
 }
 
 #pragma mark -
