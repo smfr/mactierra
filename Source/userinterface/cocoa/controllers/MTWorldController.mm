@@ -156,6 +156,7 @@ using namespace MacTierra;
         }
         
         [mGraphController worldChanged];
+        [self updateGenotypes];
         [self updateDisplay];
     }
 }
@@ -449,6 +450,13 @@ using namespace MacTierra;
         else
         {
             mWorld->setSettings(*theSettings);
+        }
+    }
+    else
+    {
+        if (self.creatingNewSoup)
+        {
+            [document performSelector:@selector(close) withObject:nil afterDelay:0];
         }
     }
     [sheet orderOut:nil];
