@@ -185,7 +185,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     BOOST_ASSERT(theGenotype);
     theCreature->setGenotype(theGenotype);
     theCreature->setGeneration(1);
-    theGenotype->creatureBorn();
+    mInventory->creatureBorn(theGenotype);
 
     theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature.get(), mSettings));
     theCreature->setReferencedLocation(theCreature->location());
@@ -518,17 +518,17 @@ World::handleBirth(Creature* inParent, Creature* inChild)
                 // cout << "was: " << parentGenotype->name() << " " << parentGenotype->printableGenome() << endl;
                 // cout << "now: " << foundGenotype->name() << " " << foundGenotype->printableGenome() << endl;
                 // old genotype lost a member
-                parentGenotype->creatureDied();
+                mInventory->creatureDied(parentGenotype);
             }
 
             inParent->setGenotype(foundGenotype);
             inParent->setGenotypeDivergence(0);
-            foundGenotype->creatureBorn();  // count the parent
+            mInventory->creatureBorn(foundGenotype);  // count the parent
         }
 
         inChild->setGenotype(foundGenotype);
         inChild->setGenotypeDivergence(0);
-        foundGenotype->creatureBorn();  // count the child
+        mInventory->creatureBorn(foundGenotype);  // count the child
     }
     else
     {
@@ -546,7 +546,7 @@ World::handleDeath(Creature* inCreature)
     inCreature->onDeath(*this);
 
     if (inCreature->genotypeDivergence() == 0)
-        inCreature->genotype()->creatureDied();
+        mInventory->creatureDied(inCreature->genotype());
 
     eradicateCreature(inCreature);
 }

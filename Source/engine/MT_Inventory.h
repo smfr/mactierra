@@ -12,6 +12,7 @@
 #define MT_Inventory_h
 
 #include <map>
+#include <vector>
 
 #include <boost/assert.hpp>
 #include <boost/serialization/export.hpp>
@@ -28,9 +29,21 @@ namespace MacTierra {
 
 class InventoryGenotype : public Genotype
 {
+friend class Inventory;
 public:
     InventoryGenotype(const std::string& inIdentifier, const GenomeData& inGenotype);
     
+    u_int32_t       numberAlive() const         { return mNumAlive; }
+    u_int32_t       numberEverLived() const     { return mNumEverLived; }
+
+    u_int64_t       originInstructions() const  { return mOriginInstructions; }
+    void            setOriginInstructions(u_int64_t inInstCount) { mOriginInstructions = inInstCount; }
+
+    u_int32_t       originGenerations() const  { return mOriginGenerations; }
+    void            setOriginGenerations(u_int32_t inGenerations) { mOriginGenerations = inGenerations; }
+
+private:
+
     void creatureBorn()
     {
         ++mNumAlive;
@@ -42,15 +55,6 @@ public:
         BOOST_ASSERT(mNumAlive > 0);
         --mNumAlive;
     }
-
-    u_int32_t       numberAlive() const         { return mNumAlive; }
-    u_int32_t       numberEverLived() const     { return mNumEverLived; }
-
-    u_int64_t       originInstructions() const  { return mOriginInstructions; }
-    void            setOriginInstructions(u_int64_t inInstCount) { mOriginInstructions = inInstCount; }
-
-    u_int32_t       originGenerations() const  { return mOriginGenerations; }
-    void            setOriginGenerations(u_int32_t inGenerations) { mOriginGenerations = inGenerations; }
 
 private:
 
@@ -90,6 +94,7 @@ protected:
 
 namespace MacTierra {
 
+class InventoryListener;
 
 // The inventory tracks the species that are alive now.
 class Inventory : Noncopyable
@@ -97,6 +102,7 @@ class Inventory : Noncopyable
 public:
     typedef std::map<GenomeData, InventoryGenotype*> InventoryMap;
     typedef std::multimap<u_int32_t, InventoryGenotype*>  SizeMap;
+    typedef std::vector<InventoryListener*> ListenerVector;
 
     Inventory();
     ~Inventory();
@@ -106,15 +112,26 @@ public:
     // return true if it's new
     bool                enterGenotype(const GenomeData& inGenotype, InventoryGenotype*& outGenotype);
 
+    void                creatureBorn(InventoryGenotype* inGenotype);
+    void                creatureDied(InventoryGenotype* inGenotype);
+    
     void                printCreatures() const;
     
     const InventoryMap& inventoryMap() const { return mInventoryMap; }
 
     void                writeToStream(std::ostream& inStream) const;
 
+    void                setListenerAliveThreshold(u_int32_t inThreshold);
+    u_int32_t           listenerAliveThreshold() const { return mListenerAliveThreshold; }
+
+    void                registerListener(InventoryListener* inListener);
+    void                unregisterListener(InventoryListener* inListener);
+    
 protected:
 
     std::string         uniqueIdentifierForLength(u_int32_t inLength) const;
+
+    void                notifyListenersForGenotype(const InventoryGenotype* inGenotype);
 
 private:
     friend class ::boost::serialization::access;
@@ -140,6 +157,9 @@ protected:
 
     InventoryMap    mInventoryMap;
     SizeMap         mGenotypeSizeMap;
+    
+    u_int32_t       mListenerAliveThreshold;
+    ListenerVector  mListeners;
 
 };
 

@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "MT_Inventory.h"
+#include "MT_InventoryListener.h"
 
 namespace MacTierra {
 
@@ -32,6 +33,7 @@ Inventory::Inventory()
 , mNumSpeciesCurrent(0)
 , mSpeciationCount(0)
 , mExtinctionCount(0)
+, mListenerAliveThreshold(10)
 {
 }
 
@@ -76,6 +78,20 @@ Inventory::enterGenotype(const GenomeData& inGenotype, InventoryGenotype*& outGe
     // it exists already
     outGenotype = it->second;
     return false;
+}
+
+void
+Inventory::creatureBorn(InventoryGenotype* inGenotype)
+{
+    inGenotype->creatureBorn();
+    if (inGenotype->numberAlive() > mListenerAliveThreshold)
+        notifyListenersForGenotype(inGenotype);
+}
+
+void
+Inventory::creatureDied(InventoryGenotype* inGenotype)
+{
+    inGenotype->creatureDied();
 }
 
 static std::string incrementString(const std::string& inString)
@@ -133,6 +149,27 @@ Inventory::writeToStream(std::ostream& inStream) const
         inStream << curEntry->name() << "\t" << curEntry->length() << "\t" << curEntry->numberAlive() << "\t" << curEntry->numberEverLived() << "\t"
             << curEntry->originGenerations() << "\t" << curEntry->originInstructions() << "\t" << curEntry->genome().printableGenome() << endl;
     }
+}
+
+void
+Inventory::registerListener(InventoryListener* inListener)
+{
+    mListeners.push_back(inListener);
+}
+
+void
+Inventory::unregisterListener(InventoryListener* inListener)
+{
+    ListenerVector::iterator findIter = find(mListeners.begin(), mListeners.end(), inListener);
+    if (findIter != mListeners.end())
+        mListeners.erase(findIter);
+}
+
+void
+Inventory::notifyListenersForGenotype(const InventoryGenotype* inGenotype)
+{
+    for (ListenerVector::const_iterator it = mListeners.begin(), end = mListeners.end(); it != end; ++it)
+        (*it)->noteGenotype(inGenotype);
 }
 
 std::string
