@@ -477,6 +477,7 @@
 					<string>genome</string>
 					<string>length</string>
 					<string>genomeString</string>
+					<string>readableGenomeString</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -690,19 +691,19 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBBindingConnection" key="connection">
-						<string key="label">value: arrangedObjects.genomeString</string>
+						<string key="label">value: arrangedObjects.readableGenomeString</string>
 						<reference key="source" ref="338786624"/>
 						<reference key="destination" ref="238460319"/>
 						<object class="NSNibBindingConnector" key="connector">
 							<reference key="NSSource" ref="338786624"/>
 							<reference key="NSDestination" ref="238460319"/>
-							<string key="NSLabel">value: arrangedObjects.genomeString</string>
+							<string key="NSLabel">value: arrangedObjects.readableGenomeString</string>
 							<string key="NSBinding">value</string>
-							<string key="NSKeyPath">arrangedObjects.genomeString</string>
+							<string key="NSKeyPath">arrangedObjects.readableGenomeString</string>
 							<int key="NSNibBindingConnectorVersion">2</int>
 						</object>
 					</object>
-					<int key="connectionID">31</int>
+					<int key="connectionID">32</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -937,7 +938,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">31</int>
+			<int key="maxID">32</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

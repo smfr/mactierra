@@ -13,11 +13,11 @@
 {
 }
 
-@property (retain) NSString * name;
-@property (retain) NSNumber * length;
-@property (retain) NSData * genome;
+@property (retain) NSString* name;
+@property (retain) NSNumber* length;
+@property (retain) NSString* genome;    // looks like "01011F...". Has to be string for indexing
 
-@property (readonly) NSString * genomeString;
+@property (readonly) NSString* readableGenomeString;        // like "01 01 1F ..."
 
 @end
 

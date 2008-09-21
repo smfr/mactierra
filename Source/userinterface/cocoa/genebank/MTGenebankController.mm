@@ -38,6 +38,8 @@ static MTGenebankController* gGenebankController = nil;
 - (NSString*)uniqueNameForSize:(NSUInteger)inSize;
 - (NSString*)identifierFromCount:(NSUInteger)inCount;
 
+- (NSString*)genomeStringFromData:(NSData*)inData;
+
 @end
 
 #pragma mark -
@@ -94,7 +96,7 @@ static MTGenebankController* gGenebankController = nil;
     [request setEntity:entityDescription];
 
     NSExpression* lhs = [NSExpression expressionForKeyPath:@"genome"];
-    NSExpression* rhs = [NSExpression expressionForConstantValue:genomeData];
+    NSExpression* rhs = [NSExpression expressionForConstantValue:[self genomeStringFromData:genomeData]];
 
     NSPredicate* equalsPredicate = [NSComparisonPredicate
                                             predicateWithLeftExpression:lhs
@@ -171,6 +173,21 @@ static MTGenebankController* gGenebankController = nil;
     return [NSString stringWithCharacters:values length:kNumDigits];
 }
 
+- (NSString*)genomeStringFromData:(NSData*)inData
+{
+    NSUInteger genomeLen = [inData length];
+    NSMutableString* theString = [NSMutableString stringWithCapacity:3 * genomeLen];
+
+    const unsigned char* bytes = (const unsigned char*)[inData bytes];
+
+    for (NSUInteger i = 0; i < genomeLen; ++i)
+    {
+        unsigned char curInst = bytes[i];
+        [theString appendFormat:@"%X%X", (curInst << 4) & 0x0F, (curInst & 0x0F)];
+    }
+
+    return theString;
+}
 
 #pragma mark -
 
@@ -180,7 +197,7 @@ static MTGenebankController* gGenebankController = nil;
 
     [newEntry setValue:inName forKey:@"name"];
     [newEntry setValue:[NSNumber numberWithUnsignedInteger:[inData length]] forKey:@"length"];
-    [newEntry setValue:inData forKey:@"genome"];
+    [newEntry setValue:[self genomeStringFromData:inData] forKey:@"genome"];
     return newEntry;
 }
 

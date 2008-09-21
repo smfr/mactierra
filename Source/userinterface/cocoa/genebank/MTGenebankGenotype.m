@@ -15,26 +15,25 @@
 @dynamic length;
 @dynamic genome;
 
-+ (NSSet *)keyPathsForValuesAffectingGenomeString
++ (NSSet *)keyPathsForValuesAffectingReadableGenomeString
 {
     return [NSSet setWithObjects:@"genome", nil];
 }
 
-- (NSString*)genomeString
+- (NSString*)readableGenomeString
 {
-    NSData* theGenome = self.genome;
-    NSUInteger dataLen = [theGenome length];
+    NSString* theGenome = self.genome;
+    NSUInteger genomeLen = [theGenome length] / 2;
 
-    NSMutableString* theString = [NSMutableString stringWithCapacity:dataLen * 3];
+    NSMutableString* theString = [NSMutableString stringWithCapacity:3 * genomeLen];
     
-    unsigned char* genomeBytes = (unsigned char*)[theGenome bytes];
     NSUInteger i;
-    for (i = 0; i < dataLen; ++i)
+    for (i = 0; i < genomeLen; ++i)
     {
         if (i > 0)
             [theString appendString:@" "];
 
-        [theString appendFormat:@"%02X", genomeBytes[i]];
+        [theString appendString:[theGenome substringWithRange:NSMakeRange(2 * i, 2)]];
     }
 
     return theString;
