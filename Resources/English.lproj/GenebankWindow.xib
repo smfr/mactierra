@@ -120,7 +120,8 @@
 															<object class="NSMutableArray" key="NSTableColumns">
 																<bool key="EncodedWithXMLCoder">YES</bool>
 																<object class="NSTableColumn" id="586694577">
-																	<double key="NSWidth">1.660000e+02</double>
+																	<string key="NSIdentifier">name</string>
+																	<double key="NSWidth">1.280000e+02</double>
 																	<double key="NSMinWidth">3.459912e+01</double>
 																	<double key="NSMaxWidth">3.402823e+38</double>
 																	<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -172,7 +173,8 @@
 																	<reference key="NSTableView" ref="463399210"/>
 																</object>
 																<object class="NSTableColumn" id="872129132">
-																	<double key="NSWidth">5.100000e+01</double>
+																	<string key="NSIdentifier">length</string>
+																	<double key="NSWidth">7.300000e+01</double>
 																	<double key="NSMinWidth">4.062012e+01</double>
 																	<double key="NSMaxWidth">3.402823e+38</double>
 																	<object class="NSTableHeaderCell" key="NSHeaderCell">
@@ -194,23 +196,29 @@
 																				<object class="NSMutableArray" key="dict.sortedKeys">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
 																					<string>allowsFloats</string>
+																					<string>decimalSeparator</string>
 																					<string>formatterBehavior</string>
+																					<string>groupingSeparator</string>
 																					<string>negativeFormat</string>
 																					<string>negativeInfinitySymbol</string>
 																					<string>nilSymbol</string>
 																					<string>positiveFormat</string>
 																					<string>positiveInfinitySymbol</string>
+																					<string>usesGroupingSeparator</string>
 																					<string>zeroSymbol</string>
 																				</object>
 																				<object class="NSMutableArray" key="dict.values">
 																					<bool key="EncodedWithXMLCoder">YES</bool>
 																					<integer value="0" id="6"/>
+																					<string>.</string>
 																					<integer value="1000"/>
+																					<string>,</string>
 																					<string>-0</string>
 																					<string type="base64-UTF8">LeKIng</string>
 																					<string/>
 																					<string>0</string>
 																					<string type="base64-UTF8">K+KIng</string>
+																					<integer value="0"/>
 																					<string>0</string>
 																				</object>
 																			</object>
@@ -262,6 +270,33 @@
 																	<bool key="NSIsEditable">YES</bool>
 																	<reference key="NSTableView" ref="463399210"/>
 																</object>
+																<object class="NSTableColumn" id="338786624">
+																	<string key="NSIdentifier">genome</string>
+																	<double key="NSWidth">2.950000e+02</double>
+																	<double key="NSMinWidth">1.000000e+01</double>
+																	<double key="NSMaxWidth">3.402823e+38</double>
+																	<object class="NSTableHeaderCell" key="NSHeaderCell">
+																		<int key="NSCellFlags">75628032</int>
+																		<int key="NSCellFlags2">0</int>
+																		<string key="NSContents">Genome</string>
+																		<reference key="NSSupport" ref="26"/>
+																		<reference key="NSBackgroundColor" ref="239192215"/>
+																		<reference key="NSTextColor" ref="465839029"/>
+																	</object>
+																	<object class="NSTextFieldCell" key="NSDataCell" id="663935450">
+																		<int key="NSCellFlags">337772096</int>
+																		<int key="NSCellFlags2">2048</int>
+																		<string key="NSContents">Text Cell</string>
+																		<reference key="NSSupport" ref="189731505"/>
+																		<reference key="NSControlView" ref="463399210"/>
+																		<reference key="NSBackgroundColor" ref="933010276"/>
+																		<reference key="NSTextColor" ref="173113038"/>
+																	</object>
+																	<int key="NSResizingMask">3</int>
+																	<bool key="NSIsResizeable">YES</bool>
+																	<bool key="NSIsEditable">YES</bool>
+																	<reference key="NSTableView" ref="463399210"/>
+																</object>
 															</object>
 															<double key="NSIntercellSpacingWidth">3.000000e+00</double>
 															<double key="NSIntercellSpacingHeight">2.000000e+00</double>
@@ -277,6 +312,7 @@
 															</object>
 															<double key="NSRowHeight">1.700000e+01</double>
 															<int key="NSTvFlags">-96436224</int>
+															<string key="NSAutosaveName">Genebank Table View</string>
 															<int key="NSColumnAutoresizingStyle">1</int>
 															<int key="NSDraggingSourceMaskForLocal">-1</int>
 															<int key="NSDraggingSourceMaskForNonLocal">0</int>
@@ -286,7 +322,6 @@
 													<string key="NSFrame">{{1, 17}, {505, 329}}</string>
 													<reference key="NSSuperview" ref="6862710"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="463399210"/>
 													<reference key="NSDocView" ref="463399210"/>
 													<reference key="NSBGColor" ref="933010276"/>
 													<int key="NScvFlags">4</int>
@@ -321,7 +356,6 @@
 													<string key="NSFrame">{{1, 0}, {505, 17}}</string>
 													<reference key="NSSuperview" ref="6862710"/>
 													<reference key="NSWindow"/>
-													<reference key="NSNextKeyView" ref="198385593"/>
 													<reference key="NSDocView" ref="198385593"/>
 													<reference key="NSBGColor" ref="933010276"/>
 													<int key="NScvFlags">4</int>
@@ -331,7 +365,6 @@
 											<string key="NSFrame">{{14, 14}, {522, 362}}</string>
 											<reference key="NSSuperview" ref="773290829"/>
 											<reference key="NSWindow"/>
-											<reference key="NSNextKeyView" ref="643264066"/>
 											<int key="NSsFlags">50</int>
 											<reference key="NSVScroller" ref="123571471"/>
 											<reference key="NSHScroller" ref="114761869"/>
@@ -373,6 +406,7 @@
 												<object class="NSButtonCell" key="NSCancelButtonCell">
 													<int key="NSCellFlags">-2147353088</int>
 													<int key="NSCellFlags2">0</int>
+													<string key="NSContents">clear</string>
 													<object class="NSMutableArray" key="NSAccessibilityOverriddenAttributes">
 														<bool key="EncodedWithXMLCoder">YES</bool>
 														<object class="NSMutableDictionary">
@@ -442,6 +476,7 @@
 					<string>name</string>
 					<string>genome</string>
 					<string>length</string>
+					<string>genomeString</string>
 				</object>
 				<bool key="NSEditable">YES</bool>
 				<bool key="NSAutomaticallyPreparesContent">YES</bool>
@@ -653,6 +688,22 @@
 					</object>
 					<int key="connectionID">28</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBBindingConnection" key="connection">
+						<string key="label">value: arrangedObjects.genomeString</string>
+						<reference key="source" ref="338786624"/>
+						<reference key="destination" ref="238460319"/>
+						<object class="NSNibBindingConnector" key="connector">
+							<reference key="NSSource" ref="338786624"/>
+							<reference key="NSDestination" ref="238460319"/>
+							<string key="NSLabel">value: arrangedObjects.genomeString</string>
+							<string key="NSBinding">value</string>
+							<string key="NSKeyPath">arrangedObjects.genomeString</string>
+							<int key="NSNibBindingConnectorVersion">2</int>
+						</object>
+					</object>
+					<int key="connectionID">31</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -761,6 +812,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="586694577"/>
 							<reference ref="872129132"/>
+							<reference ref="338786624"/>
 						</object>
 						<reference key="parent" ref="6862710"/>
 					</object>
@@ -820,6 +872,20 @@
 						<reference key="object" ref="853392833"/>
 						<reference key="parent" ref="791237177"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">29</int>
+						<reference key="object" ref="338786624"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="663935450"/>
+						</object>
+						<reference key="parent" ref="463399210"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">30</int>
+						<reference key="object" ref="663935450"/>
+						<reference key="parent" ref="338786624"/>
+					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -871,7 +937,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">28</int>
+			<int key="maxID">31</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">

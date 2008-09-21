@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 
+@class MTGenebankGenotype;
+
 @interface MTGenebankController : NSObject
 {
     NSManagedObjectModel*           mObjectModel;
@@ -21,7 +23,8 @@
 
 - (void)synchronize;
 
-- (id)entryWithGenome:(NSData*)genome;
-- (void)enterGenome:(NSData*)inData;
+- (MTGenebankGenotype*)entryWithGenome:(NSData*)genome;
+- (MTGenebankGenotype*)findOrEnterGenome:(NSData*)inData;
+
 
 @end

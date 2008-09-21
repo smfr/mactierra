@@ -12,10 +12,31 @@
 
 static MTGenebankController* gGenebankController = nil;
 
+@interface NSData(Crappy)
+
+- (const char*)UTF8String;
+
+@end
+
+@implementation NSData(Crappy)
+
+- (const char*)UTF8String
+{
+    NSLog(@"Here");
+    return "";
+}
+
+@end
+
+
 @interface MTGenebankController(Private)
 
 - (void)setupContext;
 - (NSString*)directoryForGenebankFile;
+- (MTGenebankGenotype*)enterGenome:(NSData*)inData name:(NSString*)inName;
+- (NSUInteger)numberOfGenotypesOfSize:(NSUInteger)inSize;
+- (NSString*)uniqueNameForSize:(NSUInteger)inSize;
+- (NSString*)identifierFromCount:(NSUInteger)inCount;
 
 @end
 
@@ -37,10 +58,6 @@ static MTGenebankController* gGenebankController = nil;
     if ((self = [super init]))
     {
         [self setupContext];
-        
-        // testing
-        unsigned char bytes[] = { 0x01, 0x00, 0x19, 0x1F };
-        [self enterGenome:[NSData dataWithBytes:bytes length:sizeof(bytes)]];
     }
     return self;
 }
@@ -69,15 +86,23 @@ static MTGenebankController* gGenebankController = nil;
     }
 }
 
-- (id)entryWithGenome:(NSData*)genome
+- (MTGenebankGenotype*)entryWithGenome:(NSData*)genomeData
 {
     NSEntityDescription* entityDescription = [NSEntityDescription entityForName:@"Genotype" inManagedObjectContext:mObjectContext];
 
     NSFetchRequest* request = [[[NSFetchRequest alloc] init] autorelease];
     [request setEntity:entityDescription];
 
-    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"genome == %@", genome];
-    [request setPredicate:predicate];
+    NSExpression* lhs = [NSExpression expressionForKeyPath:@"genome"];
+    NSExpression* rhs = [NSExpression expressionForConstantValue:genomeData];
+
+    NSPredicate* equalsPredicate = [NSComparisonPredicate
+                                            predicateWithLeftExpression:lhs
+                                                        rightExpression:rhs
+                                                               modifier:NSDirectPredicateModifier
+                                                                   type:NSEqualToPredicateOperatorType
+                                                                options:0];
+    [request setPredicate:equalsPredicate];
 
     NSError* queryError = nil;
     NSArray* results = [mObjectContext executeFetchRequest:request error:&queryError];
@@ -87,15 +112,79 @@ static MTGenebankController* gGenebankController = nil;
     return [results firstObject];
 }
 
-- (void)enterGenome:(NSData*)inData
+- (MTGenebankGenotype*)findOrEnterGenome:(NSData*)inData
+{
+    id foundGenome = [self entryWithGenome:inData];
+    if (!foundGenome)
+    {
+        NSString* name = [self uniqueNameForSize:[inData length]];
+
+        foundGenome = [self enterGenome:inData name:name];
+    }
+    
+    return foundGenome;
+}
+
+- (NSUInteger)numberOfGenotypesOfSize:(NSUInteger)inSize
+{
+    NSEntityDescription* entityDescription = [NSEntityDescription entityForName:@"Genotype" inManagedObjectContext:mObjectContext];
+
+    NSFetchRequest* request = [[[NSFetchRequest alloc] init] autorelease];
+    [request setEntity:entityDescription];
+
+    NSPredicate* predicate = [NSPredicate predicateWithFormat:@"length == %u", inSize];
+    [request setPredicate:predicate];
+
+    NSError* queryError = nil;
+    NSArray* results = [mObjectContext executeFetchRequest:request error:&queryError];
+    if (!results && queryError)
+        NSLog(@"Search for genome in genebank returned error %@", queryError);
+
+    return [results count];
+}
+
+- (NSString*)uniqueNameForSize:(NSUInteger)inSize
+{
+    NSUInteger  existingSizeCount = [self numberOfGenotypesOfSize:inSize];
+    return [NSString stringWithFormat:@"%u%@", inSize, [self identifierFromCount:existingSizeCount]];
+}
+
+- (NSString*)identifierFromCount:(NSUInteger)inCount
+{
+    const NSUInteger kNumDigits = 5;
+    
+    NSUInteger remainder = inCount;
+    
+    // make a base 26 string
+    unichar     values[kNumDigits];
+
+    for (NSUInteger i = 0; i < kNumDigits - 1; ++i)
+    {
+        NSUInteger units = 26 * (kNumDigits - 1 - i);
+        NSUInteger digit = remainder / units;
+        values[i] = 'A' + digit;
+        remainder %= units;
+    }
+
+    values[kNumDigits - 1] = 'A' + remainder;
+    
+    return [NSString stringWithCharacters:values length:kNumDigits];
+}
+
+
+#pragma mark -
+
+- (MTGenebankGenotype*)enterGenome:(NSData*)inData name:(NSString*)inName
 {
     id newEntry = [NSEntityDescription insertNewObjectForEntityForName:@"Genotype" inManagedObjectContext:mObjectContext];
 
-    [newEntry setValue:@"Bob" forKey:@"name"];
+    [newEntry setValue:inName forKey:@"name"];
     [newEntry setValue:[NSNumber numberWithUnsignedInteger:[inData length]] forKey:@"length"];
     [newEntry setValue:inData forKey:@"genome"];
-    
+    return newEntry;
 }
+
+#pragma mark -
 
 - (void)setupContext
 {
@@ -140,11 +229,6 @@ static MTGenebankController* gGenebankController = nil;
     
     return [appSupport stringByAppendingPathComponent:appName];
 }
-
-
-
-
-
 
 
 

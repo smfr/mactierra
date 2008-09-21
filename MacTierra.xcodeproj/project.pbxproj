@@ -102,6 +102,7 @@
 		0FBB07110E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
 		0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
 		0FBB07130E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */; };
+		0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBDEA910E8155BA00B6B34E /* MTGenebankGenotype.m */; };
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
 		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
@@ -428,6 +429,7 @@
 		0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCompositedGLView.m; sourceTree = "<group>"; };
 		0F9DE5E50E575FDB00E86DD6 /* MTCompositedGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCompositedGLView.h; sourceTree = "<group>"; };
 		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
+		0F9DEDDF0E84A9140079EAAE /* MT_InventoryListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_InventoryListener.h; sourceTree = "<group>"; };
 		0F9DEE250E57CD4600E86DD6 /* CPUTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUTests.h; sourceTree = "<group>"; };
 		0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTests.cpp; sourceTree = "<group>"; };
 		0FA54D350E7C512F00337C19 /* NSCharacterSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSetAdditions.h; sourceTree = "<group>"; };
@@ -512,6 +514,8 @@
 		0FBB07020E5A9B51007F2A6B /* MT_Inventory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Inventory.h; sourceTree = "<group>"; };
 		0FBB070F0E5A9BF0007F2A6B /* MT_Genotype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Genotype.h; sourceTree = "<group>"; };
 		0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Genotype.cpp; sourceTree = "<group>"; };
+		0FBDEA900E8155BA00B6B34E /* MTGenebankGenotype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankGenotype.h; sourceTree = "<group>"; };
+		0FBDEA910E8155BA00B6B34E /* MTGenebankGenotype.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGenebankGenotype.m; sourceTree = "<group>"; };
 		0FBEC0430E56AF7A00ABB516 /* mactierra */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mactierra; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
 		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
@@ -968,6 +972,8 @@
 			isa = PBXGroup;
 			children = (
 				0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */,
+				0FBDEA900E8155BA00B6B34E /* MTGenebankGenotype.h */,
+				0FBDEA910E8155BA00B6B34E /* MTGenebankGenotype.m */,
 				0F960A5D0E80B9270007D1D5 /* MTGenebankController.h */,
 				0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */,
 				0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */,
@@ -1059,6 +1065,7 @@
 				0FBB07100E5A9BF0007F2A6B /* MT_Genotype.cpp */,
 				0FBB06780E5A984B007F2A6B /* MT_InstructionSet.h */,
 				0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */,
+				0F9DEDDF0E84A9140079EAAE /* MT_InventoryListener.h */,
 				0FBB07020E5A9B51007F2A6B /* MT_Inventory.h */,
 				0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */,
 				0FBB067C0E5A984B007F2A6B /* MT_Reaper.h */,
@@ -1562,6 +1569,7 @@
 				0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */,
 				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
 				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.m in Sources */,
+				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

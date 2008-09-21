@@ -24,6 +24,8 @@ namespace MacTierra {
 @class MTWorldThread;
 @class MTWorldSettings;
 
+class WorldData;
+
 @interface MTWorldController : NSObject
 {
     IBOutlet NSDocument*    document;
@@ -42,13 +44,7 @@ namespace MacTierra {
     MTWorldSettings*        worldSettings;
     BOOL                    creatingNewSoup;
     
-    MacTierra::World*       mWorld;
-
-    // temp
-    MacTierra::PopulationSizeLogger* mPopSizeLogger;
-    MacTierra::MeanCreatureSizeLogger* mMeanSizeLogger;
-    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
-    MacTierra::SizeHistogramDataLogger* mSizeFrequencyLogger;
+    WorldData*              mWorldData;
     
     // threading-related
     MTWorldThread*          worldThread;

@@ -168,8 +168,13 @@ Inventory::unregisterListener(InventoryListener* inListener)
 void
 Inventory::notifyListenersForGenotype(const InventoryGenotype* inGenotype)
 {
-    for (ListenerVector::const_iterator it = mListeners.begin(), end = mListeners.end(); it != end; ++it)
-        (*it)->noteGenotype(inGenotype);
+    NotifiedGenotypeMap::const_iterator it = mListenerNotifiedGenotypes.find(inGenotype->genome());
+    if (it == mListenerNotifiedGenotypes.end())
+    {
+        for (ListenerVector::const_iterator it = mListeners.begin(), end = mListeners.end(); it != end; ++it)
+            (*it)->noteGenotype(inGenotype);
+        mListenerNotifiedGenotypes[inGenotype->genome()] = inGenotype;
+    }
 }
 
 std::string

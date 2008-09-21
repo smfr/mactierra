@@ -16,6 +16,7 @@
 #import "MT_Ancestor.h"
 #import "MT_Cellmap.h"
 #import "MT_Inventory.h"
+#import "MT_InventoryListener.h"
 #import "MT_World.h"
 
 #import "MTCreature.h"
@@ -23,6 +24,7 @@
 #import "MT_DataCollectors.h"
 
 #import "MTGraphController.h"
+#import "MTGenebankController.h"
 #import "MTInventoryController.h"
 #import "MTWorldSettings.h"
 
@@ -72,6 +74,62 @@ using namespace MacTierra;
 
 #pragma mark -
 
+class GenebankInventoryListener : public MacTierra::InventoryListener
+{
+public:
+
+    virtual void noteGenotype(const MacTierra::InventoryGenotype* inGenotype)
+    {
+        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+        
+        NSData* genomeData = [NSData dataWithBytes:inGenotype->genome().dataString().data() length:inGenotype->genome().length()];
+        [[MTGenebankController sharedGenebankController] findOrEnterGenome:genomeData];
+        
+        [pool release];
+    }
+
+};
+
+
+// Container for C++ world-related data
+class WorldData
+{
+public:
+
+    WorldData()
+    : mWorld(NULL)
+    , mPopSizeLogger(NULL)
+    , mMeanSizeLogger(NULL)
+    , mGenotypeFrequencyLogger(NULL)
+    , mSizeFrequencyLogger(NULL)
+    , mGenebankListener(NULL)
+    {
+    }
+    
+    ~WorldData()
+    {
+        delete mWorld;
+        delete mPopSizeLogger;
+        delete mMeanSizeLogger;
+        delete mGenotypeFrequencyLogger;
+        delete mSizeFrequencyLogger;
+        delete mGenebankListener;
+    }
+    
+    MacTierra::World*       mWorld;
+
+    // temp
+    MacTierra::PopulationSizeLogger*        mPopSizeLogger;
+    MacTierra::MeanCreatureSizeLogger*      mMeanSizeLogger;
+    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
+    MacTierra::SizeHistogramDataLogger*     mSizeFrequencyLogger;
+    
+    GenebankInventoryListener*              mGenebankListener;
+};
+
+#pragma mark -
+
+
 @implementation MTWorldController
 
 @synthesize document;
@@ -93,6 +151,7 @@ using namespace MacTierra;
 {
     if ((self = [super init]))
     {
+        mWorldData = new WorldData();
     }
     return self;
 }
@@ -103,7 +162,7 @@ using namespace MacTierra;
     [mSoupView setWorld:NULL];
     [mSoupView release];
     
-    delete mWorld;
+    delete mWorldData;
 
     [super dealloc];
 }
@@ -120,39 +179,42 @@ using namespace MacTierra;
 
 - (void)setWorld:(World*)inWorld
 {
-    if (inWorld != mWorld)
+    if (inWorld != mWorldData->mWorld)
     {
         [self terminateWorldThread];
         
         [mSoupView setWorld:nil];
-        delete mWorld;
+        delete mWorldData->mWorld;
         [mInventoryController setInventory:nil];
         
-        mWorld = inWorld;
-        [mSoupView setWorld:mWorld];
+        mWorldData->mWorld = inWorld;
+        [mSoupView setWorld:mWorldData->mWorld];
         
         [self createWorldThread];
         
-        [mInventoryController setInventory:mWorld ? mWorld->inventory() : NULL];
+        [mInventoryController setInventory:mWorldData->mWorld ? mWorldData->mWorld->inventory() : NULL];
 
-        if (mWorld)
+        if (mWorldData->mWorld)
         {
             const NSUInteger kMaxDataPoints = 500;
             
             // set up some logging
-            mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
-            mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
-            mWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
+            mWorldData->mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
+            mWorldData->mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
+            mWorldData->mWorld->dataCollector()->addPeriodicLogger(mWorldData->mPopSizeLogger);
 
-            mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
-            mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
-            mWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
+            mWorldData->mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
+            mWorldData->mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
+            mWorldData->mWorld->dataCollector()->addPeriodicLogger(mWorldData->mMeanSizeLogger);
 
-            mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
-            mGenotypeFrequencyLogger->setMaxBuckets(15);
+            mWorldData->mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
+            mWorldData->mGenotypeFrequencyLogger->setMaxBuckets(15);
             
-            mSizeFrequencyLogger = new SizeHistogramDataLogger();       // FIXME: leaked
-            mSizeFrequencyLogger->setMaxBuckets(15);
+            mWorldData->mSizeFrequencyLogger = new SizeHistogramDataLogger();       // FIXME: leaked
+            mWorldData->mSizeFrequencyLogger->setMaxBuckets(15);
+            
+            mWorldData->mGenebankListener = new GenebankInventoryListener();
+            mWorldData->mWorld->inventory()->registerListener(mWorldData->mGenebankListener);
         }
         
         [mGraphController worldChanged];
@@ -164,8 +226,8 @@ using namespace MacTierra;
 - (void)seedWithAncestor
 {
     // seed the soup
-    if (mWorld)
-        mWorld->insertCreature(mWorld->soupSize() / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    if (mWorldData->mWorld)
+        mWorldData->mWorld->insertCreature(mWorldData->mWorld->soupSize() / 4, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
 }
 
 - (IBAction)toggleRunning:(id)sender
@@ -177,7 +239,7 @@ using namespace MacTierra;
 {
     if (self.selectedCreature)
     {
-        mWorld->stepCreature(selectedCreature.creature);
+        mWorldData->mWorld->stepCreature(selectedCreature.creature);
         [self updateSoup];
         [self updateDebugPanel];
         [document updateChangeCount:NSChangeDone];
@@ -198,13 +260,13 @@ using namespace MacTierra;
 
 - (void)exportInventorySavePanelDidDne:(NSSavePanel *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    if (mWorld && returnCode == NSOKButton)
+    if (mWorldData->mWorld && returnCode == NSOKButton)
     {
         [self lockWorld];
         NSString* filePath = [sheet filename];
         
         std::ofstream outFileStream([filePath fileSystemRepresentation]);
-        mWorld->inventory()->writeToStream(outFileStream);
+        mWorldData->mWorld->inventory()->writeToStream(outFileStream);
         [self unlockWorld];
     }
 }
@@ -216,27 +278,27 @@ using namespace MacTierra;
 
 - (MacTierra::World*)world
 {
-    return mWorld;
+    return mWorldData->mWorld;
 }
 
 - (MacTierra::PopulationSizeLogger*)popSizeLogger
 {
-    return mPopSizeLogger;
+    return mWorldData->mPopSizeLogger;
 }
 
 - (MacTierra::MeanCreatureSizeLogger*)meanSizeLogger
 {
-    return mMeanSizeLogger;
+    return mWorldData->mMeanSizeLogger;
 }
 
 - (MacTierra::GenotypeFrequencyDataLogger*)genotypeFrequencyLogger;
 {
-    return mGenotypeFrequencyLogger;
+    return mWorldData->mGenotypeFrequencyLogger;
 }
 
 - (MacTierra::SizeHistogramDataLogger*)sizeFrequencyLogger
 {
-    return mSizeFrequencyLogger;
+    return mWorldData->mSizeFrequencyLogger;
 }
 
 - (double)fullness
@@ -307,7 +369,7 @@ using namespace MacTierra;
                                                  repeats:YES] retain];       // retain cycle
 
     mLastInstTime = CFAbsoluteTimeGetCurrent();
-    mLastInstructions = mWorld->timeSlicer().instructionsExecuted();
+    mLastInstructions = mWorldData->mWorld->timeSlicer().instructionsExecuted();
 }
 
 - (void)stopUpdateTimer
@@ -325,7 +387,7 @@ using namespace MacTierra;
 
 - (void)updateDisplay
 {
-    if (!mWorld) return;
+    if (!mWorldData->mWorld) return;
 
     [self willChangeValueForKey:@"fullness"];
     [self willChangeValueForKey:@"totalInstructions"];
@@ -333,15 +395,15 @@ using namespace MacTierra;
     
     [self lockWorld];
     {
-        u_int64_t curInstructions = mWorld->timeSlicer().instructionsExecuted();
+        u_int64_t curInstructions = mWorldData->mWorld->timeSlicer().instructionsExecuted();
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
         self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
         
         mLastInstTime = currentTime;
         mLastInstructions = curInstructions;
-        mLastNumCreatures = mWorld->cellMap()->numCreatures();
-        mLastFullness = mWorld->cellMap()->fullness();
+        mLastNumCreatures = mWorldData->mWorld->cellMap()->numCreatures();
+        mLastFullness = mWorldData->mWorld->cellMap()->fullness();
         
         [self updateSoup];
         
@@ -386,13 +448,13 @@ using namespace MacTierra;
 // Settings panel
 - (IBAction)editSoupSettings:(id)sender
 {
-    NSAssert(mWorld, @"Should have world already");
+    NSAssert(mWorldData->mWorld, @"Should have world already");
 
     self.creatingNewSoup = NO;
 
-    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorld->settings()] autorelease];
-    self.worldSettings.soupSize = mWorld->soupSize();
-    self.worldSettings.randomSeed = mWorld->initialRandomSeed();
+    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorldData->mWorld->settings()] autorelease];
+    self.worldSettings.soupSize = mWorldData->mWorld->soupSize();
+    self.worldSettings.randomSeed = mWorldData->mWorld->initialRandomSeed();
     
     [NSApp beginSheet:mSettingsPanel
        modalForWindow:[document windowForSheet]
@@ -435,7 +497,7 @@ using namespace MacTierra;
 
         if (self.creatingNewSoup)
         {
-            BOOST_ASSERT(!mWorld);
+            BOOST_ASSERT(!mWorldData->mWorld);
             
             MacTierra::World* newWorld = new World();
             newWorld->setInitialRandomSeed(self.worldSettings.randomSeed);
@@ -449,7 +511,7 @@ using namespace MacTierra;
         }
         else
         {
-            mWorld->setSettings(*theSettings);
+            mWorldData->mWorld->setSettings(*theSettings);
         }
     }
     else
@@ -517,8 +579,8 @@ using namespace MacTierra;
 
 - (void)iterate:(NSUInteger)inNumCycles
 {
-    if (mWorld)
-        mWorld->iterate(inNumCycles);
+    if (mWorldData->mWorld)
+        mWorldData->mWorld->iterate(inNumCycles);
 }
 
 - (void)lockWorld
@@ -535,14 +597,14 @@ using namespace MacTierra;
 
 - (NSData*)worldData
 {
-    if (!mWorld)
+    if (!mWorldData->mWorld)
         return nil;
 
 //    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
 
     std::ostringstream stringStream;
     [self lockWorld];
-        World::worldToStream(mWorld, stringStream, World::kBinary);
+        World::worldToStream(mWorldData->mWorld, stringStream, World::kBinary);
     [self unlockWorld];
 
 //    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
@@ -563,12 +625,12 @@ using namespace MacTierra;
 
 - (NSData*)worldXMLData
 {
-    if (!mWorld)
+    if (!mWorldData->mWorld)
         return nil;
 
     std::ostringstream stringStream;
     [self lockWorld];
-        World::worldToStream(mWorld, stringStream, World::kXML);
+        World::worldToStream(mWorldData->mWorld, stringStream, World::kXML);
     [self unlockWorld];
 
     return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
@@ -604,7 +666,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     std::ofstream fileStream(filePath.c_str());
 
     [self lockWorld];
-        World::worldToStream(mWorld, fileStream, World::kBinary);
+        World::worldToStream(mWorldData->mWorld, fileStream, World::kBinary);
     [self unlockWorld];
 
     return YES;
@@ -631,7 +693,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
     std::ofstream fileStream(filePath.c_str());
     [self lockWorld];
-        World::worldToStream(mWorld, fileStream, World::kXML);
+        World::worldToStream(mWorldData->mWorld, fileStream, World::kXML);
     [self unlockWorld];
 
     return YES;

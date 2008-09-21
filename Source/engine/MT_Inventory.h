@@ -158,8 +158,13 @@ protected:
     InventoryMap    mInventoryMap;
     SizeMap         mGenotypeSizeMap;
     
+    // members below here not archived
     u_int32_t       mListenerAliveThreshold;
     ListenerVector  mListeners;
+
+    // remember which genotypes we've notified the listener about
+    typedef std::map<GenomeData, const InventoryGenotype*> NotifiedGenotypeMap;
+    NotifiedGenotypeMap    mListenerNotifiedGenotypes;
 
 };
 

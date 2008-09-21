@@ -31,7 +31,13 @@
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
+    [mGenebankWindowController close];
+    [mGenebankWindowController release];
+    mGenebankWindowController = nil;
+
     [mGenebankController synchronize];
+    [mGenebankController release];
+    mGenebankController = nil;
 }
 
 - (MTGenebankController*)genebankController
@@ -42,10 +48,9 @@
 - (IBAction)showGenebankWindow:(id)sender
 {
     if (!mGenebankWindowController)
-    {
         mGenebankWindowController = [[MTGenebankWindowController alloc] initWithWindowNibName:@"GenebankWindow"];
-        [mGenebankWindowController showWindow:sender];
-    }
+
+    [mGenebankWindowController showWindow:sender];
 }
 
 @end
