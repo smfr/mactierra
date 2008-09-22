@@ -34,14 +34,17 @@
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
-    [pasteboard declareTypes:[NSArray arrayWithObject:kCreaturePasteboardType]  owner:self];
+    // FIXME: for some reason other applications don't want to receive the text drags
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
     MTGenebankGenotype* curGenotype = [[mGenebankArrayController arrangedObjects] objectAtIndex:curIndex];
 
     MTSerializableCreature* curCreature = [[[MTSerializableCreature alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome] autorelease];
-    NSData* creatureData = [NSKeyedArchiver archivedDataWithRootObject:curCreature]; 
-    [pasteboard setData:creatureData forType:kCreaturePasteboardType];
+
+    [pasteboard setString:[curCreature stringRepresentation] forType:NSStringPboardType];
+    [pasteboard setData:[curCreature archiveRepresentation] forType:kCreaturePasteboardType];
+
     return YES;
 }
 
