@@ -381,7 +381,6 @@ using namespace MacTierra;
 
         MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithName:[creatureObj name] genome:[creatureObj genome]] autorelease];
 
-
         NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
         [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
@@ -445,7 +444,10 @@ using namespace MacTierra;
         NSUInteger creatureLen = [creature.genome length];
         
 //        NSPoint localPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
-        NSPoint imagePoint = [self convertPoint:[sender draggedImageLocation] fromView:nil];
+//        NSPoint dragImageTopLeft = [sender draggedImageLocation];
+//        dragImageTopLeft.y -= [[sender draggedImage] size].height;
+
+        NSPoint imagePoint = [self convertPoint:[sender draggingLocation] fromView:nil];
                 
         CGPoint thePoint = *(CGPoint*)&imagePoint;
         if (mWorld && [self viewPointInSoup:thePoint])

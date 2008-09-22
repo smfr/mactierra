@@ -120,7 +120,8 @@
 10 pop_ax
 
 
-# This is an odd one. It only uses 1/4 of its space, and seems to self-modify.
+# This is an odd one. It only uses 1/4 of its space, and writes a single instruction
+# to itself so offpsring are always different from parents.
 # Because it does not clear all of its content, it appears as a swarm of similar
 # genotypes (unless 'clear offspring cells' is set).
 88aaa
