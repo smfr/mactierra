@@ -28,7 +28,7 @@
 		0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */; };
 		0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */; };
 		0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F960B070E80C6250007D1D5 /* GenebankWindow.xib */; };
-		0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */; };
+		0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */; };
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
@@ -408,7 +408,7 @@
 		0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankController.mm; sourceTree = "<group>"; };
 		0F960B080E80C6250007D1D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/GenebankWindow.xib; sourceTree = "<group>"; };
 		0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankWindowController.h; sourceTree = "<group>"; };
-		0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTGenebankWindowController.m; sourceTree = "<group>"; };
+		0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankWindowController.mm; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
@@ -977,7 +977,7 @@
 				0F960A5D0E80B9270007D1D5 /* MTGenebankController.h */,
 				0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */,
 				0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */,
-				0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.m */,
+				0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */,
 			);
 			path = genebank;
 			sourceTree = "<group>";
@@ -1568,7 +1568,7 @@
 				0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 				0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */,
 				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
-				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.m in Sources */,
+				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */,
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

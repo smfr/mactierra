@@ -39,4 +39,27 @@
     return theString;
 }
 
+- (NSData*)binaryGenome
+{
+    NSString* theGenome = self.genome;
+    NSUInteger genomeLen = [theGenome length] / 2;
+
+    NSMutableData*  genomeData = [NSMutableData dataWithLength:genomeLen];
+    
+    unsigned char* dataBytes = (unsigned char*)[genomeData mutableBytes];
+    
+    for (NSUInteger i = 0; i < genomeLen; ++i)
+    {
+        unichar char1 = tolower([theGenome characterAtIndex:2 * i]);
+        unichar char2 = tolower([theGenome characterAtIndex:2 * i + 1]);
+
+        u_int32_t charVal1 = (char1 < 'a') ? char1 - '0' : char1 - ('a' - 10);
+        u_int32_t charVal2 = (char2 < 'a') ? char2 - '0' : char2 - ('a' - 10);
+
+        dataBytes[i] = ((charVal1 & 0x0F) << 4) | (charVal2 & 0x0F);
+    }
+    
+    return genomeData;
+}
+
 @end

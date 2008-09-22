@@ -183,7 +183,7 @@ static MTGenebankController* gGenebankController = nil;
     for (NSUInteger i = 0; i < genomeLen; ++i)
     {
         unsigned char curInst = bytes[i];
-        [theString appendFormat:@"%X%X", (curInst << 4) & 0x0F, (curInst & 0x0F)];
+        [theString appendFormat:@"%X%X", (curInst >> 4) & 0x0F, (curInst & 0x0F)];
     }
 
     return theString;

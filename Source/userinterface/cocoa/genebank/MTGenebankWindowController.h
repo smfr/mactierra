@@ -12,7 +12,7 @@
 
 @interface MTGenebankWindowController : NSWindowController
 {
-
+    IBOutlet NSArrayController*      mGenebankArrayController;
 }
 
 @property (readonly) MTGenebankController* genebankController;

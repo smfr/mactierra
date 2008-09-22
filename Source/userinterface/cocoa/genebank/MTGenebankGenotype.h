@@ -18,6 +18,7 @@
 @property (retain) NSString* genome;    // looks like "01011F...". Has to be string for indexing
 
 @property (readonly) NSString* readableGenomeString;        // like "01 01 1F ..."
+@property (readonly) NSData* binaryGenome;
 
 @end
 
