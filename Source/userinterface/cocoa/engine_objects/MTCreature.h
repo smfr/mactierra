@@ -71,4 +71,7 @@ class CreaturePrivateData;
 - (id)initWithCoder:(NSCoder *)decoder;
 - (id)initWithName:(NSString *)inName genome:(NSData*)inGenome;
 
+- (NSData*)archiveRepresentation;
+- (NSString*)stringRepresentation;
+
 @end

@@ -374,4 +374,29 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
     [encoder encodeObject:genome forKey:@"genome"];
 }
 
+- (NSData*)archiveRepresentation
+{
+    return [NSKeyedArchiver archivedDataWithRootObject:self]; 
+}
+
+// FIXME: there are too many places that convert between genome data and strings. Need to share the code.
+- (NSString*)stringRepresentation
+{
+    NSMutableString* genomeString = [NSMutableString string];
+
+    [genomeString appendFormat:@"%@\n", name];
+    
+    const unsigned char* genomeBytes = (const unsigned char*)[self.genome bytes];
+
+    for (u_int32_t i = 0; i < [genome length]; ++i)
+    {
+        unsigned char curInst = genomeBytes[i];
+        const char* instructionName = MacTierra::nameForInstruction(curInst);
+     
+        [genomeString appendFormat:@"%02X %s\n", curInst, instructionName];
+    }
+
+    return genomeString;
+}
+
 @end

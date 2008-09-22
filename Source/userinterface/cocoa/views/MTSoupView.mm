@@ -381,12 +381,13 @@ using namespace MacTierra;
 
         MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithName:[creatureObj name] genome:[creatureObj genome]] autorelease];
 
-        NSData* creatureData = [NSKeyedArchiver archivedDataWithRootObject:serCreature]; 
 
         NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
-        
-        [pasteboard declareTypes:[NSArray arrayWithObject:kCreaturePasteboardType]  owner:self];
-        [pasteboard setData:creatureData forType:kCreaturePasteboardType];
+
+        [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
+
+        [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
+        [pasteboard setData:[serCreature archiveRepresentation] forType:kCreaturePasteboardType];
     
         // FIXME: scale the image so that it matches the soup scaling
         NSImage* theImage = [[[NSImage alloc] initWithSize:NSMakeSize(creatureObj.length, 1.0)] autorelease];

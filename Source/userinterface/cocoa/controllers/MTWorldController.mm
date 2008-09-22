@@ -83,7 +83,9 @@ public:
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
         NSData* genomeData = [NSData dataWithBytes:inGenotype->genome().dataString().data() length:inGenotype->genome().length()];
-        [[MTGenebankController sharedGenebankController] findOrEnterGenome:genomeData];
+        
+        MTGenebankController* genebankController = [MTGenebankController sharedGenebankController];
+        [genebankController performSelectorOnMainThread:@selector(findOrEnterGenome:) withObject:genomeData waitUntilDone:NO];
         
         [pool release];
     }

@@ -248,5 +248,4 @@ static MTGenebankController* gGenebankController = nil;
 }
 
 
-
 @end
