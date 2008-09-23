@@ -244,6 +244,8 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
                 *outName = curWord;
                 continue;
             }
+            else if ([curWord length] == 0 || [curWord isEqualToString:@"\n"])
+                break;
             else
                 return nil; // invalid
         }
