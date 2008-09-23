@@ -15,6 +15,25 @@ How to build
 
 Building requires Leopard (10.5.4) and Xcode 3.1 or later.
 
-First, open Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj. Get Info on the Graph Suite item at the top of the Files hiearchy, and change the Build Products location to MacTierra/build (same directory as used by MacTierra.xcodeproj). Build Release and Debug (either Target).
+First, open Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj. Get Info on the Graph Suite item at the top of the Files hiearchy, and change the Build Products location to MacTierra/build (same directory as used by MacTierra.xcodeproj). Build Release and Debug (either target).
 
-Now open MacTierra.xcodeproj, and build (Release or Debug, as you wish; Release will run much faster).
+Now open MacTierra.xcodeproj, choose the MacTierra target, and build (Release or Debug, as you wish; Release will run much faster).
+
+
+
+Known issues
+------------
+
+Saving soups in XML format crashes sometimes (bug in boost serialization).
+
+
+Tips & Tricks
+-------------
+
+Use Command-Option-N to make a new, empty soup with mutation turned off.
+
+
+Genebank
+--------
+
+MacTierra creates a "genebank" file at ~/Library/Application Support/MacTierra/Genebank.sql, in which it stores successful genotypes. You can view the genebank via the Window->Genebank menu item. Genotypes can be dragged into an empty soup to run them.
