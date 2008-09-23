@@ -15,6 +15,8 @@
     NSManagedObjectModel*           mObjectModel;
     NSPersistentStoreCoordinator*   mStoreCoordinator;
     NSManagedObjectContext*         mObjectContext;
+    
+    NSTimer*                        mSynchronizeTimer;
 }
 
 + (MTGenebankController*)sharedGenebankController;
@@ -22,6 +24,7 @@
 @property (readonly) NSManagedObjectContext* managedObjectContext;
 
 - (void)synchronize;
+- (void)shutdown;
 
 - (MTGenebankGenotype*)entryWithGenome:(NSData*)genome;
 - (MTGenebankGenotype*)findOrEnterGenome:(NSData*)inData;

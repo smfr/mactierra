@@ -12,6 +12,8 @@
 
 static MTGenebankController* gGenebankController = nil;
 
+static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 minutes
+
 @interface NSData(Crappy)
 
 - (const char*)UTF8String;
@@ -86,6 +88,15 @@ static MTGenebankController* gGenebankController = nil;
     {
         NSLog(@"Saving genebank failed with error %@", saveError);
     }
+}
+
+- (void)shutdown
+{
+    [self synchronize];
+
+    [mSynchronizeTimer invalidate];
+    [mSynchronizeTimer release];
+    mSynchronizeTimer = nil;
 }
 
 - (MTGenebankGenotype*)entryWithGenome:(NSData*)genomeData
@@ -229,6 +240,18 @@ static MTGenebankController* gGenebankController = nil;
 
     mObjectContext = [[NSManagedObjectContext alloc] init];
     [mObjectContext setPersistentStoreCoordinator:mStoreCoordinator];
+    
+    
+    mSynchronizeTimer = [[NSTimer scheduledTimerWithTimeInterval:kSynchronizationInterval
+                                                          target:self
+                                                        selector:@selector(synchronizeTimerFired:)
+                                                        userInfo:nil
+                                                         repeats:YES] retain];       // creates ref cycle
+}
+
+- (void)synchronizeTimerFired:(NSTimer*)inTimer
+{
+    [self synchronize];
 }
 
 - (NSString*)directoryForGenebankFile

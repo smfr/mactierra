@@ -216,6 +216,7 @@ public:
             mWorldData->mSizeFrequencyLogger->setMaxBuckets(15);
             
             mWorldData->mGenebankListener = new GenebankInventoryListener();
+            mWorldData->mWorld->inventory()->setListenerAliveThreshold(20);
             mWorldData->mWorld->inventory()->registerListener(mWorldData->mGenebankListener);
         }
         

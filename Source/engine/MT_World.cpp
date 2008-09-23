@@ -213,6 +213,7 @@ World::iterate(u_int32_t inNumCycles)
     if (mCurCreatureCycles == 0)
         mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSettings.sliceSizeVariance());
     
+    BOOST_ASSERT(mCurCreatureSliceCycles > 0);
     while (cycles < numCycles)
     {
         if (mCurCreatureCycles < mCurCreatureSliceCycles)

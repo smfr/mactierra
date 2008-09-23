@@ -121,8 +121,8 @@ public:
 
     void                writeToStream(std::ostream& inStream) const;
 
-    void                setListenerAliveThreshold(u_int32_t inThreshold);
-    u_int32_t           listenerAliveThreshold() const { return mListenerAliveThreshold; }
+    void                setListenerAliveThreshold(u_int32_t inThreshold)    { mListenerAliveThreshold = inThreshold; }
+    u_int32_t           listenerAliveThreshold() const                      { return mListenerAliveThreshold; }
 
     void                registerListener(InventoryListener* inListener);
     void                unregisterListener(InventoryListener* inListener);

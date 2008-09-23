@@ -35,7 +35,7 @@
     [mGenebankWindowController release];
     mGenebankWindowController = nil;
 
-    [mGenebankController synchronize];
+    [mGenebankController shutdown];
     [mGenebankController release];
     mGenebankController = nil;
 }
