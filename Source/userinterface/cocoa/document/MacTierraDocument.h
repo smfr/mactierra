@@ -31,6 +31,7 @@ extern NSString* const kXMLSoupDocumentType;
 
 
 - (IBAction)showSettings:(id)sender;
+- (IBAction)exportSettings:(id)sender;
 
 - (IBAction)toggleRunning:(id)sender;
 - (IBAction)step:(id)sender;

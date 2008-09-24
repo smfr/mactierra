@@ -8,8 +8,12 @@
 
 #import "MTWorldController.h"
 
-#import <RandomLib/RandomSeed.hpp>
 #import <fstream>
+
+#import <RandomLib/RandomSeed.hpp>
+
+#include <boost/archive/xml_oarchive.hpp>
+#include <boost/serialization/serialization.hpp>
 
 #import "MTSoupView.h"
 
@@ -17,6 +21,7 @@
 #import "MT_Cellmap.h"
 #import "MT_Inventory.h"
 #import "MT_InventoryListener.h"
+#import "MT_SoupConfiguration.h"
 #import "MT_World.h"
 
 #import "MTCreature.h"
@@ -714,6 +719,21 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     World* newWorld = World::worldFromStream(fileStream, World::kXML);
     [self setWorld:newWorld];
 
+    return YES;
+}
+
+- (BOOL)writeSoupConfigurationToXMLFile:(NSURL*)inFileURL
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+    std::ofstream fileStream(filePath.c_str());
+
+    MacTierra:SoupConfiguration soupConfig(mWorldData->mWorld->soupSize(), mWorldData->mWorld->initialRandomSeed(), mWorldData->mWorld->settings());
+    
+    ::boost::archive::xml_oarchive xmlArchive(fileStream);
+    xmlArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("configuration", soupConfig);
     return YES;
 }
 

@@ -8,6 +8,9 @@
 
 #import "MacTierraDocument.h"
 
+#include <iostream>
+#include <fstream>
+
 #import "MTDocumentController.h"
 #import "MTWorldController.h"
 
@@ -132,6 +135,26 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 - (IBAction)showSettings:(id)sender
 {
     [worldController editSoupSettings:sender];
+}
+
+- (IBAction)exportSettings:(id)sender
+{
+    NSSavePanel*    savePanel = [NSSavePanel savePanel];
+    
+    [savePanel beginSheetForDirectory:nil
+                                 file:@"Settings.xml"
+                       modalForWindow:[self windowForSheet]
+                        modalDelegate:self
+                       didEndSelector:@selector(exportSettingsPanelDidDne:returnCode:contextInfo:)
+                          contextInfo:NULL];
+}
+
+- (void)exportSettingsPanelDidDne:(NSSavePanel *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
+{
+    if (returnCode == NSOKButton)
+    {
+        [worldController writeSoupConfigurationToXMLFile:[sheet URL]];
+    }
 }
 
 - (IBAction)toggleRunning:(id)sender

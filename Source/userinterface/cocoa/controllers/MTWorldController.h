@@ -119,6 +119,7 @@ class WorldData;
 - (BOOL)writeXMLDataToFile:(NSURL*)inFileURL;
 - (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL;
 
+- (BOOL)writeSoupConfigurationToXMLFile:(NSURL*)inFileURL;
 
 // for settings panel
 - (IBAction)zeroMutationRates:(id)sender;

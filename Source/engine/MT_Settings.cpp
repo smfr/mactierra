@@ -104,6 +104,14 @@ Settings::setDaughterAllocationStrategy(EDaughterAllocationStrategy inStrategy)
     mDaughterAllocation = inStrategy;
 }
 
+void
+Settings::recomputeMutationIntervals(u_int32_t inSoupSize)
+{
+    BOOST_ASSERT(inSoupSize > 0);
+    mMeanCosmicTimeInterval = (mCosmicRate > 0.0) ? (1.0 / (mCosmicRate * inSoupSize)) : 0.0;
+    mMeanFlawInterval = (mFlawRate > 0.0) ? 1.0 / mFlawRate : 0.0;
+    mMeanCopyErrorInterval = (mCopyErrorRate > 0.0) ? 1.0 / mCopyErrorRate : 0.0;
+}
 
 } // namespace MacTierra
 

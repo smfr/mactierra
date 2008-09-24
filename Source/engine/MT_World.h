@@ -154,10 +154,10 @@ private:
         ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
         ar.register_type(static_cast<InventoryGenotype *>(NULL));
 
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", mSoupSize);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("settings", mSettings);
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("random_number_generator", mRNG);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", mSoupSize);
         
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cell_map", mCellMap);
@@ -190,10 +190,11 @@ private:
         ar.register_type(static_cast<ExecutionUnit0 *>(NULL));
         ar.register_type(static_cast<InventoryGenotype *>(NULL));
 
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("settings", mSettings);
-
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("random_number_generator", mRNG);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup_size", mSoupSize);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("settings", mSettings);
+        mSettings.recomputeMutationIntervals(mSoupSize);
+        
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("random_number_generator", mRNG);
         
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cell_map", mCellMap);

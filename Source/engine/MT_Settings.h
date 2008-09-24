@@ -106,6 +106,8 @@ public:
 
     bool            clearReapedCreatures() const    { return mClearReapedCreatures; }
     void            setClearReapedCreatures(bool inClear) { mClearReapedCreatures = inClear; }
+
+    void            recomputeMutationIntervals(u_int32_t inSoupSize);
     
 private:
     friend class ::boost::serialization::access;
@@ -117,13 +119,10 @@ private:
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size_variance", mSliceSizeVariance);
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("copy_error_rate", mCopyErrorRate);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_copy_error_interval", mMeanCopyErrorInterval);
-
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("flaw_rate", mFlawRate);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_flaw_interval", mMeanFlawInterval);
-
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cosmic_rate", mCosmicRate);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_cosmic_time_interval", mMeanCosmicTimeInterval);
+        // We don't serialize the intervals, since they are recomputed from the rates,
+        // but someone needs to call recomputeMutationIntervals() after loading
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("size_selection", mSizeSelection);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("leanness_selection", mLeannessSelection);

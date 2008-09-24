@@ -25,6 +25,9 @@
 		0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */; };
+		0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */; };
+		0F9431BA0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */; };
+		0F9431BB0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */; };
 		0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */; };
 		0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */; };
 		0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F960B070E80C6250007D1D5 /* GenebankWindow.xib */; };
@@ -402,6 +405,8 @@
 		0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MutationRateDefaults.plist; sourceTree = "<group>"; };
+		0F9431B70E89F991009BBD28 /* MT_SoupConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_SoupConfiguration.h; sourceTree = "<group>"; };
+		0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_SoupConfiguration.cpp; sourceTree = "<group>"; };
 		0F960A500E80B8CB0007D1D5 /* Genebank.xcdatamodel */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = wrapper.xcdatamodel; path = Genebank.xcdatamodel; sourceTree = "<group>"; };
 		0F960A5D0E80B9270007D1D5 /* MTGenebankController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankController.h; sourceTree = "<group>"; };
 		0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankController.mm; sourceTree = "<group>"; };
@@ -1072,6 +1077,8 @@
 				0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */,
 				0FBB066F0E5A984B007F2A6B /* MT_Soup.h */,
 				0FBB067B0E5A984B007F2A6B /* MT_Soup.cpp */,
+				0F9431B70E89F991009BBD28 /* MT_SoupConfiguration.h */,
+				0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */,
 				0FBB06750E5A984B007F2A6B /* MT_TimeSlicer.h */,
 				0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */,
 				0FBB067A0E5A984B007F2A6B /* MT_World.h */,
@@ -1488,6 +1495,7 @@
 				0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */,
 				0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */,
+				0F9431BA0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1516,6 +1524,7 @@
 				0F995CAC0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */,
 				0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */,
+				0F9431BB0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1566,6 +1575,7 @@
 				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
 				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */,
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
+				0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
