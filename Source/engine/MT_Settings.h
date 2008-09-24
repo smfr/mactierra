@@ -41,9 +41,6 @@ public:
     
     Settings();
     
-    // update computed settings values that depend on soup size
-    void            updateWithSoupSize(u_int32_t inSoupSize);
-
     enum ETimeSliceType {
         kConstantSlizeSize,
         kSizeVariableSliceSize,

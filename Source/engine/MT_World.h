@@ -126,6 +126,8 @@ protected:
         return (mSettings.cosmicRate() > 0.0 && inInstructionCount == mNextCosmicRayInstruction);
     }
     
+    void            computeNextMutationTimes();
+    
     void            noteInstructionCopy();
     
     // birth happens on 'divide'

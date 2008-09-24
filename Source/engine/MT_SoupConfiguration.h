@@ -22,12 +22,23 @@ class SoupConfiguration
 {
 public:
 
+    SoupConfiguration()
+    : mSoupSize(0)
+    , mRandomSeed(0)
+    {
+    }
+    
     SoupConfiguration(u_int32_t inSoupSize, u_int32_t inRandomSeed, const Settings& inSettings)
     : mSoupSize(inSoupSize)
     , mRandomSeed(inRandomSeed)
     , mSettings(inSettings)
     {
     }
+
+    u_int32_t       soupSize() const        { return mSoupSize; }
+    u_int32_t       randomSeed() const      { return mRandomSeed; }
+    
+    const Settings& settings() const        { return mSettings; }
 
 private:
     friend class ::boost::serialization::access;

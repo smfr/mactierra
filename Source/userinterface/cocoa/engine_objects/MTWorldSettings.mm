@@ -118,7 +118,7 @@
 {
     [self willChangeValueForKey:@"soupSize"];
     soupSize = inSize;
-    mSettings->updateWithSoupSize(soupSize);
+    mSettings->recomputeMutationIntervals(soupSize);
     soupSizePreset = [self presetFromSoupSize:inSize];
     [self didChangeValueForKey:@"soupSize"];
 }

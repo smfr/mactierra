@@ -36,12 +36,6 @@ Settings::Settings()
 }
 
 void
-Settings::updateWithSoupSize(u_int32_t inSoupSize)
-{
-    mMeanCosmicTimeInterval = (mCosmicRate > 0.0) ? (1.0 / (mCosmicRate * inSoupSize)) : 0.0;
-}
-
-void
 Settings::setFlawRate(double inRate)
 {
     mFlawRate = inRate;

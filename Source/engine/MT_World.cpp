@@ -74,9 +74,9 @@ void
 World::initializeSoup(u_int32_t inSoupSize)
 {
     BOOST_ASSERT(!mSoup && !mCellMap);
+
     mSoupSize = inSoupSize;
-    
-    mSettings.updateWithSoupSize(mSoupSize);
+    mSettings.recomputeMutationIntervals(mSoupSize);
     
     mSoup = new Soup(inSoupSize);
     mCellMap = new CellMap(inSoupSize);
@@ -84,6 +84,8 @@ World::initializeSoup(u_int32_t inSoupSize)
     mExecution = new ExecutionUnit0();
     
     mInventory = new Inventory();
+    
+    computeNextMutationTimes();
 }
 
 PassRefPtr<Creature>
@@ -441,6 +443,21 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
 }
 
 void
+World::computeNextMutationTimes()
+{
+    u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
+    
+    if (mSettings.cosmicRate() > 0.0)
+        computeNextCosmicRay(instructionCount);
+
+    if (mSettings.flawRate() > 0.0)
+        computeNextInstructionFlaw(instructionCount);
+
+    if (mSettings.copyErrorRate() > 0.0)
+        computeNextCopyError();
+}
+
+void
 World::noteInstructionCopy()
 {
     if (mCopyErrorPending)  // just did one
@@ -636,17 +653,11 @@ void
 World::setSettings(const Settings& inSettings)
 {
     mSettings = inSettings;
-
-    u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
     
-    if (mSettings.cosmicRate() > 0.0)
-        computeNextCosmicRay(instructionCount);
-
-    if (mSettings.flawRate() > 0.0)
-        computeNextInstructionFlaw(instructionCount);
-
-    if (mSettings.copyErrorRate() > 0.0)
-        computeNextCopyError();
+    if (mSoupSize > 0)
+        mSettings.recomputeMutationIntervals(mSoupSize);
+    
+    computeNextMutationTimes();
 }
 
 void

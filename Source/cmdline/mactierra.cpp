@@ -10,7 +10,10 @@
 #include <stddef.h>
 #import <fstream>
 
-#include "RandomLib/RandomSeed.hpp"
+#include <RandomLib/RandomSeed.hpp>
+
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/serialization/serialization.hpp>
 
 #include "mactierra.h"
 
@@ -18,6 +21,7 @@
 
 #include "MT_World.h"
 #include "MT_Settings.h"
+#include "MT_SoupConfiguration.h"
 #include "MT_Ancestor.h"
 
 using namespace MacTierra;
@@ -34,6 +38,7 @@ static const char * const kOptionsList[] = {
     "s:soup-size <number>",     // required
     "d:duration <number>",      // required
     "r:random-seed <number>",   // optional
+    "c:configuration-file",     // optional
     "f:in-soup-file",
     "o:out-soup-file",
     "x:xml-format",
@@ -52,6 +57,7 @@ extern "C" int main(int argc, char* argv[])
     u_int64_t duration = 0;
     string  inputSoupFilePath;
     string  outputSoupFilePath;
+    string  configFilePath;
     bool useXMLFormat = false;
 
     int  optchar;
@@ -79,6 +85,13 @@ extern "C" int main(int argc, char* argv[])
                     ++errors;
                 else
                     duration = strtoull(optarg, NULL, 0);
+                break;
+
+            case 'c':
+                if (!optarg) 
+                    ++errors;
+                else
+                    configFilePath = optarg;
                 break;
 
             case 'r':
@@ -129,6 +142,28 @@ extern "C" int main(int argc, char* argv[])
         cout << endl;
     }
     
+    Settings soupSettings;
+    if (configFilePath.length() > 0)
+    {
+        std::ifstream fileStream(configFilePath.c_str());
+
+        SoupConfiguration config;
+        ::boost::archive::xml_iarchive xmlArchive(fileStream);
+        xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("configuration", config);
+        
+        cout << "Read configuration from file " << configFilePath << endl;
+
+        soupSize = config.soupSize();
+        randomSeed = config.randomSeed();
+        soupSettings = config.settings();
+        
+        seedSet = true;
+    }
+    else
+    {
+        soupSettings = Settings::mediumMutationSettings(soupSize);
+    }
+    
     cout << "Soup size: " << soupSize << endl;
     cout << "Duration: " << duration << endl;
     cout << "Input soup file: " << inputSoupFilePath << endl;
@@ -148,7 +183,7 @@ extern "C" int main(int argc, char* argv[])
 
         theWorld = new World();
         theWorld->initializeSoup(soupSize);
-        theWorld->setSettings(Settings::mediumMutationSettings(soupSize));
+        theWorld->setSettings(soupSettings);
         theWorld->setInitialRandomSeed(randomSeed);
 
         // seed the soup
