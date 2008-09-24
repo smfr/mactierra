@@ -201,18 +201,18 @@ public:
             const NSUInteger kMaxDataPoints = 500;
             
             // set up some logging
-            mWorldData->mPopSizeLogger = new PopulationSizeLogger();        // FIXME: leaked
+            mWorldData->mPopSizeLogger = new PopulationSizeLogger();
             mWorldData->mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
             mWorldData->mWorld->dataCollector()->addPeriodicLogger(mWorldData->mPopSizeLogger);
 
-            mWorldData->mMeanSizeLogger = new MeanCreatureSizeLogger();        // FIXME: leaked
+            mWorldData->mMeanSizeLogger = new MeanCreatureSizeLogger();
             mWorldData->mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
             mWorldData->mWorld->dataCollector()->addPeriodicLogger(mWorldData->mMeanSizeLogger);
 
-            mWorldData->mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();        // FIXME: leaked
+            mWorldData->mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();
             mWorldData->mGenotypeFrequencyLogger->setMaxBuckets(15);
             
-            mWorldData->mSizeFrequencyLogger = new SizeHistogramDataLogger();       // FIXME: leaked
+            mWorldData->mSizeFrequencyLogger = new SizeHistogramDataLogger();
             mWorldData->mSizeFrequencyLogger->setMaxBuckets(15);
             
             mWorldData->mGenebankListener = new GenebankInventoryListener();
@@ -493,6 +493,8 @@ public:
 
 - (void)soupSettingsPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
+    [sheet orderOut:nil];
+    
     if (returnCode == NSOKButton)
     {
         const MacTierra::Settings* theSettings = worldSettings.settings;
@@ -524,7 +526,7 @@ public:
             [document performSelector:@selector(close) withObject:nil afterDelay:0];
         }
     }
-    [sheet orderOut:nil];
+    
     self.worldSettings = nil;
 }
 
