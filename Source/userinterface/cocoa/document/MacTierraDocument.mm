@@ -142,7 +142,7 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     NSSavePanel*    savePanel = [NSSavePanel savePanel];
     
     [savePanel beginSheetForDirectory:nil
-                                 file:@"Settings.xml"
+                                 file:NSLocalizedString(@"ConfigurationFilename", @"")
                        modalForWindow:[self windowForSheet]
                         modalDelegate:self
                        didEndSelector:@selector(exportSettingsPanelDidDne:returnCode:contextInfo:)

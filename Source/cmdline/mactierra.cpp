@@ -45,25 +45,106 @@ static const char * const kOptionsList[] = {
     NULL
 };
 
+u_int32_t   gSoupSize = kDefaultSoupSize;
+u_int32_t   gRandomSeed = 0;
+bool        gSeedSet = false;
+
+u_int64_t   gRunDuration = 0;
+
+string      gInputSoupFilePath;
+string      gOutputSoupFilePath;
+string      gConfigFilePath;
+
+bool        gUseXMLFormat = false;
+
+Settings    gSoupSettings;
+
+static bool readConfigurationFile(const std::string filePath)
+{
+    std::ifstream fileStream(filePath.c_str());
+
+    SoupConfiguration config;
+    
+    try
+    {
+        boost::archive::xml_iarchive xmlArchive(fileStream);
+        xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("configuration", config);
+    }
+    catch (std::exception const& e)
+    {
+        cerr << "Failed to parse configuration file (error " << e.what() << ") at " << filePath << endl;
+        return false;
+    }
+    catch (...)
+    {
+        cerr << "Failed to parse configuration file " << filePath << endl;
+        return false;
+    }
+    
+    gSoupSize = config.soupSize();
+    gRandomSeed = config.randomSeed();
+    gSoupSettings = config.settings();
+    
+    gSeedSet = true;
+    return true;
+}
+
+static bool sanityCheckOptions()
+{
+    if (gInputSoupFilePath.length() > 0 && gConfigFilePath.length() > 0)
+    {
+        cerr << "Provide an input soup path, or configuration file path, but not both." << endl;
+        return false;
+    }
+    
+    if (gRunDuration == 0)
+    {
+        cerr << "Run duration not specified, or zero. Use -d to specify the run duration as an instruction count." << endl;
+        return false;
+    }
+
+    return true;
+}
+
+static World* createWorld()
+{
+    World* theWorld = NULL;
+    
+    if (gInputSoupFilePath.length() > 0)
+    {
+        std::ifstream fileStream(gInputSoupFilePath.c_str());
+        // FIXME: sniff the file to determine the type
+        theWorld = World::worldFromStream(fileStream, World::kXML);
+    }
+    else
+    {
+        if (!gSeedSet)
+            gRandomSeed = RandomLib::RandomSeed::SeedWord();
+
+        theWorld = new World();
+        theWorld->initializeSoup(gSoupSize);
+        theWorld->setSettings(gSoupSettings);
+        theWorld->setInitialRandomSeed(gRandomSeed);
+
+        // seed the soup
+        theWorld->insertCreature(gSoupSize / 2, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
+    }
+
+    return theWorld;
+}
 
 extern "C" int main(int argc, char* argv[])
 {
     Options      opts(*argv, kOptionsList);
-    OptArgvIter  iter(--argc, ++argv);
 
-    u_int32_t soupSize = kDefaultSoupSize;
-    u_int32_t randomSeed = 0;
-    bool seedSet = false;
-    u_int64_t duration = 0;
-    string  inputSoupFilePath;
-    string  outputSoupFilePath;
-    string  configFilePath;
-    bool useXMLFormat = false;
 
     int  optchar;
     const char * optarg;
     int  errors = 0;
     
+    gSoupSettings = Settings::mediumMutationSettings(gSoupSize);
+
+    OptArgvIter  iter(--argc, ++argv);
     while ((optchar = opts(iter, optarg)))
     {
         switch (optchar)
@@ -77,21 +158,25 @@ extern "C" int main(int argc, char* argv[])
                 if (!optarg) 
                     ++errors;
                 else
-                    soupSize = strtoul(optarg, NULL, 0);
+                    gSoupSize = strtoul(optarg, NULL, 0);
                 break;
 
             case 'd':
                 if (!optarg) 
                     ++errors;
                 else
-                    duration = strtoull(optarg, NULL, 0);
+                    gRunDuration = strtoull(optarg, NULL, 0);
                 break;
 
             case 'c':
                 if (!optarg) 
                     ++errors;
                 else
-                    configFilePath = optarg;
+                {
+                    gConfigFilePath = optarg;
+                    if (!readConfigurationFile(gConfigFilePath))
+                        exit(1);
+                }
                 break;
 
             case 'r':
@@ -99,8 +184,8 @@ extern "C" int main(int argc, char* argv[])
                     ++errors;
                 else
                 {
-                    randomSeed = strtoul(optarg, NULL, 0);
-                    seedSet = true;
+                    gRandomSeed = strtoul(optarg, NULL, 0);
+                    gSeedSet = true;
                 }
                 break;
 
@@ -108,18 +193,18 @@ extern "C" int main(int argc, char* argv[])
                 if (!optarg) 
                     ++errors;
                 else
-                    inputSoupFilePath = optarg;
+                    gInputSoupFilePath = optarg;
                 break;
 
             case 'o':
                 if (!optarg) 
                     ++errors;
                 else
-                    outputSoupFilePath = optarg;
+                    gOutputSoupFilePath = optarg;
                 break;
 
             case 'x':
-                useXMLFormat = true;
+                gUseXMLFormat = true;
                 break;
 
             default: 
@@ -133,72 +218,37 @@ extern "C" int main(int argc, char* argv[])
         opts.usage(cerr, "");
         exit(1);
     }
+    
+    if (!sanityCheckOptions())
+        exit(1);
+    
+    World*  theWorld = createWorld();
 
-    if (iter.index() < argc) {
-        cout << "files=" ;
-        for (int i = iter.index() ; i < argc ; i++) {
-            cout << "\"" << argv[i] << "\" " ;
-        }
-        cout << endl;
+    if (gOutputSoupFilePath.empty())
+    {
+        std::ostringstream nameStream;
+        nameStream << "output_soup_" << gRandomSeed << ".mactierra";
+        gOutputSoupFilePath = nameStream.str();
     }
     
-    Settings soupSettings;
-    if (configFilePath.length() > 0)
-    {
-        std::ifstream fileStream(configFilePath.c_str());
+    cout << "Soup size: " << gSoupSize << endl;
+    cout << "Random seed: " << gRandomSeed << endl;
+    cout << "Duration: " << gRunDuration << endl;
+    if (!gConfigFilePath.empty())
+        cout << "Configuration read from " << gConfigFilePath << endl;
+    if (!gInputSoupFilePath.empty())
+        cout << "Input soup file: " << gInputSoupFilePath << endl;
+    cout << "Output soup file: " << gOutputSoupFilePath << endl;
 
-        SoupConfiguration config;
-        ::boost::archive::xml_iarchive xmlArchive(fileStream);
-        xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("configuration", config);
-        
-        cout << "Read configuration from file " << configFilePath << endl;
-
-        soupSize = config.soupSize();
-        randomSeed = config.randomSeed();
-        soupSettings = config.settings();
-        
-        seedSet = true;
-    }
-    else
-    {
-        soupSettings = Settings::mediumMutationSettings(soupSize);
-    }
-    
-    cout << "Soup size: " << soupSize << endl;
-    cout << "Duration: " << duration << endl;
-    cout << "Input soup file: " << inputSoupFilePath << endl;
-    cout << "Output soup file: " << outputSoupFilePath << endl;
-
-    World*  theWorld = NULL;
-    if (inputSoupFilePath.length() > 0)
-    {
-        std::ifstream fileStream(inputSoupFilePath.c_str());
-        // FIXME: sniff the file to determine the type
-        theWorld = World::worldFromStream(fileStream, World::kXML);
-    }
-    else
-    {
-        if (!seedSet)
-            randomSeed = RandomLib::RandomSeed::SeedWord();
-
-        theWorld = new World();
-        theWorld->initializeSoup(soupSize);
-        theWorld->setSettings(soupSettings);
-        theWorld->setInitialRandomSeed(randomSeed);
-
-        // seed the soup
-        theWorld->insertCreature(soupSize / 2, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
-    }
-    
     for (int32_t i = 0; i < 1; ++i)
     {
-        theWorld->iterate(duration);
+        theWorld->iterate(gRunDuration);
     }
     
-    if (outputSoupFilePath.length() > 0)
+    if (gOutputSoupFilePath.length() > 0)
     {
-        ofstream outputStream(outputSoupFilePath.c_str());
-        World::worldToStream(theWorld, outputStream, useXMLFormat ? World::kXML : World::kBinary);
+        ofstream outputStream(gOutputSoupFilePath.c_str());
+        World::worldToStream(theWorld, outputStream, gUseXMLFormat ? World::kXML : World::kBinary);
     }
     
     delete theWorld;
