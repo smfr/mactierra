@@ -38,6 +38,7 @@ public:
     } exception_code;
     exception_code code;
     xml_archive_exception(exception_code c)
+        : code(c)
     {}
     virtual const char *what( ) const throw( )
     {
