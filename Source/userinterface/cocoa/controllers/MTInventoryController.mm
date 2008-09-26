@@ -26,6 +26,11 @@ using namespace MacTierra;
     [super dealloc];
 }
 
+- (NSArrayController*)genotypesArrayController
+{
+    return mGenotypesArrayController;
+}
+
 - (void)setInventory:(MacTierra::Inventory*)inInventory
 {
     if (inInventory != inventory)

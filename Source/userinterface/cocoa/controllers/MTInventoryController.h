@@ -23,6 +23,8 @@ namespace MacTierra {
 
 @property (assign) MacTierra::Inventory* inventory;
 
+- (NSArrayController*)genotypesArrayController;
+
 - (void)updateGenotypesArray;
 - (NSArray*)genotypes;
 

@@ -18,7 +18,8 @@ namespace MacTierra {
 
 @interface MTSoupView : MTCompositedGLView
 {
-    IBOutlet MTWorldController* mWorldController;
+    IBOutlet MTWorldController*     mWorldController;
+    IBOutlet NSArrayController*     mGenotypesArrayController;
     
     MacTierra::World*   mWorld;
     
@@ -41,5 +42,6 @@ namespace MacTierra {
 @property (assign) BOOL showInstructionPointers;
 
 @property (assign) NSString* focusedCreatureName;
+
 
 @end

@@ -8,11 +8,14 @@
 
 #import "MTSoupView.h"
 
+#import "NSArrayAdditions.h"
+
 #import "MT_Cellmap.h"
 #import "MT_Soup.h"
 #import "MT_World.h"
 
 #import "MTCreature.h"
+#import "MTInventoryGenotype.h"
 #import "MTWorldController.h"
 
 using namespace MacTierra;
@@ -32,6 +35,9 @@ using namespace MacTierra;
 
 - (CGPoint)viewPointToSoupPoint:(CGPoint)inPoint;
 - (CGPoint)soupPointToViewPoint:(CGPoint)inPoint;
+
+- (void)startObservingSelectedGenotypes;
+- (void)stopObservingSelectedGenotypes;
 
 @end
 
@@ -62,6 +68,11 @@ using namespace MacTierra;
 {
     self.focusedCreatureName = nil;
     [super dealloc];
+}
+
+- (void)awakeFromNib
+{
+    [self startObservingSelectedGenotypes];
 }
 
 - (void)setWorld:(MacTierra::World*)inWorld
@@ -158,10 +169,17 @@ using namespace MacTierra;
     if (!mWorld)
         return;
 
+    MTInventoryGenotype* selectedGenotype = nil;
+    if ([[mGenotypesArrayController selectedObjects] count] == 1)
+    {
+        selectedGenotype = [[mGenotypesArrayController selectedObjects] firstObject];
+    }
+    
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
 
     NSColor* adultColor  = [[NSColor blueColor] colorWithAlphaComponent:0.5];
     NSColor* embryoColor = [[NSColor grayColor] colorWithAlphaComponent:0.5];
+    NSColor* selectedGenotypeColor = [[NSColor orangeColor] colorWithAlphaComponent:0.9];
 
     CGContextSetLineWidth(cgContext, 1.0f);
     
@@ -219,8 +237,13 @@ using namespace MacTierra;
         if (curCreature->isEmbryo())
             [embryoColor set];
         else
-            [adultColor set];
-
+        {
+            if (curCreature->genotype() == selectedGenotype.genotype)
+                [selectedGenotypeColor set];
+            else
+                [adultColor set];
+        }
+        
         CGContextStrokePath(cgContext);
     }
 }
@@ -578,6 +601,32 @@ using namespace MacTierra;
     [self checkForGLError];
 }
 
+#pragma mark -
+
+- (void)startObservingSelectedGenotypes
+{
+    [mGenotypesArrayController addObserver:self
+                                   forKeyPath:@"selection"
+                                      options:0
+                                      context:NULL];
+}
+
+- (void)stopObservingSelectedGenotypes
+{
+    [mGenotypesArrayController removeObserver:self forKeyPath:@"selection"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"selection"])
+    {
+        [self setNeedsDisplay:YES];
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
 
 
 @end

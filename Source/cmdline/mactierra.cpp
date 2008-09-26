@@ -56,10 +56,10 @@ protected:
 static const char * const kOptionsList[] = {
     "?|?",
     "H|help",
-    "s:soup-size <number>",     // required
-    "d:duration <number>",      // required
-    "r:random-seed <number>",   // optional
-    "c:configuration-file",     // optional
+    "s:soup-size <number>",
+    "d:duration <number>",
+    "r:random-seed <number>",
+    "c:configuration-file",
     "f:in-soup-file",
     "o:out-soup-file",
     "x:xml-format",
