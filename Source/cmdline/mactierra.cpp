@@ -78,6 +78,7 @@ string      gConfigFilePath;
 
 bool        gUseXMLFormat = false;
 
+bool        gInterrupted = false;
 Settings    gSoupSettings;
 
 static bool readConfigurationFile(const std::string filePath)
@@ -123,12 +124,6 @@ static bool sanityCheckOptions()
         // warn if -s or -r are specified
     }
     
-    if (gRunDuration == 0)
-    {
-        cerr << "Run duration not specified, or zero. Use -d to specify the run duration as an instruction count." << endl;
-        return false;
-    }
-
     return true;
 }
 
@@ -211,6 +206,13 @@ static ostream* uniqueOutputStream(const string& inPrefix, const string& inExten
     }
     
     return NULL;
+}
+
+
+extern "C" void interruptSignalHandler(int inSignal)
+{
+    cerr << "Interrupted; saving soup" << endl;
+    gInterrupted = true;
 }
 
 extern "C" int main(int argc, char* argv[])
@@ -301,6 +303,9 @@ extern "C" int main(int argc, char* argv[])
     if (!sanityCheckOptions())
         exit(1);
 
+    signal(SIGINT, interruptSignalHandler);
+    signal(SIGTERM, interruptSignalHandler);
+    
     World*  theWorld = createWorld();
 
     const string outFileExtension(gUseXMLFormat ? "mactierra_xml" : "mactierra");
@@ -328,16 +333,21 @@ extern "C" int main(int argc, char* argv[])
     
     cout << "Soup size: " << gSoupSize << endl;
     cout << "Random seed: " << gRandomSeed << endl;
-    cout << "Duration: " << gRunDuration << endl;
+    if (gRunDuration > 0)
+        cout << "Duration: " << gRunDuration << endl;
+    else
+        cout << "No duration specified. Will run until killed" << endl;
+
     if (!gConfigFilePath.empty())
         cout << "Configuration read from " << gConfigFilePath << endl;
     if (!gInputSoupFilePath.empty())
         cout << "Input soup file: " << gInputSoupFilePath << endl;
     cout << "Output soup file: " << gOutputSoupFilePath << "." << outFileExtension << endl;
 
-    for (int32_t i = 0; i < 1; ++i)
+    const u_int32_t cycleLength = gRunDuration > 0 ? gRunDuration : 50000;
+    while (!gInterrupted)
     {
-        theWorld->iterate(gRunDuration);
+        theWorld->iterate(cycleLength);
     }
     
     if (outputStream)
