@@ -94,7 +94,8 @@ public:
 
     enum EWorldSerializationFormat {
         kBinary,
-        kXML
+        kXML,
+        kAutodetect     // for open only
     };
     
     // save/restore

@@ -696,6 +696,10 @@ World::worldToStream(const World* inWorld, std::ostream& inStream, EWorldSeriali
                 xmlArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", inWorld);
             }
             break;
+
+        case kAutodetect:
+            BOOST_ASSERT(0);
+            break;
     }
 }
 
@@ -705,6 +709,21 @@ World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inForma
 {
     World* braveNewWorld = NULL;
 
+    if (inFormat == kAutodetect)
+    {
+        inStream.seekg(0);
+
+        string header;
+        inStream >> header;
+        
+        if (header.compare("<?xml") == 0)
+            inFormat = kXML;
+        else
+            inFormat = kBinary;
+        
+        inStream.seekg(0);
+    }
+    
     switch (inFormat)
     {
         case kBinary:
@@ -719,6 +738,10 @@ World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inForma
                 ::boost::archive::xml_iarchive xmlArchive(inStream);
                 xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", braveNewWorld);
             }
+            break;
+
+        case kAutodetect:
+            BOOST_ASSERT(0);
             break;
     }
 

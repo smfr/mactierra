@@ -8,13 +8,19 @@
  */
 
 #include <stddef.h>
-#import <fstream>
+
+#include <sys/fcntl.h>
+
+#include <fstream>
 
 #include <RandomLib/RandomSeed.hpp>
 
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/serialization/serialization.hpp>
 
+#include <boost/iostreams/device/file_descriptor.hpp>
+#include <boost/iostreams/stream_buffer.hpp>
+    
 #include "mactierra.h"
 
 #include "options.h"
@@ -27,9 +33,24 @@
 using namespace MacTierra;
 using namespace std;
 
+namespace io = boost::iostreams;
 
 const int32_t kDefaultSoupSize = 1024 * 256;
 const int32_t kCycleCount = 200;
+
+// cheesy ostream subclass which holds onto the streambuf
+class fileDescStream : public ostream
+{
+public:
+    fileDescStream(int fd)
+    : m_streamBuf(fd, true /* close on exit */)
+    , ostream(&m_streamBuf)
+    {
+    }
+    
+protected:
+    io::stream_buffer<io::file_descriptor_sink> m_streamBuf;    
+};
 
 
 static const char * const kOptionsList[] = {
@@ -72,7 +93,7 @@ static bool readConfigurationFile(const std::string filePath)
     }
     catch (std::exception const& e)
     {
-        cerr << "Failed to parse configuration file (error " << e.what() << ") at " << filePath << endl;
+        cerr << "Failed to parse configuration file (error " << e.what() << ") " << filePath << endl;
         return false;
     }
     catch (...)
@@ -91,10 +112,15 @@ static bool readConfigurationFile(const std::string filePath)
 
 static bool sanityCheckOptions()
 {
-    if (gInputSoupFilePath.length() > 0 && gConfigFilePath.length() > 0)
+    if (!gInputSoupFilePath.empty() && !gConfigFilePath.empty())
     {
         cerr << "Provide an input soup path, or configuration file path, but not both." << endl;
         return false;
+    }
+    
+    if (!gInputSoupFilePath.empty())
+    {
+        // warn if -s or -r are specified
     }
     
     if (gRunDuration == 0)
@@ -106,15 +132,44 @@ static bool sanityCheckOptions()
     return true;
 }
 
+static World::EWorldSerializationFormat formatFromFileExtension(const string& inFileName)
+{
+    const string xmlFileSuffix = ".mactierra_xml";
+    const string binaryFileSuffix = ".mactierra";
+
+    if (inFileName.compare(inFileName.length() - xmlFileSuffix.length(), xmlFileSuffix.length(), xmlFileSuffix) == 0)
+        return World::kXML;
+
+    if (inFileName.compare(inFileName.length() - binaryFileSuffix.length(), binaryFileSuffix.length(), binaryFileSuffix) == 0)
+        return World::kBinary;
+
+    return World::kAutodetect;
+}
+
 static World* createWorld()
 {
     World* theWorld = NULL;
     
     if (gInputSoupFilePath.length() > 0)
     {
-        std::ifstream fileStream(gInputSoupFilePath.c_str());
-        // FIXME: sniff the file to determine the type
-        theWorld = World::worldFromStream(fileStream, World::kXML);
+        try
+        {
+            std::ifstream fileStream(gInputSoupFilePath.c_str());
+            theWorld = World::worldFromStream(fileStream, formatFromFileExtension(gInputSoupFilePath));
+        }
+        catch (std::exception const& e)
+        {
+            cerr << "Failed to parse soup file (error " << e.what() << ") " << gInputSoupFilePath << endl;
+            exit(1);
+        }
+        catch (...)
+        {
+            cerr << "Failed to open soup file " << gInputSoupFilePath << endl;
+            exit(1);
+        }
+        
+        gSoupSize = theWorld->soupSize();
+        gRandomSeed = theWorld->initialRandomSeed();
     }
     else
     {
@@ -133,10 +188,34 @@ static World* createWorld()
     return theWorld;
 }
 
+static ostream* uniqueOutputStream(const string& inPrefix, const string& inExtension)
+{
+    for (u_int32_t counter = 0; counter < 10000; ++counter)
+    {
+        std::ostringstream nameStream;
+        
+        nameStream << inPrefix;
+        if (counter > 0)
+            nameStream << "_" << counter;
+        nameStream << ".";
+        nameStream << inExtension;
+        
+        // Ugly gyrations because I don't like the filename patterns
+        // of mkstemp, and there's no way to open an ofstream in O_EXCL mode
+        // (ios::noreplace is not standard).
+        int fd = open(nameStream.str().c_str(), O_RDWR | O_CREAT | O_EXCL, 0644);
+        if (fd == -1)
+            continue;
+
+        return new fileDescStream(fd);
+    }
+    
+    return NULL;
+}
+
 extern "C" int main(int argc, char* argv[])
 {
-    Options      opts(*argv, kOptionsList);
-
+    Options opts(*argv, kOptionsList);
 
     int  optchar;
     const char * optarg;
@@ -213,7 +292,7 @@ extern "C" int main(int argc, char* argv[])
         }
     }
 
-    if (errors)
+    if (!argc || errors)
     {
         opts.usage(cerr, "");
         exit(1);
@@ -221,14 +300,30 @@ extern "C" int main(int argc, char* argv[])
     
     if (!sanityCheckOptions())
         exit(1);
-    
+
     World*  theWorld = createWorld();
+
+    const string outFileExtension(gUseXMLFormat ? "mactierra_xml" : "mactierra");
+
+    ostream* outputStream = NULL;
 
     if (gOutputSoupFilePath.empty())
     {
         std::ostringstream nameStream;
-        nameStream << "output_soup_" << gRandomSeed << ".mactierra";
+        nameStream << "output_soup_" << gRandomSeed;
         gOutputSoupFilePath = nameStream.str();
+    }
+    else
+    {
+        string fileSuffix = "." + outFileExtension;
+        if (gOutputSoupFilePath.compare(gOutputSoupFilePath.length() - fileSuffix.length(), fileSuffix.length(), fileSuffix) == 0)
+            gOutputSoupFilePath = string(gOutputSoupFilePath, 0, gOutputSoupFilePath.length() - fileSuffix.length());
+    }
+
+    if (!(outputStream = uniqueOutputStream(gOutputSoupFilePath, outFileExtension)))
+    {
+        cout << "Failed to create output file " << gOutputSoupFilePath << "." << outFileExtension;
+        exit(1);
     }
     
     cout << "Soup size: " << gSoupSize << endl;
@@ -238,19 +333,17 @@ extern "C" int main(int argc, char* argv[])
         cout << "Configuration read from " << gConfigFilePath << endl;
     if (!gInputSoupFilePath.empty())
         cout << "Input soup file: " << gInputSoupFilePath << endl;
-    cout << "Output soup file: " << gOutputSoupFilePath << endl;
+    cout << "Output soup file: " << gOutputSoupFilePath << "." << outFileExtension << endl;
 
     for (int32_t i = 0; i < 1; ++i)
     {
         theWorld->iterate(gRunDuration);
     }
     
-    if (gOutputSoupFilePath.length() > 0)
-    {
-        ofstream outputStream(gOutputSoupFilePath.c_str());
-        World::worldToStream(theWorld, outputStream, gUseXMLFormat ? World::kXML : World::kBinary);
-    }
+    if (outputStream)
+        World::worldToStream(theWorld, *outputStream, gUseXMLFormat ? World::kXML : World::kBinary);
     
+    delete outputStream;
     delete theWorld;
     
     return 0;
