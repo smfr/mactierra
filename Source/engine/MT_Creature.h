@@ -94,6 +94,8 @@ public:
     // this string can have embedded nulls. Not printable.
     GenomeData      genomeData() const;
     
+    const GenomeData& birthGenome() const                           { return mBirthGenome; }
+
     // move to soup?
     void            clearSpace();
     
@@ -185,6 +187,8 @@ private:
         // mReaperListHook and mSlicerListHook are saved by the slicer and reaper lists
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("id", mID);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_genome", mBirthGenome);
+
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
@@ -221,6 +225,8 @@ private:
         // mReaperListHook and mSlicerListHook are filled in when the slicer and reaper lists load
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("id", mID);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_genome", mBirthGenome);
+
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
@@ -259,6 +265,8 @@ protected:
 
     creature_id     mID;
     
+    GenomeData      mBirthGenome;                   // genome at birth
+
     InventoryGenotype*  mGenotype;
     u_int32_t           mGenotypeDivergence;        // number of primes after the name
 

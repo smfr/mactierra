@@ -515,7 +515,8 @@ World::handleBirth(Creature* inParent, Creature* inChild)
             parentGenotype = inParent->genotype();
 
         InventoryGenotype*   foundGenotype = NULL;
-        if (mInventory->enterGenotype(inParent->genomeData(), foundGenotype))
+        BOOST_ASSERT(inParent->birthGenome().length() > 0);
+        if (mInventory->enterGenotype(inParent->birthGenome(), foundGenotype))
         {
             // it's new
             foundGenotype->setOriginInstructions(inParent->originInstructions());

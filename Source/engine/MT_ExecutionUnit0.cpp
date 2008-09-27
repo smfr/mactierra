@@ -119,7 +119,6 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
             }
             break;
 
-#warning should these raise the flag if the sp wraps?
         case k_pop_ax:  // Pop top of stack into ax
             {
                 int32_t targetRegister = (k_ax + kNumRegisters + inFlaw) % kNumRegisters; 
@@ -288,7 +287,7 @@ ExecutionUnit0::call(Creature& inCreature, Soup& inSoup)
 
     if (inSoup.seachForTemplate(Soup::kBothways, templateOffset, templateLength))
     {
-        cpu.push(cpu.mInstructionPointer + templateLength + 1); // why the + 1?
+        cpu.push(cpu.mInstructionPointer + templateLength + 1); // FIXME: verify the + 1
         
         // subtract one so that when we increment the IP later it points to the found location
         u_int32_t soupSize = inSoup.soupSize();
@@ -298,7 +297,10 @@ ExecutionUnit0::call(Creature& inCreature, Soup& inSoup)
     {
         //cout << "Failed to find call template" << endl;
         if (templateLength == 0)
+        {
             cpu.push(cpu.mInstructionPointer + 1);
+            // tierra doesn't set the flag here, apparently
+        }
         else
         {
             cpu.mInstructionPointer += templateLength;

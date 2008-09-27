@@ -202,6 +202,7 @@ static ostream* uniqueOutputStream(const string& inPrefix, const string& inExten
         if (fd == -1)
             continue;
 
+        gOutputSoupFilePath = string(nameStream.str(), 0, nameStream.str().length() - inExtension.length() - 1);
         return new fileDescStream(fd);
     }
     

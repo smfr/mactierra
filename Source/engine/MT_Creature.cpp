@@ -161,15 +161,13 @@ Creature::genomeIdenticalToCreature(const Creature& inOther) const
     const u_int32_t soupSize = mSoup->soupSize();
     const instruction_t* soupStart = mSoup->soup();
     
-    address_t selfOffset = location();
     address_t daughterOffset = inOther.location();
 
     for (u_int32_t i = 0; i < length(); ++ i)
     {
-        if (*(soupStart + selfOffset) != *(soupStart + daughterOffset))
+        if ((instruction_t)mBirthGenome.dataString()[i] != *(soupStart + daughterOffset))
             return false;
 
-        selfOffset     = (selfOffset + 1) % soupSize;
         daughterOffset = (daughterOffset + 1) % soupSize;
     }
     return true;
@@ -195,6 +193,7 @@ Creature::gaveBirth(Creature* inDaughter)
 void
 Creature::onBirth(const World& inWorld)
 {
+    mBirthGenome = genomeData();
     setOriginInstructions(inWorld.timeSlicer().instructionsExecuted());
     mBorn = true;
 }

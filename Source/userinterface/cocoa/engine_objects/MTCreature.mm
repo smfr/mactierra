@@ -65,7 +65,7 @@ public:
 
 - (NSData*)genome
 {
-    std::string genomeString = mPrivateData->creature()->genomeData().dataString();
+    std::string genomeString = mPrivateData->creature()->birthGenome().dataString();
     
     return [NSData dataWithBytes:genomeString.data() length:genomeString.length()];
 }
