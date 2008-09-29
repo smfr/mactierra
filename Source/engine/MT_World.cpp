@@ -89,12 +89,12 @@ World::initializeSoup(u_int32_t inSoupSize)
 }
 
 PassRefPtr<Creature>
-World::createCreature()
+World::createCreature(u_int32_t inLength)
 {
     if (!mSoup)
         return NULL;
 
-    RefPtr<Creature> theCreature = Creature::create(uniqueCreatureID(), mSoup);
+    RefPtr<Creature> theCreature = Creature::create(uniqueCreatureID(), inLength, mSoup);
     // mCreatureIDMap is the ultimate owner of creatures. both adults and embryos are entered
     mCreatureIDMap[theCreature->creatureID()] = theCreature;
     
@@ -170,10 +170,8 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     if (!mCellMap->spaceAtAddress(inAddress, inLength))
         return NULL;
 
-    RefPtr<Creature> theCreature = createCreature();
-
+    RefPtr<Creature> theCreature = createCreature(inLength);
     theCreature->setLocation(inAddress);
-    theCreature->setLength(inLength);
     
     mSoup->injectInstructions(inAddress, inInstructions, inLength);
 
@@ -189,7 +187,7 @@ World::insertCreature(address_t inAddress, const instruction_t* inInstructions, 
     theCreature->setGeneration(1);
     mInventory->creatureBorn(theGenotype);
 
-    theCreature->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature.get(), mSettings));
+    theCreature->setMeanSliceSize(mTimeSlicer.initialSliceSizeForCreature(theCreature.get(), mSettings));
     theCreature->setReferencedLocation(theCreature->location());
     
     bool inserted = mCellMap->insertCreature(theCreature.get());
@@ -427,9 +425,8 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
     RefPtr<Creature> daughter;
     if (foundLocation)
     {
-        daughter = createCreature();
+        daughter = createCreature(inDaughterLength);
         daughter->setLocation(location);
-        daughter->setLength(inDaughterLength);
     
         bool added = mCellMap->insertCreature(daughter.get());
         BOOST_ASSERT(added);
@@ -489,7 +486,7 @@ World::computeNextCopyError()
 void
 World::handleBirth(Creature* inParent, Creature* inChild)
 {
-    inChild->setSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings));
+    inChild->setMeanSliceSize(mTimeSlicer.initialSliceSizeForCreature(inChild, mSettings));
     inChild->setReferencedLocation(inChild->location());
 
     // add to slicer and reaper

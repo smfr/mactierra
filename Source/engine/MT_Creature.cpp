@@ -17,18 +17,20 @@ namespace MacTierra {
 
 using namespace std;
 
-Creature::Creature(creature_id inID, Soup* inOwningSoup)
+Creature::Creature(creature_id inID, u_int32_t inLength, Soup* inOwningSoup)
 : mID(inID)
 , mGenotype(NULL)
 , mGenotypeDivergence(0)
 , mSoup(inOwningSoup)
 , mDaughter(NULL)
+, mExecutedBits(inLength, 0)
 , mDividing(false)
 , mBorn(false)
 , mDead(false)
-, mLength(0)
+, mLength(inLength)
 , mLocation(0)
-, mSliceSize(0)
+, mMeanSliceSize(0.0)
+, mLeanness(0.5)
 , mLastInstruction(0)
 , mInstructionsToLastOffspring(0)
 , mTotalInstructionsExecuted(0)
@@ -88,7 +90,8 @@ int32_t
 Creature::offsetFromAddress(u_int32_t inAddress) const
 {
 #ifdef RELATIVE_ADDRESSING
-    return (int32_t)inAddress - mLocation;      // wrap to soup size?
+    const u_int32_t soupSize = mSoup->soupSize();
+    return ((inAddress + soupSize) - mLocation) % soupSize;
 #else
     return inAddress;
 #endif
@@ -180,9 +183,14 @@ Creature::gaveBirth(Creature* inDaughter)
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
 
+    computeLeanness();
+    
     // daughter gets our genotype
     inDaughter->setGeneration(generation() + 1);
-
+    
+    // daughter inherits leanness (until its first offspring)
+    inDaughter->setLeanness(mLeanness);
+    
     bool identicalCopy = genomeIdenticalToCreature(*inDaughter);
     if (identicalCopy)
         ++mNumIdenticalOffspring;
@@ -209,6 +217,12 @@ Creature::clearDaughter()
 {
     mDaughter.clear();
     mDividing = false;
+}
+
+void
+Creature::noteMoveToOffspring(address_t inTargetAddress)
+{
+    ++mMovesToLastOffspring;
 }
 
 } // namespace MacTierra

@@ -50,26 +50,21 @@ CellMapTests::runTest()
 {
     std::cout << "CellMapTests" << std::endl;
 
-    RefPtr<Creature>   creature1 = mWorld->createCreature();
+    RefPtr<Creature>   creature1 = mWorld->createCreature(100);
     creature1->setLocation(100);
-    creature1->setLength(100);
 
-    RefPtr<Creature>   creature2 = mWorld->createCreature();
+    RefPtr<Creature>   creature2 = mWorld->createCreature(100);
     creature2->setLocation(200);
-    creature2->setLength(100);
 
-    RefPtr<Creature>   creature3 = mWorld->createCreature();
+    RefPtr<Creature>   creature3 = mWorld->createCreature(100);
     creature3->setLocation(400);
-    creature3->setLength(100);
 
     // wrapping creature
-    RefPtr<Creature>   creature4 = mWorld->createCreature();
+    RefPtr<Creature>   creature4 = mWorld->createCreature(100);
     creature4->setLocation(1000);
-    creature4->setLength(100);
 
-    RefPtr<Creature>   creature5 = mWorld->createCreature();
+    RefPtr<Creature>   creature5 = mWorld->createCreature(20);
     creature5->setLocation(80);
-    creature5->setLength(20);
 
     TEST_CONDITION(creature1 && creature2 && creature3);
 

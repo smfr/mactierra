@@ -18,7 +18,6 @@
 - (void)updateFlawLevel;
 - (void)updateCopyErrorLevel;
 
-
 @end
 
 #pragma mark -
@@ -317,6 +316,16 @@
 - (void)setClearReapedCreatures:(BOOL)inVal
 {
     mSettings->setClearReapedCreatures(inVal);
+}
+
+- (BOOL)selectForLeanness
+{
+    return mSettings->selectForLeanness();
+}
+
+- (void)setSelectForLeanness:(BOOL)inVal
+{
+    mSettings->setSelectForLeanness(inVal);
 }
 
 #pragma mark -

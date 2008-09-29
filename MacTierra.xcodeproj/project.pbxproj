@@ -569,6 +569,7 @@
 		0FA56BAA0E5A64E20001E997 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		0FA56D350E5A8ACE0001E997 /* MTInstructionCountFormatter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInstructionCountFormatter.h; sourceTree = "<group>"; };
 		0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTInstructionCountFormatter.m; sourceTree = "<group>"; };
+		0FA5F8040E9069840097B984 /* serialize_dynamic_bitset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = serialize_dynamic_bitset.h; sourceTree = "<group>"; };
 		0FADF3E10E6E480000775949 /* MT_DataCollectors.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_DataCollectors.cpp; sourceTree = "<group>"; };
 		0FADF3E20E6E480000775949 /* MT_DataCollectors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_DataCollectors.h; sourceTree = "<group>"; };
 		0FB043F90E5D2FCD0024DF67 /* MTInventoryGenotype.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTInventoryGenotype.h; sourceTree = "<group>"; };
@@ -1368,6 +1369,15 @@
 			path = utils;
 			sourceTree = "<group>";
 		};
+		0FA5F8010E9069730097B984 /* boost_additions */ = {
+			isa = PBXGroup;
+			children = (
+				0FA5F8040E9069840097B984 /* serialize_dynamic_bitset.h */,
+			);
+			name = boost_additions;
+			path = Source/boost_additions;
+			sourceTree = "<group>";
+		};
 		0FAC2F910E4F75FE00CB068B /* engine */ = {
 			isa = PBXGroup;
 			children = (
@@ -1640,6 +1650,7 @@
 				0FB9C4400E72336000E6EBFD /* Readme.txt */,
 				0FB9C4480E72338500E6EBFD /* TODO.txt */,
 				0F13F9F70E5FD95000D8E649 /* boost */,
+				0FA5F8010E9069730097B984 /* boost_additions */,
 				0FFF64300E4FE34C00404828 /* RandomLib */,
 				0F1D19D40E7A2F37008EB764 /* wtf */,
 				0FAC2F910E4F75FE00CB068B /* engine */,

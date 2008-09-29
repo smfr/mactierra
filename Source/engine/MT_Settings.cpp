@@ -31,6 +31,7 @@ Settings::Settings()
 , mTransferRegistersToOffspring(false)
 , mClearDaughterCells(false)
 , mClearReapedCreatures(false)
+, mSelectForLeanness(false)
 , mDaughterAllocation(kPreferredAlloc)
 {
 }

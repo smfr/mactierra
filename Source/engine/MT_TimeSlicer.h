@@ -49,7 +49,7 @@ public:
 
     u_int64_t   instructionsExecuted() const { return mTotalInstructions; }
 
-    u_int32_t   initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings);
+    double      initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings);
 
     u_int32_t   sizeForThisSlice(const Creature* inCreature, double inSliceSizeVariance);
 

@@ -82,18 +82,18 @@ TimeSlicer::advance(bool inForwards /* = true */)
     return false;
 }
 
-u_int32_t
+double
 TimeSlicer::initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings)
 {
     if (inSettings.timeSliceType() == Settings::kConstantSlizeSize)
         return inSettings.constantSliceSize();
 
-/*
-    if (self.fLeannessSelection) then
-        thisSize := System.Round(thisCreature.fLeanness * fSliceConst * exp(fSizeSelection * ln(thisCreature.fValue/80.0)))
-*/
+    double sliceSize = inSettings.constantSliceSize() * exp(inSettings.sizeSelection() * log(inCreature->length() / 80.0));
+    
+    if (inSettings.selectForLeanness())
+        sliceSize *= inCreature->leanness();
 
-    return lround(inSettings.constantSliceSize() * exp(inSettings.sizeSelection() * log(inCreature->length() / 80.0)));
+    return sliceSize;
 }
 
 u_int32_t
@@ -101,13 +101,13 @@ TimeSlicer::sizeForThisSlice(const Creature* inCreature, double inSliceSizeVaria
 {
     if (inSliceSizeVariance > 0.0)
     {
-        u_int32_t sliceSize = inCreature->sliceSize();
+        double sliceSize = inCreature->meanSliceSize();
         
         RandomLib::NormalDistribution<double> normdist;
         return std::max(lround(normdist(mWorld->RNG(), sliceSize, inSliceSizeVariance)), 1L);
     }
     
-    return inCreature->sliceSize();
+    return lround(inCreature->meanSliceSize());
 }
 
 void

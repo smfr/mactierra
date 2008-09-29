@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 
+#include <boost/dynamic_bitset.hpp>
 #include <boost/intrusive/list.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -20,6 +21,8 @@
 #include <wtf/PassRefPtr.h>
 #include <wtf/RefPtr.h>
 #include <wtf/RefCounted.h>
+
+#include "serialize_dynamic_bitset.h"
 
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
@@ -42,9 +45,9 @@ public:
     
 public:
     
-    static PassRefPtr<Creature> create(creature_id inID, Soup* inOwningSoup)
+    static PassRefPtr<Creature> create(creature_id inID, u_int32_t inLength, Soup* inOwningSoup)
     {
-        return adoptRef(new Creature(inID, inOwningSoup));
+        return adoptRef(new Creature(inID, inLength, inOwningSoup));
     }
     
     ~Creature();
@@ -57,7 +60,6 @@ public:
     Soup*           soup() const { return mSoup; }
 
     u_int32_t       length() const { return mLength; }
-    void            setLength(u_int32_t inLength) { mLength = inLength; }
 
     address_t       location() const { return mLocation; }
     void            setLocation(address_t inLocation) { mLocation = inLocation; }
@@ -69,9 +71,10 @@ public:
                         return (endAddress > mLocation) ? (inAddress >= mLocation && inAddress < endAddress)
                                                         : (inAddress >= mLocation || inAddress < endAddress);     // wrapping case
                     }
-                    
-    int32_t         sliceSize() const   { return mSliceSize; }
-    void            setSliceSize(int32_t inSize) { mSliceSize = inSize; }
+
+    // stored as a double since it's used as the mean of a normal distribution
+    double          meanSliceSize() const   { return mMeanSliceSize; }
+    void            setMeanSliceSize(double inSize) { mMeanSliceSize = inSize; }
 
     Cpu&            cpu() { return mCPU; }
     const Cpu&      cpu() const { return mCPU; }
@@ -112,8 +115,16 @@ public:
 
     void            clearDaughter();
     
-    void            noteMoveToOffspring()       { ++mMovesToLastOffspring; }
+    void            noteMoveToOffspring(address_t inTargetAddress);
 
+    // leanness is the proportion of instructions executed to produce the first child. Currently,
+    // template instructions are not counted.
+    void            setExecutedBit(u_int32_t inBitIndex)     { mExecutedBits[inBitIndex] = 1; }
+    void            computeLeanness()           { mLeanness = (double)mExecutedBits.count() / mLength; }
+
+    void            setLeanness(double inVal)   { mLeanness = inVal; }
+    double          leanness() const            { return mLeanness; }
+    
     void            noteErrors()                { if (mCPU.mFlag) ++mNumErrors; }
     u_int32_t       numErrors() const           { return mNumErrors; }
     // for testing
@@ -155,7 +166,7 @@ public:
                     }
 private:
 
-    Creature(creature_id inID, Soup* inOwningSoup);
+    Creature(creature_id inID, u_int32_t inLength, Soup* inOwningSoup);
 
     // default ctor for serialization
     Creature()
@@ -168,7 +179,7 @@ private:
     , mBorn(false)
     , mLength(0)
     , mLocation(0)
-    , mSliceSize(0)
+    , mMeanSliceSize(0.0)
     , mLastInstruction(0)
     , mInstructionsToLastOffspring(0)
     , mTotalInstructionsExecuted(0)
@@ -195,6 +206,9 @@ private:
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
+        
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("executed_bits", mExecutedBits);
+
         bool temp = mDividing;
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", temp);
         temp = mBorn;
@@ -204,7 +218,7 @@ private:
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
-        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size", mSliceSize);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_slice_size", mMeanSliceSize);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("last_instruction", mLastInstruction);
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("insts_to_last_offspring", mInstructionsToLastOffspring);
@@ -233,6 +247,9 @@ private:
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter", mDaughter);
+
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("executed_bits", mExecutedBits);
+
         bool temp;
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("dividing", temp); mDividing = temp;
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("born", temp); mBorn = temp;
@@ -240,7 +257,7 @@ private:
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("length", mLength);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("location", mLocation);
-        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("slice_size", mSliceSize);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_slice_size", mMeanSliceSize);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("last_instruction", mLastInstruction);
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("insts_to_last_offspring", mInstructionsToLastOffspring);
@@ -276,6 +293,8 @@ protected:
     
     RefPtr<Creature> mDaughter;
 
+    boost::dynamic_bitset<>   mExecutedBits;
+
     bool            mDividing : 1;
     bool            mBorn : 1;              // false until parent divides
     bool            mDead : 1;
@@ -283,8 +302,9 @@ protected:
     u_int32_t       mLength;
     address_t       mLocation;          // position in soup
     
-    u_int32_t       mSliceSize;         // should this be here?
-    instruction_t   mLastInstruction;   // ditto
+    double          mMeanSliceSize;
+    double          mLeanness;
+    instruction_t   mLastInstruction;
     
     u_int32_t       mInstructionsToLastOffspring;
     u_int64_t       mTotalInstructionsExecuted;

@@ -50,8 +50,8 @@ ReaperTests::runTest()
     std::cout << "ReaperTests" << std::endl;
 
     creature_id creatureID = 100;
-    RefPtr<Creature>   creature1 = Creature::create(++creatureID, mSoup);
-    RefPtr<Creature>   creature2 = Creature::create(++creatureID, mSoup);
+    RefPtr<Creature>   creature1 = Creature::create(++creatureID, 100, mSoup);
+    RefPtr<Creature>   creature2 = Creature::create(++creatureID, 100, mSoup);
 
     creature1->setNumErrors(2);
     creature2->setNumErrors(4);

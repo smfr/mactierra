@@ -36,6 +36,13 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
     Cpu& cpu = inCreature.cpu();
     cpu.clearFlag();
     
+    if (inWorld.settings().selectForLeanness())
+    {
+        const int32_t ip = cpu.mInstructionPointer;
+        if (ip >= 0 && ip < inCreature.length())
+            inCreature.setExecutedBit(ip);
+    }
+    
     instruction_t   theInst = inCreature.getSoupInstruction(cpu.mInstructionPointer);
     
     //cout << "Executing instruction " << (int32_t)theInst << endl;
@@ -186,7 +193,8 @@ ExecutionUnit0::execute(Creature& inCreature, World& inWorld, int32_t inFlaw)
                     (inCreature.isDividing() && inCreature.daughterCreature()->containsAddress(targetAddress, soupSize)))
                 {
                     inWorld.soup()->setInstructionAtAddress(targetAddress, inst);
-                    inCreature.noteMoveToOffspring();
+                    if (inCreature.isDividing())
+                        inCreature.noteMoveToOffspring(targetAddress);
                 }
                 else
                     cpu.setFlag();

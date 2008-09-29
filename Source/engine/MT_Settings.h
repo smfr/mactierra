@@ -104,6 +104,9 @@ public:
     bool            clearReapedCreatures() const    { return mClearReapedCreatures; }
     void            setClearReapedCreatures(bool inClear) { mClearReapedCreatures = inClear; }
 
+    bool            selectForLeanness() const    { return mSelectForLeanness; }
+    void            setSelectForLeanness(bool inSet) { mSelectForLeanness = inSet; }
+
     void            recomputeMutationIntervals(u_int32_t inSoupSize);
     
 private:
@@ -130,6 +133,7 @@ private:
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("transfer_register_contents_to_offspring", mTransferRegistersToOffspring);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("clear_daughter_cells", mClearDaughterCells);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("clear_reaped_creatures", mClearReapedCreatures);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("select_for_leanness", mSelectForLeanness);
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("daughter_allocation_type", mDaughterAllocation);
     }
@@ -161,6 +165,7 @@ protected:
     bool            mTransferRegistersToOffspring;
     bool            mClearDaughterCells;
     bool            mClearReapedCreatures;
+    bool            mSelectForLeanness;
     
     EDaughterAllocationStrategy mDaughterAllocation;
 

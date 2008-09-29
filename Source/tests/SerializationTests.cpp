@@ -74,7 +74,6 @@ SerializationTests::runTest()
     
     RefPtr<Creature> creature1 = mWorld->insertCreature(100, kAncestor80aaa, sizeof(kAncestor80aaa) / sizeof(instruction_t));
     creature1->setLocation(400);
-    creature1->setLength(100);
 
     mWorld->iterate(20000);
 

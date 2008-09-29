@@ -408,7 +408,6 @@ public:
 
         self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
         
-        mLastInstTime = currentTime;
         mLastInstructions = curInstructions;
         mLastNumCreatures = mWorldData->mWorld->cellMap()->numCreatures();
         mLastFullness = mWorldData->mWorld->cellMap()->fullness();
@@ -420,6 +419,8 @@ public:
             [self updateGenotypes];
 
         [mGraphController updateGraph];
+
+        mLastInstTime = CFAbsoluteTimeGetCurrent();
     }
     [self unlockWorld];
 

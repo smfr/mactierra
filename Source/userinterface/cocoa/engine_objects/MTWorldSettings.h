@@ -85,7 +85,7 @@ typedef enum EMutationRate {
 @property (assign) BOOL transferRegistersToOffspring;
 @property (assign) BOOL clearDaughterCells;
 @property (assign) BOOL clearReapedCreatures;
-
+@property (assign) BOOL selectForLeanness;
 
 // internal
 @property (retain) NSDictionary* mutationDefaults;
