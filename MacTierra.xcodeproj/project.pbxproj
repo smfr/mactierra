@@ -52,6 +52,7 @@
 		0FA4B95D0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA4B95C0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a */; };
 		0FA4B95E0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA4B95C0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a */; };
 		0FA4B95F0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FA4B95C0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a */; };
+		0FA53E660E91E25200826FAD /* MTWorldDataCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FA53E650E91E25200826FAD /* MTWorldDataCollection.mm */; };
 		0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
 		0FA56BAB0E5A64E20001E997 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 0FA56BAA0E5A64E20001E997 /* Localizable.strings */; };
 		0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA56D360E5A8ACE0001E997 /* MTInstructionCountFormatter.m */; };
@@ -564,6 +565,8 @@
 		0FA4B9240E8C897700EB3188 /* traits_fwd.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = traits_fwd.hpp; sourceTree = "<group>"; };
 		0FA4B9250E8C897700EB3188 /* write.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = write.hpp; sourceTree = "<group>"; };
 		0FA4B95C0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_iostreams-xgcc40-mt-1_36.a"; path = "Source/boost/lib/libboost_iostreams-xgcc40-mt-1_36.a"; sourceTree = "<group>"; };
+		0FA53E640E91E25200826FAD /* MTWorldDataCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTWorldDataCollection.h; sourceTree = "<group>"; };
+		0FA53E650E91E25200826FAD /* MTWorldDataCollection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTWorldDataCollection.mm; sourceTree = "<group>"; };
 		0FA54D350E7C512F00337C19 /* NSCharacterSetAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSCharacterSetAdditions.h; sourceTree = "<group>"; };
 		0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSCharacterSetAdditions.m; sourceTree = "<group>"; };
 		0FA56BAA0E5A64E20001E997 /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
@@ -1125,6 +1128,8 @@
 				0FB0442A0E5D325B0024DF67 /* MTInventoryController.mm */,
 				0F995BC00E68FD3C00AC5089 /* MTGraphController.h */,
 				0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */,
+				0FA53E640E91E25200826FAD /* MTWorldDataCollection.h */,
+				0FA53E650E91E25200826FAD /* MTWorldDataCollection.mm */,
 				0F9DE5D40E575DAD00E86DD6 /* MTWorldController.h */,
 				0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */,
 			);
@@ -1915,6 +1920,7 @@
 				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */,
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 				0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
+				0FA53E660E91E25200826FAD /* MTWorldDataCollection.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

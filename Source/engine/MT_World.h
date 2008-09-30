@@ -64,7 +64,7 @@ public:
     DataCollector*      dataCollector() const   { return mDataCollector; }
     
     PassRefPtr<Creature> createCreature(u_int32_t inLength);
-    void                eradicateCreature(Creature* inCreature);
+    void                 eradicateCreature(Creature* inCreature);
     
     PassRefPtr<Creature> insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
     
@@ -89,7 +89,7 @@ public:
     // data
     u_int32_t           numAdultCreatures() const;
     double              meanCreatureSize() const;   // counts adults only
-    
+
     void                printCreatures() const;
 
     enum EWorldSerializationFormat {

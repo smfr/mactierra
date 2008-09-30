@@ -236,6 +236,55 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
+@interface MTMaxFitnessGraphAdapter : MTGraphAdapter
+@end
+
+@implementation MTMaxFitnessGraphAdapter
+
+- (void)setupGraph
+{
+    NSAssert(!graphView, @"Should not have created graph view yet");
+    
+    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    [graphView setShowXTickMarks:NO];
+    [graphView setShowTitle:NO];
+    [graphView setShowYLabel:NO];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [(CTScatterPlotView*)graphView setDataSource:self];
+}
+
+- (void)updateGraph:(MTWorldController*)inWorldController
+{
+    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
+
+    MacTierra::MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MacTierra::MaxFitnessDataLogger*>(dataLogger);
+    if (!fitnessLogger) return;
+
+    [graphView setXMin:0.0];
+    [graphView setXMax:std::max((double)fitnessLogger->dataCount(), 1.0)];
+
+    u_int32_t numDivisions;
+    double yMax = graphAxisMax(fitnessLogger->maxValue(), &numDivisions);
+    [graphView setYMax:yMax];
+    [graphView setYScale:yMax / numDivisions];
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+{
+    MacTierra::MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MacTierra::MaxFitnessDataLogger*>(dataLogger);
+    if (fitnessLogger && index < fitnessLogger->dataCount())
+    {
+        *(*point) = NSMakePoint(index, fitnessLogger->data()[index].second);
+        return;
+    }
+    
+    *point = NULL;
+}
+
+@end
+
+#pragma mark -
+
 @interface MTGenotypeFrequencyGraphAdapter : MTGraphAdapter
 @end
 
@@ -373,6 +422,10 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
                                                        nil],
 
         [NSDictionary dictionaryWithObjectsAndKeys:
+                NSLocalizedString(@"MaxFitness", @""), kGraphLabelKey,
+                                                       nil],
+
+        [NSDictionary dictionaryWithObjectsAndKeys:
                 NSLocalizedString(@"GenotypeFrequencies", @""), kGraphLabelKey,
                                                        nil],
 
@@ -405,6 +458,14 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
         [creatureSizeGrapher setupGraph];
         [adaptors addObject:creatureSizeGrapher];
         [creatureSizeGrapher release];
+    }
+
+    if (mWorldController.maxFitnessLogger)
+    {
+        MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.maxFitnessLogger];
+        [fitnessGrapher setupGraph];
+        [adaptors addObject:fitnessGrapher];
+        [fitnessGrapher release];
     }
     
     if (mWorldController.genotypeFrequencyLogger)
@@ -449,7 +510,8 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 {
     currentGraphIndex = inIndex;
     
-    [self switchToAdaptor:[mGraphAdaptors objectAtIndex:currentGraphIndex]];
+    if (currentGraphIndex < [mGraphAdaptors count])
+        [self switchToAdaptor:[mGraphAdaptors objectAtIndex:currentGraphIndex]];
 }
 
 

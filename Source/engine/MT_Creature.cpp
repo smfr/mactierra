@@ -161,19 +161,7 @@ Creature::genomeIdenticalToCreature(const Creature& inOther) const
     if (length() != inOther.length())
         return false;
 
-    const u_int32_t soupSize = mSoup->soupSize();
-    const instruction_t* soupStart = mSoup->soup();
-    
-    address_t daughterOffset = inOther.location();
-
-    for (u_int32_t i = 0; i < length(); ++ i)
-    {
-        if ((instruction_t)mBirthGenome.dataString()[i] != *(soupStart + daughterOffset))
-            return false;
-
-        daughterOffset = (daughterOffset + 1) % soupSize;
-    }
-    return true;
+    return mBirthGenome == inOther.genomeData();
 }
 
 bool

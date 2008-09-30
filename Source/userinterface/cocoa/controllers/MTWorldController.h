@@ -13,6 +13,7 @@ namespace MacTierra {
     class World;
     class PopulationSizeLogger;
     class MeanCreatureSizeLogger;
+    class MaxFitnessDataLogger;
     class GenotypeFrequencyDataLogger;
     class SizeHistogramDataLogger;
 };
@@ -77,9 +78,12 @@ class WorldData;
 @property (assign) BOOL creatingNewSoup;
 
 @property (readonly) MacTierra::World* world;
-// temp. Move to graph controller?
+
+// Move to graph controller?
 @property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
 @property (readonly) MacTierra::MeanCreatureSizeLogger* meanSizeLogger;
+@property (readonly) MacTierra::MaxFitnessDataLogger* maxFitnessLogger;
+
 @property (readonly) MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyLogger;
 @property (readonly) MacTierra::SizeHistogramDataLogger* sizeFrequencyLogger;
 

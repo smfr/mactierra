@@ -57,6 +57,8 @@ public:
 
     void        printCreatures() const;
 
+    const SlicerList& slicerList() const { return mSlicerList; }
+
 private:
 
     friend class ::boost::serialization::access;

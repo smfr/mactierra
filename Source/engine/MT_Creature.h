@@ -149,6 +149,8 @@ public:
     u_int32_t       numOffspring() const            { return mNumOffspring; }
     u_int32_t       numIdenticalOffspring() const   { return mNumIdenticalOffspring; }
 
+    u_int64_t       instructionsToLastOffspring() const { return mInstructionsToLastOffspring; }
+
     u_int32_t       generation() const              { return mGeneration; }
     void            setGeneration(u_int32_t inGen)  { mGeneration = inGen; }
 
@@ -306,7 +308,7 @@ protected:
     double          mLeanness;
     instruction_t   mLastInstruction;
     
-    u_int32_t       mInstructionsToLastOffspring;
+    u_int64_t       mInstructionsToLastOffspring;       // num instructions executed up to the birth of the most recent offspring
     u_int64_t       mTotalInstructionsExecuted;
     u_int64_t       mBirthInstructions;     // world instructions at birth
     

@@ -13,6 +13,7 @@
 
 #include "MT_CellMap.h"
 #include "MT_Inventory.h"
+#include "MT_TimeSlicer.h"
 #include "MT_World.h"
 
 namespace MacTierra {
@@ -33,6 +34,71 @@ void
 MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
 {
     appendValue(inInstructionCount, inWorld->meanCreatureSize());
+}
+
+#pragma mark -
+
+// collectData is called on the engine thread
+void
+MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+{
+    u_int32_t maxAlive = 0;
+    const InventoryGenotype* mostCommonGenotype = NULL;
+    
+    // find the most common genotype (slow!)
+    const Inventory*  inventory = inWorld->inventory();
+    Inventory::InventoryMap::const_iterator it, end;
+    for (it = inventory->inventoryMap().begin(), end = inventory->inventoryMap().end();
+         it != end;
+         ++it)
+    {
+        const InventoryGenotype* curEntry = it->second;
+        if (curEntry->numberAlive() > maxAlive)
+        {
+            mostCommonGenotype = curEntry;
+            maxAlive = curEntry->numberAlive();
+        }
+    }
+    
+    if (!mostCommonGenotype)
+    {
+        appendValue(inInstructionCount, 0.0);
+        return;
+    }
+    
+
+    double maxFitness = 0.0;
+
+    const TimeSlicer& slicer = inWorld->timeSlicer();
+
+    u_int64_t   totalInstructions = 0;
+    u_int32_t   numCreatures = 0;
+    u_int32_t   numTrueOffspring = 0;
+    double      totSliceSize = 0.0;
+    
+    for (SlicerList::const_iterator it = slicer.slicerList().cbegin(); it != slicer.slicerList().cend(); ++it)
+    {
+        const Creature& curCreature = (*it);
+        if (curCreature.genotype() == mostCommonGenotype && curCreature.numIdenticalOffspring() > 0)
+        {
+            // We don't count the number of instructions that went into true offspring, so just count
+            // all offspring
+            totalInstructions += curCreature.instructionsToLastOffspring();
+            numTrueOffspring += curCreature.numOffspring();
+            
+            ++numCreatures;
+            totSliceSize += curCreature.meanSliceSize();
+        }
+    }
+
+    if (numTrueOffspring > 0)
+    {
+        // what we are really computing is offspring/slice
+        double meanSliceSize = totSliceSize / numCreatures;
+        maxFitness = meanSliceSize * ((double)numTrueOffspring / (double)totalInstructions);
+    }
+    
+    appendValue(inInstructionCount, maxFitness);
 }
 
 #pragma mark -

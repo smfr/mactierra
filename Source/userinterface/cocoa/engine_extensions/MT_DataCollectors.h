@@ -131,7 +131,6 @@ protected:
 class PopulationSizeLogger : public SimpleDataLogger<u_int32_t>
 {
 public:
-
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
 };
@@ -140,7 +139,13 @@ public:
 class MeanCreatureSizeLogger : public SimpleDataLogger<double>
 {
 public:
+    // collectData is called on the engine thread
+    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+};
 
+class MaxFitnessDataLogger : public SimpleDataLogger<double>
+{
+public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
 };
