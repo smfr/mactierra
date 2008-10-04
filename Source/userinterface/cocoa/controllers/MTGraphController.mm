@@ -160,7 +160,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
 
-    MacTierra::PopulationSizeLogger* popSizeLogger = dynamic_cast<MacTierra::PopulationSizeLogger*>(dataLogger);
+    PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (!popSizeLogger) return;
 
     [graphView setXMin:0.0];
@@ -174,7 +174,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
-    MacTierra::PopulationSizeLogger* popSizeLogger = dynamic_cast<MacTierra::PopulationSizeLogger*>(dataLogger);
+    PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
     {
         *(*point) = NSMakePoint(index, popSizeLogger->data()[index].second);
@@ -209,7 +209,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
 
-    MacTierra::MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MacTierra::MeanCreatureSizeLogger*>(dataLogger);
+    MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (!creatureSizeLogger) return;
 
     [graphView setXMin:0.0];
@@ -223,7 +223,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
-    MacTierra::MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MacTierra::MeanCreatureSizeLogger*>(dataLogger);
+    MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
         *(*point) = NSMakePoint(index, creatureSizeLogger->data()[index].second);
@@ -258,7 +258,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
 
-    MacTierra::MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MacTierra::MaxFitnessDataLogger*>(dataLogger);
+    MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (!fitnessLogger) return;
 
     [graphView setXMin:0.0];
@@ -272,7 +272,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
-    MacTierra::MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MacTierra::MaxFitnessDataLogger*>(dataLogger);
+    MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
         *(*point) = NSMakePoint(index, fitnessLogger->data()[index].second);
@@ -307,7 +307,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
 
-    MacTierra::GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<MacTierra::GenotypeFrequencyDataLogger*>(dataLogger);
+    GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(dataLogger);
     if (!genotypeLogger) return;
 
     MacTierra::World* theWorld = inWorldController.world;
@@ -323,7 +323,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
 {
-    MacTierra::GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<MacTierra::GenotypeFrequencyDataLogger*>(dataLogger);
+    GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(dataLogger);
     if (!genotypeLogger) return 0.0f;
     
     if (index >= genotypeLogger->dataCount())
@@ -359,7 +359,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
 
-    MacTierra::SizeHistogramDataLogger* sizeLogger = dynamic_cast<MacTierra::SizeHistogramDataLogger*>(dataLogger);
+    SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(dataLogger);
     if (!sizeLogger) return;
 
     MacTierra::World* theWorld = inWorldController.world;
@@ -375,7 +375,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
 {
-    MacTierra::SizeHistogramDataLogger* sizeLogger = dynamic_cast<MacTierra::SizeHistogramDataLogger*>(dataLogger);
+    SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(dataLogger);
     if (!sizeLogger) return 0.0f;
     
     if (index >= sizeLogger->dataCount())

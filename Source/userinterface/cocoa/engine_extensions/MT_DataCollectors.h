@@ -14,8 +14,6 @@
 
 #include "MT_DataCollection.h"
 
-namespace MacTierra {
-
 // Data collection is considered to be "outside" the engine. Clients of the engine
 // should subclass DataLogger and register their loggers with the engine via
 // world()->dataCollector()->addLogger(). It's up to the client to choose how
@@ -25,7 +23,7 @@ namespace MacTierra {
 // This data logger collects up to maxDataCount, then prunes the data, throwing
 // away every other data point, to conserve memory and make the graphing quicker.
 template <class T>
-class SimpleDataLogger : public DataLogger
+class SimpleDataLogger : public MacTierra::DataLogger
 {
 public:
     typedef T data_type;
@@ -39,7 +37,7 @@ public:
     {
     }
 
-    virtual void collect(u_int64_t inInstructionCount, const World* inWorld)
+    virtual void collect(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
     {
         if (inInstructionCount >= mNextCollectionInstructions)
         {
@@ -132,7 +130,7 @@ class PopulationSizeLogger : public SimpleDataLogger<u_int32_t>
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 };
 
 
@@ -140,20 +138,20 @@ class MeanCreatureSizeLogger : public SimpleDataLogger<double>
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 };
 
 class MaxFitnessDataLogger : public SimpleDataLogger<double>
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 };
 
 
 // Logging tempalate for histogram data. These loggers replace the data each time.
 template <class T>
-class HistogramDataLogger : public DataLogger
+class HistogramDataLogger : public MacTierra::DataLogger
 {
 public:
 
@@ -196,7 +194,7 @@ class GenotypeFrequencyDataLogger : public HistogramDataLogger<std::string>
 public:
 
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 
 protected:
     
@@ -209,13 +207,9 @@ class SizeHistogramDataLogger : public HistogramDataLogger<range_pair>
 public:
 
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 };
 
-
-
-
-} // namespace MacTierra
 
 
 #endif // MT_DataCollectors_h_

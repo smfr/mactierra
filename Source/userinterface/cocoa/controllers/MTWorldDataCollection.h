@@ -36,12 +36,12 @@ public:
         clearDataCollectors();
     }
     
-    MacTierra::PopulationSizeLogger*    populationSizeLogger() const    { return mPopSizeLogger; }
-    MacTierra::MeanCreatureSizeLogger*  meanCreatureSizeLogger() const  { return mMeanSizeLogger; }
-    MacTierra::MaxFitnessDataLogger*    maxFitnessDataLogger() const    { return mFitnessFrequencyLogger; }
+    PopulationSizeLogger*    populationSizeLogger() const    { return mPopSizeLogger; }
+    MeanCreatureSizeLogger*  meanCreatureSizeLogger() const  { return mMeanSizeLogger; }
+    MaxFitnessDataLogger*    maxFitnessDataLogger() const    { return mFitnessFrequencyLogger; }
 
-    MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const { return mGenotypeFrequencyLogger; }
-    MacTierra::SizeHistogramDataLogger*     sizeHistogramDataLogger() const     { return mSizeFrequencyLogger; }
+    GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const { return mGenotypeFrequencyLogger; }
+    SizeHistogramDataLogger*     sizeHistogramDataLogger() const     { return mSizeFrequencyLogger; }
 
 protected:
 
@@ -49,12 +49,12 @@ protected:
     void clearDataCollectors();
 
 protected:
-    MacTierra::PopulationSizeLogger*        mPopSizeLogger;
-    MacTierra::MeanCreatureSizeLogger*      mMeanSizeLogger;
-    MacTierra::MaxFitnessDataLogger*        mFitnessFrequencyLogger;
+    PopulationSizeLogger*        mPopSizeLogger;
+    MeanCreatureSizeLogger*      mMeanSizeLogger;
+    MaxFitnessDataLogger*        mFitnessFrequencyLogger;
 
-    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
-    MacTierra::SizeHistogramDataLogger*     mSizeFrequencyLogger;
+    GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
+    SizeHistogramDataLogger*     mSizeFrequencyLogger;
     
     GenebankInventoryListener*              mGenebankListener;
 };

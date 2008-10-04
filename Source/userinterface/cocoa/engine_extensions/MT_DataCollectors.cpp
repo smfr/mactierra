@@ -16,13 +16,12 @@
 #include "MT_TimeSlicer.h"
 #include "MT_World.h"
 
-namespace MacTierra {
-
 using namespace std;
+using namespace MacTierra;
 
 // collectData is called on the engine thread
 void
-PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
 {
     appendValue(inInstructionCount, inWorld->numAdultCreatures());
 }
@@ -31,7 +30,7 @@ PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const World* inW
 
 // collectData is called on the engine thread
 void
-MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
 {
     appendValue(inInstructionCount, inWorld->meanCreatureSize());
 }
@@ -40,7 +39,7 @@ MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const World* i
 
 // collectData is called on the engine thread
 void
-MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
 {
     u_int32_t maxAlive = 0;
     const InventoryGenotype* mostCommonGenotype = NULL;
@@ -111,7 +110,7 @@ struct aliveReverseSort
 };
 
 void
-GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
 {
     const Inventory*  inventory = inWorld->inventory();
 
@@ -145,7 +144,7 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Wor
 #pragma mark -
 
 void
-SizeHistogramDataLogger::collectData(u_int64_t inInstructionCount, const World* inWorld)
+SizeHistogramDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
 {
     const CellMap* cellMap = inWorld->cellMap();
     
@@ -191,7 +190,3 @@ SizeHistogramDataLogger::collectData(u_int64_t inInstructionCount, const World* 
     }
 }
 
-
-
-
-} // namespace MacTierra
