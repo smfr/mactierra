@@ -22,6 +22,7 @@
 #import "MT_InventoryListener.h"
 #import "MT_SoupConfiguration.h"
 #import "MT_World.h"
+#import "MT_WorldArchive.h"
 
 #import "MTCreature.h"
 #import "MT_DataCollection.h"
@@ -512,7 +513,7 @@ using namespace MacTierra;
 
     std::ostringstream stringStream;
     [self lockWorld];
-        World::worldToStream(mWorldData->world(), stringStream, World::kBinary);
+        WorldArchive::worldToStream(mWorldData->world(), stringStream, WorldArchive::kBinary);
     [self unlockWorld];
 
 //    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
@@ -526,7 +527,7 @@ using namespace MacTierra;
     std::string worldString((const char*)[inData bytes], [inData length]);
     std::istringstream stringStream(worldString);
 
-    World* newWorld = World::worldFromStream(stringStream, World::kBinary);
+    World* newWorld = WorldArchive::worldFromStream(stringStream, WorldArchive::kBinary);
 
     [self setWorld:newWorld];
 }
@@ -538,7 +539,7 @@ using namespace MacTierra;
 
     std::ostringstream stringStream;
     [self lockWorld];
-        World::worldToStream(mWorldData->world(), stringStream, World::kXML);
+        WorldArchive::worldToStream(mWorldData->world(), stringStream, WorldArchive::kXML);
     [self unlockWorld];
 
     return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
@@ -549,7 +550,7 @@ using namespace MacTierra;
     std::string worldString((const char*)[inData bytes], [inData length]);
 
     std::istringstream stringStream(worldString);
-    World* newWorld = World::worldFromStream(stringStream, World::kXML);
+    World* newWorld = WorldArchive::worldFromStream(stringStream, WorldArchive::kXML);
 
     [self setWorld:newWorld];
 }
@@ -574,7 +575,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     std::ofstream fileStream(filePath.c_str());
 
     [self lockWorld];
-        World::worldToStream(mWorldData->world(), fileStream, World::kBinary);
+        WorldArchive::worldToStream(mWorldData->world(), fileStream, WorldArchive::kBinary);
     [self unlockWorld];
 
     return YES;
@@ -587,7 +588,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         return NO;
 
     std::ifstream fileStream(filePath.c_str());
-    World* newWorld = World::worldFromStream(fileStream, World::kBinary);
+    World* newWorld = WorldArchive::worldFromStream(fileStream, WorldArchive::kBinary);
     [self setWorld:newWorld];
 
     return YES;
@@ -601,7 +602,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
     std::ofstream fileStream(filePath.c_str());
     [self lockWorld];
-        World::worldToStream(mWorldData->world(), fileStream, World::kXML);
+        WorldArchive::worldToStream(mWorldData->world(), fileStream, WorldArchive::kXML);
     [self unlockWorld];
 
     return YES;
@@ -614,7 +615,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         return NO;
 
     std::ifstream fileStream(filePath.c_str());
-    World* newWorld = World::worldFromStream(fileStream, World::kXML);
+    World* newWorld = WorldArchive::worldFromStream(fileStream, WorldArchive::kXML);
     [self setWorld:newWorld];
 
     return YES;

@@ -26,6 +26,7 @@
 #include "options.h"
 
 #include "MT_World.h"
+#include "MT_WorldArchive.h"
 #include "MT_Settings.h"
 #include "MT_SoupConfiguration.h"
 #include "MT_Ancestor.h"
@@ -127,18 +128,18 @@ static bool sanityCheckOptions()
     return true;
 }
 
-static World::EWorldSerializationFormat formatFromFileExtension(const string& inFileName)
+static WorldArchive::EWorldSerializationFormat formatFromFileExtension(const string& inFileName)
 {
     const string xmlFileSuffix = ".mactierra_xml";
     const string binaryFileSuffix = ".mactierra";
 
     if (inFileName.compare(inFileName.length() - xmlFileSuffix.length(), xmlFileSuffix.length(), xmlFileSuffix) == 0)
-        return World::kXML;
+        return WorldArchive::kXML;
 
     if (inFileName.compare(inFileName.length() - binaryFileSuffix.length(), binaryFileSuffix.length(), binaryFileSuffix) == 0)
-        return World::kBinary;
+        return WorldArchive::kBinary;
 
-    return World::kAutodetect;
+    return WorldArchive::kAutodetect;
 }
 
 static World* createWorld()
@@ -150,7 +151,7 @@ static World* createWorld()
         try
         {
             std::ifstream fileStream(gInputSoupFilePath.c_str());
-            theWorld = World::worldFromStream(fileStream, formatFromFileExtension(gInputSoupFilePath));
+            theWorld = WorldArchive::worldFromStream(fileStream, formatFromFileExtension(gInputSoupFilePath));
         }
         catch (std::exception const& e)
         {
@@ -352,7 +353,7 @@ extern "C" int main(int argc, char* argv[])
     }
     
     if (outputStream)
-        World::worldToStream(theWorld, *outputStream, gUseXMLFormat ? World::kXML : World::kBinary);
+        WorldArchive::worldToStream(theWorld, *outputStream, gUseXMLFormat ? WorldArchive::kXML : WorldArchive::kBinary);
     
     delete outputStream;
     delete theWorld;

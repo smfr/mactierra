@@ -18,14 +18,7 @@
 
 #include "RandomLib/ExponentialDistribution.hpp"
 
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-
-#include <boost/archive/binary_iarchive.hpp>
-#include <boost/archive/binary_oarchive.hpp>
-
 #include <boost/serialization/serialization.hpp>
-
 
 #include "MT_Cellmap.h"
 #include "MT_Creature.h"
@@ -671,80 +664,6 @@ World::initialRandomSeed() const
     const std::vector<RandomLib::RandomSeed::seed_type>& originalSeed = mRNG.Seed();
     BOOST_ASSERT(originalSeed.size() == 1);
     return originalSeed[0];
-}
-
-#pragma mark -
-
-// static
-void
-World::worldToStream(const World* inWorld, std::ostream& inStream, EWorldSerializationFormat inFormat)
-{
-    switch (inFormat)
-    {
-        case kBinary:
-            {
-                ::boost::archive::binary_oarchive binaryArchive(inStream);
-                binaryArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", inWorld);
-            }
-            break;
-
-        case kXML:
-            {
-                ::boost::archive::xml_oarchive xmlArchive(inStream);
-                xmlArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", inWorld);
-            }
-            break;
-
-        case kAutodetect:
-            BOOST_ASSERT(0);
-            break;
-    }
-}
-
-// static
-World*
-World::worldFromStream(std::istream& inStream, EWorldSerializationFormat inFormat)
-{
-    World* braveNewWorld = NULL;
-
-    if (inFormat == kAutodetect)
-    {
-        inStream.seekg(0);
-
-        string header;
-        inStream >> header;
-        
-        if (header.compare("<?xml") == 0)
-            inFormat = kXML;
-        else
-            inFormat = kBinary;
-        
-        inStream.seekg(0);
-    }
-    
-    switch (inFormat)
-    {
-        case kBinary:
-            {
-                ::boost::archive::binary_iarchive binaryArchive(inStream);
-                binaryArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", braveNewWorld);
-            }
-            break;
-
-        case kXML:
-            {
-                ::boost::archive::xml_iarchive xmlArchive(inStream);
-                xmlArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("tierra", braveNewWorld);
-            }
-            break;
-
-        case kAutodetect:
-            BOOST_ASSERT(0);
-            break;
-    }
-
-    braveNewWorld->wasDeserialized();
-    return braveNewWorld;
 }
 
 } // namespace MacTierra

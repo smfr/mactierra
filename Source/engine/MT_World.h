@@ -91,18 +91,7 @@ public:
     double              meanCreatureSize() const;   // counts adults only
 
     void                printCreatures() const;
-
-    enum EWorldSerializationFormat {
-        kBinary,
-        kXML,
-        kAutodetect     // for open only
-    };
-    
-    // save/restore
-    static void         worldToStream(const World* inWorld, std::ostream& inStream, EWorldSerializationFormat inFormat);
-    static World*       worldFromStream(std::istream& inStream, EWorldSerializationFormat inFormat);
-
-    
+        
 protected:
 
     creature_id     uniqueCreatureID();
@@ -222,6 +211,8 @@ private:
 
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_flaw_time", mNextFlawInstruction);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_cosmic_ray_time", mNextCosmicRayInstruction);
+
+        wasDeserialized();
     }
 
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
