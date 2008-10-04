@@ -5,7 +5,6 @@ Optimize template searching
 Improve genotype tracking; treat a creature's "real" genotype as the genotype at birth.
 
 Limit range of instruction pointer from creature (enforce locality of reference)
-Implement "leanness" (punish creatures which allocate large bodies, but only use a fraction of the space).
 
 Cocoa front-end
 ---------------
@@ -41,5 +40,3 @@ Command-line tool
 Needs basic work.
 Hook up more commandline args
 Add ability to save the soup every N instructions
-Use default output file name, uniquify names to avoid overwriting files
-Sniff file format when opening soups to know if they are XML or binary

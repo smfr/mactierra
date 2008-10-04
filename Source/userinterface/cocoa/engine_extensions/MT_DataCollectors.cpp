@@ -66,7 +66,6 @@ MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const World* inW
         return;
     }
     
-
     double maxFitness = 0.0;
 
     const TimeSlicer& slicer = inWorld->timeSlicer();

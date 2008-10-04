@@ -18,17 +18,55 @@
 class GenebankInventoryListener;
 
 // Container for C++ world-related data, particularly for data collection
+class WorldDataCollectors
+{
+public:
+    WorldDataCollectors(MacTierra::World* inWorld)
+    : mPopSizeLogger(NULL)
+    , mMeanSizeLogger(NULL)
+    , mFitnessFrequencyLogger(NULL)
+    , mGenotypeFrequencyLogger(NULL)
+    , mSizeFrequencyLogger(NULL)
+    {
+        setupDataCollectors(inWorld);
+    }
+    
+    ~WorldDataCollectors()
+    {
+        clearDataCollectors();
+    }
+    
+    MacTierra::PopulationSizeLogger*    populationSizeLogger() const    { return mPopSizeLogger; }
+    MacTierra::MeanCreatureSizeLogger*  meanCreatureSizeLogger() const  { return mMeanSizeLogger; }
+    MacTierra::MaxFitnessDataLogger*    maxFitnessDataLogger() const    { return mFitnessFrequencyLogger; }
+
+    MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const { return mGenotypeFrequencyLogger; }
+    MacTierra::SizeHistogramDataLogger*     sizeHistogramDataLogger() const     { return mSizeFrequencyLogger; }
+
+protected:
+
+    void setupDataCollectors(MacTierra::World* inWorld);
+    void clearDataCollectors();
+
+protected:
+    MacTierra::PopulationSizeLogger*        mPopSizeLogger;
+    MacTierra::MeanCreatureSizeLogger*      mMeanSizeLogger;
+    MacTierra::MaxFitnessDataLogger*        mFitnessFrequencyLogger;
+
+    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
+    MacTierra::SizeHistogramDataLogger*     mSizeFrequencyLogger;
+    
+    GenebankInventoryListener*              mGenebankListener;
+};
+
+
 class WorldData
 {
 public:
 
     WorldData()
     : mWorld(NULL)
-    , mPopSizeLogger(NULL)
-    , mMeanSizeLogger(NULL)
-    , mFitnessFrequencyLogger(NULL)
-    , mGenotypeFrequencyLogger(NULL)
-    , mSizeFrequencyLogger(NULL)
+    , mDataCollectors(NULL)
     , mGenebankListener(NULL)
     {
     }
@@ -46,30 +84,12 @@ public:
 
     u_int64_t instructionsExecuted() const { return mWorld->timeSlicer().instructionsExecuted(); }
 
-    MacTierra::PopulationSizeLogger*    populationSizeLogger() const    { return mPopSizeLogger; }
-    MacTierra::MeanCreatureSizeLogger*  meanCreatureSizeLogger() const  { return mMeanSizeLogger; }
-    MacTierra::MaxFitnessDataLogger*    maxFitnessDataLogger() const    { return mFitnessFrequencyLogger; }
-
-    MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const { return mGenotypeFrequencyLogger; }
-    MacTierra::SizeHistogramDataLogger*     sizeHistogramDataLogger() const     { return mSizeFrequencyLogger; }
+    WorldDataCollectors*        dataCollectors() const { return mDataCollectors; }
 
 protected:
-
-    void setupDataCollectors();
-    void clearDataCollectors();
-
-protected:
-    MacTierra::World*       mWorld;
-
-    MacTierra::PopulationSizeLogger*        mPopSizeLogger;
-    MacTierra::MeanCreatureSizeLogger*      mMeanSizeLogger;
-    MacTierra::MaxFitnessDataLogger*        mFitnessFrequencyLogger;
-
-    MacTierra::GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
-    MacTierra::SizeHistogramDataLogger*     mSizeFrequencyLogger;
-    
-    GenebankInventoryListener*              mGenebankListener;
+    MacTierra::World*           mWorld;
+    WorldDataCollectors*        mDataCollectors;
+    GenebankInventoryListener*  mGenebankListener;
 };
-
 
 #endif // MTWorldDataCollection_h

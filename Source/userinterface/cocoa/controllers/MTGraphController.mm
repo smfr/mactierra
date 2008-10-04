@@ -22,6 +22,7 @@
 #import "MT_World.h"
 
 #import "MTWorldController.h"
+#import "MTWorldDataCollection.h"
 
 @interface MTGraphController(Private)
 
@@ -411,6 +412,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
 - (NSArray*)availableGraphTypes
 {
+    // This array needs to match the data collector types
     return [NSArray arrayWithObjects:
 
         [NSDictionary dictionaryWithObjectsAndKeys:
@@ -444,44 +446,43 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
     NSMutableArray*     adaptors = [NSMutableArray array];
     
-    if (mWorldController.popSizeLogger)
+    WorldDataCollectors* dataCollectors = mWorldController.dataCollectors;
+    if (dataCollectors)
     {
-        MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.popSizeLogger];
-        [popSizeGrapher setupGraph];
-        [adaptors addObject:popSizeGrapher];
-        [popSizeGrapher release];
-    }
-    
-    if (mWorldController.meanSizeLogger)
-    {
-        MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.meanSizeLogger];
-        [creatureSizeGrapher setupGraph];
-        [adaptors addObject:creatureSizeGrapher];
-        [creatureSizeGrapher release];
-    }
+        {
+            MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->populationSizeLogger()];
+            [popSizeGrapher setupGraph];
+            [adaptors addObject:popSizeGrapher];
+            [popSizeGrapher release];
+        }
+        
+        {
+            MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->meanCreatureSizeLogger()];
+            [creatureSizeGrapher setupGraph];
+            [adaptors addObject:creatureSizeGrapher];
+            [creatureSizeGrapher release];
+        }
 
-    if (mWorldController.maxFitnessLogger)
-    {
-        MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.maxFitnessLogger];
-        [fitnessGrapher setupGraph];
-        [adaptors addObject:fitnessGrapher];
-        [fitnessGrapher release];
-    }
-    
-    if (mWorldController.genotypeFrequencyLogger)
-    {
-        MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.genotypeFrequencyLogger];
-        [genotypeFrequencyGrapher setupGraph];
-        [adaptors addObject:genotypeFrequencyGrapher];
-        [genotypeFrequencyGrapher release];
-    }
+        {
+            MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->maxFitnessDataLogger()];
+            [fitnessGrapher setupGraph];
+            [adaptors addObject:fitnessGrapher];
+            [fitnessGrapher release];
+        }
+        
+        {
+            MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->genotypeFrequencyDataLogger()];
+            [genotypeFrequencyGrapher setupGraph];
+            [adaptors addObject:genotypeFrequencyGrapher];
+            [genotypeFrequencyGrapher release];
+        }
 
-    if (mWorldController.sizeFrequencyLogger)
-    {
-        MTGraphAdapter* sizeHistogramGrapher = [[MTSizeHistorgramGraphAdapter alloc] initWithGraphController:self dataLogger:mWorldController.sizeFrequencyLogger];
-        [sizeHistogramGrapher setupGraph];
-        [adaptors addObject:sizeHistogramGrapher];
-        [sizeHistogramGrapher release];
+        {
+            MTGraphAdapter* sizeHistogramGrapher = [[MTSizeHistorgramGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->sizeHistogramDataLogger()];
+            [sizeHistogramGrapher setupGraph];
+            [adaptors addObject:sizeHistogramGrapher];
+            [sizeHistogramGrapher release];
+        }
     }
     
     mGraphAdaptors = [adaptors retain];

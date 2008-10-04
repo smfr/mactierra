@@ -205,29 +205,9 @@ using namespace MacTierra;
     return mWorldData->world();
 }
 
-- (MacTierra::PopulationSizeLogger*)popSizeLogger
+- (WorldDataCollectors*)dataCollectors
 {
-    return mWorldData->populationSizeLogger();
-}
-
-- (MacTierra::MeanCreatureSizeLogger*)meanSizeLogger
-{
-    return mWorldData->meanCreatureSizeLogger();
-}
-
-- (MacTierra::MaxFitnessDataLogger*)maxFitnessLogger
-{
-    return mWorldData->maxFitnessDataLogger();
-}
-
-- (MacTierra::GenotypeFrequencyDataLogger*)genotypeFrequencyLogger;
-{
-    return mWorldData->genotypeFrequencyDataLogger();
-}
-
-- (MacTierra::SizeHistogramDataLogger*)sizeFrequencyLogger
-{
-    return mWorldData->sizeHistogramDataLogger();
+    return mWorldData->dataCollectors();
 }
 
 - (double)fullness

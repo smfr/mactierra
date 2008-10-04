@@ -26,6 +26,7 @@ namespace MacTierra {
 @class MTWorldSettings;
 
 class WorldData;
+class WorldDataCollectors;
 
 @interface MTWorldController : NSObject
 {
@@ -78,15 +79,7 @@ class WorldData;
 @property (assign) BOOL creatingNewSoup;
 
 @property (readonly) MacTierra::World* world;
-
-// Move to graph controller?
-@property (readonly) MacTierra::PopulationSizeLogger* popSizeLogger;
-@property (readonly) MacTierra::MeanCreatureSizeLogger* meanSizeLogger;
-@property (readonly) MacTierra::MaxFitnessDataLogger* maxFitnessLogger;
-
-@property (readonly) MacTierra::GenotypeFrequencyDataLogger* genotypeFrequencyLogger;
-@property (readonly) MacTierra::SizeHistogramDataLogger* sizeFrequencyLogger;
-
+@property (readonly) WorldDataCollectors* dataCollectors;
 
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;
@@ -110,13 +103,6 @@ class WorldData;
 - (void)clearWorld;
 
 // save and restore
-- (NSData*)worldData;
-- (void)setWorldWithData:(NSData*)inData;
-
-- (NSData*)worldXMLData;
-- (void)setWorldWithXMLData:(NSData*)inData;
-
-
 - (BOOL)writeBinaryDataToFile:(NSURL*)inFileURL;
 - (BOOL)readWorldFromBinaryFile:(NSURL*)inFileURL;
 

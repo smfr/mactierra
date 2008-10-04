@@ -32,64 +32,38 @@ public:
         
         [pool release];
     }
-
 };
 
 
 #pragma mark -
 
-WorldData::~WorldData()
-{
-    delete mWorld;
-    clearDataCollectors();
-}
-
 void
-WorldData::setWorld(MacTierra::World* inWorld)
-{
-    if (inWorld != mWorld)
-    {
-        clearDataCollectors();
-        delete mWorld;
-        
-        mWorld = inWorld;
-        
-        if (mWorld)
-            setupDataCollectors();
-    }
-}
-
-void
-WorldData::setupDataCollectors()
+WorldDataCollectors::setupDataCollectors(World* inWorld)
 {
     const NSUInteger kMaxDataPoints = 500;
     
     // set up some logging
     mPopSizeLogger = new PopulationSizeLogger();
     mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
-    mWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
+    inWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
 
     mMeanSizeLogger = new MeanCreatureSizeLogger();
     mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
-    mWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
+    inWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
 
     mFitnessFrequencyLogger = new MaxFitnessDataLogger();
     mFitnessFrequencyLogger->setMaxDataCount(kMaxDataPoints);
-    mWorld->dataCollector()->addPeriodicLogger(mFitnessFrequencyLogger);
+    inWorld->dataCollector()->addPeriodicLogger(mFitnessFrequencyLogger);
     
     mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();
     mGenotypeFrequencyLogger->setMaxBuckets(15);
     
     mSizeFrequencyLogger = new SizeHistogramDataLogger();
     mSizeFrequencyLogger->setMaxBuckets(15);
-    
-    mGenebankListener = new GenebankInventoryListener();
-    mWorld->inventory()->setListenerAliveThreshold(20);
-    mWorld->inventory()->registerListener(mGenebankListener);
 }
 
 void
-WorldData::clearDataCollectors()
+WorldDataCollectors::clearDataCollectors()
 {
     delete mPopSizeLogger;
     mPopSizeLogger = NULL;
@@ -105,9 +79,41 @@ WorldData::clearDataCollectors()
     
     delete mSizeFrequencyLogger;
     mSizeFrequencyLogger = NULL;
+}
+
+#pragma mark -
+
+WorldData::~WorldData()
+{
+    delete mDataCollectors;
+    mDataCollectors = NULL;
 
     delete mGenebankListener;
     mGenebankListener = NULL;
+
+    setWorld(NULL);
+}
+
+void
+WorldData::setWorld(MacTierra::World* inWorld)
+{
+    if (inWorld != mWorld)
+    {
+        delete mDataCollectors;
+        mDataCollectors = NULL;
+        
+        delete mWorld;
+        mWorld = inWorld;
+        
+        if (mWorld)
+        {
+            mDataCollectors = new WorldDataCollectors(mWorld);
+
+            mGenebankListener = new GenebankInventoryListener();
+            mWorld->inventory()->setListenerAliveThreshold(20);
+            mWorld->inventory()->registerListener(mGenebankListener);
+        }
+    }
 }
 
 void
@@ -120,7 +126,8 @@ WorldData::seedWithAncestor()
 void
 WorldData::stepCreature(const MacTierra::Creature* inCreature)
 {
-    mWorld->stepCreature(inCreature);
+    if (mWorld)
+        mWorld->stepCreature(inCreature);
 }
 
 void
@@ -129,5 +136,4 @@ WorldData::writeInventory(std::ostream& inStream)
     if (mWorld)
         mWorld->inventory()->writeToStream(inStream);
 }
-
 
