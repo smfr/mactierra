@@ -10,6 +10,9 @@
 
 @interface CTGraphView : NSView
 {
+    IBOutlet id dataSource;   //object that will give graph values for drawing the curve
+    IBOutlet id delegate  ;   //object that will be notified when key events occur
+
     float xMin, xMax, xScale;     //Specifies the minimum/maximum values for X Axis
                                 // xscale used to determine location of Vertical Gridlines & X Axix tick marks
 
@@ -65,6 +68,9 @@
 // the next display
 - (void)dataChanged;
 
+@property (retain) id dataSource;
+@property (assign) id delegate;
+
 @property (assign) float xMin;
 @property (assign) float xMax;
 @property (assign) float xScale;        // grid spacing (?)
@@ -115,5 +121,12 @@
 
 - (void)recomputeGraphIfNecessary;
 - (void)recomputeGraph:(NSRect)rect;
+
+@end
+
+@interface NSObject(CTGraphViewDelegate)
+
+- (void)willUpdateGraphView:(CTGraphView*)inGraphView;
+- (void)didUpdateGraphView:(CTGraphView*)inGraphView;
 
 @end

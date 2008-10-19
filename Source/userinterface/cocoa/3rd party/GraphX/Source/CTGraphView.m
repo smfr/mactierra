@@ -49,6 +49,9 @@ static const float kYLabelAxisOffset = 2.0f;
 static const float kXLabelAxisOffset = 2.0f;
 static const float kTickMarkLength = 4.0f;
 
+@synthesize dataSource;
+@synthesize delegate;
+
 @synthesize xMin;
 @synthesize xMax;
 @synthesize xScale;
@@ -267,6 +270,9 @@ static const float kTickMarkLength = 4.0f;
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+
+    self.dataSource = nil;
+    self.delegate = nil;
 
     [graphColors release];
     self.xLabel = nil;
@@ -836,7 +842,21 @@ static const float kTickMarkLength = 4.0f;
 {
     if (graphDirty)
     {
-        [self recomputeGraph:[self graphRectForRect:[self bounds]]];
+        if ([delegate respondsToSelector:@selector(willUpdateGraphView:)])
+            [delegate willUpdateGraphView:self];
+
+        @try
+        {
+            [self recomputeGraph:[self graphRectForRect:[self bounds]]];
+        }
+        @catch(NSException* e)
+        {
+            NSLog(@"Caught exception %@ recomputing graph %@", e, self);
+        }
+        
+        if ([delegate respondsToSelector:@selector(didUpdateGraphView:)])
+            [delegate didUpdateGraphView:self];
+
         graphDirty = NO;
     }
 }

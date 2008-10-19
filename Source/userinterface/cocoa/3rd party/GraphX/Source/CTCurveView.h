@@ -9,24 +9,19 @@
 #import <Cocoa/Cocoa.h>
 #import "CTGraphView.h"
 
-@protocol CTCurveViewDataSource
+@interface NSObject(CTCurveViewDataSource)
 - (double)yValueForXValue:(double)x;
 @end
 
-@protocol CTCurveViewDelegate
+@interface NSObject(CTCurveViewDelegate)
 - (void)hasDrawnFirstSegmentDataPoint:(NSPoint)dataPoint atViewPoint:(NSPoint)viewPoint inRect:(NSRect)rect withOrigin:(NSPoint)viewOrigin;
 - (void)hasDrawnSegmentDataPoint     :(NSPoint)dataPoint atViewPoint:(NSPoint)viewPoint inRect:(NSRect)rect withOrigin:(NSPoint)viewOrigin;
 - (void)hasDrawnLastSegmentDataPoint :(NSPoint)dataPoint atViewPoint:(NSPoint)viewPoint inRect:(NSRect)rect withOrigin:(NSPoint)viewOrigin;
 @end
 
 
-
 @interface CTCurveView : CTGraphView
 {
-  IBOutlet id <CTCurveViewDataSource> dataSource;   //object that will give graph values for drawing the curve
-  IBOutlet id <CTCurveViewDelegate  > delegate  ;   //object that will be notified when key events occur
-  
-  
   float resolution;  //Determines number of pixels per point on curve
               // Frequency of Point samples taken from DataSource to form the continous curve
               // *has a major effect on preformance - use high values if DataSource method is slow

@@ -13,16 +13,8 @@
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index;
 @end
 
-@interface NSObject(CTScatterPlotViewDelegate)
-
-@end
-
-
 @interface CTScatterPlotView : CTGraphView
 {
-  IBOutlet id dataSource;   //object that will give graph values for drawing the curve
-  IBOutlet id delegate  ;   //object that will be notified when key events occur
-  
   BOOL showCurve , showFill;	//Flags to turn on/off different components of CTGraphView
   
   float curveLineWidth;   //width of the curve

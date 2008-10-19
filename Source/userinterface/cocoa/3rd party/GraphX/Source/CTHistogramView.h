@@ -10,22 +10,11 @@
 #import "CTGraphView.h"
 
 @interface NSObject(CTHistogramViewDataSource)
-
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel;
-
 @end
-
-@interface NSObject(CTHistogramViewDelegate)
-
-@end
-
-
 
 @interface CTHistogramView : CTGraphView
 {
-  IBOutlet id dataSource;   //object that will give graph values for drawing the curve
-  IBOutlet id delegate  ;   //object that will be notified when key events occur
-
   NSUInteger numberOfBuckets;
   
   BOOL showBorder, showFill;  //Flags to turn on/off different components of CTGraphView
