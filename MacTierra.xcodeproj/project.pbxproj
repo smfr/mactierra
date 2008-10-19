@@ -25,7 +25,6 @@
 		0F4F663D0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F63B1020E5E6A54005793DE /* MTDocumentController.m */; };
-		0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */; };
 		0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */; };
@@ -35,12 +34,13 @@
 		0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */; };
 		0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F960B070E80C6250007D1D5 /* GenebankWindow.xib */; };
 		0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */; };
+		0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9876BB0EAAE5D300AA0738 /* GraphX.framework */; };
+		0F9876E40EAAE8F600AA0738 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F9876BB0EAAE5D300AA0738 /* GraphX.framework */; };
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992C020E650BCF00EFF4D3 /* Instructions0.clr in Resources */ = {isa = PBXBuildFile; fileRef = 0F992C010E650BCF00EFF4D3 /* Instructions0.clr */; };
 		0F995BC20E68FD3C00AC5089 /* MTGraphController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */; };
-		0F995BEF0E68FF6700AC5089 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F995C580E69025000AC5089 /* NSViewAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F995C570E69025000AC5089 /* NSViewAdditions.m */; };
 		0F995C5D0E69029900AC5089 /* NSArrayAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F995C5C0E69029900AC5089 /* NSArrayAdditions.m */; };
 		0F995CAA0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F995CA90E6907EE00AC5089 /* MT_DataCollection.cpp */; };
@@ -129,6 +129,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = A8CF1B000923235F00E21122;
+			remoteInfo = GraphX;
+		};
+		0F9876BC0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 8D1107320486CEB800E47090;
+			remoteInfo = "Graph Suite";
+		};
+		0F9876BE0EAAE5EE00AA0738 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = A868ACA00894A1A00078843B;
+			remoteInfo = GraphX;
+		};
 		0FA527EF0E7D7CDC004D840D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -152,7 +173,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */,
+				0F9876E40EAAE8F600AA0738 /* GraphX.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,11 +443,11 @@
 		0F960B080E80C6250007D1D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/GenebankWindow.xib; sourceTree = "<group>"; };
 		0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankWindowController.h; sourceTree = "<group>"; };
 		0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankWindowController.mm; sourceTree = "<group>"; };
+		0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Graph Suite.xcodeproj"; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj"; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
 		0F995BC10E68FD3C00AC5089 /* MTGraphController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGraphController.mm; sourceTree = "<group>"; };
-		0F995BEE0E68FF6700AC5089 /* GraphX.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GraphX.framework; path = build/Release/GraphX.framework; sourceTree = "<group>"; };
 		0F995C560E69025000AC5089 /* NSViewAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSViewAdditions.h; sourceTree = "<group>"; };
 		0F995C570E69025000AC5089 /* NSViewAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSViewAdditions.m; sourceTree = "<group>"; };
 		0F995C5B0E69029900AC5089 /* NSArrayAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSArrayAdditions.h; sourceTree = "<group>"; };
@@ -763,9 +784,9 @@
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 				0F3210460E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */,
-				0F995BEF0E68FF6700AC5089 /* GraphX.framework in Frameworks */,
 				0FF381E10E6B529C00780F5B /* libboost_thread-xgcc40-mt-1_36.a in Frameworks */,
 				0FA4B95D0E8C8DE800EB3188 /* libboost_iostreams-xgcc40-mt-1_36.a in Frameworks */,
+				0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1124,6 +1145,15 @@
 				0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */,
 			);
 			path = genebank;
+			sourceTree = "<group>";
+		};
+		0F9876B60EAAE5D300AA0738 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0F9876BB0EAAE5D300AA0738 /* GraphX.framework */,
+				0F9876BD0EAAE5D300AA0738 /* Graph Suite.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		0F9DE5D30E575DAD00E86DD6 /* controllers */ = {
@@ -1632,7 +1662,6 @@
 				0FF381E00E6B529C00780F5B /* libboost_thread-xgcc40-mt-1_36.a */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 				0F9DE6540E57795B00E86DD6 /* OpenGL.framework */,
-				0F995BEE0E68FF6700AC5089 /* GraphX.framework */,
 			);
 			name = "Linked Frameworks";
 			sourceTree = "<group>";
@@ -1661,6 +1690,7 @@
 			children = (
 				0FB9C4400E72336000E6EBFD /* Readme.txt */,
 				0FB9C4480E72338500E6EBFD /* TODO.txt */,
+				0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */,
 				0F13F9F70E5FD95000D8E649 /* boost */,
 				0FA5F8010E9069730097B984 /* boost_additions */,
 				0FFF64300E4FE34C00404828 /* RandomLib */,
@@ -1768,6 +1798,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */,
 				0FA527F00E7D7CDC004D840D /* PBXTargetDependency */,
 				0FA527F20E7D7CDC004D840D /* PBXTargetDependency */,
 			);
@@ -1787,6 +1818,12 @@
 			hasScannedForEncodings = 1;
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* MacTierra */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 0F9876B60EAAE5D300AA0738 /* Products */;
+					ProjectRef = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* MacTierra */,
@@ -1795,6 +1832,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		0F9876BB0EAAE5D300AA0738 /* GraphX.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = GraphX.framework;
+			remoteRef = 0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		0F9876BD0EAAE5D300AA0738 /* Graph Suite.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = "Graph Suite.app";
+			remoteRef = 0F9876BC0EAAE5D300AA0738 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
@@ -1937,6 +1991,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = GraphX;
+			targetProxy = 0F9876BE0EAAE5EE00AA0738 /* PBXContainerItemProxy */;
+		};
 		0FA527F00E7D7CDC004D840D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 0F0C94980E514AD700B233E8 /* TestRunner */;
@@ -2068,8 +2127,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Prebuilt\"",
+					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -2093,8 +2151,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)/Prebuilt\"",
+					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
 				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
