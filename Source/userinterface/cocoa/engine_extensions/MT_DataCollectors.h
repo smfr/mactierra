@@ -24,18 +24,14 @@
 
 // This data logger collects up to maxDataCount, then prunes the data, throwing
 // away every other data point, to conserve memory and make the graphing quicker.
-template <class T>
+
 class SimpleDataLogger : public MacTierra::DataLogger
 {
 public:
-    typedef T data_type;
-    typedef std::pair<u_int64_t, data_type> data_pair;
-
     SimpleDataLogger()
     : mNextCollectionInstructions(0)
     , mCollectionInterval(1)
     , mMaxDataCount(ULONG_MAX)
-    , mMaxValue(0)
     {
     }
 
@@ -53,10 +49,7 @@ public:
         }
     }
 
-    // engine needs to be locked while using this data
-    const std::vector<data_pair>& data() const { return mData; }
-    
-    u_int32_t   dataCount() const { return mData.size(); }
+    virtual u_int32_t   dataCount() const = 0;
 
     void setMaxDataCount(u_int32_t inMax)
     {
@@ -67,13 +60,63 @@ public:
                 pruneData();
         }
     }
+
     u_int32_t   maxDataCount() const    { return mMaxDataCount; }
+
+    virtual u_int64_t minInstructions() const = 0;
+    virtual u_int64_t maxInstructions() const = 0;
+
+    virtual double maxDoubleValue() const = 0;
+
+protected:
+
+    virtual void pruneData() = 0;
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_collection_instructions", mNextCollectionInstructions);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_interval", mCollectionInterval);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_data_count", mMaxDataCount);
+    }
+
+protected:
+
+    u_int64_t       mNextCollectionInstructions;
+    u_int32_t       mCollectionInterval;
+
+    u_int32_t       mMaxDataCount;
+
+};
+
+template <class T>
+class TypedSimpleDataLogger : public SimpleDataLogger
+{
+public:
+    typedef T data_type;
+    typedef std::pair<u_int64_t, data_type> data_pair;
+
+    TypedSimpleDataLogger()
+    : mMaxValue(0)
+    {
+    }
+
+    virtual u_int32_t   dataCount() const { return mData.size(); }
+
+    // engine needs to be locked while using this data
+    const std::vector<data_pair>& data() const { return mData; }
     
-    data_type   maxValue() const        { return mMaxValue; }
+    data_type maxValue() const { return mMaxValue; }
+
+    virtual u_int64_t minInstructions() const { return mData.size() > 0 ? mData[0].first : 0; }
+    virtual u_int64_t maxInstructions() const { return mData.size() > 0 ? mData[mData.size() - 1].first : 0; }
+
+    virtual double maxDoubleValue() const { return (double)mMaxValue; }
 
 protected:
     
-    void pruneData()
+    virtual void pruneData()
     {
         if (dataCount() > maxDataCount())
         {
@@ -121,26 +164,19 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
     {
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_collection_instructions", mNextCollectionInstructions);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_interval", mCollectionInterval);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_count", mCollectionCount);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_data_count", mMaxDataCount);
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleDataLogger);
+
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", mData);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_value", mMaxValue);
     }
 
 protected:
 
-    u_int64_t       mNextCollectionInstructions;
-    u_int32_t       mCollectionInterval;
-    u_int32_t       mCollectionCount;
-
-    u_int32_t       mMaxDataCount;
     std::vector<data_pair>  mData;
     data_type               mMaxValue;
 };
 
-typedef SimpleDataLogger<u_int32_t> SimpleUInt32DataLogger;
+typedef TypedSimpleDataLogger<u_int32_t> SimpleUInt32DataLogger;
 class PopulationSizeLogger : public SimpleUInt32DataLogger
 {
 public:
@@ -156,7 +192,7 @@ private:
 };
 
 
-typedef SimpleDataLogger<double> SimpleDoubleDataLogger;
+typedef TypedSimpleDataLogger<double> SimpleDoubleDataLogger;
 class MeanCreatureSizeLogger : public SimpleDoubleDataLogger
 {
 public:

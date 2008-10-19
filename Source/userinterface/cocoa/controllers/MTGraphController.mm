@@ -24,6 +24,8 @@
 #import "MTWorldController.h"
 #import "MTWorldDataCollection.h"
 
+static const double kMillion = 1.0e6;
+
 @interface MTGraphController(Private)
 
 - (void)setupLineGraph;
@@ -178,6 +180,25 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [(CTScatterPlotView*)graphView setDataSource:self];
 }
 
+- (void)updateGraph:(MTWorldController*)inWorldController
+{
+    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(dataLogger);
+    if (!logger) return;
+    
+    u_int32_t numDivisions;
+    u_int64_t minInstructions = logger->minInstructions();
+    u_int64_t maxInstructions = logger->maxInstructions();
+    
+    [graphView setXMin:(double)minInstructions / kMillion];
+    [graphView setXMax:graphAxisMax(std::max((double)maxInstructions / kMillion, 1.0), &numDivisions)];
+    [graphView setXScale:[graphView xMax] / numDivisions];
+    
+    double yMax = graphAxisMax(logger->maxDoubleValue(), &numDivisions);
+    [graphView setYMax:yMax];
+    [graphView setYScale:yMax / numDivisions];
+    [graphView dataChanged];
+}
+
 @end
 
 #pragma mark -
@@ -186,36 +207,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 @end
 
 @implementation MTPopulationSizeGraphAdapter
-
-const double kMillion = 1.0e6;
-
-- (void)updateGraph:(MTWorldController*)inWorldController
-{
-    PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
-    if (!popSizeLogger) return;
-    
-#warning FIXME share code
-    u_int32_t numDivisions;
-    if (popSizeLogger->dataCount() > 1)
-    {
-        PopulationSizeLogger::data_pair firstPair = popSizeLogger->data()[0];
-        PopulationSizeLogger::data_pair lastPair  = popSizeLogger->data()[popSizeLogger->dataCount() - 1];
-        
-        [graphView setXMin:(double)firstPair.first / kMillion];
-        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
-        [graphView setXScale:[graphView xMax] / numDivisions];
-    }
-    else
-    {
-        [graphView setXMin:0.0];
-        [graphView setXMax:1.0];
-    }
-    
-    double yMax = graphAxisMax(popSizeLogger->maxValue(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
-    [graphView dataChanged];
-}
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
@@ -238,33 +229,6 @@ const double kMillion = 1.0e6;
 @end
 
 @implementation MTCreatureSizeGraphAdapter
-
-- (void)updateGraph:(MTWorldController*)inWorldController
-{
-    MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
-    if (!creatureSizeLogger) return;
-
-    u_int32_t numDivisions;
-    if (creatureSizeLogger->dataCount() > 1)
-    {
-        MeanCreatureSizeLogger::data_pair firstPair = creatureSizeLogger->data()[0];
-        MeanCreatureSizeLogger::data_pair lastPair  = creatureSizeLogger->data()[creatureSizeLogger->dataCount() - 1];
-        
-        [graphView setXMin:(double)firstPair.first / kMillion];
-        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
-        [graphView setXScale:[graphView xMax] / numDivisions];
-    }
-    else
-    {
-        [graphView setXMin:0.0];
-        [graphView setXMax:1.0];
-    }
-
-    double yMax = graphAxisMax(creatureSizeLogger->maxValue(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
-    [graphView dataChanged];
-}
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
