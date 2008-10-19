@@ -17,7 +17,7 @@
 //  return NAN;
 //  if(YES)
 //  return sin(x);
-  return x*x*x;
+  return x * x * x;
 }
 
 //************Histogram DataSource
@@ -38,11 +38,11 @@
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
   int factor = 10000;
-  int variablility = 10;
+  int variablility = 100;
   const double xMax = 10.0;
   
   float x = (float)index * xMax / factor;
-  float y = 10 * ((float)(Random() % variablility) + index * index + variablility * .75) / (1.75 * variablility + factor * factor);
+  float y = 10 * ((float)(random() % variablility) + index * index + variablility * .75) / (1.75 * variablility + factor * factor);
   
   
 //  if( (x > -2 && x < -1) || (x > 1 && x < 2) )
@@ -52,11 +52,9 @@
 //  else
 //  y = cos(x);
   
-  
   *(*point) = NSMakePoint(x, y);
   
-  
-  if(index > factor)
+  if (index > factor)
     *point = nil;
 }
 

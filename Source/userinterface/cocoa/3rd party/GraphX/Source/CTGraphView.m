@@ -158,68 +158,116 @@ static const float kTickMarkLength = 4.0f;
     return sAttributes;
 }
 
+// 10.5 and later only
++ (NSSet *)keyPathsForValuesAffectingNeedsRecomputation
+{
+    return [NSSet setWithObjects:@"xMin",
+                                @"xMax",
+                                @"yMin",
+                                @"yMax",
+                                @"showTitle",
+                                @"showXLabel",
+                                @"showXAxis",
+                                @"showXValues",
+                                @"showXGrid",
+                                @"showXTickMarks",
+                                @"showYLabel",
+                                @"showYAxis",
+                                @"showYValues",
+                                @"showYGrid",
+                                @"showYTickMarks",
+                                @"showBackground",
+                                @"externalTickMarks",
+                                @"xAxisColor",
+                                @"xGridColor",
+                                @"yAxisColor",
+                                @"yGridColor",
+                                @"backgroundColor",
+                                @"title",
+                                @"xLabel",
+                                @"yLabel",
+                                @"xAxisValueTextAttributes",
+                                @"yAxisValueTextAttributes",
+                                nil];
+}
+
 - (id)initWithFrame:(NSRect)frameRect
 {
-  if ((self = [super initWithFrame:frameRect]) != nil)
-  {
-    // Set Default Graph Bounds
-    xMin = -10;   xMax = 10;  xScale = 1;
-    yMin = -10;   yMax = 10;  yScale = 1;
+    if ((self = [super initWithFrame:frameRect]) != nil)
+    {
+        // Set Default Graph Bounds
+        xMin = -10;   xMax = 10;  xScale = 1;
+        yMin = -10;   yMax = 10;  yScale = 1;
 
-    // Set Default Colors
-    graphColors = [[NSColorList alloc] initWithName:@"Graph Colors"];
-    [graphColors setColor:[ NSColor whiteColor ] forKey:@"background"];
-    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"xMajor"  ];
-    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"yMajor"  ];
-    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"xMinor"  ];
-    [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"yMinor"  ];
-    [graphColors setColor:[ NSColor blackColor ] forKey:@"xaxis"     ];
-    [graphColors setColor:[ NSColor blackColor ] forKey:@"yaxis"     ];
-    
-    // Set Default Strings
-    xLabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
-    yLabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
+        // Set Default Colors
+        graphColors = [[NSColorList alloc] initWithName:@"Graph Colors"];
+        [graphColors setColor:[ NSColor whiteColor ] forKey:@"background"];
+        [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"xMajor"  ];
+        [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.6)] forKey:@"yMajor"  ];
+        [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"xMinor"  ];
+        [graphColors setColor:[[NSColor blueColor  ] colorWithAlphaComponent:(.4)] forKey:@"yMinor"  ];
+        [graphColors setColor:[ NSColor blackColor ] forKey:@"xaxis"     ];
+        [graphColors setColor:[ NSColor blackColor ] forKey:@"yaxis"     ];
 
-    title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[CTGraphView defaultTitleAttributes]];
-    
-    self.xAxisValueTextAttributes = [CTGraphView defaultXAxisValueAttributes];
-    self.yAxisValueTextAttributes = [CTGraphView defaultYAxisValueAttributes];
-    
-    //Set Flags
-    showTitle  = YES;
-    showBackground = YES;
-    externalTickMarks = YES;
+        // Set Default Strings
+        xLabel = [[NSAttributedString alloc] initWithString:@"X Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
+        yLabel = [[NSAttributedString alloc] initWithString:@"Y Axis Label" attributes:[CTGraphView defaultAxisLabelAttributes]];
 
-    showXAxis  = YES;
-    showXValues = YES;
-    showXGrid = YES;
-    showXTickMarks = YES;
+        title  = [[NSAttributedString alloc] initWithString:@"Title Text"   attributes:[CTGraphView defaultTitleAttributes]];
 
-    showYAxis  = YES;
-    showYValues = YES;
-    showYGrid = YES;
-    showYTickMarks = YES;
+        self.xAxisValueTextAttributes = [CTGraphView defaultXAxisValueAttributes];
+        self.yAxisValueTextAttributes = [CTGraphView defaultYAxisValueAttributes];
 
-    // Set Drawing Constants
-    labelPadding     = 2;
-    titlePadding     = 4;
-    
-    xMinorLineCount  = 0;
-    yMinorLineCount  = 0;
-    
-    majorLineWidth   = 1;
-    minorLineWidth   = 1;
-    axisLineWidth    = 1;
-    
-    lineDashPattern[0]  = 4;  // segment painted with stroke color
-    lineDashPattern[1]  = 5;  // segment not painted with a color
-  }
-  
-  return self;
+        //Set Flags
+        showTitle  = YES;
+        showBackground = YES;
+        externalTickMarks = YES;
+
+        showXAxis  = YES;
+        showXValues = YES;
+        showXGrid = YES;
+        showXTickMarks = YES;
+
+        showYAxis  = YES;
+        showYValues = YES;
+        showYGrid = YES;
+        showYTickMarks = YES;
+
+        // Set Drawing Constants
+        labelPadding     = 2;
+        titlePadding     = 4;
+
+        xMinorLineCount  = 0;
+        yMinorLineCount  = 0;
+
+        majorLineWidth   = 1;
+        minorLineWidth   = 1;
+        axisLineWidth    = 1;
+
+        lineDashPattern[0]  = 4;  // segment painted with stroke color
+        lineDashPattern[1]  = 5;  // segment not painted with a color
+
+        graphDirty = YES;
+        
+        [self setPostsBoundsChangedNotifications:YES];
+        [self setPostsFrameChangedNotifications:YES];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(viewBoundsDidChange:)
+                                                     name:NSViewBoundsDidChangeNotification
+                                                   object:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(viewBoundsDidChange:)
+                                                     name:NSViewFrameDidChangeNotification
+                                                   object:self];
+    }
+
+    return self;
 }
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+
     [graphColors release];
     self.xLabel = nil;
     self.yLabel = nil;
@@ -228,6 +276,32 @@ static const float kTickMarkLength = 4.0f;
     self.yAxisValueTextAttributes = nil;
 
     [super dealloc];
+}
+
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow
+{
+    if (newWindow)
+    {
+        [self addObserver:self
+               forKeyPath:@"needsRecomputation"
+                  options:0
+                  context:NULL];
+    }
+    else
+    {
+        [self removeObserver:self forKeyPath:@"needsRecomputation"];
+    }
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"needsRecomputation"])
+    {
+        [self dataChanged];
+        return;
+    }
+
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 - (float)titleHeight
@@ -270,14 +344,16 @@ static const float kTickMarkLength = 4.0f;
 
 - (float)maxYValueWidth
 {
+    float maxYWidth = 0.0f;
     if (showYValues)
     {
+        NSString* formattedString = [NSString stringWithFormat:@"%.6g", yMax];
 
-
-        
-        return 20 + kYLabelAxisOffset;      // FIXME compute this
+        NSMutableAttributedString* yLabelString = [[[NSMutableAttributedString alloc] initWithString:formattedString
+                                                                                         attributes:yAxisValueTextAttributes] autorelease];
+        maxYWidth = kYLabelAxisOffset + [yLabelString size].width;
     }
-    return 0;
+    return maxYWidth;
 }
 
 - (float)yLabelWidth
@@ -349,33 +425,35 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)drawRect:(NSRect)inDirtyRect   //mainly function calls to more complex implementation
 {
-  NSRect rect = [self bounds];
+    [self recomputeGraphIfNecessary];
 
-  //First Draw the Title, X/Y Axis & Labels
-  [self drawTitle :rect];
-  [self drawXLabel:rect];
-  [self drawYLabel:rect];
+    NSRect rect = [self bounds];
 
-  NSRect graphRect = [self graphRectForRect:rect];
-  
-  [self drawXValues:graphRect];
-  [self drawYValues:graphRect];
+    //First Draw the Title, X/Y Axis & Labels
+    [self drawTitle :rect];
+    [self drawXLabel:rect];
+    [self drawYLabel:rect];
 
-  //NSRectClip(graphRect); // don't allow drawing outside of graphRect from this point onward
-  
-  //Draw the Background
-  [self drawBackground:(graphRect)];
-  
-  //Draw the Grid Lines
-  [self drawXGrid:graphRect];
-  [self drawYGrid:graphRect];
+    NSRect graphRect = [self graphRectForRect:rect];
 
-  //Draw Curve and Area
-  [self drawGraph:graphRect];
-  
-  //Finish up by drawing the X and Y Axis (dependent on flags)
-  [self drawXAxis:graphRect];
-  [self drawYAxis:graphRect];
+    [self drawXValues:graphRect];
+    [self drawYValues:graphRect];
+
+    //NSRectClip(graphRect); // don't allow drawing outside of graphRect from this point onward
+
+    //Draw the Background
+    [self drawBackground:(graphRect)];
+
+    //Draw the Grid Lines
+    [self drawXGrid:graphRect];
+    [self drawYGrid:graphRect];
+
+    //Draw Curve and Area
+    [self drawGraph:graphRect];
+
+    //Finish up by drawing the X and Y Axis (dependent on flags)
+    [self drawXAxis:graphRect];
+    [self drawYAxis:graphRect];
 }
   
 - (void)drawTitle:(NSRect)rect;
@@ -428,7 +506,7 @@ static const float kTickMarkLength = 4.0f;
     const float minYBounds = NSMinY(rect);
 //    const float maxYBounds = NSMaxY(rect);
     
-    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio âˆ†Data/âˆ†Coordinate -> dg/dx
 
     float valueHeight = [self xValueHeight];
     float labelBottom = minYBounds - valueHeight - kXLabelAxisOffset - (externalTickMarks ? kTickMarkLength : 0.0f);
@@ -471,7 +549,7 @@ static const float kTickMarkLength = 4.0f;
     const float minYBounds = NSMinY(rect);
     const float maxYBounds = NSMaxY(rect);
     
-    const float yRatio = (yMax - yMin) / (maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yRatio = (yMax - yMin) / (maxYBounds - minYBounds); //ratio âˆ†Data/âˆ†Coordinate -> dh/dy
     
     float maxLabelWidth = [self maxYValueWidth];
     float labelRightPos = minXBounds - kYLabelAxisOffset - (externalTickMarks ? kTickMarkLength : 0.0f);
@@ -526,7 +604,7 @@ static const float kTickMarkLength = 4.0f;
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
 
-    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio âˆ†Data/âˆ†Coordinate -> dg/dx
 
     const float xOrigin = (0 - xMin)/xRatio + minXBounds; //x component of the origin
 
@@ -573,7 +651,7 @@ static const float kTickMarkLength = 4.0f;
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
 
-    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio âˆ†Data/âˆ†Coordinate -> dh/dy
 
     const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
 
@@ -625,7 +703,7 @@ static const float kTickMarkLength = 4.0f;
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
     
-    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio ÆData/ÆCoordinate -> dg/dx
+    const float xRatio = (xMax - xMin)/(maxXBounds - minXBounds); //ratio âˆ†Data/âˆ†Coordinate -> dg/dx
     
     const float xOrigin = (0 - xMin)/xRatio + minXBounds; //x component of the origin
     
@@ -693,7 +771,7 @@ static const float kTickMarkLength = 4.0f;
     const float maxYBounds = NSMaxY(rect);
     const float minYBounds = NSMinY(rect);
     
-    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio ÆData/ÆCoordinate -> dh/dy
+    const float yRatio = (yMax - yMin)/(maxYBounds - minYBounds); //ratio âˆ†Data/âˆ†Coordinate -> dh/dy
 
     const float yOrigin = (0 - yMin)/(yRatio) + minYBounds; //y component of the origin
 
@@ -748,143 +826,33 @@ static const float kTickMarkLength = 4.0f;
   return [self dataWithPDFInsideRect:[self bounds]];
 }
 
+- (void)dataChanged
+{
+    graphDirty = YES;
+    [self setNeedsDisplay:YES];
+}
+
+- (void)recomputeGraphIfNecessary
+{
+    if (graphDirty)
+    {
+        [self recomputeGraph:[self graphRectForRect:[self bounds]]];
+        graphDirty = NO;
+    }
+}
+
+- (void)recomputeGraph:(NSRect)rect
+{
+    // for subclasses to override
+}
+
+- (void)viewBoundsDidChange:(NSNotification*)inNotification
+{
+    // we need to recompute the bezier paths etc
+    [self dataChanged];
+}
 
 #pragma mark -
-
-
-//*********Customization Methods********************
-- (void)setXMin:(float)bound
-{
-  if (bound >= xMax)
-    [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
-  else
-    xMin = bound;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setXMax:(float)bound
-{
-  if (bound <= xMin)
-    [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
-  else
-    xMax = bound;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setXScale:(float)scale
-{
-  xScale = scale;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setXMinorLineCount:(unsigned)count
-{
-  xMinorLineCount = count;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setYMin:(float)bound
-{
-  if (bound >= yMax)
-    [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid lower bound" userInfo:nil] raise];
-  else
-    yMin = bound;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setYMax:(float)bound
-{
-  if (bound <= yMin)
-    [[NSException exceptionWithName:@"NSRangeException" reason:@"Invalid upper bound" userInfo:nil] raise];
-  else
-    yMax = bound;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setYScale:(float)scale
-{
-  yScale = scale;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setYMinorLineCount:(unsigned)count
-{
-  yMinorLineCount = count;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowTitle:(BOOL)state
-{
-  showTitle  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowXLabel:(BOOL)state
-{
-  showXLabel = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowXAxis :(BOOL)state
-{
-  showXAxis  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowXValues :(BOOL)state
-{
-  showXValues  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowXGrid :(BOOL)state
-{
-  showXGrid  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowXTickMarks:(BOOL)state
-{
-  showXTickMarks = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowYLabel:(BOOL)state
-{
-  showYLabel = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowYAxis:(BOOL)state
-{
-  showYAxis  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowYValues:(BOOL)state
-{
-  showYValues  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowYGrid:(BOOL)state
-{
-  showYGrid  = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowYTickMarks:(BOOL)state
-{
-  showYTickMarks = state;
-  [self setNeedsDisplay:YES];
-}
-
-- (void)setShowBackground:(BOOL)state
-{
-  showBackground = state;
-  [self setNeedsDisplay:YES];
-}
-
 
 - (NSColor *)xAxisColor
 {
@@ -893,8 +861,9 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)setXAxisColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"xAxisColor"];
     [graphColors setColor:color forKey:@"xaxis"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"xAxisColor"];
 }
 
 - (NSColor *)xGridColor
@@ -904,8 +873,9 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)setXGridColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"xGridColor"];
     [graphColors setColor:color forKey:@"xMajor"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"xGridColor"];
 }
 
 - (NSColor *)yAxisColor
@@ -915,8 +885,9 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)setYAxisColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"yAxisColor"];
     [graphColors setColor:color forKey:@"yaxis"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"yAxisColor"];
 }
 
 - (NSColor *)yGridColor
@@ -926,8 +897,9 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)setYGridColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"yGridColor"];
     [graphColors setColor:color forKey:@"yMajor"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"yGridColor"];
 }
 
 - (NSColor *)backgroundColor
@@ -937,39 +909,9 @@ static const float kTickMarkLength = 4.0f;
 
 - (void)setBackgroundColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"backgroundColor"];
     [graphColors setColor:color forKey:@"background"];
-    [self setNeedsDisplay:YES];
-}
-
-
-- (void)setTitle:(NSAttributedString *)string
-{
-    if (string != title)
-    {
-        [title release];
-        title = [string retain];
-        [self setNeedsDisplay:YES];
-    }
-}
-
-- (void)setXLabel:(NSAttributedString *)string
-{
-    if (string != xLabel)
-    {
-        [xLabel release];
-        xLabel = [string retain];
-        [self setNeedsDisplay:YES];
-    }
-}
-
-- (void)setYLabel:(NSAttributedString *)string
-{
-    if (string != yLabel)
-    {
-        [yLabel release];
-        yLabel = [string retain];
-        [self setNeedsDisplay:YES];
-    }
+    [self didChangeValueForKey:@"backgroundColor"];
 }
 
 #pragma mark -

@@ -15,10 +15,6 @@
 			<string>MacTierra XML Document</string>
 			<key>CFBundleTypeName</key>
 			<string>XMLSoupDocumentType</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>TrrX</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>LSTypeIsPackage</key>
@@ -37,10 +33,6 @@
 			<string>MacTierra Binary Document</string>
 			<key>CFBundleTypeName</key>
 			<string>SoupDocumentType</string>
-			<key>CFBundleTypeOSTypes</key>
-			<array>
-				<string>TrrA</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>NSDocumentClass</key>

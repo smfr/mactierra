@@ -16,6 +16,17 @@
 @synthesize showBorder;
 @synthesize showFill;
 
++ (NSSet *)keyPathsForValuesAffectingNeedsRecomputation
+{
+    return [[super keyPathsForValuesAffectingNeedsRecomputation] setByAddingObjectsFromSet:
+                          [NSSet setWithObjects:@"numberOfBuckets",
+                                                @"showBorder",
+                                                @"showFill",
+                                                @"borderColor",
+                                                @"fillColor",
+                                                nil]];
+}
+
 - (id)initWithFrame:(NSRect)frameRect
 {
   if ((self = [super initWithFrame:frameRect]) != nil)
@@ -97,8 +108,11 @@
     [labelString drawInRect:textRect];
 }
 
-- (void)drawGraph:(NSRect)rect
+- (void)recomputeGraph:(NSRect)rect
 {
+    [border removeAllPoints];
+    [displacement removeAllPoints];
+
     if (!dataSource)
         return;
 
@@ -147,7 +161,10 @@
     }
 
     [displacement lineToPoint:NSMakePoint(x , yOrigin)];
+}
 
+- (void)drawGraph:(NSRect)rect
+{
     if (showFill)
     {
         [[graphColors colorWithKey:@"fill"] set];
@@ -160,29 +177,13 @@
         [border appendBezierPath:displacement];
         [border stroke];
     }
-
-    [border removeAllPoints];
-    [displacement removeAllPoints];
 }
-
 
 - (void)setNumberOfBuckets:(NSUInteger)inNumBuckets;
 {
     numberOfBuckets = inNumBuckets;
     self.xMin = 0;
     self.xMax = inNumBuckets;
-    [self setNeedsDisplay:YES];
-}
-
-- (void)setShowBorder:(BOOL)state
-{
-    showBorder = state;
-    [self setNeedsDisplay:YES];
-}
-
-- (void)setShowFill:(BOOL)state
-{
-    showFill = state;
     [self setNeedsDisplay:YES];
 }
 
@@ -193,8 +194,9 @@
 
 - (void)setBorderColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"borderColor"];
     [graphColors setColor:color forKey:@"border"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"borderColor"];
 }
 
 - (NSColor *)fillColor
@@ -204,8 +206,9 @@
 
 - (void)setFillColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"fillColor"];
     [graphColors setColor:color forKey:@"fill"];
-    [self setNeedsDisplay:YES];
+    [self didChangeValueForKey:@"fillColor"];
 }
 
 

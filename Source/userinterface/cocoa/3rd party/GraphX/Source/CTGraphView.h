@@ -53,19 +53,26 @@
     float minorLineWidth;     //width of gridlines - applies to both x and y gridlines
 
     float lineDashPattern[2]; //dashing pattern used by axis that are out of bounds
+    
+    BOOL graphDirty;
 }
+
++ (NSSet *)keyPathsForValuesAffectingNeedsRecomputation;
 
 - (NSData *)graphImage;
 
+// Call this when the data source data changes. The graph wil be recomputed before
+// the next display
+- (void)dataChanged;
 
 @property (assign) float xMin;
 @property (assign) float xMax;
-@property (assign) float xScale;
+@property (assign) float xScale;        // grid spacing (?)
 @property (assign) unsigned xMinorLineCount;
 
 @property (assign) float yMin;
 @property (assign) float yMax;
-@property (assign) float yScale;
+@property (assign) float yScale;        // grid spacing (?)
 @property (assign) unsigned yMinorLineCount;
 
 @property (assign) BOOL showTitle;
@@ -106,5 +113,7 @@
 @property (readonly) float tickMarkLength;
 @property (readonly) float xValueHeight;
 
+- (void)recomputeGraphIfNecessary;
+- (void)recomputeGraph:(NSRect)rect;
 
 @end
