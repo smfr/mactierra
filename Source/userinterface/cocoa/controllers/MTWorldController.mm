@@ -120,6 +120,9 @@ using namespace MacTierra;
 - (void)awakeFromNib
 {
     [mSoupView retain];
+
+    [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
+    [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 }
 
 - (MTSoupView*)soupView

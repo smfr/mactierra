@@ -107,7 +107,6 @@ using namespace MacTierra;
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
-    // FIXME: for some reason other applications don't want to receive the text drags
     [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
