@@ -150,7 +150,24 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (NSString*)xAxisLabel
 {
+    // for subclassers
     return nil;
+}
+
+- (void)clear
+{
+    // break retain cycle
+    graphView.dataSource = nil;
+    graphView.delegate = nil;
+}
+
+// CTGraphViewDelegate methods
+- (void)willUpdateGraphView:(CTGraphView*)inGraphView
+{
+}
+
+- (void)didUpdateGraphView:(CTGraphView*)inGraphView
+{
 }
 
 @end
@@ -172,12 +189,14 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     NSAssert(!graphView, @"Should not have created graph view yet");
     
     self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    [graphView setShowXTickMarks:NO];
-    [graphView setShowTitle:NO];
-    [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]]];
-    [graphView setShowXLabel:YES];
-    [(CTScatterPlotView*)graphView setDataSource:self];
+    graphView.showXTickMarks = NO;
+    graphView.showTitle = NO;
+    graphView.showYLabel = NO;
+    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+    graphView.showXLabel = YES;
+
+    graphView.dataSource = self;        // retain cycle
+    graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
@@ -189,13 +208,13 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     u_int64_t minInstructions = logger->minInstructions();
     u_int64_t maxInstructions = logger->maxInstructions();
     
-    [graphView setXMin:(double)minInstructions / kMillion];
-    [graphView setXMax:graphAxisMax(std::max((double)maxInstructions / kMillion, 1.0), &numDivisions)];
-    [graphView setXScale:[graphView xMax] / numDivisions];
+    graphView.xMin = (double)minInstructions / kMillion;
+    graphView.xMax = graphAxisMax(std::max((double)maxInstructions / kMillion, 1.0), &numDivisions);
+    graphView.xScale = [graphView xMax] / numDivisions;
     
     double yMax = graphAxisMax(logger->maxDoubleValue(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
+    graphView.yMax = yMax;
+    graphView.yScale = yMax / numDivisions;
     [graphView dataChanged];
 }
 
@@ -252,33 +271,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTMaxFitnessGraphAdapter
 
-- (void)updateGraph:(MTWorldController*)inWorldController
-{
-    MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
-    if (!fitnessLogger) return;
-
-    u_int32_t numDivisions;
-    if (fitnessLogger->dataCount() > 1)
-    {
-        MaxFitnessDataLogger::data_pair firstPair = fitnessLogger->data()[0];
-        MaxFitnessDataLogger::data_pair lastPair  = fitnessLogger->data()[fitnessLogger->dataCount() - 1];
-        
-        [graphView setXMin:(double)firstPair.first / kMillion];
-        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
-        [graphView setXScale:[graphView xMax] / numDivisions];
-    }
-    else
-    {
-        [graphView setXMin:0.0];
-        [graphView setXMax:1.0];
-    }
-
-    double yMax = graphAxisMax(fitnessLogger->maxValue(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
-    [graphView dataChanged];
-}
-
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
@@ -306,11 +298,13 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     NSAssert(!graphView, @"Should not have created graph view yet");
     
     self.graphView = [[[CTHistogramView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    [graphView setShowXTickMarks:NO];
-    [graphView setShowTitle:NO];
-    [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]]];
-    [(CTHistogramView*)graphView setDataSource:self];
+    graphView.showXTickMarks = NO;
+    graphView.showTitle = NO;
+    graphView.showYLabel = NO;
+    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+
+    graphView.dataSource = self;       // retain cycle
+    graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
@@ -326,8 +320,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(histogramLogger->maxFrequency(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
+    graphView.yMax = yMax;
+    graphView.yScale = yMax / numDivisions;
     [graphView dataChanged];
 }
 
@@ -404,6 +398,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
 - (void)dealloc
 {
+    [mGraphAdaptors makeObjectsPerformSelector:@selector(clear)];
     [mGraphAdaptors release];
     [mGraphTypes release];
     [super dealloc];
@@ -441,7 +436,9 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
 - (void)setupGraphAdaptors
 {
-    [mGraphAdaptors release]; mGraphAdaptors = nil;
+    [mGraphAdaptors makeObjectsPerformSelector:@selector(clear)];
+    [mGraphAdaptors release];
+    mGraphAdaptors = nil;
 
     NSMutableArray*     adaptors = [NSMutableArray array];
     
