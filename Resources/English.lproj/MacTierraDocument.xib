@@ -1519,7 +1519,7 @@
 												<object class="NSTabViewItem" id="274134903">
 													<string key="NSIdentifier">1</string>
 													<object class="NSView" key="NSView" id="30334768">
-														<nil key="NSNextResponder"/>
+														<reference key="NSNextResponder" ref="44556506"/>
 														<int key="NSvFlags">256</int>
 														<object class="NSMutableArray" key="NSSubviews">
 															<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1603,6 +1603,7 @@
 															</object>
 														</object>
 														<string key="NSFrame">{{10, 33}, {1005, 156}}</string>
+														<reference key="NSSuperview" ref="44556506"/>
 													</object>
 													<string key="NSLabel">Graphs</string>
 													<reference key="NSColor" ref="623501826"/>
@@ -1611,7 +1612,7 @@
 												<object class="NSTabViewItem" id="525683623">
 													<string key="NSIdentifier">2</string>
 													<object class="NSView" key="NSView" id="45276">
-														<reference key="NSNextResponder" ref="44556506"/>
+														<nil key="NSNextResponder"/>
 														<int key="NSvFlags">256</int>
 														<object class="NSMutableArray" key="NSSubviews">
 															<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1828,6 +1829,7 @@
 																		</object>
 																		<string key="NSFrame">{{1, 17}, {985, 107}}</string>
 																		<reference key="NSSuperview" ref="1052934936"/>
+																		<reference key="NSNextKeyView" ref="358998908"/>
 																		<reference key="NSDocView" ref="358998908"/>
 																		<reference key="NSBGColor" ref="365590202"/>
 																		<int key="NScvFlags">4</int>
@@ -1861,6 +1863,7 @@
 																		</object>
 																		<string key="NSFrame">{{1, 0}, {985, 17}}</string>
 																		<reference key="NSSuperview" ref="1052934936"/>
+																		<reference key="NSNextKeyView" ref="1067095830"/>
 																		<reference key="NSDocView" ref="1067095830"/>
 																		<reference key="NSBGColor" ref="365590202"/>
 																		<int key="NScvFlags">4</int>
@@ -1869,6 +1872,7 @@
 																</object>
 																<string key="NSFrame">{{2, 28}, {1002, 125}}</string>
 																<reference key="NSSuperview" ref="45276"/>
+																<reference key="NSNextKeyView" ref="999149641"/>
 																<int key="NSsFlags">18</int>
 																<reference key="NSVScroller" ref="476085581"/>
 																<reference key="NSHScroller" ref="890750164"/>
@@ -1899,21 +1903,20 @@
 															</object>
 														</object>
 														<string key="NSFrame">{{10, 33}, {1005, 156}}</string>
-														<reference key="NSSuperview" ref="44556506"/>
 													</object>
 													<string key="NSLabel">Inventory</string>
 													<reference key="NSColor" ref="623501826"/>
 													<reference key="NSTabView" ref="44556506"/>
 												</object>
 											</object>
-											<reference key="NSSelectedTabViewItem" ref="525683623"/>
+											<reference key="NSSelectedTabViewItem" ref="274134903"/>
 											<reference key="NSFont" ref="410377631"/>
 											<int key="NSTvFlags">0</int>
 											<bool key="NSAllowTruncatedLabels">YES</bool>
 											<bool key="NSDrawsBackground">YES</bool>
 											<object class="NSMutableArray" key="NSSubviews">
 												<bool key="EncodedWithXMLCoder">YES</bool>
-												<reference ref="45276"/>
+												<reference ref="30334768"/>
 											</object>
 										</object>
 									</object>

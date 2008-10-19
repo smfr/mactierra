@@ -73,10 +73,20 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
         max = 0.2 * power;
         *outNumDivisions = 4;
     }
+    else if (mapped <= 0.4)
+    {
+        max = 0.4 * power;
+        *outNumDivisions = 4;
+    }
     else if (mapped <= 0.5)
     {
         max = 0.5 * power;
         *outNumDivisions = 5;
+    }
+    else if (mapped <= 0.8)
+    {
+        max = 0.8 * power;
+        *outNumDivisions = 4;
     }
     else
     {
@@ -164,6 +174,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView setShowTitle:NO];
     [graphView setShowYLabel:NO];
     [graphView setXLabel:[NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [graphView setShowXLabel:YES];
     [(CTScatterPlotView*)graphView setDataSource:self];
 }
 
@@ -176,15 +187,30 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTPopulationSizeGraphAdapter
 
+const double kMillion = 1.0e6;
+
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (!popSizeLogger) return;
-
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)popSizeLogger->dataCount(), 1.0)];
-
+    
+#warning FIXME share code
     u_int32_t numDivisions;
+    if (popSizeLogger->dataCount() > 1)
+    {
+        PopulationSizeLogger::data_pair firstPair = popSizeLogger->data()[0];
+        PopulationSizeLogger::data_pair lastPair  = popSizeLogger->data()[popSizeLogger->dataCount() - 1];
+        
+        [graphView setXMin:(double)firstPair.first / kMillion];
+        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
+        [graphView setXScale:[graphView xMax] / numDivisions];
+    }
+    else
+    {
+        [graphView setXMin:0.0];
+        [graphView setXMax:1.0];
+    }
+    
     double yMax = graphAxisMax(popSizeLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
@@ -196,7 +222,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
     {
-        *(*point) = NSMakePoint(index, popSizeLogger->data()[index].second);
+        PopulationSizeLogger::data_pair curPair = popSizeLogger->data()[index];
+        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
         return;
     }
     
@@ -217,10 +244,22 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (!creatureSizeLogger) return;
 
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)creatureSizeLogger->dataCount(), 1.0)];
-
     u_int32_t numDivisions;
+    if (creatureSizeLogger->dataCount() > 1)
+    {
+        MeanCreatureSizeLogger::data_pair firstPair = creatureSizeLogger->data()[0];
+        MeanCreatureSizeLogger::data_pair lastPair  = creatureSizeLogger->data()[creatureSizeLogger->dataCount() - 1];
+        
+        [graphView setXMin:(double)firstPair.first / kMillion];
+        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
+        [graphView setXScale:[graphView xMax] / numDivisions];
+    }
+    else
+    {
+        [graphView setXMin:0.0];
+        [graphView setXMax:1.0];
+    }
+
     double yMax = graphAxisMax(creatureSizeLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
@@ -232,7 +271,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
-        *(*point) = NSMakePoint(index, creatureSizeLogger->data()[index].second);
+        MeanCreatureSizeLogger::data_pair curPair = creatureSizeLogger->data()[index];
+        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
         return;
     }
     
@@ -253,10 +293,22 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (!fitnessLogger) return;
 
-    [graphView setXMin:0.0];
-    [graphView setXMax:std::max((double)fitnessLogger->dataCount(), 1.0)];
-
     u_int32_t numDivisions;
+    if (fitnessLogger->dataCount() > 1)
+    {
+        MaxFitnessDataLogger::data_pair firstPair = fitnessLogger->data()[0];
+        MaxFitnessDataLogger::data_pair lastPair  = fitnessLogger->data()[fitnessLogger->dataCount() - 1];
+        
+        [graphView setXMin:(double)firstPair.first / kMillion];
+        [graphView setXMax:graphAxisMax(std::max((double)lastPair.first / kMillion, 1.0), &numDivisions)];
+        [graphView setXScale:[graphView xMax] / numDivisions];
+    }
+    else
+    {
+        [graphView setXMin:0.0];
+        [graphView setXMax:1.0];
+    }
+
     double yMax = graphAxisMax(fitnessLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
@@ -268,7 +320,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
-        *(*point) = NSMakePoint(index, fitnessLogger->data()[index].second);
+        MaxFitnessDataLogger::data_pair curPair = fitnessLogger->data()[index];
+        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
         return;
     }
     
