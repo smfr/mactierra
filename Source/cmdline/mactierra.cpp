@@ -26,7 +26,7 @@
 #include "options.h"
 
 #include "MT_World.h"
-#include "MT_WorldArchive.h"
+#include "MT_WorldArchiver.h"
 #include "MT_Settings.h"
 #include "MT_SoupConfiguration.h"
 #include "MT_Ancestor.h"
@@ -128,18 +128,18 @@ static bool sanityCheckOptions()
     return true;
 }
 
-static WorldArchive::EWorldSerializationFormat formatFromFileExtension(const string& inFileName)
+static WorldArchiver::EWorldSerializationFormat formatFromFileExtension(const string& inFileName)
 {
     const string xmlFileSuffix = ".mactierra_xml";
     const string binaryFileSuffix = ".mactierra";
 
     if (inFileName.compare(inFileName.length() - xmlFileSuffix.length(), xmlFileSuffix.length(), xmlFileSuffix) == 0)
-        return WorldArchive::kXML;
+        return WorldArchiver::kXML;
 
     if (inFileName.compare(inFileName.length() - binaryFileSuffix.length(), binaryFileSuffix.length(), binaryFileSuffix) == 0)
-        return WorldArchive::kBinary;
+        return WorldArchiver::kBinary;
 
-    return WorldArchive::kAutodetect;
+    return WorldArchiver::kAutodetect;
 }
 
 static World* createWorld()
@@ -151,7 +151,8 @@ static World* createWorld()
         try
         {
             std::ifstream fileStream(gInputSoupFilePath.c_str());
-            theWorld = WorldArchive::worldFromStream(fileStream, formatFromFileExtension(gInputSoupFilePath));
+            WorldImporter importer(fileStream, formatFromFileExtension(gInputSoupFilePath));
+            theWorld = importer.loadWorld();
         }
         catch (std::exception const& e)
         {
@@ -352,8 +353,10 @@ extern "C" int main(int argc, char* argv[])
         theWorld->iterate(cycleLength);
     }
     
-    if (outputStream)
-        WorldArchive::worldToStream(theWorld, *outputStream, gUseXMLFormat ? WorldArchive::kXML : WorldArchive::kBinary);
+    if (outputStream) {
+        WorldExporter exporter(*outputStream, gUseXMLFormat ? WorldArchiver::kXML : WorldArchiver::kBinary);
+        exporter.saveWorld(theWorld);
+    }
     
     delete outputStream;
     delete theWorld;

@@ -42,24 +42,38 @@ WorldDataCollectors::setupDataCollectors(World* inWorld)
 {
     const NSUInteger kMaxDataPoints = 500;
     
-    // set up some logging
-    mPopSizeLogger = new PopulationSizeLogger();
-    mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
+    if (!mPopSizeLogger)
+    {
+        mPopSizeLogger = new PopulationSizeLogger();
+        mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
+    }
     inWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
 
-    mMeanSizeLogger = new MeanCreatureSizeLogger();
-    mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
+    if (!mMeanSizeLogger)
+    {
+        mMeanSizeLogger = new MeanCreatureSizeLogger();
+        mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
+    }
     inWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
 
-    mFitnessFrequencyLogger = new MaxFitnessDataLogger();
-    mFitnessFrequencyLogger->setMaxDataCount(kMaxDataPoints);
+    if (!mFitnessFrequencyLogger)
+    {
+        mFitnessFrequencyLogger = new MaxFitnessDataLogger();
+        mFitnessFrequencyLogger->setMaxDataCount(kMaxDataPoints);
+    }
     inWorld->dataCollector()->addPeriodicLogger(mFitnessFrequencyLogger);
     
-    mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();
-    mGenotypeFrequencyLogger->setMaxBuckets(15);
+    if (!mGenotypeFrequencyLogger)
+    {
+        mGenotypeFrequencyLogger = new GenotypeFrequencyDataLogger();
+        mGenotypeFrequencyLogger->setMaxBuckets(15);
+    }
     
-    mSizeFrequencyLogger = new SizeHistogramDataLogger();
-    mSizeFrequencyLogger->setMaxBuckets(15);
+    if (!mSizeFrequencyLogger)
+    {
+        mSizeFrequencyLogger = new SizeHistogramDataLogger();
+        mSizeFrequencyLogger->setMaxBuckets(15);
+    }
 }
 
 void
@@ -81,34 +95,76 @@ WorldDataCollectors::clearDataCollectors()
     mSizeFrequencyLogger = NULL;
 }
 
+void
+WorldDataCollectors::registerTypes(boost::archive::polymorphic_oarchive& inArchive)
+{
+    inArchive.register_type(static_cast<PopulationSizeLogger *>(NULL));
+    inArchive.register_type(static_cast<MeanCreatureSizeLogger *>(NULL));
+    inArchive.register_type(static_cast<MaxFitnessDataLogger *>(NULL));
+    inArchive.register_type(static_cast<GenotypeFrequencyDataLogger *>(NULL));
+    inArchive.register_type(static_cast<SizeHistogramDataLogger *>(NULL));
+}
+
+void
+WorldDataCollectors::registerTypes(boost::archive::polymorphic_iarchive& inArchive)
+{
+    inArchive.register_type(static_cast<PopulationSizeLogger *>(NULL));
+    inArchive.register_type(static_cast<MeanCreatureSizeLogger *>(NULL));
+    inArchive.register_type(static_cast<MaxFitnessDataLogger *>(NULL));
+    inArchive.register_type(static_cast<GenotypeFrequencyDataLogger *>(NULL));
+    inArchive.register_type(static_cast<SizeHistogramDataLogger *>(NULL));
+}
+
+void
+WorldDataCollectors::loadAddition(const std::string& inAdditionType, boost::archive::polymorphic_iarchive& inArchive)
+{
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("population_size_logger", mPopSizeLogger);
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_size_logger", mMeanSizeLogger);
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("max_fitness_logger", mFitnessFrequencyLogger);
+
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_frequency_logger", mGenotypeFrequencyLogger);
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("size_frequency_logger", mSizeFrequencyLogger);
+}
+
+void
+WorldDataCollectors::saveAddition(const std::string& inAdditionType, boost::archive::polymorphic_oarchive& inArchive)
+{
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("population_size_logger", mPopSizeLogger);
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_size_logger", mMeanSizeLogger);
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("max_fitness_logger", mFitnessFrequencyLogger);
+
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_frequency_logger", mGenotypeFrequencyLogger);
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("size_frequency_logger", mSizeFrequencyLogger);
+}
+
 #pragma mark -
 
 WorldData::~WorldData()
 {
-    delete mDataCollectors;
-    mDataCollectors = NULL;
-
     delete mGenebankListener;
-    mGenebankListener = NULL;
 
-    setWorld(NULL);
+    setWorld(NULL, NULL);
 }
 
 void
-WorldData::setWorld(MacTierra::World* inWorld)
+WorldData::setWorld(MacTierra::World* inWorld, WorldDataCollectors* inDataCollectors)
 {
     if (inWorld != mWorld)
     {
-        delete mDataCollectors;
-        mDataCollectors = NULL;
+        mDataCollectors = 0;
         
         delete mWorld;
         mWorld = inWorld;
         
         if (mWorld)
         {
-            mDataCollectors = new WorldDataCollectors(mWorld);
+            if (inDataCollectors)
+                mDataCollectors = inDataCollectors;
+            else
+                mDataCollectors = new WorldDataCollectors();
 
+            mDataCollectors->setWorld(mWorld);
+            
             mGenebankListener = new GenebankInventoryListener();
             mWorld->inventory()->setListenerAliveThreshold(20);
             mWorld->inventory()->registerListener(mGenebankListener);
@@ -136,4 +192,3 @@ WorldData::writeInventory(std::ostream& inStream)
     if (mWorld)
         mWorld->inventory()->writeToStream(inStream);
 }
-

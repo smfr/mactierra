@@ -11,9 +11,6 @@
 		0F0C949F0E514AE200B233E8 /* TestRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C948B0E514A8800B233E8 /* TestRunner.cpp */; };
 		0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C963E0E51620100B233E8 /* SlicerTests.cpp */; };
-		0F0D8CB40E973D4000503187 /* MT_WorldArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0D8CB30E973D4000503187 /* MT_WorldArchive.cpp */; };
-		0F0D8CB50E973D4000503187 /* MT_WorldArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0D8CB30E973D4000503187 /* MT_WorldArchive.cpp */; };
-		0F0D8CB60E973D4000503187 /* MT_WorldArchive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0D8CB30E973D4000503187 /* MT_WorldArchive.cpp */; };
 		0F13F8810E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
@@ -24,6 +21,9 @@
 		0F3210440E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F3210450E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
 		0F3210460E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */; };
+		0F4F663C0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
+		0F4F663D0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
+		0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F63B1020E5E6A54005793DE /* MTDocumentController.m */; };
 		0F87F8FB0E7188F200A27BC6 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F995BEE0E68FF6700AC5089 /* GraphX.framework */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
@@ -167,8 +167,6 @@
 		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F0C963D0E51620100B233E8 /* SlicerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlicerTests.h; sourceTree = "<group>"; };
 		0F0C963E0E51620100B233E8 /* SlicerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlicerTests.cpp; sourceTree = "<group>"; };
-		0F0D8CB20E973D4000503187 /* MT_WorldArchive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_WorldArchive.h; sourceTree = "<group>"; };
-		0F0D8CB30E973D4000503187 /* MT_WorldArchive.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_WorldArchive.cpp; sourceTree = "<group>"; };
 		0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Inventory.cpp; sourceTree = "<group>"; };
 		0F13F88C0E5FCA2D00D8E649 /* SerializationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializationTests.h; sourceTree = "<group>"; };
 		0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SerializationTests.cpp; sourceTree = "<group>"; };
@@ -409,6 +407,8 @@
 		0F1D19DD0E7A2F8A008EB764 /* AlwaysInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlwaysInline.h; sourceTree = "<group>"; };
 		0F1D1A910E7A3A93008EB764 /* Assertions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assertions.cpp; sourceTree = "<group>"; };
 		0F3210430E5FE29D00F98321 /* libboost_serialization-xgcc40-mt-1_36.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libboost_serialization-xgcc40-mt-1_36.a"; path = "Source/boost/lib/libboost_serialization-xgcc40-mt-1_36.a"; sourceTree = "<group>"; };
+		0F4F663A0E9861CC000EAA73 /* MT_WorldArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_WorldArchiver.h; sourceTree = "<group>"; };
+		0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_WorldArchiver.cpp; sourceTree = "<group>"; };
 		0F63B1010E5E6A54005793DE /* MTDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentController.h; sourceTree = "<group>"; };
 		0F63B1020E5E6A54005793DE /* MTDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentController.m; sourceTree = "<group>"; };
 		0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
@@ -1430,8 +1430,8 @@
 				0FBB066E0E5A984B007F2A6B /* MT_TimeSlicer.cpp */,
 				0FBB067A0E5A984B007F2A6B /* MT_World.h */,
 				0FBB06740E5A984B007F2A6B /* MT_World.cpp */,
-				0F0D8CB20E973D4000503187 /* MT_WorldArchive.h */,
-				0F0D8CB30E973D4000503187 /* MT_WorldArchive.cpp */,
+				0F4F663A0E9861CC000EAA73 /* MT_WorldArchiver.h */,
+				0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */,
 			);
 			name = engine;
 			path = Source/engine;
@@ -1847,7 +1847,7 @@
 				0F995CAB0E6907EE00AC5089 /* MT_DataCollection.cpp in Sources */,
 				0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */,
 				0F9431BA0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
-				0F0D8CB60E973D4000503187 /* MT_WorldArchive.cpp in Sources */,
+				0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1877,7 +1877,7 @@
 				0FB9C5E40E72536600E6EBFD /* options.cpp in Sources */,
 				0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */,
 				0F9431BB0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
-				0F0D8CB50E973D4000503187 /* MT_WorldArchive.cpp in Sources */,
+				0F4F663D0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1930,7 +1930,7 @@
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 				0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
 				0FA53E660E91E25200826FAD /* MTWorldDataCollection.mm in Sources */,
-				0F0D8CB40E973D4000503187 /* MT_WorldArchive.cpp in Sources */,
+				0F4F663C0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

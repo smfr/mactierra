@@ -12,6 +12,8 @@
 
 #include <string>
 
+#include <boost/serialization/serialization.hpp>
+
 #include "MT_DataCollection.h"
 
 // Data collection is considered to be "outside" the engine. Clients of the engine
@@ -115,6 +117,18 @@ protected:
             mCollectionInterval = mOwningCollector->collectionInterval();
     }
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_collection_instructions", mNextCollectionInstructions);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_interval", mCollectionInterval);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_count", mCollectionCount);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_data_count", mMaxDataCount);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", mData);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_value", mMaxValue);
+    }
+
 protected:
 
     u_int64_t       mNextCollectionInstructions;
@@ -126,26 +140,49 @@ protected:
     data_type               mMaxValue;
 };
 
-class PopulationSizeLogger : public SimpleDataLogger<u_int32_t>
+typedef SimpleDataLogger<u_int32_t> SimpleUInt32DataLogger;
+class PopulationSizeLogger : public SimpleUInt32DataLogger
 {
 public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleUInt32DataLogger);
+    }
 };
 
 
-class MeanCreatureSizeLogger : public SimpleDataLogger<double>
+typedef SimpleDataLogger<double> SimpleDoubleDataLogger;
+class MeanCreatureSizeLogger : public SimpleDoubleDataLogger
 {
 public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleDoubleDataLogger);
+    }
 };
 
-class MaxFitnessDataLogger : public SimpleDataLogger<double>
+class MaxFitnessDataLogger : public SimpleDoubleDataLogger
 {
 public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleDoubleDataLogger);
+    }
 };
 
 
@@ -181,6 +218,14 @@ public:
 
     void        setMaxBuckets(u_int32_t inMax) { mMaxBuckets = inMax; }
 
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", mData);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_buckets", mMaxBuckets);
+    }
+
 protected:
 
     std::vector<data_pair>  mData;
@@ -196,18 +241,30 @@ public:
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
 
-protected:
-    
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+//        ar & boost::serialization::base_object<HistogramDataLogger<std::string> >(*this);
+    }
 };
 
 // pair is a bucket range
 typedef std::pair<u_int32_t, u_int32_t> range_pair;
-class SizeHistogramDataLogger : public HistogramDataLogger<range_pair>
+typedef HistogramDataLogger<range_pair> HistogramRangePairDataLogger;
+class SizeHistogramDataLogger : public HistogramRangePairDataLogger
 {
 public:
 
     // collectData is called on the engine thread
     virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(HistogramRangePairDataLogger);
+    }
 };
 
 

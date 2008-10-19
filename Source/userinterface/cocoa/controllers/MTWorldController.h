@@ -79,7 +79,7 @@ class WorldDataCollectors;
 @property (assign) BOOL creatingNewSoup;
 
 @property (readonly) MacTierra::World* world;
-@property (readonly) WorldDataCollectors* dataCollectors;
+@property (readonly) const WorldDataCollectors* dataCollectors;
 
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;
@@ -103,11 +103,11 @@ class WorldDataCollectors;
 - (void)clearWorld;
 
 // save and restore
-- (BOOL)writeBinaryDataToFile:(NSURL*)inFileURL;
 - (BOOL)readWorldFromBinaryFile:(NSURL*)inFileURL;
-
-- (BOOL)writeXMLDataToFile:(NSURL*)inFileURL;
 - (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL;
+
+- (BOOL)writeWorldToBinaryFile:(NSURL*)inFileURL;
+- (BOOL)writeWorldToXMLFile:(NSURL*)inFileURL;
 
 - (BOOL)writeSoupConfigurationToXMLFile:(NSURL*)inFileURL;
 

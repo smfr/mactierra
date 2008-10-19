@@ -22,7 +22,7 @@
 #import "MT_InventoryListener.h"
 #import "MT_SoupConfiguration.h"
 #import "MT_World.h"
-#import "MT_WorldArchive.h"
+#import "MT_WorldArchiver.h"
 
 #import "MTCreature.h"
 #import "MT_DataCollection.h"
@@ -41,7 +41,7 @@ using namespace MacTierra;
 - (void)startUpdateTimer;
 - (void)stopUpdateTimer;
 - (void)setRunning:(BOOL)inRunning;
-- (void)setWorld:(World*)inWorld;
+- (void)setWorld:(World*)inWorld dataCollectors:(WorldDataCollectors*)inDataCollectors;
 
 - (void)updateSoup;
 - (void)updateGenotypes;
@@ -127,7 +127,7 @@ using namespace MacTierra;
     return mSoupView;
 }
 
-- (void)setWorld:(World*)inWorld
+- (void)setWorld:(World*)inWorld dataCollectors:(WorldDataCollectors*)inDataCollectors
 {
     if (inWorld != mWorldData->world())
     {
@@ -136,7 +136,7 @@ using namespace MacTierra;
         [mSoupView setWorld:nil];
         [mInventoryController setInventory:nil];
 
-        mWorldData->setWorld(inWorld);
+        mWorldData->setWorld(inWorld, inDataCollectors);
         [mSoupView setWorld:mWorldData->world()];
         
         if (mWorldData->world())
@@ -206,7 +206,7 @@ using namespace MacTierra;
     return mWorldData->world();
 }
 
-- (WorldDataCollectors*)dataCollectors
+- (const WorldDataCollectors*)dataCollectors
 {
     return mWorldData->dataCollectors();
 }
@@ -236,7 +236,7 @@ using namespace MacTierra;
     // have to break ref cycles
     [self setRunning:NO];    
 
-    [self setWorld:NULL];
+    [self setWorld:NULL dataCollectors:NULL];
     self.selectedCreature = nil;
 }
 
@@ -376,7 +376,8 @@ using namespace MacTierra;
     MacTierra::World* newWorld = new World();
     newWorld->setSettings(MacTierra::Settings::zeroMutationSettings());
     newWorld->initializeSoup(kEmptySoupSize);
-    [self setWorld:newWorld];
+
+    [self setWorld:newWorld dataCollectors:NULL];
 }
 
 - (IBAction)newSoupShowingSettings:(id)sender
@@ -413,7 +414,7 @@ using namespace MacTierra;
             newWorld->setSettings(*worldSettings.settings);
             
             newWorld->initializeSoup(worldSettings.soupSize);
-            [self setWorld:newWorld];
+            [self setWorld:newWorld dataCollectors:NULL];
             
             if (worldSettings.seedWithAncestor)
                 [self seedWithAncestor];
@@ -504,59 +505,6 @@ using namespace MacTierra;
 
 #pragma mark -
 
-- (NSData*)worldData
-{
-    if (!mWorldData->world())
-        return nil;
-
-//    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
-
-    std::ostringstream stringStream;
-    [self lockWorld];
-        WorldArchive::worldToStream(mWorldData->world(), stringStream, WorldArchive::kBinary);
-    [self unlockWorld];
-
-//    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
-//    NSLog(@"Serializaing world took %f milliseconds", (endTime - startTime) * 1000.0);
-
-    return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
-}
-
-- (void)setWorldWithData:(NSData*)inData
-{
-    std::string worldString((const char*)[inData bytes], [inData length]);
-    std::istringstream stringStream(worldString);
-
-    World* newWorld = WorldArchive::worldFromStream(stringStream, WorldArchive::kBinary);
-
-    [self setWorld:newWorld];
-}
-
-- (NSData*)worldXMLData
-{
-    if (!mWorldData->world())
-        return nil;
-
-    std::ostringstream stringStream;
-    [self lockWorld];
-        WorldArchive::worldToStream(mWorldData->world(), stringStream, WorldArchive::kXML);
-    [self unlockWorld];
-
-    return [NSData dataWithBytes:stringStream.str().data() length:stringStream.str().length()];
-}
-
-- (void)setWorldWithXMLData:(NSData*)inData
-{
-    std::string worldString((const char*)[inData bytes], [inData length]);
-
-    std::istringstream stringStream(worldString);
-    World* newWorld = WorldArchive::worldFromStream(stringStream, WorldArchive::kXML);
-
-    [self setWorld:newWorld];
-}
-
-#pragma mark -
-
 static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 {
     if (![inURL isFileURL])
@@ -566,16 +514,59 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     return YES;
 }
 
-- (BOOL)writeBinaryDataToFile:(NSURL*)inFileURL
+#define MEASURE_LOADING 1
+
+- (BOOL)readWorldFromFile:(NSURL*)inFileURL format:(WorldArchiver::EWorldSerializationFormat)inFileFormat
+{
+    std::string filePath;
+    if (!filePathFromURL(inFileURL, filePath))
+        return NO;
+
+#ifdef MEASURE_LOADING
+    CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
+#endif
+
+    RefPtr<WorldDataCollectors> dataCollectorsAddition = adoptRef(new WorldDataCollectors());
+
+    World* newWorld = NULL;
+    {
+        std::ifstream fileStream(filePath.c_str());
+        WorldImporter importer(fileStream, inFileFormat);
+
+        std::vector<std::string> archivingTypes;
+        archivingTypes.push_back("data");
+        importer.registerAddition(archivingTypes, dataCollectorsAddition.get());
+
+        newWorld = importer.loadWorld();
+    }
+    
+#ifdef MEASURE_LOADING
+    CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
+    NSLog(@"Reading %@ world took %f milliseconds", (inFileFormat == WorldArchiver::kXML) ? @"XML" : @"binary", (endTime - startTime) * 1000.0);
+#endif
+
+    [self setWorld:newWorld dataCollectors:dataCollectorsAddition.get()];
+
+    return YES;
+}
+
+- (BOOL)writeWorldToFile:(NSURL*)inFileURL format:(WorldArchiver::EWorldSerializationFormat)inFileFormat
 {
     std::string filePath;
     if (!filePathFromURL(inFileURL, filePath))
         return NO;
 
     std::ofstream fileStream(filePath.c_str());
-
     [self lockWorld];
-        WorldArchive::worldToStream(mWorldData->world(), fileStream, WorldArchive::kBinary);
+    {
+        WorldExporter exporter(fileStream, inFileFormat);
+
+        std::vector<std::string> archivingTypes;
+        archivingTypes.push_back("data");
+        exporter.registerAddition(archivingTypes, mWorldData->dataCollectors());
+
+        exporter.saveWorld(mWorldData->world());
+    }
     [self unlockWorld];
 
     return YES;
@@ -583,42 +574,22 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
 - (BOOL)readWorldFromBinaryFile:(NSURL*)inFileURL
 {
-    std::string filePath;
-    if (!filePathFromURL(inFileURL, filePath))
-        return NO;
-
-    std::ifstream fileStream(filePath.c_str());
-    World* newWorld = WorldArchive::worldFromStream(fileStream, WorldArchive::kBinary);
-    [self setWorld:newWorld];
-
-    return YES;
-}
-
-- (BOOL)writeXMLDataToFile:(NSURL*)inFileURL
-{
-    std::string filePath;
-    if (!filePathFromURL(inFileURL, filePath))
-        return NO;
-
-    std::ofstream fileStream(filePath.c_str());
-    [self lockWorld];
-        WorldArchive::worldToStream(mWorldData->world(), fileStream, WorldArchive::kXML);
-    [self unlockWorld];
-
-    return YES;
+    return [self readWorldFromFile:inFileURL format:WorldArchiver::kBinary];
 }
 
 - (BOOL)readWorldFromXMLFile:(NSURL*)inFileURL
 {
-    std::string filePath;
-    if (!filePathFromURL(inFileURL, filePath))
-        return NO;
+    return [self readWorldFromFile:inFileURL format:WorldArchiver::kXML];
+}
 
-    std::ifstream fileStream(filePath.c_str());
-    World* newWorld = WorldArchive::worldFromStream(fileStream, WorldArchive::kXML);
-    [self setWorld:newWorld];
+- (BOOL)writeWorldToBinaryFile:(NSURL*)inFileURL
+{
+    return [self writeWorldToFile:inFileURL format:WorldArchiver::kBinary];
+}
 
-    return YES;
+- (BOOL)writeWorldToXMLFile:(NSURL*)inFileURL
+{
+    return [self writeWorldToFile:inFileURL format:WorldArchiver::kXML];
 }
 
 - (BOOL)writeSoupConfigurationToXMLFile:(NSURL*)inFileURL

@@ -85,9 +85,9 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
     BOOL succeeded = NO;
     
     if ([typeName isEqualToString:kBinarySoupDocumentType])
-        succeeded = [worldController writeBinaryDataToFile:absoluteURL];
+        succeeded = [worldController writeWorldToBinaryFile:absoluteURL];
     else if ([typeName isEqualToString:kXMLSoupDocumentType])
-        succeeded = [worldController writeXMLDataToFile:absoluteURL];
+        succeeded = [worldController writeWorldToXMLFile:absoluteURL];
 
     if (!succeeded && outError != NULL)
         *outError = [NSError errorWithDomain:kMacTierraErrorDomain code:-1 userInfo:NULL];

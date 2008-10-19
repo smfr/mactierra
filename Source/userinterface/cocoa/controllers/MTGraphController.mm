@@ -446,7 +446,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
     NSMutableArray*     adaptors = [NSMutableArray array];
     
-    WorldDataCollectors* dataCollectors = mWorldController.dataCollectors;
+    const WorldDataCollectors* dataCollectors = mWorldController.dataCollectors;
     if (dataCollectors)
     {
         {
