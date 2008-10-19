@@ -171,6 +171,7 @@ private:
     }
 };
 
+
 class MaxFitnessDataLogger : public SimpleDoubleDataLogger
 {
 public:
@@ -187,28 +188,60 @@ private:
 
 
 // Logging tempalate for histogram data. These loggers replace the data each time.
-template <class T>
 class HistogramDataLogger : public MacTierra::DataLogger
 {
 public:
-
-    typedef T data_type;
-    typedef std::pair<data_type, u_int32_t> data_pair;
 
     HistogramDataLogger()
     : mMaxBuckets(50)
     {
     }
     
-    ~HistogramDataLogger()
+    virtual ~HistogramDataLogger()
+    {
+    }
+
+    virtual u_int32_t   dataCount() const = 0;
+    virtual u_int32_t   maxFrequency() const = 0;
+    void                setMaxBuckets(u_int32_t inMax) { mMaxBuckets = inMax; }
+
+    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld) = 0;
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_buckets", mMaxBuckets);
+    }
+
+protected:
+    u_int32_t   mMaxBuckets;
+};
+
+
+// Logging tempalate for histogram data. These loggers replace the data each time.
+template <class T>
+class TypedHistogramDataLogger : public HistogramDataLogger
+{
+public:
+
+    typedef T data_type;
+    typedef std::pair<data_type, u_int32_t> data_pair;
+
+    TypedHistogramDataLogger()
+    : HistogramDataLogger()
+    {
+    }
+    
+    ~TypedHistogramDataLogger()
     {
     }
 
     // engine needs to be locked while using this data
     const std::vector<data_pair>& data() const { return mData; }
     
-    u_int32_t   dataCount() const { return mData.size(); }
-    u_int32_t   maxFrequency() const
+    virtual u_int32_t   dataCount() const { return mData.size(); }
+    virtual u_int32_t   maxFrequency() const
     {
         u_int32_t maxValue = 0;
         for (size_t i = 0; i < mData.size(); ++i)
@@ -216,25 +249,21 @@ public:
         return maxValue;
     }
 
-    void        setMaxBuckets(u_int32_t inMax) { mMaxBuckets = inMax; }
-
 private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
     {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(HistogramDataLogger);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", mData);
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_buckets", mMaxBuckets);
     }
 
 protected:
 
     std::vector<data_pair>  mData;
-
-    u_int32_t   mMaxBuckets;
 };
 
 
-class GenotypeFrequencyDataLogger : public HistogramDataLogger<std::string>
+class GenotypeFrequencyDataLogger : public TypedHistogramDataLogger<std::string>
 {
 public:
 
@@ -245,13 +274,13 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
     {
-//        ar & boost::serialization::base_object<HistogramDataLogger<std::string> >(*this);
+//        ar & boost::serialization::base_object<TypedHistogramDataLogger<std::string> >(*this);
     }
 };
 
 // pair is a bucket range
 typedef std::pair<u_int32_t, u_int32_t> range_pair;
-typedef HistogramDataLogger<range_pair> HistogramRangePairDataLogger;
+typedef TypedHistogramDataLogger<range_pair> HistogramRangePairDataLogger;
 class SizeHistogramDataLogger : public HistogramRangePairDataLogger
 {
 public:

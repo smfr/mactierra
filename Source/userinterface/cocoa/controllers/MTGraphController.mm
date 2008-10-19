@@ -42,6 +42,7 @@
 
 @property (retain) CTGraphView* graphView;
 @property (assign) MacTierra::DataLogger* dataLogger;
+@property (readonly) NSString* xAxisLabel;
 
 + (NSDictionary*)axisLabelAttributes;
 
@@ -135,14 +136,24 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     // for subclassers
 }
 
+- (NSString*)xAxisLabel
+{
+    return nil;
+}
+
 @end
 
 #pragma mark -
 
-@interface MTPopulationSizeGraphAdapter : MTGraphAdapter
+@interface MTTimelineGraphAdapter : MTGraphAdapter
 @end
 
-@implementation MTPopulationSizeGraphAdapter
+@implementation MTTimelineGraphAdapter
+
+- (NSString*)xAxisLabel
+{
+    return NSLocalizedString(@"TimeAxisLabel", @"Time");
+}
 
 - (void)setupGraph
 {
@@ -152,14 +163,21 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView setShowXTickMarks:NO];
     [graphView setShowTitle:NO];
     [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]]];
     [(CTScatterPlotView*)graphView setDataSource:self];
 }
 
+@end
+
+#pragma mark -
+
+@interface MTPopulationSizeGraphAdapter : MTTimelineGraphAdapter
+@end
+
+@implementation MTPopulationSizeGraphAdapter
+
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
-
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (!popSizeLogger) return;
 
@@ -170,6 +188,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     double yMax = graphAxisMax(popSizeLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
+    [graphView dataChanged];
 }
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
@@ -188,27 +207,13 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTCreatureSizeGraphAdapter : MTGraphAdapter
+@interface MTCreatureSizeGraphAdapter : MTTimelineGraphAdapter
 @end
 
 @implementation MTCreatureSizeGraphAdapter
 
-- (void)setupGraph
-{
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    [graphView setShowXTickMarks:NO];
-    [graphView setShowTitle:NO];
-    [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
-    [(CTScatterPlotView*)graphView setDataSource:self];
-}
-
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
-
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (!creatureSizeLogger) return;
 
@@ -219,6 +224,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     double yMax = graphAxisMax(creatureSizeLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
+    [graphView dataChanged];
 }
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
@@ -237,27 +243,13 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTMaxFitnessGraphAdapter : MTGraphAdapter
+@interface MTMaxFitnessGraphAdapter : MTTimelineGraphAdapter
 @end
 
 @implementation MTMaxFitnessGraphAdapter
 
-- (void)setupGraph
-{
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    [graphView setShowXTickMarks:NO];
-    [graphView setShowTitle:NO];
-    [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
-    [(CTScatterPlotView*)graphView setDataSource:self];
-}
-
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
-
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (!fitnessLogger) return;
 
@@ -268,6 +260,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     double yMax = graphAxisMax(fitnessLogger->maxValue(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
+    [graphView dataChanged];
 }
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
@@ -286,10 +279,10 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTGenotypeFrequencyGraphAdapter : MTGraphAdapter
+@interface MTHistogramGraphAdapter : MTGraphAdapter
 @end
 
-@implementation MTGenotypeFrequencyGraphAdapter
+@implementation MTHistogramGraphAdapter : MTGraphAdapter
 
 - (void)setupGraph
 {
@@ -299,26 +292,40 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView setShowXTickMarks:NO];
     [graphView setShowTitle:NO];
     [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
+    [graphView setXLabel:[NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]]];
     [(CTHistogramView*)graphView setDataSource:self];
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
-
-    GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(dataLogger);
-    if (!genotypeLogger) return;
+    HistogramDataLogger* histogramLogger = dynamic_cast<HistogramDataLogger*>(dataLogger);
+    if (!histogramLogger)
+        return;
 
     MacTierra::World* theWorld = inWorldController.world;
-    genotypeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
+    histogramLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
     
-    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(genotypeLogger->dataCount(), 1U)];
+    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(histogramLogger->dataCount(), 1U)];
 
     u_int32_t numDivisions;
-    double yMax = graphAxisMax(genotypeLogger->maxFrequency(), &numDivisions);
+    double yMax = graphAxisMax(histogramLogger->maxFrequency(), &numDivisions);
     [graphView setYMax:yMax];
     [graphView setYScale:yMax / numDivisions];
+    [graphView dataChanged];
+}
+
+@end
+
+#pragma mark -
+
+@interface MTGenotypeFrequencyGraphAdapter : MTHistogramGraphAdapter
+@end
+
+@implementation MTGenotypeFrequencyGraphAdapter
+
+- (NSString*)xAxisLabel
+{
+    return NSLocalizedString(@"GenotypesAxisLabel", @"Genotypes");
 }
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
@@ -338,39 +345,14 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTSizeHistorgramGraphAdapter : MTGraphAdapter
+@interface MTSizeHistorgramGraphAdapter : MTHistogramGraphAdapter
 @end
 
 @implementation MTSizeHistorgramGraphAdapter
 
-- (void)setupGraph
+- (NSString*)xAxisLabel
 {
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTHistogramView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    [graphView setShowXTickMarks:NO];
-    [graphView setShowTitle:NO];
-    [graphView setShowYLabel:NO];
-    [graphView setXLabel:[NSAttributedString attributedStringWithString:NSLocalizedString(@"TimeAxisLabel", @"Time") attributes:[MTGraphAdapter axisLabelAttributes]]];
-    [(CTHistogramView*)graphView setDataSource:self];
-}
-
-- (void)updateGraph:(MTWorldController*)inWorldController
-{
-    // FIXME: this sucks, because the engine will have to be locked for the whole graph drawing process
-
-    SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(dataLogger);
-    if (!sizeLogger) return;
-
-    MacTierra::World* theWorld = inWorldController.world;
-    sizeLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
-    
-    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(sizeLogger->dataCount(), 1U)];
-
-    u_int32_t numDivisions;
-    double yMax = graphAxisMax(sizeLogger->maxFrequency(), &numDivisions);
-    [graphView setYMax:yMax];
-    [graphView setYScale:yMax / numDivisions];
+    return NSLocalizedString(@"SizeAxisLabel", @"Genotypes");
 }
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
@@ -504,6 +486,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     if (inNewAdaptor)
     {
         [mGraphContainerView addFullSubview:[inNewAdaptor graphView] replaceExisting:YES fill:YES];
+        [inNewAdaptor updateGraph:mWorldController];
     }
 }
 
