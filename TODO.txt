@@ -22,11 +22,7 @@ Highlight creatures when selected in inventory
 Add ability to control update rate.
 
 GraphX:
-    Optimize line graph drawing (split drawing/data fetching, cache the bezier)
-    Fix x-axis labels for time-based graphs
     Add ability to draw more than one data set
-
-Refactor data logging classes, saved logged data with the soup.
 
 Genebank:
     Store soup config with creatures (since creature success may depend on soup features)

@@ -49,6 +49,8 @@ public:
 
     u_int64_t   instructionsExecuted() const { return mTotalInstructions; }
 
+    u_int64_t   cycleCount() const { return mCycleCount; }
+
     double      initialSliceSizeForCreature(const Creature* inCreature, const Settings& inSettings);
 
     u_int32_t   sizeForThisSlice(const Creature* inCreature, double inSliceSizeVariance);
@@ -66,6 +68,7 @@ private:
     {
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("world", mWorld);
 
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("cycle_count", mCycleCount);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("last_cycle_instructions", mLastCycleInstructions);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("total_instructions", mTotalInstructions);
 
@@ -89,6 +92,7 @@ private:
     {
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("world", mWorld);
 
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("cycle_count", mCycleCount);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("last_cycle_instructions", mLastCycleInstructions);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("total_instructions", mTotalInstructions);
 
@@ -122,9 +126,11 @@ protected:
     SlicerList              mSlicerList;
     SlicerList::iterator    mCurrentItem;
     
+    u_int64_t               mCycleCount;        // number of times we've cycled through the slicer queue
+    
     // number of instructions for the last run through the whole slicer queue
-    u_int32_t   mLastCycleInstructions;
-    u_int64_t   mTotalInstructions;
+    u_int32_t               mLastCycleInstructions;
+    u_int64_t               mTotalInstructions;
 
 };
 

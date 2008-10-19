@@ -47,7 +47,8 @@ WorldDataCollectors::setupDataCollectors(World* inWorld)
         mPopSizeLogger = new PopulationSizeLogger();
         mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
     }
-    inWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
+    //inWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
+    inWorld->dataCollector()->addCyclicalLogger(mPopSizeLogger);
 
     if (!mMeanSizeLogger)
     {

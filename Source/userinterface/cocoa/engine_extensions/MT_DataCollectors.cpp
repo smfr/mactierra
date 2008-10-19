@@ -21,25 +21,25 @@ using namespace MacTierra;
 
 // collectData is called on the engine thread
 void
-PopulationSizeLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+PopulationSizeLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
-    appendValue(inInstructionCount, inWorld->numAdultCreatures());
+    appendValue(inInstructionCount, inSlicerCycles, inWorld->numAdultCreatures());
 }
 
 #pragma mark -
 
 // collectData is called on the engine thread
 void
-MeanCreatureSizeLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+MeanCreatureSizeLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
-    appendValue(inInstructionCount, inWorld->meanCreatureSize());
+    appendValue(inInstructionCount, inSlicerCycles, inWorld->meanCreatureSize());
 }
 
 #pragma mark -
 
 // collectData is called on the engine thread
 void
-MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+MaxFitnessDataLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
     u_int32_t maxAlive = 0;
     const InventoryGenotype* mostCommonGenotype = NULL;
@@ -61,7 +61,7 @@ MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra:
     
     if (!mostCommonGenotype)
     {
-        appendValue(inInstructionCount, 0.0);
+        appendValue(inInstructionCount, inSlicerCycles, 0.0);
         return;
     }
     
@@ -96,7 +96,7 @@ MaxFitnessDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra:
         maxFitness = meanSliceSize * ((double)numTrueOffspring / (double)totalInstructions);
     }
     
-    appendValue(inInstructionCount, maxFitness);
+    appendValue(inInstructionCount, inSlicerCycles, maxFitness);
 }
 
 #pragma mark -
@@ -110,7 +110,7 @@ struct aliveReverseSort
 };
 
 void
-GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+GenotypeFrequencyDataLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
     const Inventory*  inventory = inWorld->inventory();
 
@@ -144,7 +144,7 @@ GenotypeFrequencyDataLogger::collectData(u_int64_t inInstructionCount, const Mac
 #pragma mark -
 
 void
-SizeHistogramDataLogger::collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+SizeHistogramDataLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
     const CellMap* cellMap = inWorld->cellMap();
     

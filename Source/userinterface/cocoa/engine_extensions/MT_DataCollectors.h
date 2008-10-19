@@ -13,6 +13,7 @@
 #include <string>
 
 #include <boost/serialization/serialization.hpp>
+#include <boost/tuple/tuple.hpp>
 
 #include "MT_DataCollection.h"
 
@@ -29,24 +30,26 @@ class SimpleDataLogger : public MacTierra::DataLogger
 {
 public:
     SimpleDataLogger()
-    : mNextCollectionInstructions(0)
+    : mCallCount(0)
+    , mNextCollectionCount(0)
     , mCollectionInterval(1)
     , mMaxDataCount(ULONG_MAX)
     {
     }
 
-    virtual void collect(u_int64_t inInstructionCount, const MacTierra::World* inWorld)
+    virtual void collect(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
     {
-        if (inInstructionCount >= mNextCollectionInstructions)
+        if (mCallCount == mNextCollectionCount)
         {
-            DataLogger::collect(inInstructionCount, inWorld);
+            DataLogger::collect(inCollectionType, inInstructionCount, inSlicerCycles, inWorld);
         
             // now see if we should prune
             if (dataCount() > maxDataCount())
                 pruneData();
             
-            mNextCollectionInstructions = inInstructionCount + mCollectionInterval;
+            mNextCollectionCount = mCallCount + mCollectionInterval;
         }
+        ++mCallCount;
     }
 
     virtual u_int32_t   dataCount() const = 0;
@@ -66,6 +69,9 @@ public:
     virtual u_int64_t minInstructions() const = 0;
     virtual u_int64_t maxInstructions() const = 0;
 
+    virtual u_int64_t minSlicerCycles() const = 0;
+    virtual u_int64_t maxSlicerCycles() const = 0;
+
     virtual double maxDoubleValue() const = 0;
 
 protected:
@@ -76,15 +82,17 @@ private:
     friend class ::boost::serialization::access;
     template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
     {
-        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_collection_instructions", mNextCollectionInstructions);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("call_count", mCallCount);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("next_collection_count", mNextCollectionCount);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("collection_interval", mCollectionInterval);
         ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("max_data_count", mMaxDataCount);
     }
 
 protected:
 
-    u_int64_t       mNextCollectionInstructions;
-    u_int32_t       mCollectionInterval;
+    u_int64_t       mCallCount;
+    u_int64_t       mNextCollectionCount;
+    u_int32_t       mCollectionInterval;        // based on call count
 
     u_int32_t       mMaxDataCount;
 
@@ -95,8 +103,12 @@ class TypedSimpleDataLogger : public SimpleDataLogger
 {
 public:
     typedef T data_type;
-    typedef std::pair<u_int64_t, data_type> data_pair;
-
+    typedef boost::tuple<u_int64_t, u_int64_t, data_type> data_tuple;       // instructions, cycles, data
+    
+    static u_int64_t getInstructions(const data_tuple& data)    { return boost::tuples::get<0>(data); }
+    static u_int64_t getSlicerCycles(const data_tuple& data)    { return boost::tuples::get<1>(data); }
+    static T getData(const data_tuple& data)                    { return boost::tuples::get<2>(data); }
+    
     TypedSimpleDataLogger()
     : mMaxValue(0)
     {
@@ -105,12 +117,15 @@ public:
     virtual u_int32_t   dataCount() const { return mData.size(); }
 
     // engine needs to be locked while using this data
-    const std::vector<data_pair>& data() const { return mData; }
+    const std::vector<data_tuple>& data() const { return mData; }
     
     data_type maxValue() const { return mMaxValue; }
 
-    virtual u_int64_t minInstructions() const { return mData.size() > 0 ? mData[0].first : 0; }
-    virtual u_int64_t maxInstructions() const { return mData.size() > 0 ? mData[mData.size() - 1].first : 0; }
+    virtual u_int64_t minInstructions() const { return mData.size() > 0 ? getInstructions(mData[0]): 0; }
+    virtual u_int64_t maxInstructions() const { return mData.size() > 0 ? getInstructions(mData[mData.size() - 1]) : 0; }
+
+    virtual u_int64_t minSlicerCycles() const { return mData.size() > 0 ? getSlicerCycles(mData[0]): 0; }
+    virtual u_int64_t maxSlicerCycles() const { return mData.size() > 0 ? getSlicerCycles(mData[mData.size() - 1]) : 0; }
 
     virtual double maxDoubleValue() const { return (double)mMaxValue; }
 
@@ -122,7 +137,7 @@ protected:
         {
             // copy to a new vector rather than removing every other entry,
             // would would be slow
-            std::vector<data_pair> newData;
+            std::vector<data_tuple> newData;
             const size_t dataSize = mData.size();
             newData.reserve(dataSize / 2);
 
@@ -142,22 +157,22 @@ protected:
         const size_t dataSize = mData.size();
         for (size_t i = 0; i < dataSize; ++i)
         {
-            const data_pair& curData = mData[i];
+            const data_tuple& curData = mData[i];
             std::cout << curData.first << "  " << curData.second << std::endl;
         }
     }
 */    
 
-    void appendValue(u_int64_t inInstructionCount, data_type inValue)
+    void appendValue(u_int64_t inInstructionCount, u_int64_t inSlicerCycles, data_type inValue)
     {
-        mData.push_back(data_pair(inInstructionCount, inValue));
+        mData.push_back(data_tuple(inInstructionCount, inSlicerCycles, inValue));
         mMaxValue = std::max(inValue, mMaxValue);
     }
     
     virtual void collectorChanged()
     {
-        if (mOwningCollector)
-            mCollectionInterval = mOwningCollector->collectionInterval();
+        // if (mOwningCollector)
+        //    mCollectionInterval = mOwningCollector->collectionInterval();
     }
 
 private:
@@ -172,16 +187,31 @@ private:
 
 protected:
 
-    std::vector<data_pair>  mData;
+    std::vector<data_tuple> mData;
     data_type               mMaxValue;
 };
+
+namespace boost {
+namespace serialization {
+
+template<class Archive, class T>
+void serialize(Archive & ar, boost::tuple<u_int64_t, u_int64_t, T>& data, const unsigned int version)
+{
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("inst", data.get<0>());
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cycles", data.get<1>());
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", data.get<2>());
+}
+
+} // namespace serialization
+} // namespace boost
+
 
 typedef TypedSimpleDataLogger<u_int32_t> SimpleUInt32DataLogger;
 class PopulationSizeLogger : public SimpleUInt32DataLogger
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
 
 private:
     friend class ::boost::serialization::access;
@@ -197,7 +227,7 @@ class MeanCreatureSizeLogger : public SimpleDoubleDataLogger
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
 
 private:
     friend class ::boost::serialization::access;
@@ -212,7 +242,7 @@ class MaxFitnessDataLogger : public SimpleDoubleDataLogger
 {
 public:
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
 
 private:
     friend class ::boost::serialization::access;
@@ -241,7 +271,7 @@ public:
     virtual u_int32_t   maxFrequency() const = 0;
     void                setMaxBuckets(u_int32_t inMax) { mMaxBuckets = inMax; }
 
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld) = 0;
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld) = 0;
 
 private:
     friend class ::boost::serialization::access;
@@ -304,7 +334,7 @@ class GenotypeFrequencyDataLogger : public TypedHistogramDataLogger<std::string>
 public:
 
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
 
 private:
     friend class ::boost::serialization::access;
@@ -322,7 +352,7 @@ class SizeHistogramDataLogger : public HistogramRangePairDataLogger
 public:
 
     // collectData is called on the engine thread
-    virtual void collectData(u_int64_t inInstructionCount, const MacTierra::World* inWorld);
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
 
 private:
     friend class ::boost::serialization::access;

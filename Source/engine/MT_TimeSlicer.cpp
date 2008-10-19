@@ -25,6 +25,7 @@ using namespace std;
 
 TimeSlicer::TimeSlicer(World* inWorld)
 : mWorld(inWorld)
+, mCycleCount(0)
 , mLastCycleInstructions(0)
 , mTotalInstructions(0)
 {
@@ -77,6 +78,8 @@ TimeSlicer::advance(bool inForwards /* = true */)
     if (mCurrentItem == mSlicerList.end())
     {
         mCurrentItem = mSlicerList.begin();
+        mLastCycleInstructions = 0;
+        ++mCycleCount;
         return true;
     }
     return false;

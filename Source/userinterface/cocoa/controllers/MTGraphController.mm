@@ -227,13 +227,37 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTPopulationSizeGraphAdapter
 
+- (NSString*)xAxisLabel
+{
+    return NSLocalizedString(@"SlicerCyclesAxisLabel", @"Cycles");
+}
+
+- (void)updateGraph:(MTWorldController*)inWorldController
+{
+    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(dataLogger);
+    if (!logger) return;
+    
+    u_int32_t numDivisions;
+    u_int64_t minCycles = logger->minSlicerCycles();
+    u_int64_t maxCycles = logger->maxSlicerCycles();
+    
+    graphView.xMin = (double)minCycles;
+    graphView.xMax = graphAxisMax(std::max((double)maxCycles, 1.0), &numDivisions);
+    graphView.xScale = [graphView xMax] / numDivisions;
+    
+    double yMax = graphAxisMax(logger->maxDoubleValue(), &numDivisions);
+    graphView.yMax = yMax;
+    graphView.yScale = yMax / numDivisions;
+    [graphView dataChanged];
+}
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
     {
-        PopulationSizeLogger::data_pair curPair = popSizeLogger->data()[index];
-        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
+        PopulationSizeLogger::data_tuple curTuple = popSizeLogger->data()[index];
+        *(*point) = NSMakePoint((double)PopulationSizeLogger::getSlicerCycles(curTuple), PopulationSizeLogger::getData(curTuple));
         return;
     }
     
@@ -254,8 +278,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
-        MeanCreatureSizeLogger::data_pair curPair = creatureSizeLogger->data()[index];
-        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
+        MeanCreatureSizeLogger::data_tuple curTuple = creatureSizeLogger->data()[index];
+        *(*point) = NSMakePoint((double)MeanCreatureSizeLogger::getInstructions(curTuple) / kMillion, MeanCreatureSizeLogger::getData(curTuple));
         return;
     }
     
@@ -276,8 +300,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
-        MaxFitnessDataLogger::data_pair curPair = fitnessLogger->data()[index];
-        *(*point) = NSMakePoint((double)curPair.first / kMillion, curPair.second);
+        MaxFitnessDataLogger::data_tuple curTuple = fitnessLogger->data()[index];
+        *(*point) = NSMakePoint((double)MaxFitnessDataLogger::getInstructions(curTuple) / kMillion, MaxFitnessDataLogger::getData(curTuple));
         return;
     }
     
@@ -314,7 +338,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
         return;
 
     MacTierra::World* theWorld = inWorldController.world;
-    histogramLogger->collectData(theWorld->timeSlicer().instructionsExecuted(), theWorld);
+    histogramLogger->collectData(MacTierra::DataLogger::kCollectionAdHoc, theWorld->timeSlicer().instructionsExecuted(), theWorld->timeSlicer().cycleCount(), theWorld);
     
     [(CTHistogramView*)graphView setNumberOfBuckets:std::max(histogramLogger->dataCount(), 1U)];
 

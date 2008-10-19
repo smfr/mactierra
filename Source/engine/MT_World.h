@@ -101,9 +101,14 @@ protected:
     // handle the 'mal' instruction
     PassRefPtr<Creature> allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterLength);
 
-    bool            timeForDataCollection(u_int64_t inInstructionCount) const
+    bool            timeForPeriodicDataCollection(u_int64_t inInstructionCount) const
     {
         return (mDataCollector && mDataCollector->nextCollectionInstructions() == inInstructionCount);
+    }
+
+    bool            timeForSlicerCycleDataCollection(u_int64_t inSlicerCycle) const
+    {
+        return (mDataCollector && inSlicerCycle >= mDataCollector->nextCollectionCycle());
     }
 
     bool            timeForFlaw(u_int64_t inInstructionCount) const

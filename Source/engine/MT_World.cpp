@@ -205,6 +205,9 @@ World::iterate(u_int32_t inNumCycles)
 
     if (mCurCreatureCycles == 0)
         mCurCreatureSliceCycles = mTimeSlicer.sizeForThisSlice(curCreature, mSettings.sliceSizeVariance());
+
+    if (mTimeSlicer.instructionsExecuted() == 0 && timeForSlicerCycleDataCollection(mTimeSlicer.cycleCount()))
+        mDataCollector->collectCyclicalData(mTimeSlicer.instructionsExecuted(), mTimeSlicer.cycleCount(), this);
     
     BOOST_ASSERT(mCurCreatureSliceCycles > 0);
     while (cycles < numCycles)
@@ -214,8 +217,8 @@ World::iterate(u_int32_t inNumCycles)
             const u_int64_t instructionCount = mTimeSlicer.instructionsExecuted();
 
             // data collection
-            if (timeForDataCollection(instructionCount))
-                mDataCollector->collectData(instructionCount, this);
+            if (timeForPeriodicDataCollection(instructionCount))
+                mDataCollector->collectPeriodicData(instructionCount, mTimeSlicer.cycleCount(), this);
 
             // do cosmic rays
             if (timeForCosmicRay(instructionCount))
@@ -267,7 +270,9 @@ World::iterate(u_int32_t inNumCycles)
             if (cycled)
             {
                 //mInventory->printCreatures();
-                //printCreatures();
+
+                if (timeForSlicerCycleDataCollection(mTimeSlicer.cycleCount()))
+                    mDataCollector->collectCyclicalData(mTimeSlicer.instructionsExecuted(), mTimeSlicer.cycleCount(), this);
             }
             
             // start on the next creature
@@ -635,6 +640,7 @@ void
 World::wasDeserialized()
 {
     mDataCollector->setNextCollectionInstructions(mTimeSlicer.instructionsExecuted());
+    mDataCollector->setNextCollectionCycle(mTimeSlicer.cycleCount());
 }
 
 #pragma mark -

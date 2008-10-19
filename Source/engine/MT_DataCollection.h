@@ -23,21 +23,29 @@ class World;
 class DataLogger
 {
 public:
+    enum ECollectionType {
+        kCollectionAdHoc,           // "manually driven" data collectors, like histogram collectors
+        kCollectionPeriodic,
+        kCollectionSlicerCycle
+    };
+    
     DataLogger()
-    : mLastCollectionTime(0)
+    : mLastCollectionInstructions(0)
+    , mLastCollectionCycles(0)
     {
     }
     virtual ~DataLogger() {}
 
     // override to do special processing before/after data collection
-    virtual void collect(u_int64_t inInstructionCount, const World* inWorld);
+    virtual void collect(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const World* inWorld);
     
-    u_int64_t       lastCollectionTime() const { return mLastCollectionTime; }
+    u_int64_t       lastCollectionInstructions() const  { return mLastCollectionInstructions; }
+    u_int64_t       lastCollectionCycles() const        { return mLastCollectionCycles; }
 
 protected:
 
     // subclasses should override to collect their type of data
-    virtual void    collectData(u_int64_t inInstructionCount, const World* inWorld) = 0;
+    virtual void    collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const World* inWorld) = 0;
 
     friend class DataCollector;
     
@@ -53,7 +61,8 @@ protected:
 protected:
     
     DataCollector*  mOwningCollector;
-    u_int64_t       mLastCollectionTime;
+    u_int64_t       mLastCollectionInstructions;
+    u_int64_t       mLastCollectionCycles;
 };
 
 
@@ -76,28 +85,46 @@ public:
     DataCollector();
     ~DataCollector();
 
-    void            collectData(u_int64_t inInstructionCount, const World* inWorld);
+    void            collectPeriodicData(u_int64_t inInstructionCount, u_int64_t inCycleCount, const World* inWorld);
+    void            collectCyclicalData(u_int64_t inInstructionCount, u_int64_t inCycleCount, const World* inWorld);
     
+    // For periodic loggers (which collect every N instructions)
+    void            addPeriodicLogger(DataLogger* inLogger);
+    bool            removePeriodicLogger(DataLogger* inLogger);
+
     u_int64_t       nextCollectionInstructions() const { return mNextCollectionInstructions; }
     void            setNextCollectionInstructions(u_int64_t inInst) { mNextCollectionInstructions = inInst; }
     
     u_int64_t       collectionInterval() const { return mCollectionInterval; }
     void            setCollectionInterval(u_int64_t inInterval, u_int64_t inCurrentInstructionCount);
 
-    void            addPeriodicLogger(DataLogger* inLogger);
-    bool            removeLogger(DataLogger* inLogger);
 
+    // For cyclical loggers (which collect every N cycles of the slicer queue)
+    void            addCyclicalLogger(DataLogger* inLogger);
+    bool            removeCyclicalLogger(DataLogger* inLogger);
+
+    u_int32_t       collectionCycles() const { return mCollectionCycles; }
+    void            setCollectionCycles(u_int64_t inCycles, u_int64_t inCurrentCycleCount);
+
+    u_int64_t       nextCollectionCycle() const { return mNextCollectionCycle; }
+    void            setNextCollectionCycle(u_int64_t inCycleCount) { mNextCollectionCycle = inCycleCount; }
+    
 protected:
     
     void            computeNextCollectionTime(u_int64_t inInstructionCount);
+    void            computeNextCollectionCycles(u_int64_t inCurrentCycleCount);
 
 protected:
 
+    typedef std::vector<DataLogger*> DataLoggerList;
+
     u_int64_t       mCollectionInterval;
     u_int64_t       mNextCollectionInstructions;
-    
-    typedef std::vector<DataLogger*> DataLoggerList;
-    DataLoggerList mPeriodicLoggers;
+    DataLoggerList  mPeriodicLoggers;
+
+    u_int64_t       mCollectionCycles;
+    u_int64_t       mNextCollectionCycle;
+    DataLoggerList  mCyclicalLoggers;
 };
 
 
