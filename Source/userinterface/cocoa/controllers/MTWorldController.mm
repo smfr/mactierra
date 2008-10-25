@@ -224,6 +224,11 @@ using namespace MacTierra;
     return mLastInstructions;
 }
 
+- (u_int64_t)slicerCycles
+{
+    return mLastSlicerCycles;
+}
+
 - (NSInteger)numberOfCreatures
 {
     return mLastNumCreatures;
@@ -279,6 +284,7 @@ using namespace MacTierra;
 
     mLastInstTime = CFAbsoluteTimeGetCurrent();
     mLastInstructions = mWorldData->instructionsExecuted();
+    mLastSlicerCycles = mWorldData->world()->timeSlicer().cycleCount();
 }
 
 - (void)stopUpdateTimer
@@ -300,6 +306,7 @@ using namespace MacTierra;
 
     [self willChangeValueForKey:@"fullness"];
     [self willChangeValueForKey:@"totalInstructions"];
+    [self willChangeValueForKey:@"slicerCycles"];
     [self willChangeValueForKey:@"numberOfCreatures"];
     
     [self lockWorld];
@@ -310,6 +317,7 @@ using namespace MacTierra;
         self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
         
         mLastInstructions = curInstructions;
+        mLastSlicerCycles = mWorldData->world()->timeSlicer().cycleCount();
         mLastNumCreatures = mWorldData->world()->cellMap()->numCreatures();
         mLastFullness = mWorldData->world()->cellMap()->fullness();
         
@@ -327,6 +335,7 @@ using namespace MacTierra;
 
     [self didChangeValueForKey:@"fullness"];
     [self didChangeValueForKey:@"totalInstructions"];
+    [self didChangeValueForKey:@"slicerCycles"];
     [self didChangeValueForKey:@"numberOfCreatures"];
 }
 

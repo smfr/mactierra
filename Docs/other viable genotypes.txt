@@ -239,3 +239,30 @@
 1F divide
 01 nop_1
 01 nop_1
+
+# cyclical population fluctuations
+24aaaaa
+1D adrf
+00 nop_0
+00 nop_0
+06 sub_ab
+18 mov_cd
+1E mal
+1E mal
+01 nop_1
+00 nop_0
+1A mov_iab
+0A dec_c
+05 if_cz
+14 jmp
+01 nop_1
+08 inc_a
+09 inc_b
+15 jumpb
+00 nop_0
+01 nop_1
+1F divide
+11 pop_bx
+17 ret
+01 nop_1
+01 nop_1

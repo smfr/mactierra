@@ -57,6 +57,7 @@ class WorldDataCollectors;
     NSTimer*                mUpdateTimer;
     
     u_int64_t               mLastInstructions;
+    u_int64_t               mLastSlicerCycles;
     NSInteger               mLastNumCreatures;
     CFAbsoluteTime          mLastInstTime;
     double                  mLastFullness;
@@ -84,6 +85,7 @@ class WorldDataCollectors;
 @property (assign) double instructionsPerSecond;
 @property (readonly) double fullness;
 @property (readonly) u_int64_t totalInstructions;
+@property (readonly) u_int64_t slicerCycles;
 @property (readonly) NSInteger numberOfCreatures;
 
 @property (readonly) NSString* playPauseButtonTitle;

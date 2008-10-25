@@ -34,7 +34,6 @@ public:
     }
 };
 
-
 #pragma mark -
 
 void
@@ -47,7 +46,6 @@ WorldDataCollectors::setupDataCollectors(World* inWorld)
         mPopSizeLogger = new PopulationSizeLogger();
         mPopSizeLogger->setMaxDataCount(kMaxDataPoints);
     }
-    //inWorld->dataCollector()->addPeriodicLogger(mPopSizeLogger);
     inWorld->dataCollector()->addCyclicalLogger(mPopSizeLogger);
 
     if (!mMeanSizeLogger)
@@ -55,14 +53,14 @@ WorldDataCollectors::setupDataCollectors(World* inWorld)
         mMeanSizeLogger = new MeanCreatureSizeLogger();
         mMeanSizeLogger->setMaxDataCount(kMaxDataPoints);
     }
-    inWorld->dataCollector()->addPeriodicLogger(mMeanSizeLogger);
+    inWorld->dataCollector()->addCyclicalLogger(mMeanSizeLogger);
 
     if (!mFitnessFrequencyLogger)
     {
         mFitnessFrequencyLogger = new MaxFitnessDataLogger();
         mFitnessFrequencyLogger->setMaxDataCount(kMaxDataPoints);
     }
-    inWorld->dataCollector()->addPeriodicLogger(mFitnessFrequencyLogger);
+    inWorld->dataCollector()->addCyclicalLogger(mFitnessFrequencyLogger);
     
     if (!mGenotypeFrequencyLogger)
     {

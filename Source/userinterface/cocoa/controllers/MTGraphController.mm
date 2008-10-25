@@ -222,14 +222,29 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTPopulationSizeGraphAdapter : MTTimelineGraphAdapter
+@interface MTCyclesGraphAdapter : MTGraphAdapter
 @end
 
-@implementation MTPopulationSizeGraphAdapter
+@implementation MTCyclesGraphAdapter
 
 - (NSString*)xAxisLabel
 {
     return NSLocalizedString(@"SlicerCyclesAxisLabel", @"Cycles");
+}
+
+- (void)setupGraph
+{
+    NSAssert(!graphView, @"Should not have created graph view yet");
+    
+    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
+    graphView.showXTickMarks = NO;
+    graphView.showTitle = NO;
+    graphView.showYLabel = NO;
+    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+    graphView.showXLabel = YES;
+
+    graphView.dataSource = self;        // retain cycle
+    graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
@@ -251,6 +266,15 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [graphView dataChanged];
 }
 
+@end
+
+#pragma mark -
+
+@interface MTPopulationSizeGraphAdapter : MTCyclesGraphAdapter
+@end
+
+@implementation MTPopulationSizeGraphAdapter
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
@@ -268,7 +292,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTCreatureSizeGraphAdapter : MTTimelineGraphAdapter
+@interface MTCreatureSizeGraphAdapter : MTCyclesGraphAdapter
 @end
 
 @implementation MTCreatureSizeGraphAdapter
@@ -279,7 +303,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
         MeanCreatureSizeLogger::data_tuple curTuple = creatureSizeLogger->data()[index];
-        *(*point) = NSMakePoint((double)MeanCreatureSizeLogger::getInstructions(curTuple) / kMillion, MeanCreatureSizeLogger::getData(curTuple));
+        *(*point) = NSMakePoint((double)MeanCreatureSizeLogger::getSlicerCycles(curTuple), MeanCreatureSizeLogger::getData(curTuple));
         return;
     }
     
@@ -290,7 +314,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-@interface MTMaxFitnessGraphAdapter : MTTimelineGraphAdapter
+@interface MTMaxFitnessGraphAdapter : MTCyclesGraphAdapter
 @end
 
 @implementation MTMaxFitnessGraphAdapter
@@ -301,7 +325,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
         MaxFitnessDataLogger::data_tuple curTuple = fitnessLogger->data()[index];
-        *(*point) = NSMakePoint((double)MaxFitnessDataLogger::getInstructions(curTuple) / kMillion, MaxFitnessDataLogger::getData(curTuple));
+        *(*point) = NSMakePoint((double)MaxFitnessDataLogger::getSlicerCycles(curTuple), MaxFitnessDataLogger::getData(curTuple));
         return;
     }
     
