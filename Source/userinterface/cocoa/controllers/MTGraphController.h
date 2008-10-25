@@ -28,15 +28,16 @@ typedef enum ESoupStatistic {
 {
     IBOutlet MTWorldController*  mWorldController;
     IBOutlet NSView*    mGraphContainerView;
+
+    IBOutlet NSView*    mGraphAdditionsView;
     
-    NSArray*            mGraphAdaptors;
-    NSArray*            mGraphTypes;
-    
+    NSMutableArray*     graphs;
+
     NSInteger           currentGraphIndex;
 }
 
-// returns arrays of dicts with enum and readable names
-@property (readonly) NSArray* availableGraphTypes;
+// Available graph values: "localizedName"
+@property (retain) NSMutableArray* graphs;
 @property (assign) NSInteger currentGraphIndex;
 
 - (void)worldChanged;

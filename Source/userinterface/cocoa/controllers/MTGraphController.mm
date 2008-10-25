@@ -28,8 +28,7 @@ static const double kMillion = 1.0e6;
 
 @interface MTGraphController(Private)
 
-- (void)setupLineGraph;
-- (void)setupBarGraph;
+- (void)setupGraphAdaptors;
 
 @end
 
@@ -40,7 +39,13 @@ static const double kMillion = 1.0e6;
     MTGraphController*          mController;    // not owned (it owns us)
     MacTierra::DataLogger*      dataLogger;     // owned by the world controller
     CTGraphView*                graphView;
+
+    NSString*                   identifier;
+    NSString*                   localizedName;
 }
+
+@property (copy) NSString* identifier;
+@property (copy) NSString* localizedName;
 
 @property (retain) CTGraphView* graphView;
 @property (assign) MacTierra::DataLogger* dataLogger;
@@ -48,7 +53,7 @@ static const double kMillion = 1.0e6;
 
 + (NSDictionary*)axisLabelAttributes;
 
-- (id)initWithGraphController:(MTGraphController*)inController dataLogger:(MacTierra::DataLogger*)inLogger;
+- (id)initWithGraphController:(MTGraphController*)inController;
 - (void)setupGraph;
 - (void)updateGraph:(MTWorldController*)inWorldController;
 
@@ -103,6 +108,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @synthesize dataLogger;
 @synthesize graphView;
+@synthesize identifier;
+@synthesize localizedName;
 
 + (NSDictionary*)axisLabelAttributes
 {
@@ -122,12 +129,20 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return sLabelAttributes;
 }
 
-- (id)initWithGraphController:(MTGraphController*)inController dataLogger:(MacTierra::DataLogger*)inLogger
++ (NSString*)identifier
+{
+    [NSException exceptionWithName:NSInvalidArgumentException 
+                    reason:@"MTGraphAdapter subclasses should override +identifier"
+                    userInfo:nil];
+    return @"";
+}
+
+- (id)initWithGraphController:(MTGraphController*)inController
 {
     if ((self = [super init]))
     {
         mController = inController;
-        dataLogger = inLogger;
+        self.identifier = [[self class] identifier];
     }
     return self;
 }
@@ -275,6 +290,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTPopulationSizeGraphAdapter
 
++ (NSString*)identifier
+{
+    return @"population_size_timeline";
+}
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
@@ -297,6 +317,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTCreatureSizeGraphAdapter
 
++ (NSString*)identifier
+{
+    return @"creature_size_timeline";
+}
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
@@ -318,6 +343,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 @end
 
 @implementation MTMaxFitnessGraphAdapter
+
++ (NSString*)identifier
+{
+    return @"max_fitness_timeline";
+}
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
@@ -382,6 +412,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTGenotypeFrequencyGraphAdapter
 
++ (NSString*)identifier
+{
+    return @"genotype_frequency_histogram";
+}
+
 - (NSString*)xAxisLabel
 {
     return NSLocalizedString(@"GenotypesAxisLabel", @"Genotypes");
@@ -408,6 +443,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 @end
 
 @implementation MTSizeHistorgramGraphAdapter
+
++ (NSString*)identifier
+{
+    return @"size_frequency_histogram";
+}
 
 - (NSString*)xAxisLabel
 {
@@ -437,110 +477,121 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
 @implementation MTGraphController
 
+@synthesize graphs;
 @synthesize currentGraphIndex;
 
 - (void)awakeFromNib
 {
     self.currentGraphIndex = 0;
+    [self setupGraphAdaptors];
 }
 
 - (void)dealloc
 {
-    [mGraphAdaptors makeObjectsPerformSelector:@selector(clear)];
-    [mGraphAdaptors release];
-    [mGraphTypes release];
+    [graphs makeObjectsPerformSelector:@selector(clear)];
+    self.graphs = nil;
+
     [super dealloc];
-}
-
-- (NSArray*)availableGraphTypes
-{
-    // This array needs to match the data collector types
-    return [NSArray arrayWithObjects:
-
-        [NSDictionary dictionaryWithObjectsAndKeys:
-            NSLocalizedString(@"PopulationSize", @""), kGraphLabelKey,
-                                                       nil],
-    
-        [NSDictionary dictionaryWithObjectsAndKeys:
-                NSLocalizedString(@"MeanCreatureSize", @""), kGraphLabelKey,
-                                                       nil],
-
-        [NSDictionary dictionaryWithObjectsAndKeys:
-                NSLocalizedString(@"MaxFitness", @""), kGraphLabelKey,
-                                                       nil],
-
-        [NSDictionary dictionaryWithObjectsAndKeys:
-                NSLocalizedString(@"GenotypeFrequencies", @""), kGraphLabelKey,
-                                                       nil],
-
-        [NSDictionary dictionaryWithObjectsAndKeys:
-                NSLocalizedString(@"SizeHistgram", @""), kGraphLabelKey,
-                                                       nil],
-
-        nil];
 }
 
 #pragma mark -
 
 - (void)setupGraphAdaptors
 {
-    [mGraphAdaptors makeObjectsPerformSelector:@selector(clear)];
-    [mGraphAdaptors release];
-    mGraphAdaptors = nil;
+    [graphs makeObjectsPerformSelector:@selector(clear)];
 
-    NSMutableArray*     adaptors = [NSMutableArray array];
+    NSMutableArray* adaptors = [NSMutableArray array];
     
+    {
+        MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self];
+        popSizeGrapher.localizedName = NSLocalizedString(@"PopulationSize", @"");
+        [popSizeGrapher setupGraph];
+        [adaptors addObject:popSizeGrapher];
+        [popSizeGrapher release];
+    }
+    
+    {
+        MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self];
+        creatureSizeGrapher.localizedName = NSLocalizedString(@"MeanCreatureSize", @"");
+        [creatureSizeGrapher setupGraph];
+        [adaptors addObject:creatureSizeGrapher];
+        [creatureSizeGrapher release];
+    }
+
+    {
+        MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self];
+        fitnessGrapher.localizedName = NSLocalizedString(@"MaxFitness", @"");
+        [fitnessGrapher setupGraph];
+        [adaptors addObject:fitnessGrapher];
+        [fitnessGrapher release];
+    }
+    
+    {
+        MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self];
+        genotypeFrequencyGrapher.localizedName = NSLocalizedString(@"GenotypeFrequencies", @"");
+        [genotypeFrequencyGrapher setupGraph];
+        [adaptors addObject:genotypeFrequencyGrapher];
+        [genotypeFrequencyGrapher release];
+    }
+
+    {
+        MTGraphAdapter* sizeHistogramGrapher = [[MTSizeHistorgramGraphAdapter alloc] initWithGraphController:self];
+        sizeHistogramGrapher.localizedName = NSLocalizedString(@"SizeHistgram", @"");
+        [sizeHistogramGrapher setupGraph];
+        [adaptors addObject:sizeHistogramGrapher];
+        [sizeHistogramGrapher release];
+    }
+    
+    self.graphs = adaptors;
+}
+
+- (MTGraphAdapter*)adaptorWithIdentifier:(NSString*)inIdentifier
+{
+    // Slow linear search. We could put them in a dict, but not worth it.
+    for (MTGraphAdapter* curAdaptor in graphs)
+    {
+        if ([curAdaptor.identifier isEqualToString:inIdentifier])
+            return curAdaptor;
+    }
+
+    return nil;
+}
+
+- (void)updateGraphAdaptors
+{
     const WorldDataCollectors* dataCollectors = mWorldController.dataCollectors;
     if (dataCollectors)
     {
-        {
-            MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->populationSizeLogger()];
-            [popSizeGrapher setupGraph];
-            [adaptors addObject:popSizeGrapher];
-            [popSizeGrapher release];
-        }
+        MTGraphAdapter* popSizeGrapher = [self adaptorWithIdentifier:[MTPopulationSizeGraphAdapter identifier]];
+        popSizeGrapher.dataLogger = dataCollectors->populationSizeLogger();
         
-        {
-            MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->meanCreatureSizeLogger()];
-            [creatureSizeGrapher setupGraph];
-            [adaptors addObject:creatureSizeGrapher];
-            [creatureSizeGrapher release];
-        }
+        MTGraphAdapter* creatureSizeGrapher = [self adaptorWithIdentifier:[MTCreatureSizeGraphAdapter identifier]];
+        creatureSizeGrapher.dataLogger = dataCollectors->meanCreatureSizeLogger();
 
-        {
-            MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->maxFitnessDataLogger()];
-            [fitnessGrapher setupGraph];
-            [adaptors addObject:fitnessGrapher];
-            [fitnessGrapher release];
-        }
-        
-        {
-            MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->genotypeFrequencyDataLogger()];
-            [genotypeFrequencyGrapher setupGraph];
-            [adaptors addObject:genotypeFrequencyGrapher];
-            [genotypeFrequencyGrapher release];
-        }
+        MTGraphAdapter* fitnessGrapher = [self adaptorWithIdentifier:[MTMaxFitnessGraphAdapter identifier]];
+        fitnessGrapher.dataLogger = dataCollectors->maxFitnessDataLogger();
 
-        {
-            MTGraphAdapter* sizeHistogramGrapher = [[MTSizeHistorgramGraphAdapter alloc] initWithGraphController:self dataLogger:dataCollectors->sizeHistogramDataLogger()];
-            [sizeHistogramGrapher setupGraph];
-            [adaptors addObject:sizeHistogramGrapher];
-            [sizeHistogramGrapher release];
-        }
+        MTGraphAdapter* genotypeFrequencyGrapher = [self adaptorWithIdentifier:[MTGenotypeFrequencyGraphAdapter identifier]];
+        genotypeFrequencyGrapher.dataLogger = dataCollectors->genotypeFrequencyDataLogger();
+
+        MTGraphAdapter* sizeHistogramGrapher = [self adaptorWithIdentifier:[MTSizeHistorgramGraphAdapter identifier]];
+        sizeHistogramGrapher.dataLogger = dataCollectors->sizeHistogramDataLogger();
     }
-    
-    mGraphAdaptors = [adaptors retain];
+    else
+    {
+        [graphs makeObjectsPerformSelector:@selector(setDataLogger:) withObject:nil];
+    }
 }
 
 - (void)worldChanged
 {
-    [self setupGraphAdaptors];
+    [self updateGraphAdaptors];
     self.currentGraphIndex = 0;
 }
 
 - (void)updateGraph
 {
-    [[mGraphAdaptors objectAtIndex:currentGraphIndex] updateGraph:mWorldController];
+    [[graphs objectAtIndex:currentGraphIndex] updateGraph:mWorldController];
 }
 
 - (void)switchToAdaptor:(MTGraphAdapter*)inNewAdaptor
@@ -556,8 +607,8 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 {
     currentGraphIndex = inIndex;
     
-    if (currentGraphIndex < [mGraphAdaptors count])
-        [self switchToAdaptor:[mGraphAdaptors objectAtIndex:currentGraphIndex]];
+    if (currentGraphIndex < [graphs count])
+        [self switchToAdaptor:[graphs objectAtIndex:currentGraphIndex]];
 }
 
 
