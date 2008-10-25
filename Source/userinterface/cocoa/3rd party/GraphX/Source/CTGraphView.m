@@ -442,24 +442,31 @@ static const float kTickMarkLength = 4.0f;
 
     NSRect graphRect = [self graphRectForRect:rect];
 
-    [self drawXValues:graphRect];
-    [self drawYValues:graphRect];
+    {
+        NSGraphicsContext* context   = [NSGraphicsContext currentContext];
+        [context saveGraphicsState];
 
-    //NSRectClip(graphRect); // don't allow drawing outside of graphRect from this point onward
+        NSRectClip(graphRect);
 
-    //Draw the Background
-    [self drawBackground:(graphRect)];
+        //Draw the Background
+        [self drawBackground:(graphRect)];
 
-    //Draw the Grid Lines
-    [self drawXGrid:graphRect];
-    [self drawYGrid:graphRect];
+        //Draw the Grid Lines
+        [self drawXGrid:graphRect];
+        [self drawYGrid:graphRect];
 
-    //Draw Curve and Area
-    [self drawGraph:graphRect];
+        //Draw Curve and Area
+        [self drawGraph:graphRect];
 
-    //Finish up by drawing the X and Y Axis (dependent on flags)
+        [context restoreGraphicsState];
+    }
+
+    // Finish up by drawing the X and Y Axis (dependent on flags)
     [self drawXAxis:graphRect];
     [self drawYAxis:graphRect];
+
+    [self drawXValues:graphRect];
+    [self drawYValues:graphRect];
 }
   
 - (void)drawTitle:(NSRect)rect;
@@ -666,8 +673,11 @@ static const float kTickMarkLength = 4.0f;
     float  y;   //view coordinate y
     for (y = yOrigin - floor((yOrigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
     {                                         //End 1 scale unit outside of graph
-      [majorGridLines moveToPoint:NSMakePoint(maxXBounds, y)];
-      [majorGridLines lineToPoint:NSMakePoint(minXBounds, y)];
+      if (y > minYBounds)
+      {
+        [majorGridLines moveToPoint:NSMakePoint(maxXBounds, y)];
+        [majorGridLines lineToPoint:NSMakePoint(minXBounds, y)];
+      }
       
       float minor;
       for (minor = 1; minor < yMinorLineCount; minor++)
@@ -814,8 +824,11 @@ static const float kTickMarkLength = 4.0f;
       float y;
       for (y = yOrigin - floor((yOrigin - minYBounds) / scaleY + 1) * scaleY; y <= maxYBounds + scaleY; y += scaleY) //Begin 1 scale unit outside of graph
       {                                         //End 1 scale unit outside of graph
-        [tickMarks moveToPoint:NSMakePoint(tickXStart, y)];
-        [tickMarks lineToPoint:NSMakePoint(tickXEnd, y)];
+        if (y >= minYBounds)
+        {
+            [tickMarks moveToPoint:NSMakePoint(tickXStart, y)];
+            [tickMarks lineToPoint:NSMakePoint(tickXEnd, y)];
+        }
       }
     }
       
@@ -825,7 +838,6 @@ static const float kTickMarkLength = 4.0f;
     [axis      release];
     [tickMarks release];
 }
-
 
 - (NSData *)graphImage
 {
