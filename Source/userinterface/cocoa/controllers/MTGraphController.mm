@@ -53,8 +53,10 @@ static const double kMillion = 1.0e6;
 
 + (NSDictionary*)axisLabelAttributes;
 
++ (id)graphAdaptorWithGraphController:(MTGraphController*)inController;
+
 - (id)initWithGraphController:(MTGraphController*)inController;
-- (void)setupGraph;
+- (void)setupGraphView;
 - (void)updateGraph:(MTWorldController*)inWorldController;
 
 @end
@@ -137,12 +139,27 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return @"";
 }
 
++ (NSString*)localizedName
+{
+    [NSException exceptionWithName:NSInvalidArgumentException 
+                    reason:@"MTGraphAdapter subclasses should override +localizedName"
+                    userInfo:nil];
+    return @"";
+}
+
++ (id)graphAdaptorWithGraphController:(MTGraphController*)inController
+{
+    return [[[[self class] alloc] initWithGraphController:inController] autorelease];
+}
+
 - (id)initWithGraphController:(MTGraphController*)inController
 {
     if ((self = [super init]))
     {
         mController = inController;
         self.identifier = [[self class] identifier];
+        self.localizedName = [[self class] localizedName];
+        [self setupGraphView];
     }
     return self;
 }
@@ -153,7 +170,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [super dealloc];
 }
 
-- (void)setupGraph
+- (void)setupGraphView
 {
     // for subclassers
 }
@@ -199,12 +216,12 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"TimeAxisLabel", @"Time");
 }
 
-- (void)setupGraph
+- (void)setupGraphView
 {
     NSAssert(!graphView, @"Should not have created graph view yet");
     
     self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    graphView.showXTickMarks = NO;
+    graphView.showXTickMarks = YES;
     graphView.showTitle = NO;
     graphView.showYLabel = NO;
     graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
@@ -247,7 +264,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"SlicerCyclesAxisLabel", @"Cycles");
 }
 
-- (void)setupGraph
+- (void)setupGraphView
 {
     NSAssert(!graphView, @"Should not have created graph view yet");
     
@@ -295,6 +312,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return @"population_size_timeline";
 }
 
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"PopulationSize", @"");
+}
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
@@ -320,6 +342,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 + (NSString*)identifier
 {
     return @"creature_size_timeline";
+}
+
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"MeanCreatureSize", @"");
 }
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
@@ -349,6 +376,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return @"max_fitness_timeline";
 }
 
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"MaxFitness", @"");
+}
+
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
 {
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
@@ -371,7 +403,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTHistogramGraphAdapter : MTGraphAdapter
 
-- (void)setupGraph
+- (void)setupGraphView
 {
     NSAssert(!graphView, @"Should not have created graph view yet");
     
@@ -417,6 +449,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return @"genotype_frequency_histogram";
 }
 
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"GenotypeFrequencies", @"");
+}
+
 - (NSString*)xAxisLabel
 {
     return NSLocalizedString(@"GenotypesAxisLabel", @"Genotypes");
@@ -447,6 +484,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 + (NSString*)identifier
 {
     return @"size_frequency_histogram";
+}
+
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"SizeHistgram", @"");
 }
 
 - (NSString*)xAxisLabel
@@ -502,46 +544,12 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
     NSMutableArray* adaptors = [NSMutableArray array];
     
-    {
-        MTGraphAdapter* popSizeGrapher = [[MTPopulationSizeGraphAdapter alloc] initWithGraphController:self];
-        popSizeGrapher.localizedName = NSLocalizedString(@"PopulationSize", @"");
-        [popSizeGrapher setupGraph];
-        [adaptors addObject:popSizeGrapher];
-        [popSizeGrapher release];
-    }
-    
-    {
-        MTGraphAdapter* creatureSizeGrapher = [[MTCreatureSizeGraphAdapter alloc] initWithGraphController:self];
-        creatureSizeGrapher.localizedName = NSLocalizedString(@"MeanCreatureSize", @"");
-        [creatureSizeGrapher setupGraph];
-        [adaptors addObject:creatureSizeGrapher];
-        [creatureSizeGrapher release];
-    }
+    [adaptors addObject:[MTPopulationSizeGraphAdapter graphAdaptorWithGraphController:self]];
+    [adaptors addObject:[MTCreatureSizeGraphAdapter graphAdaptorWithGraphController:self]];
+    [adaptors addObject:[MTMaxFitnessGraphAdapter graphAdaptorWithGraphController:self]];
+    [adaptors addObject:[MTGenotypeFrequencyGraphAdapter graphAdaptorWithGraphController:self]];
+    [adaptors addObject:[MTSizeHistorgramGraphAdapter graphAdaptorWithGraphController:self]];
 
-    {
-        MTGraphAdapter* fitnessGrapher = [[MTMaxFitnessGraphAdapter alloc] initWithGraphController:self];
-        fitnessGrapher.localizedName = NSLocalizedString(@"MaxFitness", @"");
-        [fitnessGrapher setupGraph];
-        [adaptors addObject:fitnessGrapher];
-        [fitnessGrapher release];
-    }
-    
-    {
-        MTGraphAdapter* genotypeFrequencyGrapher = [[MTGenotypeFrequencyGraphAdapter alloc] initWithGraphController:self];
-        genotypeFrequencyGrapher.localizedName = NSLocalizedString(@"GenotypeFrequencies", @"");
-        [genotypeFrequencyGrapher setupGraph];
-        [adaptors addObject:genotypeFrequencyGrapher];
-        [genotypeFrequencyGrapher release];
-    }
-
-    {
-        MTGraphAdapter* sizeHistogramGrapher = [[MTSizeHistorgramGraphAdapter alloc] initWithGraphController:self];
-        sizeHistogramGrapher.localizedName = NSLocalizedString(@"SizeHistgram", @"");
-        [sizeHistogramGrapher setupGraph];
-        [adaptors addObject:sizeHistogramGrapher];
-        [sizeHistogramGrapher release];
-    }
-    
     self.graphs = adaptors;
 }
 
