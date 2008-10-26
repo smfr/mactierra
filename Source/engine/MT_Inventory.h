@@ -17,6 +17,7 @@
 #include <boost/assert.hpp>
 #include <boost/serialization/export.hpp>
 #include <boost/serialization/map.hpp>
+#include <boost/serialization/string.hpp>
 #include <boost/serialization/serialization.hpp>
 
 #include <wtf/Noncopyable.h>

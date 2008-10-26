@@ -59,7 +59,7 @@ using namespace MacTierra;
         showInstructionPointers = NO;
         self.focusedCreatureName = @"";
 
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]];
+        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreatureDataPasteboardType, NSStringPboardType, nil]];
     }
     return self;
 }
@@ -406,17 +406,17 @@ using namespace MacTierra;
 
         NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
-        [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
+        [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType,
+                                                           kCreatureDataPasteboardType,
+                                                           NSStringPboardType,
+                                                           nil]  owner:self];
 
+        [pasteboard setPropertyList:[creatureObj pasteboardData] forType:kCreatureReferencePasteboardType];
         [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
-        [pasteboard setData:[serCreature archiveRepresentation] forType:kCreaturePasteboardType];
+        [pasteboard setData:[serCreature archiveRepresentation] forType:kCreatureDataPasteboardType];
     
         // FIXME: scale the image so that it matches the soup scaling
-        NSImage* theImage = [[[NSImage alloc] initWithSize:NSMakeSize(creatureObj.length, 1.0)] autorelease];
-        [theImage lockFocus];
-        [[NSColor grayColor] set];
-        NSRectFill(NSMakeRect(0, 0, creatureObj.length, 1.0));
-        [theImage unlockFocus];
+        NSImage* theImage = creatureObj.genotype.genotypeImage;
         
         [self dragImage:theImage
                      at:NSMakePoint(localPoint.x - [theImage size].width / 2.0, localPoint.y)
@@ -440,7 +440,7 @@ using namespace MacTierra;
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
 
     NSPasteboard* pasteboard = [sender draggingPasteboard];
-    if ([[pasteboard types] containsObject:kCreaturePasteboardType])
+    if ([[pasteboard types] containsObject:kCreatureDataPasteboardType])
     {
         if (sourceDragMask & NSDragOperationCopy)
             return NSDragOperationCopy;

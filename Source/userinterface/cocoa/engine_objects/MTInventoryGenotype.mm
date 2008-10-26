@@ -25,6 +25,19 @@ using namespace MacTierra;
 @synthesize genomeString;
 @synthesize genome;
 
++ (NSColorList*)instructionsColorList
+{
+    static NSColorList* sColorList = nil;
+    if (!sColorList)
+    {
+        NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
+        sColorList = [[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath];
+
+    }
+    return sColorList;
+}
+
+
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype
 {
     if ((self = [super init]))
@@ -32,6 +45,12 @@ using namespace MacTierra;
         genotype = inGenotype;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    [mGenotypeImage release];
+    [super dealloc];
 }
 
 - (NSString*)name
@@ -89,6 +108,40 @@ using namespace MacTierra;
 - (NSData*)genome
 {
     return [NSData dataWithBytes:genotype->genome().dataString().data() length:genotype->genome().length()];
+}
+
+- (NSImage*)genotypeImage
+{
+    if (mGenotypeImage)
+        return mGenotypeImage;
+
+    NSColorList* colorList = [MTInventoryGenotype instructionsColorList];
+
+    NSArray*    colorKeys = [colorList allKeys];
+    NSUInteger  numColors = [colorKeys count];
+
+    mGenotypeImage = [[NSImage alloc] initWithSize:NSMakeSize([self length], 1.0f)];
+    [mGenotypeImage lockFocus];
+    
+    const std::string& genomeString = genotype->genome().dataString();
+    
+    NSInteger len = [self length];
+    for (NSInteger i = 0; i < len; ++i)
+    {
+        instruction_t curInst = genomeString[i];
+        curInst = std::min(curInst, (instruction_t)numColors);
+
+        NSString* curKey  = [colorKeys objectAtIndex:curInst];
+        NSColor* curColor = [colorList colorWithKey:curKey];
+
+        [curColor set];
+        NSRect instRect = NSMakeRect(i, 0, 1, 1);
+        NSRectFill(instRect);
+    }
+    
+    [mGenotypeImage unlockFocus];
+
+    return mGenotypeImage;
 }
 
 @end

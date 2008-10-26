@@ -21,6 +21,7 @@ namespace MacTierra {
 @class MTCreature;
 @class MTGraphController;
 @class MTInventoryController;
+@class MTGenotypeImageView;
 @class MTSoupView;
 @class MTWorldThread;
 @class MTWorldSettings;
@@ -40,6 +41,10 @@ class WorldDataCollectors;
     
     IBOutlet NSTextView*    mCreatureSoupView;
     
+    IBOutlet NSObjectController* mSelectedCreatureController;
+    IBOutlet MTGenotypeImageView* mDebugGenotypeImageView;
+    IBOutlet MTGenotypeImageView* mInspectGenotypeImageView;
+
     // settings panel
     IBOutlet NSPanel*       mSettingsPanel;
 

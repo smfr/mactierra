@@ -107,7 +107,7 @@ using namespace MacTierra;
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
-    [pasteboard declareTypes:[NSArray arrayWithObjects:kCreaturePasteboardType, NSStringPboardType, nil]  owner:self];
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureDataPasteboardType, NSStringPboardType, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
     MTInventoryGenotype* curGenotype = [[mGenotypesArrayController arrangedObjects] objectAtIndex:curIndex];
@@ -115,7 +115,7 @@ using namespace MacTierra;
     MTSerializableCreature* curCreature = [[[MTSerializableCreature alloc] initWithName:[curGenotype name] genome:[curGenotype genome]] autorelease];
 
     [pasteboard setString:[curCreature stringRepresentation] forType:NSStringPboardType];
-    [pasteboard setData:[curCreature archiveRepresentation] forType:kCreaturePasteboardType];
+    [pasteboard setData:[curCreature archiveRepresentation] forType:kCreatureDataPasteboardType];
 
     return true;
 }

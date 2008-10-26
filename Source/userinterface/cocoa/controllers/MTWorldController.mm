@@ -123,6 +123,16 @@ using namespace MacTierra;
 
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
+    
+    [mDebugGenotypeImageView bind:@"creature"
+                         toObject:self
+                      withKeyPath:@"selectedCreature"
+                          options:0];
+
+    [mInspectGenotypeImageView bind:@"creature"
+                         toObject:self
+                      withKeyPath:@"selectedCreature"
+                          options:0];
 }
 
 - (MTSoupView*)soupView
@@ -237,6 +247,9 @@ using namespace MacTierra;
 - (void)documentClosing
 {
     [self clearWorld];
+
+    [mDebugGenotypeImageView unbind:@"creature"];
+    [mInspectGenotypeImageView unbind:@"creature"];
 }
 
 - (void)clearWorld

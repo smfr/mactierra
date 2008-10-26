@@ -30,6 +30,7 @@ public:
     : mPopSizeLogger(NULL)
     , mMeanSizeLogger(NULL)
     , mFitnessFrequencyLogger(NULL)
+    , mTwoGenotypesFrequencyLogger(NULL)
     , mGenotypeFrequencyLogger(NULL)
     , mSizeFrequencyLogger(NULL)
     {
@@ -45,12 +46,13 @@ public:
         setupDataCollectors(inWorld);
     }
     
-    PopulationSizeLogger*    populationSizeLogger() const    { return mPopSizeLogger; }
-    MeanCreatureSizeLogger*  meanCreatureSizeLogger() const  { return mMeanSizeLogger; }
-    MaxFitnessDataLogger*    maxFitnessDataLogger() const    { return mFitnessFrequencyLogger; }
+    PopulationSizeLogger*    populationSizeLogger() const               { return mPopSizeLogger; }
+    MeanCreatureSizeLogger*  meanCreatureSizeLogger() const             { return mMeanSizeLogger; }
+    MaxFitnessDataLogger*    maxFitnessDataLogger() const               { return mFitnessFrequencyLogger; }
+    TwoGenotypesFrequencyLogger* twoGenotypesFrequencyLogger() const    { return mTwoGenotypesFrequencyLogger; }
 
-    GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const { return mGenotypeFrequencyLogger; }
-    SizeHistogramDataLogger*     sizeHistogramDataLogger() const     { return mSizeFrequencyLogger; }
+    GenotypeFrequencyDataLogger* genotypeFrequencyDataLogger() const    { return mGenotypeFrequencyLogger; }
+    SizeHistogramDataLogger*     sizeHistogramDataLogger() const        { return mSizeFrequencyLogger; }
 
 
     virtual void registerTypes(boost::archive::polymorphic_oarchive& inArchive);
@@ -65,14 +67,15 @@ protected:
     void clearDataCollectors();
 
 protected:
-    PopulationSizeLogger*        mPopSizeLogger;
-    MeanCreatureSizeLogger*      mMeanSizeLogger;
-    MaxFitnessDataLogger*        mFitnessFrequencyLogger;
-
-    GenotypeFrequencyDataLogger* mGenotypeFrequencyLogger;
-    SizeHistogramDataLogger*     mSizeFrequencyLogger;
+    PopulationSizeLogger*           mPopSizeLogger;
+    MeanCreatureSizeLogger*         mMeanSizeLogger;
+    MaxFitnessDataLogger*           mFitnessFrequencyLogger;
+    TwoGenotypesFrequencyLogger*    mTwoGenotypesFrequencyLogger;
     
-    GenebankInventoryListener*   mGenebankListener;
+    GenotypeFrequencyDataLogger*    mGenotypeFrequencyLogger;
+    SizeHistogramDataLogger*     	mSizeFrequencyLogger;
+    
+    GenebankInventoryListener*      mGenebankListener;
 };
 
 class WorldData : Noncopyable

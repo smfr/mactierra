@@ -30,7 +30,10 @@ typedef enum ESoupStatistic {
     IBOutlet NSView*    mGraphContainerView;
 
     IBOutlet NSView*    mGraphAdditionsView;
-    
+
+    // Auxillary views
+    IBOutlet NSView*    mTwoGenotypesAuxiliaryView;
+
     NSMutableArray*     graphs;
 
     NSInteger           currentGraphIndex;

@@ -52,7 +52,6 @@ public:
     
     ~Creature();
 
-    // zero out this creature's space in the soup
     creature_id     creatureID() const  { return mID; }
     
     std::string     creatureName() const;

@@ -61,6 +61,14 @@ WorldDataCollectors::setupDataCollectors(World* inWorld)
         mFitnessFrequencyLogger->setMaxDataCount(kMaxDataPoints);
     }
     inWorld->dataCollector()->addCyclicalLogger(mFitnessFrequencyLogger);
+
+    if (!mTwoGenotypesFrequencyLogger)
+    {
+        mTwoGenotypesFrequencyLogger = new TwoGenotypesFrequencyLogger();
+        mTwoGenotypesFrequencyLogger->setMaxDataCount(kMaxDataPoints);
+    }
+    inWorld->dataCollector()->addCyclicalLogger(mTwoGenotypesFrequencyLogger);
+
     
     if (!mGenotypeFrequencyLogger)
     {
@@ -87,6 +95,9 @@ WorldDataCollectors::clearDataCollectors()
     delete mFitnessFrequencyLogger;
     mFitnessFrequencyLogger = NULL;
 
+    delete mTwoGenotypesFrequencyLogger;
+    mTwoGenotypesFrequencyLogger = NULL;
+    
     delete mGenotypeFrequencyLogger;
     mGenotypeFrequencyLogger = NULL;
     
@@ -100,6 +111,7 @@ WorldDataCollectors::registerTypes(boost::archive::polymorphic_oarchive& inArchi
     inArchive.register_type(static_cast<PopulationSizeLogger *>(NULL));
     inArchive.register_type(static_cast<MeanCreatureSizeLogger *>(NULL));
     inArchive.register_type(static_cast<MaxFitnessDataLogger *>(NULL));
+    inArchive.register_type(static_cast<TwoGenotypesFrequencyLogger *>(NULL));
     inArchive.register_type(static_cast<GenotypeFrequencyDataLogger *>(NULL));
     inArchive.register_type(static_cast<SizeHistogramDataLogger *>(NULL));
 }
@@ -110,6 +122,7 @@ WorldDataCollectors::registerTypes(boost::archive::polymorphic_iarchive& inArchi
     inArchive.register_type(static_cast<PopulationSizeLogger *>(NULL));
     inArchive.register_type(static_cast<MeanCreatureSizeLogger *>(NULL));
     inArchive.register_type(static_cast<MaxFitnessDataLogger *>(NULL));
+    inArchive.register_type(static_cast<TwoGenotypesFrequencyLogger *>(NULL));
     inArchive.register_type(static_cast<GenotypeFrequencyDataLogger *>(NULL));
     inArchive.register_type(static_cast<SizeHistogramDataLogger *>(NULL));
 }
@@ -120,6 +133,7 @@ WorldDataCollectors::loadAddition(const std::string& inAdditionType, boost::arch
     inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("population_size_logger", mPopSizeLogger);
     inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_size_logger", mMeanSizeLogger);
     inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("max_fitness_logger", mFitnessFrequencyLogger);
+    inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("two_genotypes_logger", mTwoGenotypesFrequencyLogger);
 
     inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_frequency_logger", mGenotypeFrequencyLogger);
     inArchive >> MT_BOOST_MEMBER_SERIALIZATION_NVP("size_frequency_logger", mSizeFrequencyLogger);
@@ -131,6 +145,7 @@ WorldDataCollectors::saveAddition(const std::string& inAdditionType, boost::arch
     inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("population_size_logger", mPopSizeLogger);
     inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("mean_size_logger", mMeanSizeLogger);
     inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("max_fitness_logger", mFitnessFrequencyLogger);
+    inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("two_genotypes_logger", mTwoGenotypesFrequencyLogger);
 
     inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_frequency_logger", mGenotypeFrequencyLogger);
     inArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("size_frequency_logger", mSizeFrequencyLogger);

@@ -129,38 +129,45 @@
 
     const float bucketPixelWidth = (maxXBounds - minXBounds) / numberOfBuckets;
     
-    // Create Boxes for Histogram
-    float x = minXBounds;
-    float y = yOrigin;
-
-    float x_next = x + (1)/(xRatio);
-    float y_next;
-
-    [displacement moveToPoint:NSMakePoint(x,y)];
-
-    NSUInteger i;
-    for (i = 0; i < numberOfBuckets; ++i)
+    NSInteger numSeries = [dataSource numberOfSeries];
+    // FIXME: need to correctly draw more than one series of columns
+    NSInteger curSeries;
+    for (curSeries = 0; curSeries < numSeries; ++curSeries)
     {
-        NSString* label = nil;
-        float frequency = [dataSource frequencyForBucket:i label:&label];
-    
-        y_next = minYBounds + (frequency  - yMin)/(yRatio);
+        // Create Boxes for Histogram
+        float x = minXBounds;
+        float y = yOrigin;
 
-        [displacement lineToPoint:NSMakePoint(x     , y_next)];
-        [displacement lineToPoint:NSMakePoint(x_next, y_next)];
+        float x_next = x + (1)/(xRatio);
+        float y_next;
 
-        [border moveToPoint:NSMakePoint(x , (y < y_next) ? y : y_next)];
-        [border lineToPoint:NSMakePoint(x , yOrigin)];
+        [displacement moveToPoint:NSMakePoint(x,y)];
 
-        if (showXValues && label)
-            [self drawLabel:label forBucket:i inRect:rect];
+        NSUInteger i;
+        for (i = 0; i < numberOfBuckets; ++i)
+        {
+            NSString* label = nil;
+            float frequency = [dataSource frequencyForBucket:i label:&label inSeries:curSeries];
+        
+            y_next = minYBounds + (frequency  - yMin)/(yRatio);
 
-        y = y_next;
-        x = x_next;
-        x_next += bucketPixelWidth;
+            [displacement lineToPoint:NSMakePoint(x     , y_next)];
+            [displacement lineToPoint:NSMakePoint(x_next, y_next)];
+
+            [border moveToPoint:NSMakePoint(x , (y < y_next) ? y : y_next)];
+            [border lineToPoint:NSMakePoint(x , yOrigin)];
+
+            // FIXME: we should not be drawing labels here
+            if (showXValues && label)
+                [self drawLabel:label forBucket:i inRect:rect];
+
+            y = y_next;
+            x = x_next;
+            x_next += bucketPixelWidth;
+        }
+
+        [displacement lineToPoint:NSMakePoint(x , yOrigin)];
     }
-
-    [displacement lineToPoint:NSMakePoint(x , yOrigin)];
 }
 
 - (void)drawGraph:(NSRect)rect
@@ -171,6 +178,9 @@
         [displacement fill];
     }
 
+    // Draw labels here
+    
+    
     if (showBorder)
     {
         [[graphColors colorWithKey:@"border"] set];

@@ -130,6 +130,16 @@ World::eradicateCreature(Creature* inCreature)
     // no need to delete here; creatures are refcounted.
 }
 
+const Creature*
+World::creatureWithID(creature_id inCreatureID) const
+{
+    CreatureIDMap::const_iterator it = mCreatureIDMap.find(inCreatureID);
+    if (it != mCreatureIDMap.end())
+        return it->second.get();
+
+    return NULL;
+}
+
 u_int32_t
 World::numAdultCreatures() const
 {

@@ -10,9 +10,11 @@
 
 namespace MacTierra {
     class Creature;
+    class World;
 };
 
-extern NSString* const kCreaturePasteboardType;
+extern NSString* const kCreatureDataPasteboardType;
+extern NSString* const kCreatureReferencePasteboardType;
 
 @class MTInventoryGenotype;
 
@@ -24,6 +26,8 @@ class CreaturePrivateData;
     
     MTInventoryGenotype*    genotype;
 }
+
++ (id)creatureFromPasteboard:(NSPasteboard*)inPasteboard inWorld:(MacTierra::World*)inWorld;
 
 - (id)initWithCreature:(MacTierra::Creature*)inCreature;
 
@@ -50,12 +54,14 @@ class CreaturePrivateData;
 @property (readonly) NSString* soupAroundIP;
 @property (readonly) NSRange soupSelectionRange;
 
-
 @property (readonly) MTInventoryGenotype* genotype;
+
+@property (readonly) NSDictionary* pasteboardData;
 
 @end
 
 
+// Put onto the pasteboard with type kCreatureDataPasteboardType
 @interface MTSerializableCreature : NSObject<NSCoding>
 {
     NSString*       name;

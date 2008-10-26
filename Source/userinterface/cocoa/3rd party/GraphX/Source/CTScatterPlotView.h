@@ -10,7 +10,8 @@
 #import "CTGraphView.h"
 
 @interface NSObject(CTScatterPlotViewDataSource)
-- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index;
+- (NSInteger)numberOfSeries;
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)series;
 @end
 
 @interface CTScatterPlotView : CTGraphView
@@ -19,8 +20,8 @@
   
   float curveLineWidth;   //width of the curve
   
-  NSBezierPath* curve;
-  NSBezierPath* displacement;
+  NSMutableArray*  curvePaths;
+  NSMutableArray*  displacementPaths;
 }
 
 - (void)setDataSource:(id)inDataSource;
@@ -33,5 +34,8 @@
 
 @property (retain) NSColor* curveColor;
 @property (retain) NSColor* fillColor;
+
+- (void)setCurveColor:(NSColor*)color forSeries:(NSInteger)series;
+- (NSColor*)curveColorForSeries:(NSInteger)series;
 
 @end

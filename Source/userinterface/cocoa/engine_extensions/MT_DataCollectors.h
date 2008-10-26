@@ -12,8 +12,11 @@
 
 #include <string>
 
+#include <boost/serialization/export.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/tuple/tuple.hpp>
+
+#include "MT_Inventory.h"
 
 #include "MT_DataCollection.h"
 
@@ -109,11 +112,6 @@ public:
     static u_int64_t getSlicerCycles(const data_tuple& data)    { return boost::tuples::get<1>(data); }
     static T getData(const data_tuple& data)                    { return boost::tuples::get<2>(data); }
     
-    TypedSimpleDataLogger()
-    : mMaxValue(0)
-    {
-    }
-
     virtual u_int32_t   dataCount() const { return mData.size(); }
 
     // engine needs to be locked while using this data
@@ -126,8 +124,6 @@ public:
 
     virtual u_int64_t minSlicerCycles() const { return mData.size() > 0 ? getSlicerCycles(mData[0]): 0; }
     virtual u_int64_t maxSlicerCycles() const { return mData.size() > 0 ? getSlicerCycles(mData[mData.size() - 1]) : 0; }
-
-    virtual double maxDoubleValue() const { return (double)mMaxValue; }
 
 protected:
     
@@ -210,8 +206,16 @@ typedef TypedSimpleDataLogger<u_int32_t> SimpleUInt32DataLogger;
 class PopulationSizeLogger : public SimpleUInt32DataLogger
 {
 public:
+
+    PopulationSizeLogger()
+    {
+        mMaxValue = 0;
+    }
+    
     // collectData is called on the engine thread
     virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
+
+    virtual double maxDoubleValue() const { return static_cast<double>(mMaxValue); }
 
 private:
     friend class ::boost::serialization::access;
@@ -226,8 +230,15 @@ typedef TypedSimpleDataLogger<double> SimpleDoubleDataLogger;
 class MeanCreatureSizeLogger : public SimpleDoubleDataLogger
 {
 public:
+    MeanCreatureSizeLogger()
+    {
+        mMaxValue = 0;
+    }
+
     // collectData is called on the engine thread
     virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
+
+    virtual double maxDoubleValue() const { return static_cast<double>(mMaxValue); }
 
 private:
     friend class ::boost::serialization::access;
@@ -241,8 +252,15 @@ private:
 class MaxFitnessDataLogger : public SimpleDoubleDataLogger
 {
 public:
+    MaxFitnessDataLogger()
+    {
+        mMaxValue = 0;
+    }
+
     // collectData is called on the engine thread
     virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
+
+    virtual double maxDoubleValue() const { return static_cast<double>(mMaxValue); }
 
 private:
     friend class ::boost::serialization::access;
@@ -250,6 +268,44 @@ private:
     {
         ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleDoubleDataLogger);
     }
+};
+
+typedef TypedSimpleDataLogger<std::pair<u_int32_t, u_int32_t> > SimpleFrequencyPairDataLogger;
+class TwoGenotypesFrequencyLogger : public SimpleFrequencyPairDataLogger
+{
+public:
+    TwoGenotypesFrequencyLogger()
+    : mFirstGenotype(NULL)
+    , mSecondGenotype(NULL)
+    {
+        mMaxValue = std::pair<u_int32_t, u_int32_t>(0, 0);
+    }
+
+    // collectData is called on the engine thread
+    virtual void collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld);
+
+    virtual double maxDoubleValue() const { return static_cast<double>(mMaxValue.first); }
+
+    void setFirstGenotype(MacTierra::InventoryGenotype* inGenotype)     { mFirstGenotype = inGenotype; }
+    void setSecondGenotype(MacTierra::InventoryGenotype* inGenotype)    { mSecondGenotype = inGenotype; }
+
+    MacTierra::InventoryGenotype* firstGenotype() const     { return mFirstGenotype; }
+    MacTierra::InventoryGenotype* secondGenotype() const    { return mSecondGenotype; }
+
+private:
+    friend class ::boost::serialization::access;
+    template<class Archive> void serialize(Archive& ar, const unsigned int file_version)
+    {
+        ar & BOOST_SERIALIZATION_BASE_OBJECT_NVP(SimpleFrequencyPairDataLogger);
+        
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("first_genotype", mFirstGenotype);
+        ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("second_genotype", mSecondGenotype);
+    }
+    
+protected:
+    // These probably need to be refcounted, but at present the inventory keeps all genotypes around
+    MacTierra::InventoryGenotype*      mFirstGenotype;
+    MacTierra::InventoryGenotype*      mSecondGenotype;
 };
 
 

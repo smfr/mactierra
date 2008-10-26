@@ -12,7 +12,6 @@
 #include "MT_DataCollectors.h"
 
 #include "MT_CellMap.h"
-#include "MT_Inventory.h"
 #include "MT_TimeSlicer.h"
 #include "MT_World.h"
 
@@ -33,6 +32,26 @@ void
 MeanCreatureSizeLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
 {
     appendValue(inInstructionCount, inSlicerCycles, inWorld->meanCreatureSize());
+}
+
+#pragma mark -
+
+void
+TwoGenotypesFrequencyLogger::collectData(ECollectionType inCollectionType, u_int64_t inInstructionCount, u_int64_t inSlicerCycles, const MacTierra::World* inWorld)
+{
+    std::pair<u_int32_t, u_int32_t> twoFrequencies(0, 0);
+    
+    if (mFirstGenotype)
+        twoFrequencies.first = mFirstGenotype->numberAlive();
+
+    if (mSecondGenotype)
+        twoFrequencies.second = mSecondGenotype->numberAlive();
+        
+    mData.push_back(data_tuple(inInstructionCount, inSlicerCycles, twoFrequencies));
+    
+    // We just use the first of the maxValue pair
+    u_int32_t larger = std::max(twoFrequencies.first, twoFrequencies.second);
+    mMaxValue = std::pair<u_int32_t, u_int32_t>(std::max(larger, mMaxValue.first), 0);
 }
 
 #pragma mark -

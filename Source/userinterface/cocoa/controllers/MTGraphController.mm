@@ -21,6 +21,9 @@
 #import "MT_TimeSlicer.h"
 #import "MT_World.h"
 
+#import "MTGenotypeImageView.h"
+#import "MTCreature.h"
+#import "MTInventoryGenotype.h"
 #import "MTWorldController.h"
 #import "MTWorldDataCollection.h"
 
@@ -29,6 +32,7 @@ static const double kMillion = 1.0e6;
 @interface MTGraphController(Private)
 
 - (void)setupGraphAdaptors;
+- (NSView*)twoGenotypesAuxiliaryView;
 
 @end
 
@@ -42,6 +46,8 @@ static const double kMillion = 1.0e6;
 
     NSString*                   identifier;
     NSString*                   localizedName;
+    
+    NSView*                     auxiliaryView;
 }
 
 @property (copy) NSString* identifier;
@@ -51,13 +57,17 @@ static const double kMillion = 1.0e6;
 @property (assign) MacTierra::DataLogger* dataLogger;
 @property (readonly) NSString* xAxisLabel;
 
+@property (retain) NSView* auxiliaryView;
+
 + (NSDictionary*)axisLabelAttributes;
 
 + (id)graphAdaptorWithGraphController:(MTGraphController*)inController;
 
 - (id)initWithGraphController:(MTGraphController*)inController;
 - (void)setupGraphView;
+- (void)setupAuxiliaryView;
 - (void)updateGraph:(MTWorldController*)inWorldController;
+- (void)dataLoggerChanged;
 
 @end
 
@@ -112,6 +122,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 @synthesize graphView;
 @synthesize identifier;
 @synthesize localizedName;
+@synthesize auxiliaryView;
 
 + (NSDictionary*)axisLabelAttributes
 {
@@ -160,6 +171,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
         self.identifier = [[self class] identifier];
         self.localizedName = [[self class] localizedName];
         [self setupGraphView];
+        [self setupAuxiliaryView];
     }
     return self;
 }
@@ -167,6 +179,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 - (void)dealloc
 {
     self.graphView = nil;
+    self.auxiliaryView = nil;
     [super dealloc];
 }
 
@@ -175,7 +188,17 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     // for subclassers
 }
 
+- (void)setupAuxiliaryView
+{
+    // for subclassers
+}
+
 - (void)updateGraph:(MTWorldController*)inWorldController
+{
+    // for subclassers
+}
+
+- (void)dataLoggerChanged
 {
     // for subclassers
 }
@@ -317,7 +340,12 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"PopulationSize", @"");
 }
 
-- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+- (NSInteger)numberOfSeries
+{
+    return 1;
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
     PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
@@ -349,7 +377,12 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"MeanCreatureSize", @"");
 }
 
-- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+- (NSInteger)numberOfSeries
+{
+    return 1;
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
     MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
@@ -381,13 +414,131 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"MaxFitness", @"");
 }
 
-- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index
+- (NSInteger)numberOfSeries
+{
+    return 1;
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
     MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
         MaxFitnessDataLogger::data_tuple curTuple = fitnessLogger->data()[index];
         *(*point) = NSMakePoint((double)MaxFitnessDataLogger::getSlicerCycles(curTuple), MaxFitnessDataLogger::getData(curTuple));
+        return;
+    }
+    
+    *point = NULL;
+}
+
+@end
+
+#pragma mark -
+
+@interface MTTwoGenotypesFrequencyGraphAdapter : MTCyclesGraphAdapter
+@end
+
+static const NSInteger kFirstGenotypeImageViewTag = 1001;
+static const NSInteger kSecondGenotypeImageViewTag = 1002;
+
+@implementation MTTwoGenotypesFrequencyGraphAdapter
+
++ (NSString*)identifier
+{
+    return @"two_genotypes_frequency";
+}
+
++ (NSString*)localizedName
+{
+    return NSLocalizedString(@"TwoGenotypesFrequency", @"");
+}
+
+- (void)setupGraphView
+{
+    [super setupGraphView];
+    
+    CTScatterPlotView* scatterPlotView = (CTScatterPlotView*)graphView;
+    scatterPlotView.showFill = NO;
+    [scatterPlotView setCurveColor:[NSColor blueColor] forSeries:0];
+    [scatterPlotView setCurveColor:[NSColor redColor ] forSeries:1];
+}
+
+- (void)clear
+{
+    MTGenotypeImageView* genotypeView = [auxiliaryView viewWithTag:kFirstGenotypeImageViewTag];
+    [genotypeView removeObserver:self forKeyPath:@"creature"];
+
+    genotypeView = [auxiliaryView viewWithTag:kSecondGenotypeImageViewTag];
+    [genotypeView removeObserver:self forKeyPath:@"creature"];
+
+    [super clear];
+}
+
+- (void)setupAuxiliaryView
+{
+    self.auxiliaryView = [mController twoGenotypesAuxiliaryView];
+    
+    // Find the two genotype image views
+    MTGenotypeImageView* genotypeView = [auxiliaryView viewWithTag:kFirstGenotypeImageViewTag];
+    [genotypeView addObserver:self
+                   forKeyPath:@"creature"
+                      options:0
+                      context:NULL];
+
+    genotypeView = [auxiliaryView viewWithTag:kSecondGenotypeImageViewTag];
+    [genotypeView addObserver:self
+                   forKeyPath:@"creature"
+                      options:0
+                      context:NULL];
+}
+
+- (void)dataLoggerChanged
+{
+    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+    if (!genotypesLogger)
+        return;
+
+    // udpate the genotypes on the image views
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"creature"])
+    {
+        if ([object isKindOfClass:[MTGenotypeImageView self]])
+        {
+            MTGenotypeImageView* genotypeView = (MTGenotypeImageView*)object;
+            MTCreature* newCreature = genotypeView.creature;
+            
+            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+            if (!genotypesLogger)
+                return;
+
+            if ([genotypeView tag] == kFirstGenotypeImageViewTag)
+                genotypesLogger->setFirstGenotype(newCreature.genotype.genotype);
+            else if ([genotypeView tag] == kSecondGenotypeImageViewTag)
+                genotypesLogger->setSecondGenotype(newCreature.genotype.genotype);
+        }
+        return;
+    }
+
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+- (NSInteger)numberOfSeries
+{
+    return 2;
+}
+
+- (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
+{
+    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+    if (genotypesLogger && index < genotypesLogger->dataCount())
+    {
+        TwoGenotypesFrequencyLogger::data_tuple curTuple = genotypesLogger->data()[index];
+        u_int32_t frequency = (inSeries == 0) ? TwoGenotypesFrequencyLogger::getData(curTuple).first : TwoGenotypesFrequencyLogger::getData(curTuple).second;
+        *(*point) = NSMakePoint((double)TwoGenotypesFrequencyLogger::getSlicerCycles(curTuple), frequency);
         return;
     }
     
@@ -459,7 +610,12 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"GenotypesAxisLabel", @"Genotypes");
 }
 
-- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
+- (NSInteger)numberOfSeries
+{
+    return 1;
+}
+
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel inSeries:(NSInteger)series
 {
     GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(dataLogger);
     if (!genotypeLogger) return 0.0f;
@@ -496,7 +652,12 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     return NSLocalizedString(@"SizeAxisLabel", @"Genotypes");
 }
 
-- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel
+- (NSInteger)numberOfSeries
+{
+    return 1;
+}
+
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel inSeries:(NSInteger)series
 {
     SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(dataLogger);
     if (!sizeLogger) return 0.0f;
@@ -538,6 +699,11 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 
 #pragma mark -
 
+- (NSView*)twoGenotypesAuxiliaryView
+{
+    return mTwoGenotypesAuxiliaryView;
+}
+
 - (void)setupGraphAdaptors
 {
     [graphs makeObjectsPerformSelector:@selector(clear)];
@@ -547,6 +713,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     [adaptors addObject:[MTPopulationSizeGraphAdapter graphAdaptorWithGraphController:self]];
     [adaptors addObject:[MTCreatureSizeGraphAdapter graphAdaptorWithGraphController:self]];
     [adaptors addObject:[MTMaxFitnessGraphAdapter graphAdaptorWithGraphController:self]];
+    [adaptors addObject:[MTTwoGenotypesFrequencyGraphAdapter graphAdaptorWithGraphController:self]];
     [adaptors addObject:[MTGenotypeFrequencyGraphAdapter graphAdaptorWithGraphController:self]];
     [adaptors addObject:[MTSizeHistorgramGraphAdapter graphAdaptorWithGraphController:self]];
 
@@ -579,11 +746,16 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
         MTGraphAdapter* fitnessGrapher = [self adaptorWithIdentifier:[MTMaxFitnessGraphAdapter identifier]];
         fitnessGrapher.dataLogger = dataCollectors->maxFitnessDataLogger();
 
+        MTGraphAdapter* twoGenotypesGrapher = [self adaptorWithIdentifier:[MTTwoGenotypesFrequencyGraphAdapter identifier]];
+        twoGenotypesGrapher.dataLogger = dataCollectors->twoGenotypesFrequencyLogger();
+
         MTGraphAdapter* genotypeFrequencyGrapher = [self adaptorWithIdentifier:[MTGenotypeFrequencyGraphAdapter identifier]];
         genotypeFrequencyGrapher.dataLogger = dataCollectors->genotypeFrequencyDataLogger();
 
         MTGraphAdapter* sizeHistogramGrapher = [self adaptorWithIdentifier:[MTSizeHistorgramGraphAdapter identifier]];
         sizeHistogramGrapher.dataLogger = dataCollectors->sizeHistogramDataLogger();
+
+        [graphs makeObjectsPerformSelector:@selector(dataLoggerChanged) withObject:nil];
     }
     else
     {
@@ -606,7 +778,14 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 {
     if (inNewAdaptor)
     {
-        [mGraphContainerView addFullSubview:[inNewAdaptor graphView] replaceExisting:YES fill:YES];
+        [mGraphContainerView addFullSubview:inNewAdaptor.graphView replaceExisting:YES fill:YES];
+        
+        NSView* adaptorAuxiliaryView = inNewAdaptor.auxiliaryView;
+        if (adaptorAuxiliaryView)
+            [mGraphAdditionsView addFullSubview:adaptorAuxiliaryView replaceExisting:YES fill:YES];
+        else
+            [mGraphAdditionsView removeAllSubviews];
+
         [inNewAdaptor updateGraph:mWorldController];
     }
 }

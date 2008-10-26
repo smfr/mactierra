@@ -15,6 +15,8 @@ namespace MacTierra {
 @interface MTInventoryGenotype : NSObject
 {
     MacTierra::InventoryGenotype*       genotype;       // not owned
+    
+    NSImage*                            mGenotypeImage;
 }
 
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype;
@@ -30,5 +32,7 @@ namespace MacTierra {
 @property (readonly) NSString* genomeString;        // like "01 01 0a" etc.
 @property (readonly) NSString* prettyPrintedGenomeString;        // pretty-printed
 @property (readonly) NSData* genome;
+
+@property (readonly) NSImage* genotypeImage;
 
 @end

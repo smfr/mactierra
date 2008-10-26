@@ -66,6 +66,8 @@ public:
     PassRefPtr<Creature> createCreature(u_int32_t inLength);
     void                 eradicateCreature(Creature* inCreature);
     
+    const Creature*     creatureWithID(creature_id inCreatureID) const;
+    
     PassRefPtr<Creature> insertCreature(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
     
     void                iterate(u_int32_t inNumCycles);

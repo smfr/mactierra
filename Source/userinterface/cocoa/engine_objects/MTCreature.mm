@@ -12,13 +12,16 @@
 #import "MT_Creature.h"
 #import "MT_InstructionSet.h"
 #import "MT_ISA.h"
+#import "MT_World.h"
 
 #import "MTInventoryGenotype.h"
 
 #import "NSCharacterSetAdditions.h"
 
-NSString* const kCreaturePasteboardType = @"org.smfr.mactierra.creature";
+NSString* const kCreatureDataPasteboardType         = @"org.smfr.mactierra.creature_data";
+NSString* const kCreatureReferencePasteboardType    = @"org.smfr.mactierra.creature_ref";
 
+using namespace MacTierra;
 
 class CreaturePrivateData
 {
@@ -30,6 +33,24 @@ public:
 };
 
 @implementation MTCreature
+
++ (id)creatureFromPasteboard:(NSPasteboard*)inPasteboard inWorld:(World*)inWorld
+{
+    if ([[inPasteboard types] containsObject:kCreatureReferencePasteboardType])
+    {
+        NSDictionary* creatureInfo = [inPasteboard propertyListForType:kCreatureReferencePasteboardType];
+        NSNumber* creatureIDNum;
+        if ((creatureIDNum = [creatureInfo objectForKey:@"creature_id"]))
+        {
+            creature_id creatureID = (creature_id)[creatureIDNum unsignedIntValue];
+        
+            const Creature* foundCreature = inWorld->creatureWithID(creatureID);
+            if (foundCreature)
+                return [[[MTCreature alloc] initWithCreature:const_cast<Creature*>(foundCreature)] autorelease];
+        }
+    }
+    return nil;
+}
 
 - (id)initWithCreature:(MacTierra::Creature*)inCreature
 {
@@ -172,7 +193,14 @@ const NSInteger kRangeBeforeIP = 8;
     return genotype;
 }
 
+- (NSDictionary*)pasteboardData
+{
+    return [NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:mPrivateData->creature()->creatureID()]
+                                       forKey:@"creature_id"];
+}
+
 @end
+
 
 #pragma mark -
 
@@ -185,9 +213,9 @@ const NSInteger kRangeBeforeIP = 8;
 {
     MTSerializableCreature* creature = nil;
     
-    if ([[inPasteboard types] containsObject:kCreaturePasteboardType])
+    if ([[inPasteboard types] containsObject:kCreatureDataPasteboardType])
     {
-        NSData* creatureData = [inPasteboard dataForType:kCreaturePasteboardType];
+        NSData* creatureData = [inPasteboard dataForType:kCreatureDataPasteboardType];
         if (creatureData)
             creature = [NSKeyedUnarchiver unarchiveObjectWithData:creatureData];
     }

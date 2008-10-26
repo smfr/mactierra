@@ -10,7 +10,8 @@
 #import "CTGraphView.h"
 
 @interface NSObject(CTHistogramViewDataSource)
-- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel;
+- (NSInteger)numberOfSeries;
+- (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel inSeries:(NSInteger)series;
 @end
 
 @interface CTHistogramView : CTGraphView

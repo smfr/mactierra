@@ -44,15 +44,8 @@
     //Set Drawing Constants
     curveLineWidth = 2;
     
-    curve        = [[NSBezierPath alloc] init];
-    displacement = [[NSBezierPath alloc] init];
-    
-    [curve setLineWidth:curveLineWidth];
-    [curve setLineJoinStyle:NSRoundLineJoinStyle];
-    [curve setLineCapStyle :NSRoundLineCapStyle ];
-    
-    [curve        setCachesBezierPath:YES];
-    [displacement setCachesBezierPath:YES];
+    curvePaths        = [[NSMutableArray alloc] init];
+    displacementPaths = [[NSMutableArray alloc] init];
   }
   
   return self;
@@ -62,8 +55,8 @@
 {
   [dataSource release];
 
-  [curve release];
-  [displacement release];
+  [curvePaths release];
+  [displacementPaths release];
   
   [super dealloc];
 }
@@ -84,8 +77,8 @@
 
 - (void)recomputeGraph:(NSRect)rect
 {
-    [curve removeAllPoints];
-    [displacement removeAllPoints];
+    [curvePaths removeAllObjects];
+    [displacementPaths removeAllObjects];
 
     if (!dataSource)
         return;
@@ -109,145 +102,160 @@
     //Sampling will begin at xMin and finish off at xMax
     //  any points that return null will be ignored
 
-    //the sample data point's coordinates
-    unsigned index = 0;
-
-
     NSPoint tmp = NSMakePoint(1,2);
 
-    NSPoint *pointPointer = &tmp;
-
-    float g = xMin;
-    float h = NAN; 
-
-    float g_next;
-    float h_next;
-
-    float xMinRatio = xMin / xratio;
-    float hMinRatio = yMin / yRatio;
-
-    float x;
-    float y;
-
-    [dataSource getPoint:&pointPointer atIndex:index];
-  
-    while (g < xMax &&  pointPointer != nil)
+    NSInteger curSeries, numSeries = [dataSource numberOfSeries];
+    for (curSeries = 0; curSeries < numSeries; ++curSeries)
     {
-        while ((g < xMax &&  pointPointer != nil) && isnan(h))
+        NSPoint *pointPointer = &tmp;
+
+        NSBezierPath*   curve = [NSBezierPath bezierPath];
+        [curve setLineWidth:curveLineWidth];
+        [curve setLineJoinStyle:NSRoundLineJoinStyle];
+        [curve setLineCapStyle :NSRoundLineCapStyle ];
+        [curve setCachesBezierPath:YES];
+    
+        NSBezierPath*   displacement = [NSBezierPath bezierPath];
+        [displacement setCachesBezierPath:YES];
+
+        // the sample data point's coordinates
+        unsigned index = 0;
+
+        float g = xMin;
+        float h = NAN; 
+
+        float g_next;
+        float h_next;
+
+        float xMinRatio = xMin / xratio;
+        float hMinRatio = yMin / yRatio;
+
+        float x;
+        float y;
+
+        [dataSource getPoint:&pointPointer atIndex:index inSeries:curSeries];
+      
+        while (g < xMax &&  pointPointer != nil)
         {
-            g_next = pointPointer->x;
-            h_next = pointPointer->y;
-
-            if (isnan(h_next))
-            {
-            }
-            else
-            {
-                x = (g_next)/(xratio) - xMinRatio + minXBounds;
-
-                if (isfinite(h_next))              //move to the right to the point
-                y = (h_next)/(yRatio) - hMinRatio + minYBounds;
-                else if (signbit(h_next))            //move to top of screen
-                y = maxYBounds + curveLineWidth;
-                else                      //move to bottom of screen
-                y = minYBounds - curveLineWidth;
-
-                [curve moveToPoint:NSMakePoint(x, y)];
-            }
-
-            g = g_next;
-            h = h_next;
-            [dataSource getPoint:&pointPointer atIndex:(++index)];
-        }
-
-        //Make sure we aren't ending with NaN
-        if (g >= xMax && isnan(h))
-            break;
-
-        float firstPoint = g/(xratio) - xMinRatio + minXBounds;
-
-        while (!isnan(h))
-        {
-            while((g < xMax &&  pointPointer != nil) && isfinite(h))
+            while ((g < xMax &&  pointPointer != nil) && isnan(h))
             {
                 g_next = pointPointer->x;
                 h_next = pointPointer->y;
 
                 if (isnan(h_next))
                 {
-                    break;
                 }
-                else    // Next point is valid - draw a line to it
+                else
                 {
-                    if (isfinite(h_next))              //line to the right to the point
-                    {
-                        x = (g_next)/(xratio) - xMinRatio + minXBounds;
-                        y = (h_next)/(yRatio) - hMinRatio + minYBounds;
-                    }
-                    else if (signbit(h_next))            //line to top of screen
-                        y = maxYBounds + curveLineWidth;
-                    else                      //line to bottom of screen
-                        y = minYBounds - curveLineWidth;
-
-                    [curve lineToPoint:NSMakePoint(x,y)];
-                }
-
-                g = g_next;
-                h = h_next;
-                [dataSource getPoint:&pointPointer atIndex:(++index)];
-            }
-
-            while(!isfinite(h) && !isnan(h) && (g < xMax &&  pointPointer != nil))
-            {
-                g_next = pointPointer->x;
-                h_next = pointPointer->y;
-
-                if (isnan(h_next))
-                {
-                    break;
-                }
-                else if (!isnan(h_next)) // Next point is valid - draw a line to it
-                {
-                    x = (g_next)/(xratio) - xMinRatio + minXBounds;
-                    y = signbit(h) ? maxYBounds + curveLineWidth : minYBounds - curveLineWidth;
-
-                    [curve lineToPoint:NSMakePoint(x,y)];
-
-                    //Next point is valid - draw a line to it
                     x = (g_next)/(xratio) - xMinRatio + minXBounds;
 
                     if (isfinite(h_next))              //move to the right to the point
-                        y = (h_next)/(yRatio) - hMinRatio + minYBounds;
+                    y = (h_next)/(yRatio) - hMinRatio + minYBounds;
                     else if (signbit(h_next))            //move to top of screen
-                        y = maxYBounds + curveLineWidth;
+                    y = maxYBounds + curveLineWidth;
                     else                      //move to bottom of screen
-                        y = minYBounds - curveLineWidth;
+                    y = minYBounds - curveLineWidth;
 
-                    [curve lineToPoint:NSMakePoint(x,y)];
+                    [curve moveToPoint:NSMakePoint(x, y)];
                 }
 
                 g = g_next;
                 h = h_next;
-                [dataSource getPoint:&pointPointer atIndex:(++index)];
+                [dataSource getPoint:&pointPointer atIndex:(++index) inSeries:curSeries];
             }
 
-            if (isnan(h_next) || (g >= xMax || pointPointer == nil))
+            //Make sure we aren't ending with NaN
+            if (g >= xMax && isnan(h))
                 break;
+
+            float firstPoint = g/(xratio) - xMinRatio + minXBounds;
+
+            while (!isnan(h))
+            {
+                while((g < xMax &&  pointPointer != nil) && isfinite(h))
+                {
+                    g_next = pointPointer->x;
+                    h_next = pointPointer->y;
+
+                    if (isnan(h_next))
+                    {
+                        break;
+                    }
+                    else    // Next point is valid - draw a line to it
+                    {
+                        if (isfinite(h_next))              //line to the right to the point
+                        {
+                            x = (g_next)/(xratio) - xMinRatio + minXBounds;
+                            y = (h_next)/(yRatio) - hMinRatio + minYBounds;
+                        }
+                        else if (signbit(h_next))            //line to top of screen
+                            y = maxYBounds + curveLineWidth;
+                        else                      //line to bottom of screen
+                            y = minYBounds - curveLineWidth;
+
+                        [curve lineToPoint:NSMakePoint(x,y)];
+                    }
+
+                    g = g_next;
+                    h = h_next;
+                    [dataSource getPoint:&pointPointer atIndex:(++index) inSeries:curSeries];
+                }
+
+                while(!isfinite(h) && !isnan(h) && (g < xMax &&  pointPointer != nil))
+                {
+                    g_next = pointPointer->x;
+                    h_next = pointPointer->y;
+
+                    if (isnan(h_next))
+                    {
+                        break;
+                    }
+                    else if (!isnan(h_next)) // Next point is valid - draw a line to it
+                    {
+                        x = (g_next)/(xratio) - xMinRatio + minXBounds;
+                        y = signbit(h) ? maxYBounds + curveLineWidth : minYBounds - curveLineWidth;
+
+                        [curve lineToPoint:NSMakePoint(x,y)];
+
+                        //Next point is valid - draw a line to it
+                        x = (g_next)/(xratio) - xMinRatio + minXBounds;
+
+                        if (isfinite(h_next))              //move to the right to the point
+                            y = (h_next)/(yRatio) - hMinRatio + minYBounds;
+                        else if (signbit(h_next))            //move to top of screen
+                            y = maxYBounds + curveLineWidth;
+                        else                      //move to bottom of screen
+                            y = minYBounds - curveLineWidth;
+
+                        [curve lineToPoint:NSMakePoint(x,y)];
+                    }
+
+                    g = g_next;
+                    h = h_next;
+                    [dataSource getPoint:&pointPointer atIndex:(++index) inSeries:curSeries];
+                }
+
+                if (isnan(h_next) || (g >= xMax || pointPointer == nil))
+                    break;
+            }
+
+            //Set points up for next segment
+            g = g_next;
+            h = h_next;
+
+            if (showFill)
+            {
+                //Create new path that will be filled
+                [displacement appendBezierPath:curve];
+
+                //move curve to x axis, then go across it to the begining of the segment
+                [displacement lineToPoint:NSMakePoint(x, yOrigin)];
+                [displacement lineToPoint:NSMakePoint(firstPoint, yOrigin)];
+            }
         }
-
-        //Set points up for next segment
-        g = g_next;
-        h = h_next;
-
-        if (showFill)
-        {
-            //Create new path that will be filled
-            [displacement appendBezierPath:curve];
-
-            //move curve to x axis, then go across it to the begining of the segment
-            [displacement lineToPoint:NSMakePoint(x, yOrigin)];
-            [displacement lineToPoint:NSMakePoint(firstPoint, yOrigin)];
-        }
+        
+        [curvePaths addObject:curve];
+        [displacementPaths addObject:displacement];
     }
 }
 
@@ -256,13 +264,17 @@
     if (showFill)
     {
         [[graphColors colorWithKey:@"fill"] set];
-        [displacement fill];
+        [displacementPaths makeObjectsPerformSelector:@selector(fill)];
     }
     
     if (showCurve)
     {
-        [[graphColors colorWithKey:@"curve"] set];
-        [curve stroke];
+        NSInteger i, numCurves = [curvePaths count];
+        for (i = 0; i < numCurves; ++i)
+        {
+            [[self curveColorForSeries:i] set];
+            [[curvePaths objectAtIndex:i] stroke];
+        }
     }
 }
 
@@ -273,7 +285,9 @@
 
 - (void)setCurveColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"curveColor"];
     [graphColors setColor:color forKey:@"curve"];
+    [self didChangeValueForKey:@"curveColor"];
 }
 
 - (NSColor *)fillColor
@@ -283,7 +297,29 @@
 
 - (void)setFillColor:(NSColor *)color
 {
+    [self willChangeValueForKey:@"fillColor"];
     [graphColors setColor:color forKey:@"fill"];
+    [self didChangeValueForKey:@"fillColor"];
+}
+
+- (void)setCurveColor:(NSColor*)color forSeries:(NSInteger)series
+{
+    if (series == 0)
+    {
+        [self setCurveColor:color];
+        return;
+    }
+    NSString* colorKey = [NSString stringWithFormat:@"curve_%d", series];
+    [graphColors setColor:color forKey:colorKey];
+}
+
+- (NSColor*)curveColorForSeries:(NSInteger)series
+{
+    if (series == 0)
+        return [self curveColor];
+
+    NSString* colorKey = [NSString stringWithFormat:@"curve_%d", series];
+    return [graphColors colorWithKey:colorKey];
 }
 
 
