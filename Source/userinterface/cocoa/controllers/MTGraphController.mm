@@ -6,6 +6,7 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
+#import "NSArrayAdditions.h"
 #import "NSAttributedStringAdditions.h"
 
 #import "MTGraphController.h"
@@ -29,10 +30,16 @@
 
 static const double kMillion = 1.0e6;
 
+@class MTGraphAdapter;
+
 @interface MTGraphController(Private)
 
+- (void)startObservingGraphs;
+- (void)stopObservingGraphs;
+
 - (void)setupGraphAdaptors;
-- (NSView*)twoGenotypesAuxiliaryView;
+- (MTGraphAdapter*)selectedGraphAdaptor;
+- (void)switchToAdaptor:(MTGraphAdapter*)inNewAdaptor;
 
 @end
 
@@ -47,7 +54,7 @@ static const double kMillion = 1.0e6;
     NSString*                   identifier;
     NSString*                   localizedName;
     
-    NSView*                     auxiliaryView;
+    NSViewController*           auxiliaryViewController;
 }
 
 @property (copy) NSString* identifier;
@@ -57,7 +64,7 @@ static const double kMillion = 1.0e6;
 @property (assign) MacTierra::DataLogger* dataLogger;
 @property (readonly) NSString* xAxisLabel;
 
-@property (retain) NSView* auxiliaryView;
+@property (retain) NSViewController* auxiliaryViewController;
 
 + (NSDictionary*)axisLabelAttributes;
 
@@ -122,7 +129,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 @synthesize graphView;
 @synthesize identifier;
 @synthesize localizedName;
-@synthesize auxiliaryView;
+@synthesize auxiliaryViewController;
 
 + (NSDictionary*)axisLabelAttributes
 {
@@ -179,7 +186,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 - (void)dealloc
 {
     self.graphView = nil;
-    self.auxiliaryView = nil;
+    self.auxiliaryViewController = nil;
     [super dealloc];
 }
 
@@ -436,13 +443,72 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
+@implementation TwoGenotypesViewController
+
+- (MTGenotypeImageView*)firstGenotypeImageView
+{
+    return firstGenotypeImageView;
+}
+
+- (MTGenotypeImageView*)secondGenotypeImageView
+{
+    return secondGenotypeImageView;
+}
+
+- (void)setupBindings
+{
+    // For some reason, binding doesn't work
+    [firstGenotypeImageView addObserver:self 
+                             forKeyPath:@"genotype"
+                                options:0
+                                context:NULL];
+
+    [secondGenotypeImageView addObserver:self 
+                             forKeyPath:@"genotype"
+                                options:0
+                                context:NULL];
+}
+
+- (void)clearBindings
+{
+    [firstGenotypeImageView removeObserver:self forKeyPath:@"genotype"];
+    [secondGenotypeImageView removeObserver:self forKeyPath:@"genotype"];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"genotype"])
+    {
+        if (object == firstGenotypeImageView)
+            [[self representedObject] setValue:firstGenotypeImageView.genotype forKeyPath:@"firstGenotype"];
+        else if (object == secondGenotypeImageView)
+            [[self representedObject] setValue:secondGenotypeImageView.genotype forKeyPath:@"secondGenotype"];
+        return;
+    }
+
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+}
+
+@end
+
 @interface MTTwoGenotypesFrequencyGraphAdapter : MTCyclesGraphAdapter
+{
+    MTInventoryGenotype* firstGenotype;
+    MTInventoryGenotype* secondGenotype;
+}
+
+@property (retain) MTInventoryGenotype* firstGenotype;
+@property (retain) MTInventoryGenotype* secondGenotype;
+
 @end
 
 static const NSInteger kFirstGenotypeImageViewTag = 1001;
 static const NSInteger kSecondGenotypeImageViewTag = 1002;
 
 @implementation MTTwoGenotypesFrequencyGraphAdapter
+
+@synthesize firstGenotype;
+@synthesize secondGenotype;
 
 + (NSString*)identifier
 {
@@ -466,31 +532,25 @@ static const NSInteger kSecondGenotypeImageViewTag = 1002;
 
 - (void)clear
 {
-    MTGenotypeImageView* genotypeView = [auxiliaryView viewWithTag:kFirstGenotypeImageViewTag];
-    [genotypeView removeObserver:self forKeyPath:@"creature"];
+    [(TwoGenotypesViewController*)auxiliaryViewController clearBindings];
+    auxiliaryViewController.representedObject = nil;
 
-    genotypeView = [auxiliaryView viewWithTag:kSecondGenotypeImageViewTag];
-    [genotypeView removeObserver:self forKeyPath:@"creature"];
+    self.firstGenotype = nil;
+    self.secondGenotype = nil;
 
     [super clear];
 }
 
 - (void)setupAuxiliaryView
 {
-    self.auxiliaryView = [mController twoGenotypesAuxiliaryView];
+    TwoGenotypesViewController* viewController = [[[TwoGenotypesViewController alloc] initWithNibName:@"TwoGenotypesAuxiliaryView" bundle:nil] autorelease];
+    [viewController loadView];
+    self.auxiliaryViewController = viewController;
+    auxiliaryViewController.representedObject = self;
     
-    // Find the two genotype image views
-    MTGenotypeImageView* genotypeView = [auxiliaryView viewWithTag:kFirstGenotypeImageViewTag];
-    [genotypeView addObserver:self
-                   forKeyPath:@"creature"
-                      options:0
-                      context:NULL];
-
-    genotypeView = [auxiliaryView viewWithTag:kSecondGenotypeImageViewTag];
-    [genotypeView addObserver:self
-                   forKeyPath:@"creature"
-                      options:0
-                      context:NULL];
+    [viewController setupBindings];
+    [viewController firstGenotypeImageView].worldController = mController.worldController;
+    [viewController secondGenotypeImageView].worldController = mController.worldController;
 }
 
 - (void)dataLoggerChanged
@@ -499,31 +559,57 @@ static const NSInteger kSecondGenotypeImageViewTag = 1002;
     if (!genotypesLogger)
         return;
 
-    // udpate the genotypes on the image views
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    if ([keyPath isEqualToString:@"creature"])
+    TwoGenotypesViewController* viewController = (TwoGenotypesViewController*)auxiliaryViewController;
+    
+    if (genotypesLogger->firstGenotype())
     {
-        if ([object isKindOfClass:[MTGenotypeImageView self]])
-        {
-            MTGenotypeImageView* genotypeView = (MTGenotypeImageView*)object;
-            MTCreature* newCreature = genotypeView.creature;
-            
-            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
-            if (!genotypesLogger)
-                return;
-
-            if ([genotypeView tag] == kFirstGenotypeImageViewTag)
-                genotypesLogger->setFirstGenotype(newCreature.genotype.genotype);
-            else if ([genotypeView tag] == kSecondGenotypeImageViewTag)
-                genotypesLogger->setSecondGenotype(newCreature.genotype.genotype);
-        }
-        return;
+        self.firstGenotype = [[[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->firstGenotype()] autorelease];
+        // Ideally the image views would be bound, and this would "just work". Alas, it doesn't.
+        [viewController firstGenotypeImageView].genotype = self.firstGenotype;
     }
 
-    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    if (genotypesLogger->secondGenotype())
+    {
+        self.secondGenotype = [[[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->secondGenotype()] autorelease];
+        // Ideally the image views would be bound, and this would "just work". Alas, it doesn't.
+        [viewController secondGenotypeImageView].genotype = self.secondGenotype;
+    }
+}
+
+- (void)setFirstGenotype:(MTInventoryGenotype*)inGenotype
+{
+    if (inGenotype != firstGenotype)
+    {
+        [self willChangeValueForKey:@"firstGenotype"];
+        [firstGenotype release];
+        firstGenotype = [inGenotype retain];
+        
+        if (dataLogger)
+        {
+            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+            genotypesLogger->setFirstGenotype(firstGenotype ? firstGenotype.genotype : NULL);
+        }
+        
+        [self didChangeValueForKey:@"firstGenotype"];
+    }
+}
+
+- (void)setSecondGenotype:(MTInventoryGenotype*)inGenotype
+{
+    if (inGenotype != secondGenotype)
+    {
+        [self willChangeValueForKey:@"secondGenotype"];
+        [secondGenotype release];
+        secondGenotype = [inGenotype retain];
+
+        if (dataLogger)
+        {
+            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+            genotypesLogger->setSecondGenotype(secondGenotype ? secondGenotype.genotype : NULL);
+        }
+        
+        [self didChangeValueForKey:@"secondGenotype"];
+    }
 }
 
 - (NSInteger)numberOfSeries
@@ -681,12 +767,11 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 @implementation MTGraphController
 
 @synthesize graphs;
-@synthesize currentGraphIndex;
 
 - (void)awakeFromNib
 {
-    self.currentGraphIndex = 0;
     [self setupGraphAdaptors];
+    [self startObservingGraphs];
 }
 
 - (void)dealloc
@@ -697,12 +782,17 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     [super dealloc];
 }
 
-#pragma mark -
-
-- (NSView*)twoGenotypesAuxiliaryView
+- (void)documentClosing
 {
-    return mTwoGenotypesAuxiliaryView;
+    [self stopObservingGraphs];
 }
+
+- (MTWorldController*)worldController
+{
+    return mWorldController;
+}
+
+#pragma mark -
 
 - (void)setupGraphAdaptors
 {
@@ -718,6 +808,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     [adaptors addObject:[MTSizeHistorgramGraphAdapter graphAdaptorWithGraphController:self]];
 
     self.graphs = adaptors;
+    [self switchToAdaptor:[self selectedGraphAdaptor]];
 }
 
 - (MTGraphAdapter*)adaptorWithIdentifier:(NSString*)inIdentifier
@@ -766,12 +857,16 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
 - (void)worldChanged
 {
     [self updateGraphAdaptors];
-    self.currentGraphIndex = 0;
+}
+
+- (MTGraphAdapter*)selectedGraphAdaptor
+{
+    return [[mGraphsArrayController selectedObjects] firstObject];
 }
 
 - (void)updateGraph
 {
-    [[graphs objectAtIndex:currentGraphIndex] updateGraph:mWorldController];
+    [[self selectedGraphAdaptor] updateGraph:mWorldController];
 }
 
 - (void)switchToAdaptor:(MTGraphAdapter*)inNewAdaptor
@@ -780,7 +875,7 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     {
         [mGraphContainerView addFullSubview:inNewAdaptor.graphView replaceExisting:YES fill:YES];
         
-        NSView* adaptorAuxiliaryView = inNewAdaptor.auxiliaryView;
+        NSView* adaptorAuxiliaryView = [inNewAdaptor.auxiliaryViewController view];
         if (adaptorAuxiliaryView)
             [mGraphAdditionsView addFullSubview:adaptorAuxiliaryView replaceExisting:YES fill:YES];
         else
@@ -790,12 +885,28 @@ NSString* const kGraphAdaptorKey    = @"graph_adaptor";
     }
 }
 
-- (void)setCurrentGraphIndex:(NSInteger)inIndex
+- (void)startObservingGraphs
 {
-    currentGraphIndex = inIndex;
-    
-    if (currentGraphIndex < [graphs count])
-        [self switchToAdaptor:[graphs objectAtIndex:currentGraphIndex]];
+    [mGraphsArrayController addObserver:self
+                             forKeyPath:@"selection"
+                                options:0
+                                context:NULL];
+}
+
+- (void)stopObservingGraphs
+{
+    [mGraphsArrayController removeObserver:self forKeyPath:@"selection"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:@"selection"])
+    {
+        [self switchToAdaptor:[self selectedGraphAdaptor]];
+        return;
+    }
+
+    [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
 }
 
 

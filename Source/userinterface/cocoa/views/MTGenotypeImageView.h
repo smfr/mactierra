@@ -9,15 +9,16 @@
 #import <Cocoa/Cocoa.h>
 
 @class MTWorldController;
-@class MTCreature;
+@class MTInventoryGenotype;
 
 @interface MTGenotypeImageView : NSImageView
 {
     IBOutlet MTWorldController* worldController;
     
-    MTCreature* creature;
+    MTInventoryGenotype* genotype;
 }
 
-@property (retain) MTCreature* creature;
+@property (retain) MTInventoryGenotype* genotype;
+@property (assign) MTWorldController* worldController;
 
 @end

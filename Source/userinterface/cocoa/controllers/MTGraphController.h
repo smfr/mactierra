@@ -26,24 +26,42 @@ typedef enum ESoupStatistic {
 
 @interface MTGraphController : NSObject
 {
+    IBOutlet NSArrayController* mGraphsArrayController;
+    
     IBOutlet MTWorldController*  mWorldController;
     IBOutlet NSView*    mGraphContainerView;
 
     IBOutlet NSView*    mGraphAdditionsView;
 
-    // Auxillary views
-    IBOutlet NSView*    mTwoGenotypesAuxiliaryView;
-
     NSMutableArray*     graphs;
-
-    NSInteger           currentGraphIndex;
 }
 
 // Available graph values: "localizedName"
 @property (retain) NSMutableArray* graphs;
-@property (assign) NSInteger currentGraphIndex;
+@property (readonly) MTWorldController*  worldController;
 
 - (void)worldChanged;
 - (void)updateGraph;
+
+- (void)documentClosing;
+
+@end
+
+@class MTGenotypeImageView;
+
+@interface TwoGenotypesViewController : NSViewController
+{
+    IBOutlet NSObjectController*    firstGenotypeController;
+    IBOutlet NSObjectController*    secondGenotypeController;
+    
+    IBOutlet MTGenotypeImageView*   firstGenotypeImageView;
+    IBOutlet MTGenotypeImageView*   secondGenotypeImageView;
+}
+
+- (MTGenotypeImageView*)firstGenotypeImageView;
+- (MTGenotypeImageView*)secondGenotypeImageView;
+
+- (void)setupBindings;
+- (void)clearBindings;
 
 @end

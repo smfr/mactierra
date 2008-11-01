@@ -12,6 +12,8 @@ namespace MacTierra {
     class InventoryGenotype;
 };
 
+extern NSString* const kGenotypeDataPasteboardType;
+
 @interface MTInventoryGenotype : NSObject
 {
     MacTierra::InventoryGenotype*       genotype;       // not owned
@@ -34,5 +36,31 @@ namespace MacTierra {
 @property (readonly) NSData* genome;
 
 @property (readonly) NSImage* genotypeImage;
+
+@end
+
+
+@class MTCreature;
+
+// Put onto the pasteboard with type kGenotypeDataPasteboardType
+@interface MTSerializableGenotype : NSObject<NSCoding>
+{
+    NSString*       name;
+    NSData*         genome;
+}
+
+@property (retain) NSString* name;
+@property (retain) NSData* genome;
+
++ (id)serializableGenotypeFromString:(NSString*)inString;
++ (id)serializableGenotypeFromPasteboard:(NSPasteboard*)inPasteboard;
++ (id)serializableGenotypeFromCreature:(MTCreature*)inCreature;
++ (id)serializableGenotypeFromGenotype:(MTInventoryGenotype*)inGenotype;
+
+- (id)initWithCoder:(NSCoder *)decoder;
+- (id)initWithName:(NSString *)inName genome:(NSData*)inGenome;
+
+- (NSData*)archiveRepresentation;
+- (NSString*)stringRepresentation;
 
 @end

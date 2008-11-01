@@ -115,6 +115,7 @@
 		0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FBDEA910E8155BA00B6B34E /* MTGenebankGenotype.m */; };
 		0FBEC0530E56AF9500ABB516 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0FBEC06D0E56AFEB00ABB516 /* mactierra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */; };
+		0FC76B460EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0FC76B440EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib */; };
 		0FC8E6C20EB3DA5D004760EA /* MTGenotypeImageView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FC8E6C10EB3DA5D004760EA /* MTGenotypeImageView.mm */; };
 		0FCA24620E61115700F37B71 /* MacTierra.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FCA24600E61115700F37B71 /* MacTierra.icns */; };
 		0FEDEAE60E62728000DEF441 /* MTWorldSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FEDEAE30E62728000DEF441 /* MTWorldSettings.mm */; };
@@ -687,6 +688,7 @@
 		0FBEC0430E56AF7A00ABB516 /* mactierra */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mactierra; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FBEC0650E56AFCF00ABB516 /* mactierra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mactierra.h; path = Source/cmdline/mactierra.h; sourceTree = "<group>"; };
 		0FBEC0660E56AFCF00ABB516 /* mactierra.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mactierra.cpp; path = Source/cmdline/mactierra.cpp; sourceTree = "<group>"; };
+		0FC76B450EBCFDAC00D0F4CA /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/TwoGenotypesAuxiliaryView.xib; sourceTree = "<group>"; };
 		0FC8E6C00EB3DA5D004760EA /* MTGenotypeImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenotypeImageView.h; sourceTree = "<group>"; };
 		0FC8E6C10EB3DA5D004760EA /* MTGenotypeImageView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenotypeImageView.mm; sourceTree = "<group>"; };
 		0FCA24600E61115700F37B71 /* MacTierra.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = MacTierra.icns; sourceTree = "<group>"; };
@@ -1767,6 +1769,7 @@
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
 				1DDD58280DA1D0D100B32029 /* MacTierraDocument.xib */,
 				0F960B070E80C6250007D1D5 /* GenebankWindow.xib */,
+				0FC76B440EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib */,
 				0FA56BAA0E5A64E20001E997 /* Localizable.strings */,
 				0FCA24600E61115700F37B71 /* MacTierra.icns */,
 				0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */,
@@ -1898,6 +1901,7 @@
 				0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */,
 				0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */,
 				0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */,
+				0FC76B460EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2057,6 +2061,15 @@
 				0F960B080E80C6250007D1D5 /* English */,
 			);
 			name = GenebankWindow.xib;
+			path = ..;
+			sourceTree = "<group>";
+		};
+		0FC76B440EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0FC76B450EBCFDAC00D0F4CA /* English */,
+			);
+			name = TwoGenotypesAuxiliaryView.xib;
 			path = ..;
 			sourceTree = "<group>";
 		};

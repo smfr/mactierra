@@ -8,7 +8,7 @@
 
 #import "MTGenebankWindowController.h"
 
-#import "MTCreature.h"
+#import "MTInventoryGenotype.h"
 #import "MTGenebankGenotype.h"
 #import "MTGenebankController.h"
 
@@ -35,15 +35,15 @@
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
     // FIXME: for some reason other applications don't want to receive the text drags
-    [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureDataPasteboardType, NSStringPboardType, nil]  owner:self];
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSStringPboardType, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
     MTGenebankGenotype* curGenotype = [[mGenebankArrayController arrangedObjects] objectAtIndex:curIndex];
 
-    MTSerializableCreature* curCreature = [[[MTSerializableCreature alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome] autorelease];
+    MTSerializableGenotype* genotype = [[[MTSerializableGenotype alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome] autorelease];
 
-    [pasteboard setString:[curCreature stringRepresentation] forType:NSStringPboardType];
-    [pasteboard setData:[curCreature archiveRepresentation] forType:kCreatureDataPasteboardType];
+    [pasteboard setString:[genotype stringRepresentation] forType:NSStringPboardType];
+    [pasteboard setData:[genotype archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     return YES;
 }

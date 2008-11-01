@@ -124,14 +124,14 @@ using namespace MacTierra;
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
     
-    [mDebugGenotypeImageView bind:@"creature"
+    [mDebugGenotypeImageView bind:@"genotype"
                          toObject:self
-                      withKeyPath:@"selectedCreature"
+                      withKeyPath:@"selectedCreature.genotype"
                           options:0];
 
-    [mInspectGenotypeImageView bind:@"creature"
+    [mInspectGenotypeImageView bind:@"genotype"
                          toObject:self
-                      withKeyPath:@"selectedCreature"
+                      withKeyPath:@"selectedCreature.genotype"
                           options:0];
 }
 
@@ -248,8 +248,9 @@ using namespace MacTierra;
 {
     [self clearWorld];
 
-    [mDebugGenotypeImageView unbind:@"creature"];
-    [mInspectGenotypeImageView unbind:@"creature"];
+    [mGraphController documentClosing];
+    [mDebugGenotypeImageView unbind:@"genotype"];
+    [mInspectGenotypeImageView unbind:@"genotype"];
 }
 
 - (void)clearWorld

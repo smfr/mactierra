@@ -59,7 +59,7 @@ using namespace MacTierra;
         showInstructionPointers = NO;
         self.focusedCreatureName = @"";
 
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreatureDataPasteboardType, NSStringPboardType, nil]];
+        [self registerForDraggedTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSStringPboardType, nil]];
     }
     return self;
 }
@@ -402,18 +402,18 @@ using namespace MacTierra;
     {
         MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
 
-        MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithName:[creatureObj name] genome:[creatureObj genome]] autorelease];
+        MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromCreature:creatureObj];
 
         NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
         [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType,
-                                                           kCreatureDataPasteboardType,
+                                                           kGenotypeDataPasteboardType,
                                                            NSStringPboardType,
                                                            nil]  owner:self];
 
         [pasteboard setPropertyList:[creatureObj pasteboardData] forType:kCreatureReferencePasteboardType];
         [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
-        [pasteboard setData:[serCreature archiveRepresentation] forType:kCreatureDataPasteboardType];
+        [pasteboard setData:[serCreature archiveRepresentation] forType:kGenotypeDataPasteboardType];
     
         // FIXME: scale the image so that it matches the soup scaling
         NSImage* theImage = creatureObj.genotype.genotypeImage;
@@ -440,7 +440,7 @@ using namespace MacTierra;
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
 
     NSPasteboard* pasteboard = [sender draggingPasteboard];
-    if ([[pasteboard types] containsObject:kCreatureDataPasteboardType])
+    if ([[pasteboard types] containsObject:kGenotypeDataPasteboardType])
     {
         if (sourceDragMask & NSDragOperationCopy)
             return NSDragOperationCopy;
@@ -461,10 +461,10 @@ using namespace MacTierra;
 
     BOOL inserted = NO;
 
-    MTSerializableCreature* creature = [MTSerializableCreature serializableCreatureFromPasteboard:pasteboard];
-    if (creature)
+    MTSerializableGenotype* genotype = [MTSerializableGenotype serializableGenotypeFromPasteboard:pasteboard];
+    if (genotype)
     {
-        NSUInteger creatureLen = [creature.genome length];
+        NSUInteger creatureLen = [genotype.genome length];
         
 //        NSPoint localPoint = [self convertPoint:[sender draggingLocation] fromView:nil];
 //        NSPoint dragImageTopLeft = [sender draggedImageLocation];
@@ -480,7 +480,7 @@ using namespace MacTierra;
 
             if (mWorld->cellMap()->spaceAtAddress(soupAddr, creatureLen))
             {
-                RefPtr<Creature> newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[creature.genome bytes], creatureLen);
+                RefPtr<Creature> newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[genotype.genome bytes], creatureLen);
                 NSAssert(newCreature, @"Should have been able to insert");
                 inserted = YES;
                 [self setNeedsDisplay:YES];

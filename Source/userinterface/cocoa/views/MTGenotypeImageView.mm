@@ -14,7 +14,8 @@
 
 @implementation MTGenotypeImageView
 
-@synthesize creature;
+@synthesize worldController;
+@synthesize genotype;
 
 - (id)initWithFrame:(NSRect)inFrame
 {
@@ -27,7 +28,7 @@
 
 - (void)dealloc
 {
-    self.creature = nil;
+    self.genotype = nil;
     [super dealloc];
 }
 
@@ -36,15 +37,15 @@
     [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType, nil]];
 }
 
-- (void)setCreature:(MTCreature*)inCreature
+- (void)setGenotype:(MTInventoryGenotype*)inGenotype
 {
-    if (inCreature != creature)
+    if (inGenotype != genotype)
     {
-        [self willChangeValueForKey:@"creature"];
-        [creature release];
-        creature = [inCreature retain];
-        [self setImage:creature.genotype.genotypeImage];
-        [self didChangeValueForKey:@"creature"];
+        [self willChangeValueForKey:@"genotype"];
+        [genotype release];
+        genotype = [inGenotype retain];
+        [self setImage:genotype.genotypeImage];
+        [self didChangeValueForKey:@"genotype"];
     }
 }
 
@@ -66,26 +67,24 @@
 
 - (void)mouseDragged:(NSEvent*)inEvent
 {
-    if (!creature)
+    if (!genotype)
         return;
 
     NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
 
-    MTSerializableCreature* serCreature = [[[MTSerializableCreature alloc] initWithName:[creature name] genome:[creature genome]] autorelease];
+    MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromGenotype:genotype];
 
     NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
 
-    [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType,
-                                                       kCreatureDataPasteboardType,
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType,
                                                        NSStringPboardType,
                                                        nil]  owner:self];
 
-    [pasteboard setPropertyList:[creature pasteboardData] forType:kCreatureReferencePasteboardType];
     [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
-    [pasteboard setData:[serCreature archiveRepresentation] forType:kCreatureDataPasteboardType];
+    [pasteboard setData:[serCreature archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     // FIXME: scale the image so that it matches the soup scaling
-    NSImage* theImage = creature.genotype.genotypeImage;
+    NSImage* theImage = genotype.genotypeImage;
     
     [self dragImage:theImage
                  at:NSMakePoint(localPoint.x - [theImage size].width / 2.0, localPoint.y)
@@ -104,7 +103,7 @@
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
 
     NSPasteboard* pasteboard = [sender draggingPasteboard];
-    if ([[pasteboard types] containsObject:kCreatureDataPasteboardType])
+    if ([[pasteboard types] containsObject:kGenotypeDataPasteboardType])
     {
         if (sourceDragMask & (NSDragOperationCopy | NSDragOperationGeneric))
             return NSDragOperationCopy;
@@ -138,7 +137,8 @@
 
     if (sourceDragMask & (NSDragOperationCopy | NSDragOperationGeneric))
     {
-        self.creature = [MTCreature creatureFromPasteboard:pasteboard inWorld:worldController.world];
+        MTCreature* tempCreature = [MTCreature creatureFromPasteboard:pasteboard inWorld:worldController.world];
+        self.genotype = tempCreature.genotype;
     }
 }
 
