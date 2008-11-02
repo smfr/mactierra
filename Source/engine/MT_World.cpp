@@ -514,13 +514,16 @@ World::handleBirth(Creature* inParent, Creature* inChild)
     {
         InventoryGenotype* parentGenotype = NULL;
 
-        // if the parent has not diverged, we could use its genotype. However, this may have changed
+        // If the parent has not diverged, we could use its genotype. However, this may have changed
         // because of cosmic mutations, being written over etc, so we need to fetch it again.
         if (inParent->genotypeDivergence() == 0)
             parentGenotype = inParent->genotype();
 
         InventoryGenotype*   foundGenotype = NULL;
         BOOST_ASSERT(inParent->birthGenome().length() > 0);
+        // We make the assumption that it's the "birth genome" (genome at birth) of the parent
+        // that is important here. However, this isn't necessarily the case; what if a cosmic
+        // ray mutation made this creature successful? What is the genome, really?
         if (mInventory->enterGenotype(inParent->birthGenome(), foundGenotype))
         {
             // it's new
@@ -552,12 +555,16 @@ World::handleBirth(Creature* inParent, Creature* inChild)
 
         inChild->setGenotype(foundGenotype);
         inChild->setGenotypeDivergence(0);
+        
+        inChild->setParentalGenotype(inParent->genotype());
         mInventory->creatureBorn(foundGenotype);  // count the child
     }
     else
     {
         // not bred true
+        // FIXME: if the size changed, maybe we should just clear the genotype?
         inChild->setGenotype(inParent->genotype());
+        inChild->setParentalGenotype(inParent->genotype());
         inChild->setGenotypeDivergence(inParent->genotypeDivergence() + 1);
     }
     

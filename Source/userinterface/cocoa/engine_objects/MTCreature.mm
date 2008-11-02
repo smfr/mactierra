@@ -63,6 +63,7 @@ public:
 {
     delete mPrivateData;
     [genotype release];
+    [parentalGenotype release];
     
     [super dealloc];
 }
@@ -198,6 +199,14 @@ const NSInteger kRangeBeforeIP = 8;
         genotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->genotype()];
 
     return genotype;
+}
+
+- (MTInventoryGenotype*)parentalGenotype
+{
+    if (!parentalGenotype)
+        parentalGenotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->parentalGenotype()];
+    
+    return parentalGenotype;
 }
 
 - (NSDictionary*)pasteboardData

@@ -93,6 +93,9 @@ public:
     u_int32_t       genotypeDivergence() const                      { return mGenotypeDivergence; }
     void            setGenotypeDivergence(u_int32_t inDivergence)   { mGenotypeDivergence = inDivergence; }
 
+    InventoryGenotype* parentalGenotype() const                         { return mParentalGenotype; }
+    void            setParentalGenotype(InventoryGenotype* inGenotype)  { mParentalGenotype = inGenotype; }
+    
     // this string can have embedded nulls. Not printable.
     GenomeData      genomeData() const;
     
@@ -202,6 +205,7 @@ private:
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_genome", mBirthGenome);
 
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
+        ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("parental_genotype", mParentalGenotype);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
         ar << MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
@@ -243,6 +247,7 @@ private:
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("birth_genome", mBirthGenome);
 
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype", mGenotype);
+        ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("parental_genotype", mParentalGenotype);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("genotype_divergence", mGenotypeDivergence);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("cpu", mCPU);
         ar >> MT_BOOST_MEMBER_SERIALIZATION_NVP("soup", mSoup);
@@ -286,6 +291,7 @@ protected:
     GenomeData      mBirthGenome;                   // genome at birth
 
     InventoryGenotype*  mGenotype;
+    InventoryGenotype*  mParentalGenotype;
     u_int32_t           mGenotypeDivergence;        // number of primes after the name
 
     Cpu             mCPU;
@@ -318,10 +324,6 @@ protected:
     u_int32_t       mNumIdenticalOffspring;
     
     u_int32_t       mGeneration;
-    
-    // leanness stuff
-    
-    
 };
 
 } // namespace MacTierra

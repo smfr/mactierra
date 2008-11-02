@@ -24,6 +24,7 @@ class CreaturePrivateData;
     CreaturePrivateData*    mPrivateData;
     
     MTInventoryGenotype*    genotype;
+    MTInventoryGenotype*    parentalGenotype;
 }
 
 + (id)creatureFromPasteboard:(NSPasteboard*)inPasteboard inWorld:(MacTierra::World*)inWorld;
@@ -57,6 +58,7 @@ class CreaturePrivateData;
 @property (readonly) NSRange soupSelectionRange;
 
 @property (readonly) MTInventoryGenotype* genotype;
+@property (readonly) MTInventoryGenotype* parentalGenotype;
 
 @property (readonly) NSDictionary* pasteboardData;
 

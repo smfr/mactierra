@@ -20,6 +20,7 @@ using namespace std;
 Creature::Creature(creature_id inID, u_int32_t inLength, Soup* inOwningSoup)
 : mID(inID)
 , mGenotype(NULL)
+, mParentalGenotype(NULL)
 , mGenotypeDivergence(0)
 , mSoup(inOwningSoup)
 , mDaughter(NULL)
@@ -171,12 +172,15 @@ Creature::gaveBirth(Creature* inDaughter)
     mInstructionsToLastOffspring = mTotalInstructionsExecuted;
     ++mNumOffspring;
 
-    computeLeanness();
+    // compute leanness when the creature produces its first offspring
+    if (mNumOffspring == 1)
+        computeLeanness();
     
     // daughter gets our genotype
     inDaughter->setGeneration(generation() + 1);
     
     // daughter inherits leanness (until its first offspring)
+    // only do this if it's a true offspring?
     inDaughter->setLeanness(mLeanness);
     
     bool identicalCopy = genomeIdenticalToCreature(*inDaughter);
