@@ -6,6 +6,8 @@
 //  Copyright 2008 __MyCompanyName__. All rights reserved.
 //
 
+#import <algorithm>
+
 #import "MTSoupView.h"
 
 #import "NSArrayAdditions.h"
@@ -24,6 +26,7 @@ using namespace MacTierra;
 
 - (void)setScalingCTM;
 - (void)drawCells:(NSRect)inDirtyRect;
+- (void)drawFecundity:(NSRect)inDirtyRect;
 - (void)drawInstructionPointers:(NSRect)inDirtyRect;
 
 - (CGRect)soupRect;
@@ -48,6 +51,7 @@ using namespace MacTierra;
 @synthesize zoomToFit;
 @synthesize showCells;
 @synthesize showInstructionPointers;
+@synthesize showFecundity;
 @synthesize focusedCreatureName;
 
 - (id)initWithFrame:(NSRect)inFrame
@@ -101,8 +105,10 @@ using namespace MacTierra;
 {
     if (inShow != showCells)
     {
+        [self willChangeValueForKey:@"showCells"];
         showCells = inShow;
         [self setNeedsDisplay:YES];
+        [self didChangeValueForKey:@"showCells"];
     }
 }
 
@@ -110,8 +116,21 @@ using namespace MacTierra;
 {
     if (inShow != showInstructionPointers)
     {
+        [self willChangeValueForKey:@"showInstructionPointers"];
         showInstructionPointers = inShow;
         [self setNeedsDisplay:YES];
+        [self didChangeValueForKey:@"showInstructionPointers"];
+    }
+}
+
+- (void)setShowFecundity:(BOOL)inShow
+{
+    if (inShow != showFecundity)
+    {
+        [self willChangeValueForKey:@"showFecundity"];
+        showFecundity = inShow;
+        [self setNeedsDisplay:YES];
+        [self didChangeValueForKey:@"showFecundity"];
     }
 }
 
@@ -140,13 +159,15 @@ using namespace MacTierra;
     [NSGraphicsContext saveGraphicsState];
     [self setScalingCTM];
 
-    if (showInstructionPointers)
+    if (showInstructionPointers || showFecundity || showCells)
     {
         [[NSColor colorWithCalibratedWhite:0.0f alpha:0.5f] set];
         NSRectFill(NSMakeRect(0, 0, mSoupWidth, mSoupHeight));
     }
     
-    if (showCells)
+    if (showFecundity)
+        [self drawFecundity:inDirtyRect];
+    else if (showCells)
         [self drawCells:inDirtyRect];
 
     if (showInstructionPointers)
@@ -244,6 +265,87 @@ using namespace MacTierra;
                 [adultColor set];
         }
         
+        CGContextStrokePath(cgContext);
+    }
+}
+
+- (NSColor*)colorForOffspring:(NSInteger)inNumOffspring identicalOffspring:(NSInteger)inIdenticalOffspring
+{
+    // TODO: blend of yellow and red
+    
+    const float kSingleOffspringOpacity = 0.3;
+    const NSInteger kMaxFecundity = 10;
+
+    float opacity = kSingleOffspringOpacity + (1.0 - kSingleOffspringOpacity) * (std::min(inNumOffspring, kMaxFecundity) / (float)kMaxFecundity);
+    float identicalFraction = std::min(inIdenticalOffspring, kMaxFecundity) / (float)kMaxFecundity;
+    
+    return [NSColor colorWithCalibratedRed:1.0 green:identicalFraction blue:0 alpha:opacity];
+}
+
+- (void)drawFecundity:(NSRect)inDirtyRect
+{
+    if (!mWorld)
+        return;
+
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+
+    CGContextSetLineWidth(cgContext, 1.0f);
+    
+    CellMap*    cellMap = mWorld->cellMap();
+    const u_int32_t soupSize = mWorld->soupSize();
+    
+    CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
+    for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
+    {
+        const CreatureRange& curCell = *it;
+        const Creature* curCreature = curCell.mData;
+        
+        if (curCreature->isEmbryo() || curCreature->numOffspring() == 0)
+            continue;
+        
+        int startLine   = curCell.start() / mSoupWidth;
+        int endLine     = curCell.wrappedEnd(soupSize) / mSoupWidth;
+        
+        int startCol    = curCell.start() % mSoupWidth;
+        int endCol      = curCell.wrappedEnd(soupSize) % mSoupWidth;
+        
+        CGContextBeginPath(cgContext);
+        
+        if (curCell.wraps(soupSize))
+        {
+            int numLines = mSoupHeight;
+            
+            for (int i = startLine; i < numLines; ++i)
+            {
+                CGPoint startPoint = CGPointMake((i == startLine) ? startCol : 0, i);
+                CGPoint endPoint   = CGPointMake(mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
+            }
+
+            for (int i = 0; i <= endLine; ++i)
+            {
+                CGPoint startPoint = CGPointMake(0, i);
+                CGPoint endPoint   = CGPointMake((i == endLine) ? endCol : mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
+            }
+        }
+        else
+        {
+            for (int i = startLine; i <= endLine; ++i)
+            {
+                CGPoint startPoint = CGPointMake((i == startLine) ? startCol : 0, i);
+                CGPoint endPoint   = CGPointMake((i == endLine) ? endCol : mSoupWidth, i);
+                
+                CGContextMoveToPoint(cgContext, startPoint.x, startPoint.y + 0.5);
+                CGContextAddLineToPoint(cgContext, endPoint.x, endPoint.y + 0.5);
+            }
+        }
+
+        [[self colorForOffspring:curCreature->numOffspring() identicalOffspring:curCreature->numIdenticalOffspring()] set];
         CGContextStrokePath(cgContext);
     }
 }

@@ -29,6 +29,7 @@ namespace MacTierra {
     BOOL                zoomToFit;
     BOOL                showCells;
     BOOL                showInstructionPointers;
+    BOOL                showFecundity;
     
     NSString*           focusedCreatureName;
 
@@ -40,6 +41,7 @@ namespace MacTierra {
 @property (assign) BOOL zoomToFit;
 @property (assign) BOOL showCells;
 @property (assign) BOOL showInstructionPointers;
+@property (assign) BOOL showFecundity;
 
 @property (assign) NSString* focusedCreatureName;
 

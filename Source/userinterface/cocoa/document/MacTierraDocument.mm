@@ -11,13 +11,14 @@
 #include <iostream>
 #include <fstream>
 
+#import "MTSoupView.h"
 #import "MTDocumentController.h"
 #import "MTWorldController.h"
 
-NSString* const kBinarySoupDocumentType = @"SoupDocumentType";  // has to match the plist
-NSString* const kXMLSoupDocumentType = @"XMLSoupDocumentType";  // has to match the plist
+NSString* const kBinarySoupDocumentType     = @"SoupDocumentType";  // has to match the plist
+NSString* const kXMLSoupDocumentType        = @"XMLSoupDocumentType";  // has to match the plist
 
-NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
+NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 
 @implementation MacTierraDocument
 
@@ -165,6 +166,52 @@ NSString* const kMacTierraErrorDomain = @"org.smfr.mactierra.error-domain";
 - (IBAction)step:(id)sender
 {
     [worldController step:sender];
+}
+
+- (IBAction)toggleCellsVisibility:(id)sender
+{
+    mSoupView.showCells = !mSoupView.showCells;
+}
+
+- (IBAction)toggleInstructionPointersVisibility:(id)sender
+{
+    mSoupView.showInstructionPointers = !mSoupView.showInstructionPointers;
+}
+
+- (IBAction)toggleFecundityVisibility:(id)sender
+{
+    mSoupView.showFecundity = !mSoupView.showFecundity;
+}
+
+#pragma mark -
+
+- (BOOL)validateUserInterfaceItem:(id<NSValidatedUserInterfaceItem>)anItem
+{
+    if ([anItem action] == @selector(toggleCellsVisibility:))
+    {
+        if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
+            [(NSMenuItem*)anItem setTitle:mSoupView.showCells ? NSLocalizedString(@"HideCells", @"") : NSLocalizedString(@"ShowCells", @"")];
+        
+        return YES;
+    }
+
+    if ([anItem action] == @selector(toggleInstructionPointersVisibility:))
+    {
+        if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
+            [(NSMenuItem*)anItem setTitle:mSoupView.showInstructionPointers ? NSLocalizedString(@"HideInstructionPointers", @"") : NSLocalizedString(@"ShowInstructionPointers", @"")];
+        
+        return YES;
+    }
+
+    if ([anItem action] == @selector(toggleFecundityVisibility:))
+    {
+        if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
+            [(NSMenuItem*)anItem setTitle:mSoupView.showFecundity ? NSLocalizedString(@"HideFecundity", @"") : NSLocalizedString(@"ShowFecundity", @"")];
+        
+        return YES;
+    }
+
+    return YES;
 }
 
 @end

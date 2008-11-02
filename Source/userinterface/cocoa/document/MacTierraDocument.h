@@ -9,14 +9,16 @@
 
 #import <Cocoa/Cocoa.h>
 
-@class MTWorldController;
-
 extern NSString* const kBinarySoupDocumentType;
 extern NSString* const kXMLSoupDocumentType;
+
+@class MTWorldController;
+@class MTSoupView;
 
 @interface MacTierraDocument : NSDocument
 {
     IBOutlet MTWorldController* worldController;
+    IBOutlet MTSoupView*        mSoupView;
 
     BOOL                        startEmpty;
     
@@ -35,5 +37,9 @@ extern NSString* const kXMLSoupDocumentType;
 
 - (IBAction)toggleRunning:(id)sender;
 - (IBAction)step:(id)sender;
+
+- (IBAction)toggleCellsVisibility:(id)sender;
+- (IBAction)toggleInstructionPointersVisibility:(id)sender;
+- (IBAction)toggleFecundityVisibility:(id)sender;
 
 @end
