@@ -98,6 +98,16 @@ public:
     return mPrivateData->creature()->location();
 }
 
+- (NSInteger)numOffspring
+{
+    return mPrivateData->creature()->numOffspring();
+}
+
+- (NSInteger)numIdenticalOffspring
+{
+    return mPrivateData->creature()->numIdenticalOffspring();
+}
+
 - (NSInteger)instructionPointer
 {
     return mPrivateData->cpu().instructionPointer();

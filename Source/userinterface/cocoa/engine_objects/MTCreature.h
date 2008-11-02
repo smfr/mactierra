@@ -38,6 +38,9 @@ class CreaturePrivateData;
 @property (readonly) NSInteger length;
 @property (readonly) NSUInteger location;
 
+@property (readonly) NSInteger numOffspring;
+@property (readonly) NSInteger numIdenticalOffspring;
+
 @property (readonly) NSInteger instructionPointer;
 @property (readonly) NSString* lastInstruction;     // or next one?
 @property (readonly) NSString* nextInstruction;
