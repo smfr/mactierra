@@ -11,6 +11,7 @@
 		0F0C949F0E514AE200B233E8 /* TestRunner.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C948B0E514A8800B233E8 /* TestRunner.cpp */; };
 		0F0C94A90E514AEF00B233E8 /* Random.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FFF64590E4FE38E00404828 /* Random.cpp */; };
 		0F0C963F0E51620100B233E8 /* SlicerTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0C963E0E51620100B233E8 /* SlicerTests.cpp */; };
+		0F0CFD24123D475900728B51 /* SoupTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F0CFD22123D475900728B51 /* SoupTests.cpp */; };
 		0F13F8810E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
@@ -196,6 +197,8 @@
 		0F0C94990E514AD700B233E8 /* TestRunner */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = TestRunner; sourceTree = BUILT_PRODUCTS_DIR; };
 		0F0C963D0E51620100B233E8 /* SlicerTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlicerTests.h; sourceTree = "<group>"; };
 		0F0C963E0E51620100B233E8 /* SlicerTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlicerTests.cpp; sourceTree = "<group>"; };
+		0F0CFD21123D475900728B51 /* SoupTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoupTests.h; sourceTree = "<group>"; };
+		0F0CFD22123D475900728B51 /* SoupTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoupTests.cpp; sourceTree = "<group>"; };
 		0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Inventory.cpp; sourceTree = "<group>"; };
 		0F13F88C0E5FCA2D00D8E649 /* SerializationTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializationTests.h; sourceTree = "<group>"; };
 		0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SerializationTests.cpp; sourceTree = "<group>"; };
@@ -837,6 +840,8 @@
 				0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */,
 				0F0C963D0E51620100B233E8 /* SlicerTests.h */,
 				0F0C963E0E51620100B233E8 /* SlicerTests.cpp */,
+				0F0CFD21123D475900728B51 /* SoupTests.h */,
+				0F0CFD22123D475900728B51 /* SoupTests.cpp */,
 				0F0C948C0E514A8800B233E8 /* TestRunner.h */,
 				0F0C948B0E514A8800B233E8 /* TestRunner.cpp */,
 			);
@@ -1975,6 +1980,7 @@
 				0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */,
 				0F9431BA0E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
 				0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */,
+				0F0CFD24123D475900728B51 /* SoupTests.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
