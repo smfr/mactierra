@@ -10,6 +10,7 @@
 #include <string>
 
 #include <boost/dynamic_bitset.hpp>
+#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_free.hpp>
 
@@ -20,14 +21,14 @@ void save(Archive &ar, const dynamic_bitset<Block, Alloc> &bs, const unsigned in
 {
     std::string  bitsetString;
     to_string(bs, bitsetString);
-    ar << make_nvp("bits", bitsetString);
+    ar << boost::serialization::make_nvp("bits", bitsetString);
 }
 
 template <class Archive, class Block, class Alloc>
 void load(Archive &ar, dynamic_bitset<Block, Alloc> &bs, const unsigned int version)
 {
     std::string  bitsetString;
-    ar >> make_nvp("bits", bitsetString);
+    ar >> boost::serialization::make_nvp("bits", bitsetString);
     bs = dynamic_bitset<Block, Alloc>(bitsetString);
 }
 
@@ -39,5 +40,4 @@ void serialize(Archive &ar, dynamic_bitset<Block, Alloc> &bs, const unsigned int
 
 }   // namespace serialization
 }   // namespace boost
-
 

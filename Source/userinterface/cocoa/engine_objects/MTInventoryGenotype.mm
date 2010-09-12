@@ -21,13 +21,6 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 @implementation MTInventoryGenotype
 
 @synthesize genotype;
-@synthesize name;
-@synthesize numAlive;
-@synthesize numEverLived;
-@synthesize originInstructions;
-@synthesize originGenerations;
-@synthesize genomeString;
-@synthesize genome;
 
 + (NSColorList*)instructionsColorList
 {
@@ -94,19 +87,19 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 
 - (NSString*)prettyPrintedGenomeString
 {
-    NSMutableString* genomeString = [NSMutableString string];
+    NSMutableString* genomeStr = [NSMutableString string];
     
-    const GenomeData& genome = genotype->genome();
+    const GenomeData& genomeData = genotype->genome();
 
-    for (u_int32_t i = 0; i < genome.length(); ++i)
+    for (u_int32_t i = 0; i < genomeData.length(); ++i)
     {
-        instruction_t curInst = genome.dataString()[i];
+        instruction_t curInst = genomeData.dataString()[i];
         const char* instructionName = nameForInstruction(curInst);
      
-        [genomeString appendFormat:@"%02X %s\n", curInst, instructionName];
+        [genomeStr appendFormat:@"%02X %s\n", curInst, instructionName];
     }
 
-    return genomeString;
+    return genomeStr;
 }
 
 - (NSData*)genome
@@ -127,12 +120,12 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
     mGenotypeImage = [[NSImage alloc] initWithSize:NSMakeSize([self length], 1.0f)];
     [mGenotypeImage lockFocus];
     
-    const std::string& genomeString = genotype->genome().dataString();
+    const std::string& genomeStr = genotype->genome().dataString();
     
     NSInteger len = [self length];
     for (NSInteger i = 0; i < len; ++i)
     {
-        instruction_t curInst = genomeString[i];
+        instruction_t curInst = genomeStr[i];
         curInst = std::min(curInst, (instruction_t)numColors);
 
         NSString* curKey  = [colorKeys objectAtIndex:curInst];

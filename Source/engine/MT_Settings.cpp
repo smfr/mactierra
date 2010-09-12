@@ -9,6 +9,8 @@
 
 #include "MT_Settings.h"
 
+#include <boost/assert.hpp>
+
 namespace MacTierra {
 
 using namespace std;

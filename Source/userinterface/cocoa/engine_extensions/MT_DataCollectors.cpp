@@ -168,7 +168,7 @@ SizeHistogramDataLogger::collectData(ECollectionType inCollectionType, u_int64_t
     const CellMap* cellMap = inWorld->cellMap();
     
     // first find the max
-    u_int32_t minAdultSize = ULONG_MAX, maxAdultSize = 0;
+    u_int32_t minAdultSize = UINT_MAX, maxAdultSize = 0;
     CellMap::CreatureList::const_iterator it, end = cellMap->cells().end();
     for (it = cellMap->cells().begin();
          it != end;

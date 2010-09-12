@@ -652,8 +652,11 @@ using namespace MacTierra;
             NSColor* curColor = [[colorList colorWithKey:curKey] colorUsingColorSpace:rgbColorSpace];
             if (curColor)
             {
-                float alphaComp;
-                [curColor getRed:&redMap[n] green:&greenMap[n] blue:&blueMap[n] alpha:&alphaComp];
+                CGFloat red, green, blue, alpha;
+                [curColor getRed:&red green:&green blue:&blue alpha:&alpha];
+                redMap[n] = red;
+                greenMap[n] = green;
+                blueMap[n] = blue;
             }
         }
     }

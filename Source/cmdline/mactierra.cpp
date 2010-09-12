@@ -15,6 +15,8 @@
 
 #include <RandomLib/RandomSeed.hpp>
 
+#define BOOST_IOSTREAMS_USE_DEPRECATED 1
+
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/serialization/serialization.hpp>
 

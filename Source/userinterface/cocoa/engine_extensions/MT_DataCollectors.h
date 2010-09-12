@@ -36,7 +36,7 @@ public:
     : mCallCount(0)
     , mNextCollectionCount(0)
     , mCollectionInterval(1)
-    , mMaxDataCount(ULONG_MAX)
+    , mMaxDataCount(UINT_MAX)
     {
     }
 

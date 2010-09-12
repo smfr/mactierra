@@ -10,6 +10,7 @@
 #ifndef MT_Settings_h
 #define MT_Settings_h
 
+#include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 
 #include "MT_Engine.h"
