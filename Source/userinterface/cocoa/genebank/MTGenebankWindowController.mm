@@ -22,12 +22,12 @@
 #pragma mark -
 
 // NSTableView dataSource methods (unused because we bind the columns)
-- (int)numberOfRowsInTableView:(NSTableView *)aTableView
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView
 {
 	return 0;
 }
 
-- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(int)rowIndex
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex
 {
     return nil;
 }
