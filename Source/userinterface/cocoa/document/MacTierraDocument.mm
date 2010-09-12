@@ -130,6 +130,7 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 - (void)close
 {
     [worldController documentClosing];
+    worldController = 0;
     [super close];
 }
 
