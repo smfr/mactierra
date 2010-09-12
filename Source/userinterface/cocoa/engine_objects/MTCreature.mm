@@ -203,7 +203,7 @@ const NSInteger kRangeBeforeIP = 8;
 
 - (MTInventoryGenotype*)parentalGenotype
 {
-    if (!parentalGenotype)
+    if (!parentalGenotype && mPrivateData->creature()->parentalGenotype())  // The first creature in a soup has no parent.
         parentalGenotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->parentalGenotype()];
     
     return parentalGenotype;
