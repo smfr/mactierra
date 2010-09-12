@@ -8,6 +8,53 @@
 
 #import "MTWorldSettings.h"
 
+@interface MTPercentageFormatter : NSFormatter
+@end
+
+@implementation MTPercentageFormatter
+
+- (NSString *)stringForObjectValue:(id)inObject
+{
+    NSString* result = @"";
+    
+    if ([inObject isKindOfClass:[NSNumber self]])
+    {
+        double val = [inObject doubleValue];
+        
+        return [NSString stringWithFormat:@"%.2f", val * 100.0];
+    }
+    else
+    {
+        [NSException exceptionWithName:NSInvalidArgumentException 
+						reason:@"MTPercentageFormatter got non-NSNumber value"
+						userInfo:nil];
+    }
+    return result;
+}
+
+- (BOOL)getObjectValue:(id *)obj forString:(NSString *)string errorDescription:(NSString **)error
+{
+    double value = [string doubleValue];
+    if (value <= 0 || value > 100) {
+        if (error)
+            *error = NSLocalizedString(@"InvalidPercentageValue", @"");
+        return NO;
+    }
+    
+    *obj = [NSNumber numberWithDouble:(value / 100.0)];
+    return YES;
+}
+
+- (NSAttributedString *)attributedStringForObjectValue:(id)obj withDefaultAttributes:(NSDictionary *)attrs
+{
+    NSString* string = [self stringForObjectValue:obj];
+    return [[[NSAttributedString alloc] initWithString:string] autorelease];
+}
+
+@end
+
+#pragma mark -
+
 @interface MTWorldSettings(Private)
 
 - (NSString*)keyForLevel:(EMutationRate)inLevel;
