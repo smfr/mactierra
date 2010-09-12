@@ -288,8 +288,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				A868ACA00894A1A00078843B /* GraphX */,
 				8D1107260486CEB800E47090 /* Graph Suite */,
+				A868ACA00894A1A00078843B /* GraphX */,
 			);
 		};
 /* End PBXProject section */
@@ -402,7 +402,6 @@
 		A868ACA50894A1A10078843B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COPY_PHASE_STRIP = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -568,6 +567,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_OPTIMIZATION_LEVEL = 0;
+				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -575,12 +575,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
 		A8F75438088915AC00F072FD /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				SDKROOT = macosx10.5;
 			};
 			name = Default;
 		};

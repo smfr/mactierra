@@ -21,25 +21,6 @@
 		0F186589123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
 		0F18658A123C6F4B009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
 		0F18658B123C6F4B009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
-		0F186606123C700D009ED12C /* archive_serializer_map.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865C7123C700D009ED12C /* archive_serializer_map.ipp */; };
-		0F186607123C700D009ED12C /* basic_binary_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865C8123C700D009ED12C /* basic_binary_iarchive.ipp */; };
-		0F186608123C700D009ED12C /* basic_binary_iprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865C9123C700D009ED12C /* basic_binary_iprimitive.ipp */; };
-		0F186609123C700D009ED12C /* basic_binary_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CA123C700D009ED12C /* basic_binary_oarchive.ipp */; };
-		0F18660A123C700D009ED12C /* basic_binary_oprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CB123C700D009ED12C /* basic_binary_oprimitive.ipp */; };
-		0F18660B123C700D009ED12C /* basic_text_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CC123C700D009ED12C /* basic_text_iarchive.ipp */; };
-		0F18660C123C700D009ED12C /* basic_text_iprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CD123C700D009ED12C /* basic_text_iprimitive.ipp */; };
-		0F18660D123C700D009ED12C /* basic_text_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CE123C700D009ED12C /* basic_text_oarchive.ipp */; };
-		0F18660E123C700D009ED12C /* basic_text_oprimitive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865CF123C700D009ED12C /* basic_text_oprimitive.ipp */; };
-		0F18660F123C700D009ED12C /* basic_xml_iarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D1123C700D009ED12C /* basic_xml_iarchive.ipp */; };
-		0F186610123C700D009ED12C /* basic_xml_oarchive.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D2123C700D009ED12C /* basic_xml_oarchive.ipp */; };
-		0F186611123C700D009ED12C /* text_iarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D3123C700D009ED12C /* text_iarchive_impl.ipp */; };
-		0F186612123C700D009ED12C /* text_oarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D4123C700D009ED12C /* text_oarchive_impl.ipp */; };
-		0F186613123C700D009ED12C /* text_wiarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D5123C700D009ED12C /* text_wiarchive_impl.ipp */; };
-		0F186614123C700D009ED12C /* text_woarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D6123C700D009ED12C /* text_woarchive_impl.ipp */; };
-		0F186615123C700D009ED12C /* xml_iarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D7123C700D009ED12C /* xml_iarchive_impl.ipp */; };
-		0F186616123C700D009ED12C /* xml_oarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D8123C700D009ED12C /* xml_oarchive_impl.ipp */; };
-		0F186617123C700D009ED12C /* xml_wiarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865D9123C700D009ED12C /* xml_wiarchive_impl.ipp */; };
-		0F186618123C700D009ED12C /* xml_woarchive_impl.ipp in Resources */ = {isa = PBXBuildFile; fileRef = 0F1865DA123C700D009ED12C /* xml_woarchive_impl.ipp */; };
 		0F186667123C7167009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
 		0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
 		0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
@@ -156,6 +137,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		0F861E86123C998A00E6428B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */;
+			remoteInfo = mactierra_cmd;
+		};
 		0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
@@ -183,13 +171,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 0F0C94980E514AD700B233E8;
 			remoteInfo = TestRunner;
-		};
-		0FA527F10E7D7CDC004D840D /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516;
-			remoteInfo = mactierra;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1861,9 +1842,9 @@
 			productReference = 0F0C94990E514AD700B233E8 /* TestRunner */;
 			productType = "com.apple.product-type.tool";
 		};
-		0FBEC0420E56AF7A00ABB516 /* mactierra */ = {
+		0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra" */;
+			buildConfigurationList = 0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra_cmd" */;
 			buildPhases = (
 				0FBEC0400E56AF7A00ABB516 /* Sources */,
 				0FBEC0410E56AF7A00ABB516 /* Frameworks */,
@@ -1872,7 +1853,7 @@
 			);
 			dependencies = (
 			);
-			name = mactierra;
+			name = mactierra_cmd;
 			productName = mactierra;
 			productReference = 0FBEC0430E56AF7A00ABB516 /* mactierra */;
 			productType = "com.apple.product-type.tool";
@@ -1891,7 +1872,7 @@
 			dependencies = (
 				0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */,
 				0FA527F00E7D7CDC004D840D /* PBXTargetDependency */,
-				0FA527F20E7D7CDC004D840D /* PBXTargetDependency */,
+				0F861E87123C998A00E6428B /* PBXTargetDependency */,
 			);
 			name = MacTierra;
 			productInstallPath = "$(HOME)/Applications";
@@ -1919,7 +1900,7 @@
 			targets = (
 				8D15AC270486D014006FF6A4 /* MacTierra */,
 				0F0C94980E514AD700B233E8 /* TestRunner */,
-				0FBEC0420E56AF7A00ABB516 /* mactierra */,
+				0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */,
 			);
 		};
 /* End PBXProject section */
@@ -1957,25 +1938,6 @@
 				0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */,
 				0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */,
 				0FC76B460EBCFDAC00D0F4CA /* TwoGenotypesAuxiliaryView.xib in Resources */,
-				0F186606123C700D009ED12C /* archive_serializer_map.ipp in Resources */,
-				0F186607123C700D009ED12C /* basic_binary_iarchive.ipp in Resources */,
-				0F186608123C700D009ED12C /* basic_binary_iprimitive.ipp in Resources */,
-				0F186609123C700D009ED12C /* basic_binary_oarchive.ipp in Resources */,
-				0F18660A123C700D009ED12C /* basic_binary_oprimitive.ipp in Resources */,
-				0F18660B123C700D009ED12C /* basic_text_iarchive.ipp in Resources */,
-				0F18660C123C700D009ED12C /* basic_text_iprimitive.ipp in Resources */,
-				0F18660D123C700D009ED12C /* basic_text_oarchive.ipp in Resources */,
-				0F18660E123C700D009ED12C /* basic_text_oprimitive.ipp in Resources */,
-				0F18660F123C700D009ED12C /* basic_xml_iarchive.ipp in Resources */,
-				0F186610123C700D009ED12C /* basic_xml_oarchive.ipp in Resources */,
-				0F186611123C700D009ED12C /* text_iarchive_impl.ipp in Resources */,
-				0F186612123C700D009ED12C /* text_oarchive_impl.ipp in Resources */,
-				0F186613123C700D009ED12C /* text_wiarchive_impl.ipp in Resources */,
-				0F186614123C700D009ED12C /* text_woarchive_impl.ipp in Resources */,
-				0F186615123C700D009ED12C /* xml_iarchive_impl.ipp in Resources */,
-				0F186616123C700D009ED12C /* xml_oarchive_impl.ipp in Resources */,
-				0F186617123C700D009ED12C /* xml_wiarchive_impl.ipp in Resources */,
-				0F186618123C700D009ED12C /* xml_woarchive_impl.ipp in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2103,6 +2065,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		0F861E87123C998A00E6428B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */;
+			targetProxy = 0F861E86123C998A00E6428B /* PBXContainerItemProxy */;
+		};
 		0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = GraphX;
@@ -2112,11 +2079,6 @@
 			isa = PBXTargetDependency;
 			target = 0F0C94980E514AD700B233E8 /* TestRunner */;
 			targetProxy = 0FA527EF0E7D7CDC004D840D /* PBXContainerItemProxy */;
-		};
-		0FA527F20E7D7CDC004D840D /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 0FBEC0420E56AF7A00ABB516 /* mactierra */;
-			targetProxy = 0FA527F10E7D7CDC004D840D /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -2190,7 +2152,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
@@ -2228,7 +2189,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
@@ -2270,7 +2230,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
 				);
@@ -2357,7 +2316,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra" */ = {
+		0FBEC0620E56AFA900ABB516 /* Build configuration list for PBXNativeTarget "mactierra_cmd" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0FBEC0450E56AF7A00ABB516 /* Debug */,
