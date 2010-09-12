@@ -37,6 +37,12 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype
 {
+    NSAssert(inGenotype, @"initWithGenotype called with null genotype");
+    if (!inGenotype) {
+        [self release];
+        return nil;
+    }
+        
     if ((self = [super init]))
     {
         genotype = inGenotype;
