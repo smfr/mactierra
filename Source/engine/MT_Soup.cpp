@@ -45,7 +45,7 @@ Soup::seachForTemplate(ESearchDirection inDirection, address_t& ioOffset, u_int3
     
     const address_t   templateAddr = ioOffset;
     
-    instruction_t   instTemplate[kMaxTemplateLength];
+    instruction_t   instTemplate[kMaxTemplateLength + 1];
     int32_t i;
     for (i = 0; i <= kMaxTemplateLength; ++i)
     {

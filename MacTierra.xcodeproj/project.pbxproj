@@ -2309,7 +2309,6 @@
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DBOOST_ENABLE_ASSERT_HANDLER";
-				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};
 			name = Debug;
@@ -2342,7 +2341,6 @@
 					"$(OTHER_CFLAGS)",
 					"-DBOOST_DISABLE_ASSERTS",
 				);
-				PREBINDING = NO;
 				SDKROOT = macosx10.5;
 			};
 			name = Release;

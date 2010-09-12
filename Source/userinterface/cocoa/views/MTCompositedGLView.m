@@ -166,7 +166,7 @@
 - (void)drawRect:(NSRect)rect
 {
 	const NSRect* dirtyRects;
-	int dirtyRectCount;
+	NSInteger dirtyRectCount;
 
 	[self getRectsBeingDrawn:&dirtyRects count:&dirtyRectCount];
 	// punch a hole so that the OpenGL view shows through.
