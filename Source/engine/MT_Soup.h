@@ -12,6 +12,7 @@
 
 #include <string.h>
 
+#include <boost/assert.hpp>
 #include <boost/serialization/binary_object.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/split_member.hpp>
@@ -36,7 +37,12 @@ public:
     
     bool            seachForTemplate(ESearchDirection inDirection, address_t& ioOffset, u_int32_t& outLength);
     
-    instruction_t   instructionAtAddress(address_t inAddress) const;
+    instruction_t   instructionAtAddress(address_t inAddress) const
+                    {
+                        BOOST_ASSERT(inAddress < mSoupSize);
+                        return *(mSoup + inAddress);
+                    }
+
     void            setInstructionAtAddress(address_t inAddress, instruction_t inInst);
 
     void            injectInstructions(address_t inAddress, const instruction_t* inInstructions, u_int32_t inLength);
@@ -49,17 +55,6 @@ protected:
     bool            searchBackwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset);
     bool            searchBothWaysForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset);
     
-    bool            instructionsMatch(address_t inAddress, const instruction_t* inTemplate, u_int32_t inLen)
-                    {
-                        for (u_int32_t i = 0; i < inLen; ++i)
-                        {
-                            address_t addr = (inAddress + i) % mSoupSize;
-                            if (*(mSoup + addr) != inTemplate[i])
-                                return false;
-                        }
-                        return true;
-                    }
-
 private:
     friend class ::boost::serialization::access;
     template<class Archive> void save(Archive& ar, const unsigned int version) const

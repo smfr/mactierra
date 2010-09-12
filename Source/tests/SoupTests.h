@@ -31,6 +31,9 @@ protected:
     void testNonPowerOfTwoSoup();
 
     void runTemplateTests(u_int32_t soupSize);
+    void runTemplateAtStartTests(u_int32_t soupSize);
+    void runWrappedSearchTests(u_int32_t soupSize);
+    void runEndConditionTests(u_int32_t soupSize);
     
 protected:
 

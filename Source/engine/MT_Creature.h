@@ -27,6 +27,7 @@
 #include "MT_Engine.h"
 #include "MT_Cpu.h"
 #include "MT_Genotype.h"
+#include "MT_Soup.h"
 
 typedef boost::intrusive::list_member_hook<> ReaperListHook;
 typedef boost::intrusive::list_member_hook<> SlicerListHook;
@@ -34,7 +35,6 @@ typedef boost::intrusive::list_member_hook<> SlicerListHook;
 namespace MacTierra {
 
 class InventoryGenotype;
-class Soup;
 class World;
 
 class Creature : public RefCounted<Creature>
@@ -83,10 +83,22 @@ public:
     // the the IP to point to the referenced location
     void            setReferencedLocation(address_t inAddress);
 
-    address_t       addressFromOffset(int32_t inOffset) const;
+    address_t       addressFromOffset(int32_t inOffset) const
+                    {
+#ifdef RELATIVE_ADDRESSING
+                        const u_int32_t soupSize = mSoup->soupSize();
+                        return (mLocation + inOffset + soupSize) % soupSize;
+#else
+                        return (inOffset + soupSize) % soupSize;
+#endif
+                    }
+
     int32_t         offsetFromAddress(address_t inAddress) const;
     
-    instruction_t   getSoupInstruction(int32_t inOffset) const;
+    instruction_t   getSoupInstruction(int32_t inOffset) const
+                    {
+                        return mSoup->instructionAtAddress(addressFromOffset(inOffset));
+                    }
 
     InventoryGenotype* genotype() const                             { return mGenotype; }
     void            setGenotype(InventoryGenotype* inGenotype)      { mGenotype = inGenotype; }

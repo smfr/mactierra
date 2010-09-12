@@ -16,7 +16,7 @@
 
 namespace MacTierra {
 
-static const int32_t kMaxSearchDist = 1024;
+static const u_int32_t kMaxSearchDist = 1024;
 
 
 Soup::Soup(u_int32_t inSize)
@@ -81,14 +81,6 @@ Soup::seachForTemplate(ESearchDirection inDirection, address_t& ioOffset, u_int3
     return found;
 }
 
-instruction_t
-Soup::instructionAtAddress(address_t inAddress) const
-{
-    BOOST_ASSERT(inAddress < mSoupSize);
-    return *(mSoup + inAddress);
-}
-
-
 void
 Soup::setInstructionAtAddress(address_t inAddress, instruction_t inInst)
 {
@@ -113,17 +105,92 @@ Soup::operator==(const Soup& inRHS) const
 }
 
 
+static inline bool instructionsMatch(instruction_t* soup, u_int32_t soupSize, address_t inAddress, const instruction_t* inTemplate, u_int32_t inLen)
+{
+    for (u_int32_t i = 0; i < inLen; ++i)
+    {
+        address_t addr = (inAddress + i) % soupSize;
+        if (*(soup + addr) != inTemplate[i])
+            return false;
+    }
+    return true;
+}
+
+static inline bool instructionsMatchNonWrapping(instruction_t* soup, u_int32_t soupSize, address_t inAddress, const instruction_t* inTemplate, u_int32_t inLen)
+{
+    BOOST_ASSERT(inAddress + inLen < soupSize);
+    
+    switch (inLen)
+    {
+        case sizeof(u_int32_t):
+            return *(u_int32_t*)(soup + inAddress) == *(u_int32_t*)(inTemplate);
+
+        case sizeof(u_int32_t) - 1:
+            return *(u_int16_t*)(soup + inAddress) == *(u_int16_t*)(inTemplate) &&
+                   *(soup + inAddress + 2) == *(inTemplate + 2);
+    
+        case sizeof(u_int16_t):
+            return *(u_int16_t*)(soup + inAddress) == *(u_int16_t*)(inTemplate);
+
+        case 1:
+            return *(soup + inAddress) == *inTemplate;
+    
+        default:
+            for (u_int32_t i = 0; i < inLen; ++i)
+            {
+                address_t addr = inAddress + i;
+                if (*(soup + addr) != inTemplate[i])
+                    return false;
+            }
+            return true;
+    }
+    
+    BOOST_ASSERT(false);
+    return true;
+}
+
 bool
 Soup::searchForwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset)
 {
-    const address_t startAddress = ioOffset;
+    address_t startAddress = ioOffset;
     const u_int32_t soupSize = mSoupSize;
+    const u_int32_t maxSearchDistance = std::min(soupSize - 1, kMaxSearchDist);
     
+    // Do non-wrapping part.
     int32_t curOffset = 0;
-    while (curOffset < kMaxSearchDist)
+    int32_t wrapOffset = std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance);
+    while (curOffset < wrapOffset)
+    {
+        address_t curAddress = startAddress + curOffset;
+        if (instructionsMatchNonWrapping(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = curAddress;
+            return true;
+        }
+
+        ++curOffset;
+    }
+    
+    // Do wrapping part.
+    int32_t wrapEndOffset = std::min(curOffset + inTemplateLen, maxSearchDistance);
+    while (curOffset < wrapEndOffset)
     {
         address_t curAddress = (startAddress + curOffset) % soupSize;
-        if (instructionsMatch(curAddress, inTemplate, inTemplateLen))
+        if (instructionsMatch(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = curAddress;
+            return true;
+        }
+
+        ++curOffset;
+    }
+
+    // Do non-wrapping part.
+    startAddress -= soupSize;
+    while (curOffset < maxSearchDistance)
+    {
+        address_t curAddress = startAddress + curOffset;
+        if (instructionsMatchNonWrapping(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
         {
             ioOffset = curAddress;
             return true;
@@ -138,14 +205,46 @@ Soup::searchForwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTem
 bool
 Soup::searchBackwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTemplateLen, address_t& ioOffset)
 {
-    const address_t startAddress = ioOffset;
+    address_t startAddress = ioOffset;
     const u_int32_t soupSize = mSoupSize;
+    const u_int32_t maxSearchDistance = std::min(soupSize - 1, kMaxSearchDist);
     
     int32_t curOffset = 0;
-    while (curOffset < kMaxSearchDist)
+
+    // Do the non-wrapping part.
+    int32_t wrapOffset = std::min(startAddress, maxSearchDistance);
+    while (curOffset < wrapOffset)
+    {
+        address_t curAddress = startAddress - curOffset;
+        if (instructionsMatchNonWrapping(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = curAddress;
+            return true;
+        }
+
+        ++curOffset;
+    }
+    
+    // Do the wrapping part.
+    int32_t wrapEndOffset = std::min(startAddress + inTemplateLen, maxSearchDistance);
+    while (curOffset <= wrapEndOffset)
     {
         address_t curAddress = (startAddress + soupSize - curOffset) % soupSize;
-        if (instructionsMatch(curAddress, inTemplate, inTemplateLen))
+        if (instructionsMatch(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = curAddress;
+            return true;
+        }
+
+        ++curOffset;
+    }
+    
+    // Do the non-wrapping part.
+    startAddress += soupSize;
+    while (curOffset < maxSearchDistance)
+    {
+        address_t curAddress = startAddress - curOffset;
+        if (instructionsMatchNonWrapping(mSoup, soupSize, curAddress, inTemplate, inTemplateLen))
         {
             ioOffset = curAddress;
             return true;
@@ -162,13 +261,46 @@ Soup::searchBothWaysForTemplate(const instruction_t* inTemplate, u_int32_t inTem
 {
     const address_t startAddress = ioOffset;
     const u_int32_t soupSize = mSoupSize;
+    const u_int32_t maxSearchDistance = std::min(soupSize - 1, kMaxSearchDist);
     
     int32_t curOffset = 0;
-    while (curOffset < kMaxSearchDist)
+
+    // Do the part that doesn't wrap in either direction.
+    int32_t forwardWrapOffset = std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance);
+    int32_t backwardsWrapOffset = std::min(startAddress, maxSearchDistance);
+    int32_t wrapOffset = std::min(forwardWrapOffset, backwardsWrapOffset);
+    
+    address_t foreAddress = startAddress + curOffset;
+    address_t backAddress = startAddress - curOffset;
+    
+    while (curOffset < wrapOffset)
+    {
+        // forwards
+        if (instructionsMatchNonWrapping(mSoup, soupSize, foreAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = foreAddress;
+            return true;
+        }
+        
+        // backwards
+        if (instructionsMatchNonWrapping(mSoup, soupSize, backAddress, inTemplate, inTemplateLen))
+        {
+            ioOffset = backAddress;
+            return true;
+        }
+
+        ++foreAddress;
+        --backAddress;
+        
+        ++curOffset;
+    }
+    
+    // Use slow mode for the rest. This could be optimized.
+    while (curOffset < maxSearchDistance)
     {
         // forwards
         address_t foreAddress = (startAddress + curOffset) % soupSize;
-        if (instructionsMatch(foreAddress, inTemplate, inTemplateLen))
+        if (instructionsMatch(mSoup, soupSize, foreAddress, inTemplate, inTemplateLen))
         {
             ioOffset = foreAddress;
             return true;
@@ -176,7 +308,7 @@ Soup::searchBothWaysForTemplate(const instruction_t* inTemplate, u_int32_t inTem
         
         // backwards
         address_t backAddress = (startAddress + soupSize - curOffset) % soupSize;
-        if (instructionsMatch(backAddress, inTemplate, inTemplateLen))
+        if (instructionsMatch(mSoup, soupSize, backAddress, inTemplate, inTemplateLen))
         {
             ioOffset = backAddress;
             return true;

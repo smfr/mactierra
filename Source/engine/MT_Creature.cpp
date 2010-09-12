@@ -10,7 +10,6 @@
 #include "MT_Creature.h"
 
 #include "MT_Inventory.h"
-#include "MT_Soup.h"
 #include "MT_World.h"       // avoid?
 
 namespace MacTierra {
@@ -76,17 +75,6 @@ Creature::setReferencedLocation(u_int32_t inAddress)
     mCPU.mInstructionPointer = offsetFromAddress(inAddress);
 }
 
-address_t
-Creature::addressFromOffset(int32_t inOffset) const
-{
-#ifdef RELATIVE_ADDRESSING
-    const u_int32_t soupSize = mSoup->soupSize();
-    return (mLocation + inOffset + soupSize) % soupSize;
-#else
-    return (inOffset + soupSize) % soupSize;
-#endif
-}
-
 int32_t
 Creature::offsetFromAddress(u_int32_t inAddress) const
 {
@@ -96,12 +84,6 @@ Creature::offsetFromAddress(u_int32_t inAddress) const
 #else
     return inAddress;
 #endif
-}
-
-instruction_t
-Creature::getSoupInstruction(int32_t inOffset) const
-{
-    return mSoup->instructionAtAddress(addressFromOffset(inOffset));
 }
 
 GenomeData
