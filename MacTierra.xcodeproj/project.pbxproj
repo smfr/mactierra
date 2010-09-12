@@ -141,7 +141,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */;
+			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516;
 			remoteInfo = mactierra_cmd;
 		};
 		0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
@@ -1200,8 +1200,8 @@
 		0F9876B60EAAE5D300AA0738 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				0F9876BB0EAAE5D300AA0738 /* GraphX.framework */,
 				0F9876BD0EAAE5D300AA0738 /* Graph Suite.app */,
+				0F9876BB0EAAE5D300AA0738 /* GraphX.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -2267,7 +2267,10 @@
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_CFLAGS = "-DBOOST_ENABLE_ASSERT_HANDLER";
+				OTHER_CFLAGS = (
+					"-fstack-protector-all",
+					"-DBOOST_ENABLE_ASSERT_HANDLER",
+				);
 				SDKROOT = macosx10.5;
 			};
 			name = Debug;
@@ -2293,6 +2296,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
 				OTHER_CFLAGS = (
+					"-fno-stack-protector",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
 					"-DNDEBUG",
 				);
