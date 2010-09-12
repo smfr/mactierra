@@ -113,10 +113,8 @@
         [curve setLineWidth:curveLineWidth];
         [curve setLineJoinStyle:NSRoundLineJoinStyle];
         [curve setLineCapStyle :NSRoundLineCapStyle ];
-        [curve setCachesBezierPath:YES];
     
         NSBezierPath*   displacement = [NSBezierPath bezierPath];
-        [displacement setCachesBezierPath:YES];
 
         // the sample data point's coordinates
         unsigned index = 0;

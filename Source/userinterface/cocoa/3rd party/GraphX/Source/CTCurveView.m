@@ -56,9 +56,6 @@
     [curve setLineWidth:curveLineWidth];
     [curve setLineJoinStyle:NSRoundLineJoinStyle];
     [curve setLineCapStyle :NSRoundLineCapStyle ];
-    
-    [curve        setCachesBezierPath:YES];
-    [displacement setCachesBezierPath:YES];
   }
   
   return self;
