@@ -25,7 +25,7 @@ class GenebankInventoryListener;
 // Container for C++ world-related data, particularly for data collection
 class WorldDataCollectors : public MacTierra::WorldArchivingAddition
 {
-public:
+private:
     WorldDataCollectors()
     : mPopSizeLogger(NULL)
     , mMeanSizeLogger(NULL)
@@ -34,6 +34,12 @@ public:
     , mGenotypeFrequencyLogger(NULL)
     , mSizeFrequencyLogger(NULL)
     {
+    }
+
+public:
+    static PassRefPtr<WorldDataCollectors> create()
+    {
+        return adoptRef(new WorldDataCollectors());
     }
 
     ~WorldDataCollectors()

@@ -552,7 +552,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     CFAbsoluteTime startTime = CFAbsoluteTimeGetCurrent();
 #endif
 
-    RefPtr<WorldDataCollectors> dataCollectorsAddition = adoptRef(new WorldDataCollectors());
+    RefPtr<WorldDataCollectors> dataCollectorsAddition = WorldDataCollectors::create();
 
     World* newWorld = NULL;
     {

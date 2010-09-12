@@ -175,7 +175,7 @@ WorldData::setWorld(MacTierra::World* inWorld, WorldDataCollectors* inDataCollec
             if (inDataCollectors)
                 mDataCollectors = inDataCollectors;
             else
-                mDataCollectors = new WorldDataCollectors();
+                mDataCollectors = WorldDataCollectors::create();
 
             mDataCollectors->setWorld(mWorld);
             
