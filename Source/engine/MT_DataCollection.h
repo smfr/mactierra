@@ -17,6 +17,7 @@
 
 namespace MacTierra {
 
+class DataCollector;
 class World;
 
 // generic data logging class

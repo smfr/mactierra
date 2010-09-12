@@ -470,9 +470,9 @@
 		0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CPUTests.cpp; sourceTree = "<group>"; };
 		0FA291210EABB4060087BE6F /* tuple_basic.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tuple_basic.hpp; path = "Source/boost/include/boost-1_36/boost/tuple/detail/tuple_basic.hpp"; sourceTree = SOURCE_ROOT; };
 		0FA291220EABB4060087BE6F /* tuple_basic_no_partial_spec.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tuple_basic_no_partial_spec.hpp; path = "Source/boost/include/boost-1_36/boost/tuple/detail/tuple_basic_no_partial_spec.hpp"; sourceTree = SOURCE_ROOT; };
-		0FA291230EABB4060087BE6F /* tuple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tuple.hpp; path = "Source/boost/include/boost-1_36/boost/tuple/tuple.hpp"; sourceTree = SOURCE_ROOT; };
-		0FA291240EABB4060087BE6F /* tuple_comparison.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tuple_comparison.hpp; path = "Source/boost/include/boost-1_36/boost/tuple/tuple_comparison.hpp"; sourceTree = SOURCE_ROOT; };
-		0FA291250EABB4060087BE6F /* tuple_io.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = tuple_io.hpp; path = "Source/boost/include/boost-1_36/boost/tuple/tuple_io.hpp"; sourceTree = SOURCE_ROOT; };
+		0FA291230EABB4060087BE6F /* tuple.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tuple.hpp; sourceTree = "<group>"; };
+		0FA291240EABB4060087BE6F /* tuple_comparison.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tuple_comparison.hpp; sourceTree = "<group>"; };
+		0FA291250EABB4060087BE6F /* tuple_io.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = tuple_io.hpp; sourceTree = "<group>"; };
 		0FA4B8A20E8C897700EB3188 /* categories.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = categories.hpp; sourceTree = "<group>"; };
 		0FA4B8A30E8C897700EB3188 /* chain.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = chain.hpp; sourceTree = "<group>"; };
 		0FA4B8A40E8C897700EB3188 /* char_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = char_traits.hpp; sourceTree = "<group>"; };
@@ -839,7 +839,7 @@
 				0FA2911F0EABB4060087BE6F /* tuple */,
 			);
 			name = boost;
-			path = "Source/boost/include/boost-1_36/boost";
+			path = "Source/boost/boost-1_36/include/boost";
 			sourceTree = "<group>";
 		};
 		0F13F9F80E5FD98300D8E649 /* archive */ = {
@@ -1214,9 +1214,8 @@
 				0FA291240EABB4060087BE6F /* tuple_comparison.hpp */,
 				0FA291250EABB4060087BE6F /* tuple_io.hpp */,
 			);
-			name = tuple;
-			path = "Source/boost/include/boost-1_36/boost/tuple";
-			sourceTree = SOURCE_ROOT;
+			path = tuple;
+			sourceTree = "<group>";
 		};
 		0FA291200EABB4060087BE6F /* detail */ = {
 			isa = PBXGroup;
@@ -1224,9 +1223,8 @@
 				0FA291210EABB4060087BE6F /* tuple_basic.hpp */,
 				0FA291220EABB4060087BE6F /* tuple_basic_no_partial_spec.hpp */,
 			);
-			name = detail;
-			path = "Source/boost/include/boost-1_36/boost/tuple/detail";
-			sourceTree = SOURCE_ROOT;
+			path = detail;
+			sourceTree = "<group>";
 		};
 		0FA4B8A10E8C897700EB3188 /* iostreams */ = {
 			isa = PBXGroup;
@@ -2216,7 +2214,7 @@
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2230,9 +2228,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					Source,
-					"Source/boost/include/boost-1_36",
+					"Source/boost/boost-1_36/include",
 				);
-				LIBRARY_SEARCH_PATHS = Source/boost/lib;
+				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_36/lib";
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DBOOST_ENABLE_ASSERT_HANDLER";
 				PREBINDING = NO;
@@ -2243,7 +2241,7 @@
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_UNROLL_LOOPS = YES;
@@ -2257,9 +2255,9 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					Source,
-					"Source/boost/include/boost-1_36",
+					"Source/boost/boost-1_36/include",
 				);
-				LIBRARY_SEARCH_PATHS = Source/boost/lib;
+				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_36/lib";
 				OTHER_CFLAGS = (
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
 					"-DNDEBUG",
