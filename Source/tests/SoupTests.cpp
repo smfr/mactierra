@@ -49,7 +49,12 @@ void SoupTests::testPowerOfTwoSoup()
     const u_int32_t soupSize = 1024;
     mSoup = new Soup(soupSize);
 
+    // Non-zero'd soup
     memset(const_cast<instruction_t*>(mSoup->soup()), k_or1, soupSize);
+    runTemplateTests(soupSize);
+
+    // Zero'd soup
+    memset(const_cast<instruction_t*>(mSoup->soup()), 0, soupSize);
     runTemplateTests(soupSize);
 
     delete mSoup;
@@ -61,7 +66,12 @@ void SoupTests::testNonPowerOfTwoSoup()
     const u_int32_t soupSize = 617;
     mSoup = new Soup(soupSize);
 
+    // Non-zero'd soup
     memset(const_cast<instruction_t*>(mSoup->soup()), k_or1, soupSize);
+    runTemplateTests(soupSize);
+
+    // Zero'd soup
+    memset(const_cast<instruction_t*>(mSoup->soup()), 0, soupSize);
     runTemplateTests(soupSize);
 
     delete mSoup;
@@ -72,43 +82,57 @@ void SoupTests::runTemplateTests(u_int32_t soupSize)
 {
     const u_int32_t templateLength = 5;
     instruction_t targetTemplate[] = { k_nop_1, k_nop_0, k_nop_1, k_nop_0, k_nop_1 };
+
+    const address_t firstTargetLocation = soupSize / 2;
+    const address_t secondTargetLocation = soupSize - 2;
     
     // Half way through
-    mSoup->injectInstructions(soupSize / 2, targetTemplate, templateLength);
+    mSoup->injectInstructions(firstTargetLocation, targetTemplate, templateLength);
 
     // Wrapping
-    mSoup->injectInstructions(soupSize - 1, targetTemplate, templateLength);
+    mSoup->injectInstructions(secondTargetLocation, targetTemplate, templateLength);
 
-    instruction_t sourceTemplate[] = { k_nop_0, k_nop_1, k_nop_0, k_nop_1, k_nop_0 };
-    mSoup->injectInstructions(soupSize / 4, sourceTemplate, templateLength);
-    mSoup->injectInstructions(3 * soupSize / 4, sourceTemplate, templateLength);
+    instruction_t sourceTemplate[] = { k_nop_0, k_nop_1, k_nop_0, k_nop_1, k_nop_0, k_or1 };
+    
+    const address_t firstTemplateLocation = soupSize / 5;
+    const address_t secondTemplateLocation = 3 * soupSize / 4;
 
-    MacTierra::address_t templateAddr = soupSize / 4;
+    mSoup->injectInstructions(firstTemplateLocation, sourceTemplate, templateLength + 1);  // + 1 to terminate the template
+    mSoup->injectInstructions(secondTemplateLocation, sourceTemplate, templateLength + 1);
+
+    address_t templateAddr = firstTemplateLocation;
     u_int32_t foundLength = 0;
     // Simple forwards.
     TEST_CONDITION(mSoup->seachForTemplate(Soup::kForwards, templateAddr, foundLength));
-    TEST_CONDITION(templateAddr == soupSize / 2);
+    TEST_CONDITION(templateAddr == firstTargetLocation);
     TEST_CONDITION(foundLength == templateLength);
 
     // Simple backwards.
-    templateAddr = 3 * soupSize / 4;
+    templateAddr = secondTemplateLocation;
     foundLength = 0;
     TEST_CONDITION(mSoup->seachForTemplate(Soup::kBackwards, templateAddr, foundLength));
-    TEST_CONDITION(templateAddr == soupSize / 2);
+    TEST_CONDITION(templateAddr == firstTargetLocation);
     TEST_CONDITION(foundLength == templateLength);
 
     // Backwards, wrapping template.
-    templateAddr = soupSize / 4;
+    templateAddr = firstTemplateLocation;
     foundLength = 0;
     TEST_CONDITION(mSoup->seachForTemplate(Soup::kBackwards, templateAddr, foundLength));
-    TEST_CONDITION(templateAddr == soupSize - 1);
+    TEST_CONDITION(templateAddr == secondTargetLocation);
     TEST_CONDITION(foundLength == templateLength);
 
     // Forwards, wrapping template.
-    templateAddr = 3 * soupSize / 4;
+    templateAddr = secondTemplateLocation;
     foundLength = 0;
     TEST_CONDITION(mSoup->seachForTemplate(Soup::kForwards, templateAddr, foundLength));
-    TEST_CONDITION(templateAddr == soupSize - 1);
+    TEST_CONDITION(templateAddr == secondTargetLocation);
+    TEST_CONDITION(foundLength == templateLength);
+
+    // Both ways, forward non-wrapping template closer.
+    templateAddr = firstTemplateLocation;
+    foundLength = 0;
+    TEST_CONDITION(mSoup->seachForTemplate(Soup::kBothways, templateAddr, foundLength));
+    TEST_CONDITION(templateAddr == secondTargetLocation);
     TEST_CONDITION(foundLength == templateLength);
 }
 
