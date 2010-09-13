@@ -438,7 +438,7 @@ World::allocateSpaceForOffspring(const Creature& inParent, u_int32_t inDaughterL
     
         bool added = mCellMap->insertCreature(daughter.get());
         BOOST_ASSERT(added);
-#ifdef NDEBUG
+#ifndef NDEBUG
         if (!added)
             mCellMap->printCreatures();
 #endif
