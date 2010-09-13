@@ -15,7 +15,7 @@ How to build
 
 Building requires Leopard (10.5.4) and Xcode 3.1 or later.
 
-First, open Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj. Get Info on the Graph Suite item at the top of the Files hiearchy, and change the Build Products location to MacTierra/build (same directory as used by MacTierra.xcodeproj). Build Release and Debug (either target).
+First, open Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj. Get Info on the Graph Suite item at the top of the Files hierarchy, and change the Build Products location to MacTierra/build (same directory as used by MacTierra.xcodeproj). Build Release and Debug (either target).
 
 Now open MacTierra.xcodeproj, choose the MacTierra target, and build (Release or Debug, as you wish; Release will run much faster).
 
