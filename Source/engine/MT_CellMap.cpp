@@ -200,7 +200,9 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
                             foundLocation = mCells[forwardIndex].wrappedEnd(mSize);
                             break;
                         }
-                        forwardIndex = (forwardIndex + 1) % numCreatures;
+                        
+                        if (++forwardIndex == numCreatures)
+                            forwardIndex = 0;
                         forwardWrapped = (forwardIndex == startIndex);
                     }
                     else if (!backwardsWrapped)
@@ -211,7 +213,8 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
                             foundLocation = (mCells[backIndex].start() - inLength + mSize) % mSize;
                             break;
                         }
-                        backIndex = (backIndex - 1 + numCreatures) % numCreatures;;
+                        if (!--backIndex)
+                            backIndex = numCreatures - 1;
                         backwardsWrapped = (backIndex == startIndex);
                     }
                     
