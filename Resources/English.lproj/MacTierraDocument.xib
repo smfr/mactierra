@@ -4925,13 +4925,12 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 													<string key="NSKeyEquivalent"/>
 													<int key="NSPeriodicDelay">400</int>
 													<int key="NSPeriodicInterval">75</int>
-													<object class="NSMenuItem" key="NSMenuItem" id="318034491">
+													<object class="NSMenuItem" key="NSMenuItem" id="151329077">
 														<reference key="NSMenu" ref="428001334"/>
-														<string key="NSTitle">Closest to parent</string>
+														<string key="NSTitle">Random</string>
 														<string key="NSKeyEquiv"/>
 														<int key="NSKeyEquivModMask">1048576</int>
 														<int key="NSMnemonicLoc">2147483647</int>
-														<int key="NSState">1</int>
 														<reference key="NSOnImage" ref="400152144"/>
 														<reference key="NSMixedImage" ref="1023971058"/>
 														<string key="NSAction">_popUpItemAction:</string>
@@ -4942,17 +4941,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 														<string key="NSTitle">OtherViews</string>
 														<object class="NSMutableArray" key="NSMenuItems">
 															<bool key="EncodedWithXMLCoder">YES</bool>
-															<object class="NSMenuItem" id="151329077">
-																<reference key="NSMenu" ref="428001334"/>
-																<string key="NSTitle">Random</string>
-																<string key="NSKeyEquiv"/>
-																<int key="NSKeyEquivModMask">1048576</int>
-																<int key="NSMnemonicLoc">2147483647</int>
-																<reference key="NSOnImage" ref="400152144"/>
-																<reference key="NSMixedImage" ref="1023971058"/>
-																<string key="NSAction">_popUpItemAction:</string>
-																<reference key="NSTarget" ref="763929936"/>
-															</object>
+															<reference ref="151329077"/>
 															<object class="NSMenuItem" id="6100099">
 																<reference key="NSMenu" ref="428001334"/>
 																<string key="NSTitle">Random (packed)</string>
@@ -4964,14 +4953,23 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 																<string key="NSAction">_popUpItemAction:</string>
 																<reference key="NSTarget" ref="763929936"/>
 															</object>
-															<reference ref="318034491"/>
+															<object class="NSMenuItem" id="318034491">
+																<reference key="NSMenu" ref="428001334"/>
+																<string key="NSTitle">Closest to parent</string>
+																<string key="NSKeyEquiv"/>
+																<int key="NSKeyEquivModMask">1048576</int>
+																<int key="NSMnemonicLoc">2147483647</int>
+																<reference key="NSOnImage" ref="400152144"/>
+																<reference key="NSMixedImage" ref="1023971058"/>
+																<string key="NSAction">_popUpItemAction:</string>
+																<reference key="NSTarget" ref="763929936"/>
+															</object>
 															<object class="NSMenuItem" id="214790911">
 																<reference key="NSMenu" ref="428001334"/>
 																<string key="NSTitle">Closest to ax address</string>
 																<string key="NSKeyEquiv"/>
 																<int key="NSKeyEquivModMask">1048576</int>
 																<int key="NSMnemonicLoc">2147483647</int>
-																<int key="NSState">1</int>
 																<reference key="NSOnImage" ref="400152144"/>
 																<reference key="NSMixedImage" ref="1023971058"/>
 																<string key="NSAction">_popUpItemAction:</string>
@@ -4979,7 +4977,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 															</object>
 														</object>
 													</object>
-													<int key="NSSelectedIndex">3</int>
 													<int key="NSPreferredEdge">1</int>
 													<bool key="NSUsesItemFromMenu">YES</bool>
 													<bool key="NSAltersState">YES</bool>
@@ -9371,7 +9368,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>100646.IBPluginDependency</string>
 					<string>100647.IBPluginDependency</string>
 					<string>100648.IBPluginDependency</string>
-					<string>100655.IBPluginDependency</string>
 					<string>5.IBEditorWindowLastContentRect</string>
 					<string>5.IBPluginDependency</string>
 					<string>5.IBViewEditorWindowController.showingLayoutRectangles</string>
@@ -9580,7 +9576,7 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{309, 742}, {225, 83}}</string>
+					<string>{{584, 485}, {225, 83}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -9726,7 +9722,6 @@ AAMAAAABAAEAAAFTAAMAAAAEAAAFwgAAAAAACAAIAAgACAABAAEAAQABA</bytes>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>MTGenotypeImageView</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
