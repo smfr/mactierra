@@ -487,7 +487,7 @@ using namespace MacTierra;
 
 - (void)createWorldThread
 {
-    self.worldThread = [[MTWorldThread alloc] initWithWorldController:self];
+    self.worldThread = [[[MTWorldThread alloc] initWithWorldController:self] autorelease];
     [worldThread start];
 }
 
@@ -666,8 +666,10 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         while (!running)
             [runningCondition wait];
 
-        if ([self isCancelled])
+        if ([self isCancelled]) {
+            [runningCondition unlock];
             break;
+        }
 
         const NSUInteger kNumCycles = 10000;
         [mWorldController iterate:kNumCycles];
