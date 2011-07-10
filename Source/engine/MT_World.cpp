@@ -253,7 +253,7 @@ World::iterate(u_int32_t inNumCycles)
                 mReaper.conditionalMoveDown(*curCreature);
 
             // compute next copy error time
-            if (mSettings.copyErrorRate() > 0.0 & (curCreature->lastInstruction() == k_mov_iab))
+            if ((mSettings.copyErrorRate() > 0.0) && (curCreature->lastInstruction() == k_mov_iab))
                 noteInstructionCopy();
             
             ++mCurCreatureCycles;

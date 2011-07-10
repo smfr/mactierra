@@ -49,45 +49,45 @@ typedef enum EMutationRate {
 }
 
 - (id)initWithSettings:(const MacTierra::Settings&)inSettings;
-@property (readonly) const MacTierra::Settings* settings;
+@property (nonatomic, readonly) const MacTierra::Settings* settings;
 
-@property (assign) NSUInteger soupSize;
-@property (assign) ESoupSizePreset soupSizePreset;
-@property (assign) BOOL creatingNewSoup;
-@property (assign) BOOL seedWithAncestor;
+@property (nonatomic, assign) NSUInteger soupSize;
+@property (nonatomic, assign) ESoupSizePreset soupSizePreset;
+@property (nonatomic, assign) BOOL creatingNewSoup;
+@property (nonatomic, assign) BOOL seedWithAncestor;
 
-@property (assign) NSUInteger randomSeed;
+@property (nonatomic, assign) NSUInteger randomSeed;
 
-@property (assign) MacTierra::Settings::ETimeSliceType timeSliceType;
+@property (nonatomic, assign) MacTierra::Settings::ETimeSliceType timeSliceType;
 
-@property (assign) NSUInteger constantSliceSize;
+@property (nonatomic, assign) NSUInteger constantSliceSize;
 
-@property (assign) double sliceSizeVariance;
-@property (assign) double sizeSelection;
-@property (assign) double reapThreshold;
+@property (nonatomic, assign) double sliceSizeVariance;
+@property (nonatomic, assign) double sizeSelection;
+@property (nonatomic, assign) double reapThreshold;
 
-@property (assign) EMutationRate flawLevel;
-@property (assign) double flawRate;
-@property (assign) double meanFlawInterval;
+@property (nonatomic, assign) EMutationRate flawLevel;
+@property (nonatomic, assign) double flawRate;
+@property (nonatomic, assign) double meanFlawInterval;
 
-@property (assign) EMutationRate cosmicMutationLevel;
-@property (assign) double cosmicRate;
-@property (assign) double meanCosmicTimeInterval;
+@property (nonatomic, assign) EMutationRate cosmicMutationLevel;
+@property (nonatomic, assign) double cosmicRate;
+@property (nonatomic, assign) double meanCosmicTimeInterval;
 
-@property (assign) EMutationRate copyErrorLevel;
-@property (assign) double copyErrorRate;
-@property (assign) double meanCopyErrorInterval;
+@property (nonatomic, assign) EMutationRate copyErrorLevel;
+@property (nonatomic, assign) double copyErrorRate;
+@property (nonatomic, assign) double meanCopyErrorInterval;
 
-@property (assign) MacTierra::Settings::EMutationType mutationType;
-@property (assign) MacTierra::Settings::EDaughterAllocationStrategy daughterAllocationStrategy;
+@property (nonatomic, assign) MacTierra::Settings::EMutationType mutationType;
+@property (nonatomic, assign) MacTierra::Settings::EDaughterAllocationStrategy daughterAllocationStrategy;
 
-@property (assign) BOOL globalWritesAllowed;
-@property (assign) BOOL transferRegistersToOffspring;
-@property (assign) BOOL clearDaughterCells;
-@property (assign) BOOL clearReapedCreatures;
-@property (assign) BOOL selectForLeanness;
+@property (nonatomic, assign) BOOL globalWritesAllowed;
+@property (nonatomic, assign) BOOL transferRegistersToOffspring;
+@property (nonatomic, assign) BOOL clearDaughterCells;
+@property (nonatomic, assign) BOOL clearReapedCreatures;
+@property (nonatomic, assign) BOOL selectForLeanness;
 
 // internal
-@property (retain) NSDictionary* mutationDefaults;
+@property (nonatomic, retain) NSDictionary* mutationDefaults;
 
 @end

@@ -731,7 +731,7 @@ static const float kTickMarkLength = 4.0f;
     if (y > maxYBounds)  //if axis is higher than graph draw dashed axis at top
     {
       //make line dashed with pattern
-      [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
+      [axis setLineDash:lineDashPattern count:2 phase:0.0];
       
       //draw line at y = maxYBounds
       y = maxYBounds;
@@ -739,7 +739,7 @@ static const float kTickMarkLength = 4.0f;
     else if (y < minYBounds) //if axis is lower than graph draw dashed axis at bottom
     {
       //make line dashed with pattern
-      [axis setLineDash: lineDashPattern count: 2 phase: 0.0];
+      [axis setLineDash:lineDashPattern count:2 phase:0.0];
           
       //draw line at y = yMain
       y = minYBounds;

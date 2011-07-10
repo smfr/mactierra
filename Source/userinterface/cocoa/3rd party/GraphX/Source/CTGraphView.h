@@ -55,7 +55,7 @@
     float majorLineWidth;     //width of gridlines - applies to both x and y gridlines
     float minorLineWidth;     //width of gridlines - applies to both x and y gridlines
 
-    float lineDashPattern[2]; //dashing pattern used by axis that are out of bounds
+    CGFloat lineDashPattern[2]; //dashing pattern used by axis that are out of bounds
     
     BOOL graphDirty;
 }

@@ -106,14 +106,14 @@
     float g = xMin - gres;
     float h = NAN; 
 
-    float g_next;
-    float h_next;
+    float g_next = 0;
+    float h_next = 0;
 
-    float gMinRatio = xMin/xRatio;
-    float hMinRatio = yMin/yRatio;
+    float gMinRatio = xMin / xRatio;
+    float hMinRatio = yMin / yRatio;
 
-    float x;
-    float y;
+    float x = 0;
+    float y = 0;
 
     while (g < xMax)
     {

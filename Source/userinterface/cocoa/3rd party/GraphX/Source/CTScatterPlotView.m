@@ -122,14 +122,14 @@
         float g = xMin;
         float h = NAN; 
 
-        float g_next;
-        float h_next;
+        float g_next = 0;
+        float h_next = 0;
 
         float xMinRatio = xMin / xratio;
         float hMinRatio = yMin / yRatio;
 
-        float x;
-        float y;
+        float x = 0;
+        float y = 0;
 
         [dataSource getPoint:&pointPointer atIndex:index inSeries:curSeries];
       

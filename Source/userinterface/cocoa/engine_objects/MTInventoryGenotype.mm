@@ -198,7 +198,8 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
         {
             if (i == 0)
             {
-                *outName = curWord;
+                if (outName)
+                    *outName = curWord;
                 continue;
             }
             else if ([curWord length] == 0 || [curWord isEqualToString:@"\n"])
@@ -334,8 +335,8 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
 {
     if ((self = [super init]))
     {
-        self.name   = [[decoder decodeObjectForKey:@"name"] retain];
-        self.genome = [[decoder decodeObjectForKey:@"genome"] retain];
+        self.name   = [decoder decodeObjectForKey:@"name"];
+        self.genome = [decoder decodeObjectForKey:@"genome"];
     }
     return self;
 }
@@ -389,3 +390,4 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
 }
 
 @end
+    

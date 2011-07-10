@@ -266,12 +266,12 @@ Soup::searchBothWaysForTemplate(const instruction_t* inTemplate, u_int32_t inTem
     int32_t curOffset = 0;
 
     // Do the part that doesn't wrap in either direction.
-    int32_t forwardWrapOffset = std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance);
+    int32_t forwardWrapOffset = (soupSize - startAddress >= inTemplateLen) ? std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance) : 0;
     int32_t backwardsWrapOffset = std::min(startAddress, maxSearchDistance);
     int32_t wrapOffset = std::min(forwardWrapOffset, backwardsWrapOffset);
     
-    address_t foreAddress = startAddress + curOffset;
-    address_t backAddress = startAddress - curOffset;
+    address_t foreAddress = startAddress;
+    address_t backAddress = startAddress;
     
     while (curOffset < wrapOffset)
     {
