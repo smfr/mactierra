@@ -213,8 +213,7 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
                             foundLocation = (mCells[backIndex].start() - inLength + mSize) % mSize;
                             break;
                         }
-                        if (!--backIndex)
-                            backIndex = numCreatures - 1;
+                        backIndex = backIndex ? --backIndex : numCreatures - 1;
                         backwardsWrapped = (backIndex == startIndex);
                     }
                     
