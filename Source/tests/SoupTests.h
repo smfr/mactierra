@@ -33,6 +33,7 @@ protected:
     void runTemplateTests(u_int32_t soupSize);
     void runTemplateAtStartTests(u_int32_t soupSize);
     void runWrappedSearchTests(u_int32_t soupSize);
+    void runWrappedTemplateTests(u_int32_t soupSize);
     void runEndConditionTests(u_int32_t soupSize);
     
 protected:

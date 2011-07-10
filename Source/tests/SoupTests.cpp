@@ -63,6 +63,9 @@ void SoupTests::testPowerOfTwoSoup()
 
     memset(const_cast<instruction_t*>(mSoup->soup()), 0, soupSize);
     runWrappedSearchTests(soupSize);
+    
+    memset(const_cast<instruction_t*>(mSoup->soup()), 0, soupSize);
+    runWrappedTemplateTests(soupSize);
 
     memset(const_cast<instruction_t*>(mSoup->soup()), 0, soupSize);
     runEndConditionTests(soupSize);
@@ -221,6 +224,34 @@ void SoupTests::runWrappedSearchTests(u_int32_t soupSize)
     templateAddr = firstTemplateLocation;
     foundLength = 0;
     TEST_CONDITION(mSoup->seachForTemplate(Soup::kBothways, templateAddr, foundLength));
+    TEST_CONDITION(templateAddr == firstTargetLocation);
+    TEST_CONDITION(foundLength == templateLength);
+}
+
+void SoupTests::runWrappedTemplateTests(u_int32_t soupSize)
+{
+    const u_int32_t templateLength = 5;
+    instruction_t targetTemplate[] = { k_nop_1, k_nop_0, k_nop_1, k_nop_0, k_nop_1 };
+    
+    const address_t firstTargetLocation = soupSize / 2;
+    mSoup->injectInstructions(firstTargetLocation, targetTemplate, templateLength);
+    
+    instruction_t sourceTemplate[] = { k_nop_0, k_nop_1, k_nop_0, k_nop_1, k_nop_0, k_or1 };
+    
+    const address_t firstTemplateLocation = soupSize - 2;
+    mSoup->injectInstructions(firstTemplateLocation, sourceTemplate, templateLength + 1);  // + 1 to terminate the template
+    
+    const address_t secondTemplateLocation = soupSize / 4;
+    mSoup->injectInstructions(secondTemplateLocation, sourceTemplate, templateLength + 1);  // + 1 to terminate the template
+    
+    address_t templateAddr = firstTemplateLocation;
+    u_int32_t foundLength = 0;
+    TEST_CONDITION(mSoup->seachForTemplate(Soup::kForwards, templateAddr, foundLength));
+    TEST_CONDITION(templateAddr == firstTargetLocation);
+    TEST_CONDITION(foundLength == templateLength);
+
+    templateAddr = firstTemplateLocation;
+    TEST_CONDITION(mSoup->seachForTemplate(Soup::kBackwards, templateAddr, foundLength));
     TEST_CONDITION(templateAddr == firstTargetLocation);
     TEST_CONDITION(foundLength == templateLength);
 }
