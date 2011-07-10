@@ -158,7 +158,8 @@ Soup::searchForwardsForTemplate(const instruction_t* inTemplate, u_int32_t inTem
     
     // Do non-wrapping part.
     int32_t curOffset = 0;
-    int32_t wrapOffset = std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance);
+    int32_t wrapOffset = (soupSize - startAddress >= inTemplateLen) ? std::min(soupSize - startAddress - inTemplateLen, maxSearchDistance) : 0;
+    
     while (curOffset < wrapOffset)
     {
         address_t curAddress = startAddress + curOffset;
