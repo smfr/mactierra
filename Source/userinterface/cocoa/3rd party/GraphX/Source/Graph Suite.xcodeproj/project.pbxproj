@@ -281,9 +281,16 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = A8F75435088915AC00F072FD /* Build configuration list for PBXProject "Graph Suite" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 29B97314FDCFA39411CA2CEA /* Graph Suite */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -387,7 +394,6 @@
 					AppKit,
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = GraphX;
 				SECTORDER_FLAGS = "";
 				SKIP_INSTALL = YES;
@@ -423,7 +429,6 @@
 					0xC0000000,
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = YES;
 				PRODUCT_NAME = GraphX;
 				SECTORDER_FLAGS = "";
 				SKIP_INSTALL = YES;
@@ -457,7 +462,6 @@
 					AppKit,
 				);
 				OTHER_REZFLAGS = "";
-				PREBINDING = NO;
 				PRODUCT_NAME = GraphX;
 				SECTORDER_FLAGS = "";
 				SKIP_INSTALL = YES;
@@ -476,7 +480,6 @@
 				DEBUGGING_SYMBOLS = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/build/Development\"";
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -508,7 +511,6 @@
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/build/Development\"";
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_ENABLE_TRIGRAPHS = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -567,7 +569,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -575,14 +577,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
 		A8F75438088915AC00F072FD /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx10.6;
 			};
 			name = Default;
 		};

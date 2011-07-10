@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 45;
+	objectVersion = 46;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -35,9 +35,6 @@
 		0F4F663D0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F63B1020E5E6A54005793DE /* MTDocumentController.m */; };
-		0F861D17123C793000E6428B /* libstdc++-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F861D16123C793000E6428B /* libstdc++-static.a */; };
-		0F861D18123C793000E6428B /* libstdc++-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F861D16123C793000E6428B /* libstdc++-static.a */; };
-		0F861D19123C793000E6428B /* libstdc++-static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F861D16123C793000E6428B /* libstdc++-static.a */; };
 		0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */; };
 		0F902E380E63B17800EF9E96 /* MutationRateDefaults.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */; };
 		0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9431B80E89F991009BBD28 /* MT_SoupConfiguration.cpp */; };
@@ -453,7 +450,6 @@
 		0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_WorldArchiver.cpp; sourceTree = "<group>"; };
 		0F63B1010E5E6A54005793DE /* MTDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentController.h; sourceTree = "<group>"; };
 		0F63B1020E5E6A54005793DE /* MTDocumentController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDocumentController.m; sourceTree = "<group>"; };
-		0F861D16123C793000E6428B /* libstdc++-static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libstdc++-static.a"; path = "/usr/lib/libstdc++-static.a"; sourceTree = "<absolute>"; };
 		0F8C67A80E5E5A5900A72FC1 /* NSStringAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSStringAdditions.h; sourceTree = "<group>"; };
 		0F8C67A90E5E5A5900A72FC1 /* NSStringAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSStringAdditions.m; sourceTree = "<group>"; };
 		0F902E370E63B17800EF9E96 /* MutationRateDefaults.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = MutationRateDefaults.plist; sourceTree = "<group>"; };
@@ -793,7 +789,6 @@
 				0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */,
 				0F18668E123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
 				0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */,
-				0F861D19123C793000E6428B /* libstdc++-static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,7 +796,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F861D18123C793000E6428B /* libstdc++-static.a in Frameworks */,
 				0F186589123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */,
 				0F18658A123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
 				0F18668D123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
@@ -820,7 +814,6 @@
 				0F186587123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
 				0F186588123C6F4B009ED12C /* libboost_thread.a in Frameworks */,
 				0F18668C123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
-				0F861D17123C793000E6428B /* libstdc++-static.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1734,7 +1727,6 @@
 		1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				0F861D16123C793000E6428B /* libstdc++-static.a */,
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 				0F9DE6540E57795B00E86DD6 /* OpenGL.framework */,
 			);
@@ -1890,9 +1882,16 @@
 /* Begin PBXProject section */
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "MacTierra" */;
-			compatibilityVersion = "Xcode 3.1";
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
+			knownRegions = (
+				en,
+			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* MacTierra */;
 			projectDirPath = "";
 			projectReferences = (
@@ -2140,7 +2139,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
@@ -2148,7 +2146,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TestRunner;
 			};
 			name = Debug;
@@ -2158,14 +2155,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = TestRunner;
 				ZERO_LINK = NO;
 			};
@@ -2177,7 +2172,6 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
@@ -2185,7 +2179,6 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = mactierra;
 			};
 			name = Debug;
@@ -2195,14 +2188,12 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
-				PREBINDING = NO;
 				PRODUCT_NAME = mactierra;
 				ZERO_LINK = NO;
 			};
@@ -2217,8 +2208,6 @@
 					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_ENABLE_FIX_AND_CONTINUE = YES;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
@@ -2229,6 +2218,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = MacTierra;
+				SDKROOT = macosx10.6;
 			};
 			name = Debug;
 		};
@@ -2239,7 +2229,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
 				);
-				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -2249,6 +2238,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = MacTierra;
+				SDKROOT = macosx10.6;
 			};
 			name = Release;
 		};
@@ -2272,12 +2262,12 @@
 					"Source/boost/boost-1_44_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-fstack-protector-all",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
 				);
-				SDKROOT = macosx10.5;
 			};
 			name = Debug;
 		};
@@ -2303,6 +2293,7 @@
 					"Source/boost/boost-1_44_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CFLAGS = (
 					"-fno-stack-protector",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
@@ -2312,7 +2303,6 @@
 					"$(OTHER_CFLAGS)",
 					"-DBOOST_DISABLE_ASSERTS",
 				);
-				SDKROOT = macosx10.5;
 			};
 			name = Release;
 		};
