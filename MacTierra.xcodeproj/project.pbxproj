@@ -25,9 +25,6 @@
 		0F186667123C7167009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
 		0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
 		0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
-		0F18668C123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
-		0F18668D123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
-		0F18668E123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
 		0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
@@ -132,6 +129,9 @@
 		8D15AC2F0486D014006FF6A4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165FFE840EACC02AAC07 /* InfoPlist.strings */; };
 		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
+		B9771CAF1638E407000AAF35 /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9771CAE1638E407000AAF35 /* libboost_wserialization.a */; };
+		B9771CB01638E42F000AAF35 /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9771CAE1638E407000AAF35 /* libboost_wserialization.a */; };
+		B9771CB11638E447000AAF35 /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B9771CAE1638E407000AAF35 /* libboost_wserialization.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -434,7 +434,6 @@
 		0F18665C123C7027009ED12C /* void_cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = void_cast.hpp; sourceTree = "<group>"; };
 		0F18665D123C7027009ED12C /* weak_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = weak_ptr.hpp; sourceTree = "<group>"; };
 		0F18665E123C7027009ED12C /* wrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wrapper.hpp; sourceTree = "<group>"; };
-		0F18668B123C747E009ED12C /* libboost_wserialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_wserialization.a; path = "Source/boost/boost-1_44_0/lib/libboost_wserialization.a"; sourceTree = "<group>"; };
 		0F1D18FD0E7A2A50008EB764 /* smart_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = smart_ptr.hpp; sourceTree = "<group>"; };
 		0F1D19010E7A2B74008EB764 /* intrusive_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrusive_ptr.hpp; sourceTree = "<group>"; };
 		0F1D19C60E7A2EC1008EB764 /* noncopyable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noncopyable.hpp; sourceTree = "<group>"; };
@@ -778,6 +777,7 @@
 		32DBCF750370BD2300C91783 /* MacTierra_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MacTierra_Prefix.pch; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* MacTierra.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MacTierra.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9771CAE1638E407000AAF35 /* libboost_wserialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_wserialization.a; path = "Source/boost/boost-1_44_0/lib/libboost_wserialization.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -785,9 +785,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9771CB01638E42F000AAF35 /* libboost_wserialization.a in Frameworks */,
 				0F186667123C7167009ED12C /* libboost_iostreams.a in Frameworks */,
 				0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */,
-				0F18668E123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
 				0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -796,9 +796,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9771CB11638E447000AAF35 /* libboost_wserialization.a in Frameworks */,
 				0F186589123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */,
 				0F18658A123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
-				0F18668D123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
 				0F18658B123C6F4B009ED12C /* libboost_thread.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -807,13 +807,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9771CAF1638E407000AAF35 /* libboost_wserialization.a in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 				0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */,
 				0F186586123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */,
 				0F186587123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
 				0F186588123C6F4B009ED12C /* libboost_thread.a in Frameworks */,
-				0F18668C123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1061,7 +1061,6 @@
 			children = (
 				0F186583123C6F4B009ED12C /* libboost_iostreams.a */,
 				0F186584123C6F4B009ED12C /* libboost_serialization.a */,
-				0F18668B123C747E009ED12C /* libboost_wserialization.a */,
 				0F186585123C6F4B009ED12C /* libboost_thread.a */,
 			);
 			name = boost;
@@ -1755,6 +1754,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* MacTierra */ = {
 			isa = PBXGroup;
 			children = (
+				B9771CAE1638E407000AAF35 /* libboost_wserialization.a */,
 				0FB9C4400E72336000E6EBFD /* Readme.txt */,
 				0FB9C4480E72338500E6EBFD /* TODO.txt */,
 				0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */,
@@ -1883,7 +1883,7 @@
 		2A37F4A9FDCFA73011CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0450;
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "MacTierra" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2146,7 +2146,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = TestRunner;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -2161,7 +2163,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = TestRunner;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2179,7 +2183,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = mactierra;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -2194,7 +2200,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = mactierra;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2217,8 +2225,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -2237,8 +2246,9 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -2246,6 +2256,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2262,12 +2273,13 @@
 					"Source/boost/boost-1_44_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-fstack-protector-all",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
 				);
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -2275,6 +2287,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_STRICT_ALIASING = NO;
@@ -2293,7 +2306,8 @@
 					"Source/boost/boost-1_44_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-fno-stack-protector",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
@@ -2303,6 +2317,7 @@
 					"$(OTHER_CFLAGS)",
 					"-DBOOST_DISABLE_ASSERTS",
 				);
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
