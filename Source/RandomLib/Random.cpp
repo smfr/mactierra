@@ -168,7 +168,7 @@ namespace RandomLib {
     }
     std::vector<seed_type> v = SeedVector();
     for (size_t i = v.size(); i--;)
-      u32::CheckSum(v[i], t);
+      u32::CheckSum(u32::type(v[i]), t);
     return seed_t::cast(t);
   }
 
@@ -527,7 +527,7 @@ namespace RandomLib {
     mixer_type r = s ? a1 : a0;
     state[0] = r;
     for (unsigned k = 1; k < n; ++k) {
-      r = b * (r ^ r >> w - 2) + k;
+      r = b * (r ^ r >> (w - 2)) + k;
       r &= mask;
       state[k] = r;
     }
@@ -538,22 +538,22 @@ namespace RandomLib {
       r = state[0];
       for (unsigned k = (n > s2 ? n : s2), j = 0;
            k; --k, i1 = i1 == n - 1 ? 1 : i1 + 1, // i1 = i1 + 1 mod n - 1
-             j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
-        r = state[i1] ^ c * (r ^ r >> w - 2);
+             j = j == s2 - 1 ? 0 : j + 1 ) {      // j = j+1 mod s2
+        r = state[i1] ^ c * (r ^ r >> (w - 2));
         r += j + mixer_type(seed[m * j]) +
           (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
-           mixer_type(seed[m * j + 1]) << w - 32);
+           mixer_type(seed[m * j + 1]) << (w - 32));
         r &= mask;
         state[i1] = r;
       }
       for (unsigned k = n - 1; k; --k,
              i1 = i1 == n - 1 ? 1 : i1 + 1) { // i1 = i1 + 1 mod n - 1
-        r = state[i1] ^ d * (r ^ r >> w - 2);
+        r = state[i1] ^ d * (r ^ r >> (w - 2));
         r -= i1;
         r &= mask;
         state[i1] = r;
       }
-      state[0] = typename mixer_t::type(1) << w - 1;
+      state[0] = typename mixer_t::type(1) << (w - 1);
     }
   }
 
@@ -571,7 +571,7 @@ namespace RandomLib {
     mixer_type r = (a + s) & mask;
     state[0] = r;
     for (unsigned k = 1; k < n; ++k) {
-      r = b * (r ^ r >> w - 2) + k;
+      r = b * (r ^ r >> (w - 2)) + k;
       r &= mask;
       state[k] = r;
     }
@@ -581,17 +581,17 @@ namespace RandomLib {
       unsigned i1 = 0;
       for (unsigned k = (n > s2 ? n : s2), j = 0;
            k; --k, i1 = i1 == n - 1 ? 0 : i1 + 1, // i1 = i1 + 1 mod n
-             j = j == s2 - 1 ? 0 : j + 1 ) { // j = j+1 mod s2
-        r = state[i1] ^ c * (r ^ r >> w - 2);
+             j = j == s2 - 1 ? 0 : j + 1 ) {      // j = j+1 mod s2
+        r = state[i1] ^ c * (r ^ r >> (w - 2));
         r += j + mixer_type(seed[m * j]) +
           (m == 1 || 2 * j + 1 == s ? mixer_type(0) :
-           mixer_type(seed[m * j + 1]) << w - 32);
+           mixer_type(seed[m * j + 1]) << (w - 32));
         r &= mask;
         state[i1] = r;
       }
       for (unsigned k = n; k; --k,
              i1 = i1 == n - 1 ? 0 : i1 + 1) { // i1 = i1 + 1 mod n
-        r = state[i1] ^ d * (r ^ r >> w - 2);
+        r = state[i1] ^ d * (r ^ r >> (w - 2));
         r -= i1;
         r &= mask;
         state[i1] = r;
@@ -632,7 +632,7 @@ namespace RandomLib {
       //      l = (j + (n - lag)/2 + lag) mod n
       r ^= state[i] ^ state[k];
       r &= mask;
-      r = b * (r ^ r >> w - 5);
+      r = b * (r ^ r >> (w - 5));
       state[k] += r;
       r += i + (j > s ? 0 : (j ? mixer_type(seed[j - 1]) : s));
       state[l] += r;
@@ -648,7 +648,7 @@ namespace RandomLib {
       //      l = (i + (n - lag)/2 + lag) mod n
       r += state[i] + state[k];
       r &= mask;
-      r = c * (r ^ r >> w - 5);
+      r = c * (r ^ r >> (w - 5));
       r &= mask;
       state[k] ^= r;
       r -= i;
@@ -662,9 +662,9 @@ namespace RandomLib {
 
   // Here, input is I, J = I + 1, K = I + M; output is I = I + N (mod N)
 
-#define MT19937_STEP(I, J, K) statev[I] = statev[K] ^           \
-    (statev[J] & engine_type(1) ? magic : engine_type(0)) ^     \
-    (statev[I] & upper | statev[J] & lower) >> 1
+#define MT19937_STEP(I, J, K) statev[I] = statev[K] ^       \
+    (statev[J] & engine_type(1) ? magic : engine_type(0)) ^ \
+    ((statev[I] & upper) | (statev[J] & lower)) >> 1
 
   // The code is cleaned up a little from Hagita's Fortran version by getting
   // rid of the unnecessary masking by YMASK and by using simpler logic to
@@ -673,11 +673,11 @@ namespace RandomLib {
   // Here input is J = I + N - 1, K = I + M - 1, and p = y[I] (only the high
   // bits are used); output _state[I] and p = y[I - 1].
 
-#define MT19937_REVSTEP(I, J, K) {                              \
-    engine_type q = statev[J] ^ statev[K], s = q >> width - 1;  \
-    q = (q ^ (s ? magic : engine_type(0))) << 1 | s;            \
-    statev[I] = p & upper | q & lower;                          \
-    p = q;                                                      \
+#define MT19937_REVSTEP(I, J, K) {                                  \
+    engine_type q = statev[J] ^ statev[K], s = q >> (width - 1);    \
+    q = (q ^ (s ? magic : engine_type(0))) << 1 | s;                \
+    statev[I] = (p & upper) | (q & lower);                          \
+    p = q;                                                          \
   }
 
   template<class RandomType>
@@ -712,20 +712,20 @@ namespace RandomLib {
 
     // Perform the MT-specific sanity check on the resulting state ensuring
     // that the significant 19937 bits are not all zero.
-    state[0] &= upper;  // Mask out unused bits
+    state[0] &= upper;          // Mask out unused bits
     unsigned i = 0;
     while (i < N && state[i] == 0)
       ++i;
     if (i >= N)
-      state[0] = engine_type(1) << width - 1; // with prob 2^-19937
+      state[0] = engine_type(1) << (width - 1); // with prob 2^-19937
 
     // This sets the low R bits of _state[0] consistent with the rest of the
     // state.  Needed to handle SetCount(-N); Ran32(); immediately following
     // reseeding.  This wasn't required in the original code because a
     // Transition was always done first.
-    engine_type q = state[N - 1] ^ state[M - 1], s = q >> width - 1;
+    engine_type q = state[N - 1] ^ state[M - 1], s = q >> (width - 1);
     q = (q ^ (s ? magic : engine_type(0))) << 1 | s;
-    state[0] = state[0] & upper | q & lower;
+    state[0] = (state[0] & upper) | (q & lower);
   }
 
   template<class RandomType>
@@ -744,7 +744,7 @@ namespace RandomLib {
     // There are only width*(N-1) + 1 = 19937 independent bits of state.  Thus
     // the low width-1 bits of _state[0] are derivable from the other bits in
     // state.  Verify that the redundant bits bits are consistent.
-    engine_type q = state[N - 1] ^ state[M - 1], s = q >> width - 1;
+    engine_type q = state[N - 1] ^ state[M - 1], s = q >> (width - 1);
     q = (q ^ (s ? magic : engine_type(0))) << 1 | s;
     if ((q ^ state[0]) & lower)
       throw std::out_of_range("MT19937: Invalid state");
@@ -873,7 +873,7 @@ namespace RandomLib {
 
   // The Altivec versions of SFMT19937_{,REV}STEP128 are simply translated from
   // the SSE2 versions.  The only significant differences arise because of the
-  // MSB ordering of the PowerPC.  This means that teh 32-bit and 64-bit
+  // MSB ordering of the PowerPC.  This means that the 32-bit and 64-bit
   // versions are no different because 32-bit and 64-bit words don't pack
   // together in the same way as on an SSE2 machine (see the two definitions of
   // magic).  This also means that the 128-bit byte shifts on an LSB machine
@@ -982,56 +982,56 @@ namespace RandomLib {
 
 #else  // neither HAVE_SSE2 or HAVE_ALTIVEC
 
-#define SFMT19937_STEP32(I, J) {                                \
-    internal_type t = statev[I] ^ statev[I] << 8 ^              \
-      statev[J] >> 11 & magic0 ^                                \
-      (s0 >> 8 | s1 << 24) ^ r0 << 18;                          \
-    s0 = r0; r0 = t & mask;                                     \
-    t = statev[I + 1] ^                                         \
-      (statev[I + 1] << 8 | statev[I] >> 24) ^                  \
-      statev[J + 1] >> 11 & magic1 ^                            \
-      (s1 >> 8 | s2 << 24) ^ r1 << 18;                          \
-    s1 = r1; r1 = t & mask;                                     \
-    t = statev[I + 2] ^                                         \
-      (statev[I + 2] << 8 | statev[I + 1] >> 24) ^              \
-      statev[J + 2] >> 11 & magic2 ^                            \
-      (s2 >> 8 | s3 << 24) ^ r2 << 18;                          \
-    s2 = r2; r2 = t & mask;                                     \
-    t = statev[I + 3] ^                                         \
-      (statev[I + 3] << 8 | statev[I + 2] >> 24) ^              \
-      statev[J + 3] >> 11 & magic3 ^ s3 >> 8 ^ r3 << 18;        \
-    s3 = r3; r3 = t & mask;                                     \
-    statev[I    ] = r0; statev[I + 1] = r1;                     \
-    statev[I + 2] = r2; statev[I + 3] = r3;                     \
+#define SFMT19937_STEP32(I, J) {                            \
+    internal_type t = statev[I] ^ statev[I] << 8 ^          \
+      (statev[J] >> 11 & magic0) ^                          \
+      (s0 >> 8 | s1 << 24) ^ r0 << 18;                      \
+    s0 = r0; r0 = t & mask;                                 \
+    t = statev[I + 1] ^                                     \
+      (statev[I + 1] << 8 | statev[I] >> 24) ^              \
+      (statev[J + 1] >> 11 & magic1) ^                      \
+      (s1 >> 8 | s2 << 24) ^ r1 << 18;                      \
+    s1 = r1; r1 = t & mask;                                 \
+    t = statev[I + 2] ^                                     \
+      (statev[I + 2] << 8 | statev[I + 1] >> 24) ^          \
+      (statev[J + 2] >> 11 & magic2) ^                      \
+      (s2 >> 8 | s3 << 24) ^ r2 << 18;                      \
+    s2 = r2; r2 = t & mask;                                 \
+    t = statev[I + 3] ^                                     \
+      (statev[I + 3] << 8 | statev[I + 2] >> 24) ^          \
+      (statev[J + 3] >> 11 & magic3) ^ s3 >> 8 ^ r3 << 18;  \
+    s3 = r3; r3 = t & mask;                                 \
+    statev[I    ] = r0; statev[I + 1] = r1;                 \
+    statev[I + 2] = r2; statev[I + 3] = r3;                 \
   }
 
-#define SFMT19937_REVSTEP32(I, J, K, L) {                       \
-    internal_type                                               \
-      t0 = (statev[I] ^ statev[J] >> 11 & magic0 ^              \
-            (statev[K] >> 8 | statev[K + 1] << 24) ^            \
-            statev[L] << 18) & mask,                            \
-      t1 = (statev[I + 1] ^                                     \
-            statev[J + 1] >> 11 & magic1 ^                      \
-            (statev[K + 1] >> 8 | statev[K + 2] << 24) ^        \
-            statev[L + 1] << 18) & mask,                        \
-      t2 = (statev[I + 2] ^                                     \
-            statev[J + 2] >> 11 & magic2 ^                      \
-            (statev[K + 2] >> 8 | statev[K + 3] << 24) ^        \
-            statev[L + 2] << 18) & mask,                        \
-      t3 = (statev[I + 3] ^                                     \
-            statev[J + 3] >> 11 & magic3 ^                      \
-            statev[K + 3] >> 8 ^                                \
-            statev[L + 3] << 18) & mask;                        \
-    t3 ^= t1; t2 ^= t0; t3 ^= t2; t2 ^= t1; t1 ^= t0;           \
-    t3 ^= t2 >> 16 | t3 << 16 & mask;                           \
-    t2 ^= t1 >> 16 | t2 << 16 & mask;                           \
-    t1 ^= t0 >> 16 | t1 << 16 & mask;                           \
-    t0 ^=            t0 << 16 & mask;                           \
-    statev[I    ] = t0 ^             t0 << 8 & mask;            \
-    statev[I + 1] = t1 ^ (t0 >> 24 | t1 << 8 & mask);           \
-    statev[I + 2] = t2 ^ (t1 >> 24 | t2 << 8 & mask);           \
-    statev[I + 3] = t3 ^ (t2 >> 24 | t3 << 8 & mask);           \
- }
+#define SFMT19937_REVSTEP32(I, J, K, L) {                   \
+    internal_type                                           \
+      t0 = (statev[I] ^ (statev[J] >> 11 & magic0) ^        \
+            (statev[K] >> 8 | statev[K + 1] << 24) ^        \
+            statev[L] << 18) & mask,                        \
+      t1 = (statev[I + 1] ^                                 \
+            (statev[J + 1] >> 11 & magic1) ^                \
+            (statev[K + 1] >> 8 | statev[K + 2] << 24) ^    \
+            statev[L + 1] << 18) & mask,                    \
+      t2 = (statev[I + 2] ^                                 \
+            (statev[J + 2] >> 11 & magic2) ^                \
+            (statev[K + 2] >> 8 | statev[K + 3] << 24) ^    \
+            statev[L + 2] << 18) & mask,                    \
+      t3 = (statev[I + 3] ^                                 \
+            (statev[J + 3] >> 11 & magic3) ^                \
+            statev[K + 3] >> 8 ^                            \
+            statev[L + 3] << 18) & mask;                    \
+    t3 ^= t1; t2 ^= t0; t3 ^= t2; t2 ^= t1; t1 ^= t0;       \
+    t3 ^= t2 >> 16 | (t3 << 16 & mask);                     \
+    t2 ^= t1 >> 16 | (t2 << 16 & mask);                     \
+    t1 ^= t0 >> 16 | (t1 << 16 & mask);                     \
+    t0 ^=             t0 << 16 & mask;                      \
+    statev[I    ] = t0 ^             (t0 << 8 & mask);      \
+    statev[I + 1] = t1 ^ (t0 >> 24 | (t1 << 8 & mask));     \
+    statev[I + 2] = t2 ^ (t1 >> 24 | (t2 << 8 & mask));     \
+    statev[I + 3] = t3 ^ (t2 >> 24 | (t3 << 8 & mask));     \
+  }
 
   template<>
   void SFMT19937<Random_u32>::Transition(long long count, internal_type statev[])
@@ -1050,32 +1050,32 @@ namespace RandomLib {
       }
     } else if (count < 0)
       for (; count; ++count) {
-      unsigned i = N;
-      for (; i + M > N;) {
-        i -= R; SFMT19937_REVSTEP32(i, i + M - N, i - 2 * R, i - R);
+        unsigned i = N;
+        for (; i + M > N;) {
+          i -= R; SFMT19937_REVSTEP32(i, i + M - N, i - 2 * R, i - R);
+        }
+        for (; i > 2 * R;) {
+          i -= R; SFMT19937_REVSTEP32(i, i + M    , i - 2 * R, i - R);
+        }
+        SFMT19937_REVSTEP32(R, M + R, N -     R, 0    ); // i = R
+        SFMT19937_REVSTEP32(0, M    , N - 2 * R, N - R); // i = 0
       }
-      for (; i > 2 * R;) {
-        i -= R; SFMT19937_REVSTEP32(i, i + M    , i - 2 * R, i - R);
-      }
-      SFMT19937_REVSTEP32(R, M + R, N -     R, 0    ); // i = R
-      SFMT19937_REVSTEP32(0, M    , N - 2 * R, N - R); // i = 0
-    }
   }
 
 #undef SFMT19937_STEP32
 #undef SFMT19937_REVSTEP32
 
-#define SFMT19937_STEP64(I, J) {                        \
-    internal_type t = statev[I] ^ statev[I] << 8 ^      \
-      statev[J] >> 11 & magic0 ^                        \
-      (s0 >> 8 | s1 << 56) ^ r0 << 18 & mask18;         \
-    s0 = r0; r0 = t & mask;                             \
-    t = statev[I + 1] ^                                 \
-      (statev[I + 1] << 8 | statev[I] >> 56) ^          \
-      statev[J + 1] >> 11 & magic1 ^                    \
-      s1 >> 8 ^ r1 << 18 & mask18;                      \
-    s1 = r1; r1 = t & mask;                             \
-    statev[I] = r0; statev[I + 1] = r1;                 \
+#define SFMT19937_STEP64(I, J) {                    \
+    internal_type t = statev[I] ^ statev[I] << 8 ^  \
+      (statev[J] >> 11 & magic0) ^                  \
+      (s0 >> 8 | s1 << 56) ^ (r0 << 18 & mask18);   \
+    s0 = r0; r0 = t & mask;                         \
+    t = statev[I + 1] ^                             \
+      (statev[I + 1] << 8 | statev[I] >> 56) ^      \
+      (statev[J + 1] >> 11 & magic1) ^              \
+      s1 >> 8 ^ (r1 << 18 & mask18);                \
+    s1 = r1; r1 = t & mask;                         \
+    statev[I] = r0; statev[I + 1] = r1;             \
   }
 
   // In combining the left and right shifts to simulate a 128-bit shift we
@@ -1083,21 +1083,21 @@ namespace RandomLib {
   // >> 56 instead of t1 ^ t1 << 8 | t0 >> 56) and this speeds up the code if
   // used in some places.
 
-#define SFMT19937_REVSTEP64(I, J, K, L) {                       \
-    internal_type                                               \
-      t0 = statev[I] ^ statev[J] >> 11 & magic0 ^               \
-      (statev[K] >> 8 | statev[K + 1] << 56 & mask)             \
-      ^ statev[L] << 18 & mask18,                               \
-      t1 = statev[I + 1] ^ statev[J + 1] >> 11 & magic1 ^       \
-      statev[K + 1] >> 8 ^ statev[L + 1] << 18 & mask18;        \
-    t1 ^= t0;                                                   \
-    t1 ^= t0 >> 32 ^ t1 << 32 & mask;                           \
-    t0 ^=            t0 << 32 & mask;                           \
-    t1 ^= t0 >> 48 ^ t1 << 16 & mask;                           \
-    t0 ^=            t0 << 16 & mask;                           \
-    statev[I    ] = t0 ^            t0 << 8 & mask;             \
-    statev[I + 1] = t1 ^ t0 >> 56 ^ t1 << 8 & mask;             \
- }
+#define SFMT19937_REVSTEP64(I, J, K, L) {                   \
+    internal_type                                           \
+      t0 = statev[I] ^ (statev[J] >> 11 & magic0) ^         \
+      (statev[K] >> 8 | (statev[K + 1] << 56 & mask)) ^     \
+      (statev[L] << 18 & mask18),                           \
+      t1 = statev[I + 1] ^ (statev[J + 1] >> 11 & magic1) ^ \
+      statev[K + 1] >> 8 ^ (statev[L + 1] << 18 & mask18);  \
+    t1 ^= t0;                                               \
+    t1 ^= t0 >> 32 ^ (t1 << 32 & mask);                     \
+    t0 ^=             t0 << 32 & mask;                      \
+    t1 ^= t0 >> 48 ^ (t1 << 16 & mask);                     \
+    t0 ^=             t0 << 16 & mask;                      \
+    statev[I    ] = t0 ^            (t0 << 8 & mask);       \
+    statev[I + 1] = t1 ^ t0 >> 56 ^ (t1 << 8 & mask);       \
+  }
 
   template<>
   void SFMT19937<Random_u64>::Transition(long long count, internal_type statev[])
@@ -1134,8 +1134,8 @@ namespace RandomLib {
   template<>
   void SFMT19937<Random_u32>::NormalizeState(engine_type state[]) throw () {
     // Carry out the Period Certification for SFMT19937
-    engine_type inner = state[0] & PARITY0 ^ state[1] & PARITY1 ^
-      state[2] & PARITY2 ^ state[3] & PARITY3;
+    engine_type inner = (state[0] & PARITY0) ^ (state[1] & PARITY1) ^
+      (state[2] & PARITY2) ^ (state[3] & PARITY3);
     for (unsigned s = 16; s; s >>= 1)
       inner ^= inner >> s;
     STATIC_ASSERT(PARITY_LSB < 32 && PARITY0 & 1u << PARITY_LSB,
@@ -1149,7 +1149,7 @@ namespace RandomLib {
   template<>
   void SFMT19937<Random_u64>::NormalizeState(engine_type state[]) throw () {
     // Carry out the Period Certification for SFMT19937
-    engine_type inner = state[0] & PARITY0 ^ state[1] & PARITY1;
+    engine_type inner = (state[0] & PARITY0) ^ (state[1] & PARITY1);
     for (unsigned s = 32; s; s >>= 1)
       inner ^= inner >> s;
     STATIC_ASSERT(PARITY_LSB < 64 && PARITY0 & 1u << PARITY_LSB,
@@ -1186,61 +1186,61 @@ namespace RandomLib {
     // It would be nice to be able to use the C99 notation of 0x1.0p-120
     // for 2^-120 here.
     1/1329227995784915872903807060280344576.f, // 2^-120
-    1/664613997892457936451903530140172288.f, // 2^-119
-    1/332306998946228968225951765070086144.f, // 2^-118
-    1/166153499473114484112975882535043072.f, // 2^-117
-    1/83076749736557242056487941267521536.f, // 2^-116
-    1/41538374868278621028243970633760768.f, // 2^-115
-    1/20769187434139310514121985316880384.f, // 2^-114
-    1/10384593717069655257060992658440192.f, // 2^-113
-    1/5192296858534827628530496329220096.f, // 2^-112
-    1/2596148429267413814265248164610048.f, // 2^-111
-    1/1298074214633706907132624082305024.f, // 2^-110
-    1/649037107316853453566312041152512.f, // 2^-109
-    1/324518553658426726783156020576256.f, // 2^-108
-    1/162259276829213363391578010288128.f, // 2^-107
-    1/81129638414606681695789005144064.f, // 2^-106
-    1/40564819207303340847894502572032.f, // 2^-105
-    1/20282409603651670423947251286016.f, // 2^-104
-    1/10141204801825835211973625643008.f, // 2^-103
-    1/5070602400912917605986812821504.f, // 2^-102
-    1/2535301200456458802993406410752.f, // 2^-101
-    1/1267650600228229401496703205376.f, // 2^-100
-    1/633825300114114700748351602688.f, // 2^-99
-    1/316912650057057350374175801344.f, // 2^-98
-    1/158456325028528675187087900672.f, // 2^-97
-    1/79228162514264337593543950336.f, // 2^-96
-    1/39614081257132168796771975168.f, // 2^-95
-    1/19807040628566084398385987584.f, // 2^-94
-    1/9903520314283042199192993792.f, // 2^-93
-    1/4951760157141521099596496896.f, // 2^-92
-    1/2475880078570760549798248448.f, // 2^-91
-    1/1237940039285380274899124224.f, // 2^-90
-    1/618970019642690137449562112.f, // 2^-89
-    1/309485009821345068724781056.f, // 2^-88
-    1/154742504910672534362390528.f, // 2^-87
-    1/77371252455336267181195264.f, // 2^-86
-    1/38685626227668133590597632.f, // 2^-85
-    1/19342813113834066795298816.f, // 2^-84
-    1/9671406556917033397649408.f, // 2^-83
-    1/4835703278458516698824704.f, // 2^-82
-    1/2417851639229258349412352.f, // 2^-81
-    1/1208925819614629174706176.f, // 2^-80
-    1/604462909807314587353088.f, // 2^-79
-    1/302231454903657293676544.f, // 2^-78
-    1/151115727451828646838272.f, // 2^-77
-    1/75557863725914323419136.f, // 2^-76
-    1/37778931862957161709568.f, // 2^-75
-    1/18889465931478580854784.f, // 2^-74
-    1/9444732965739290427392.f, // 2^-73
-    1/4722366482869645213696.f, // 2^-72
-    1/2361183241434822606848.f, // 2^-71
-    1/1180591620717411303424.f, // 2^-70
-    1/590295810358705651712.f,  // 2^-69
-    1/295147905179352825856.f,  // 2^-68
-    1/147573952589676412928.f,  // 2^-67
-    1/73786976294838206464.f,   // 2^-66
-    1/36893488147419103232.f,   // 2^-65
+    1/664613997892457936451903530140172288.f,  // 2^-119
+    1/332306998946228968225951765070086144.f,  // 2^-118
+    1/166153499473114484112975882535043072.f,  // 2^-117
+    1/83076749736557242056487941267521536.f,   // 2^-116
+    1/41538374868278621028243970633760768.f,   // 2^-115
+    1/20769187434139310514121985316880384.f,   // 2^-114
+    1/10384593717069655257060992658440192.f,   // 2^-113
+    1/5192296858534827628530496329220096.f,    // 2^-112
+    1/2596148429267413814265248164610048.f,    // 2^-111
+    1/1298074214633706907132624082305024.f,    // 2^-110
+    1/649037107316853453566312041152512.f,     // 2^-109
+    1/324518553658426726783156020576256.f,     // 2^-108
+    1/162259276829213363391578010288128.f,     // 2^-107
+    1/81129638414606681695789005144064.f,      // 2^-106
+    1/40564819207303340847894502572032.f,      // 2^-105
+    1/20282409603651670423947251286016.f,      // 2^-104
+    1/10141204801825835211973625643008.f,      // 2^-103
+    1/5070602400912917605986812821504.f,       // 2^-102
+    1/2535301200456458802993406410752.f,       // 2^-101
+    1/1267650600228229401496703205376.f,       // 2^-100
+    1/633825300114114700748351602688.f,        // 2^-99
+    1/316912650057057350374175801344.f,        // 2^-98
+    1/158456325028528675187087900672.f,        // 2^-97
+    1/79228162514264337593543950336.f,         // 2^-96
+    1/39614081257132168796771975168.f,         // 2^-95
+    1/19807040628566084398385987584.f,         // 2^-94
+    1/9903520314283042199192993792.f,          // 2^-93
+    1/4951760157141521099596496896.f,          // 2^-92
+    1/2475880078570760549798248448.f,          // 2^-91
+    1/1237940039285380274899124224.f,          // 2^-90
+    1/618970019642690137449562112.f,           // 2^-89
+    1/309485009821345068724781056.f,           // 2^-88
+    1/154742504910672534362390528.f,           // 2^-87
+    1/77371252455336267181195264.f,            // 2^-86
+    1/38685626227668133590597632.f,            // 2^-85
+    1/19342813113834066795298816.f,            // 2^-84
+    1/9671406556917033397649408.f,             // 2^-83
+    1/4835703278458516698824704.f,             // 2^-82
+    1/2417851639229258349412352.f,             // 2^-81
+    1/1208925819614629174706176.f,             // 2^-80
+    1/604462909807314587353088.f,              // 2^-79
+    1/302231454903657293676544.f,              // 2^-78
+    1/151115727451828646838272.f,              // 2^-77
+    1/75557863725914323419136.f,               // 2^-76
+    1/37778931862957161709568.f,               // 2^-75
+    1/18889465931478580854784.f,               // 2^-74
+    1/9444732965739290427392.f,                // 2^-73
+    1/4722366482869645213696.f,                // 2^-72
+    1/2361183241434822606848.f,                // 2^-71
+    1/1180591620717411303424.f,                // 2^-70
+    1/590295810358705651712.f,                 // 2^-69
+    1/295147905179352825856.f,                 // 2^-68
+    1/147573952589676412928.f,                 // 2^-67
+    1/73786976294838206464.f,                  // 2^-66
+    1/36893488147419103232.f,                  // 2^-65
 #endif
     1/18446744073709551616.f,   // 2^-64
     1/9223372036854775808.f,    // 2^-63
@@ -1375,18 +1375,12 @@ namespace RandomLib {
 #endif
 
   // RandomEngine (and implicitly RandomAlgorithm and RandomMixer)
-  // instantiations
+  // instantiations.  The first 4 (using MixerMT[01]) are not recommended.
+  template class RandomEngine<  MT19937<Random_u32>, MixerMT0<Random_u32> >;
+  template class RandomEngine<  MT19937<Random_u64>, MixerMT0<Random_u64> >;
+  template class RandomEngine<  MT19937<Random_u32>, MixerMT1<Random_u32> >;
+  template class RandomEngine<  MT19937<Random_u64>, MixerMT1<Random_u64> >;
 
-#if RANDOM_LEGACY
-  template class
-  RandomEngine<MT19937<Random_u32>, MixerMT0<Random_u32> >;
-  template class
-  RandomEngine<MT19937<Random_u64>, MixerMT0<Random_u64> >;
-  template class
-  RandomEngine<MT19937<Random_u32>, MixerMT1<Random_u32> >;
-  template class
-  RandomEngine<MT19937<Random_u64>, MixerMT1<Random_u64> >;
-#endif
   template class RandomEngine<  MT19937<Random_u32>, MixerSFMT>;
   template class RandomEngine<  MT19937<Random_u64>, MixerSFMT>;
   template class RandomEngine<SFMT19937<Random_u32>, MixerSFMT>;

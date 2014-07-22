@@ -40,7 +40,7 @@ namespace RandomLib {
      * A mask for the significant bits.
      **********************************************************************/
     static const type mask =
-      ~type(0) >> std::numeric_limits<type>::digits - width;
+      ~type(0) >> (std::numeric_limits<type>::digits - width);
     /**
      * The minimum representable value
      **********************************************************************/
@@ -88,7 +88,7 @@ namespace RandomLib {
   inline void Random_u32::CheckSum(Random_u32::type n, Random_u32::type& check)
     throw() {
     // Circular shift left by one bit and add new word.
-    check = (check << 1 | check >> 31 & Random_u32::type(1)) + n;
+    check = (check << 1 | (check >> 31 & Random_u32::type(1))) + n;
     check &= Random_u32::mask;
   }
 

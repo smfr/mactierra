@@ -129,7 +129,7 @@ namespace RandomLib {
       return bits <= width ?
 	IntType(Generator::Ran() & Generator::mask
 		>> (bits <= width ? width - bits : 0)) :
-	IntType(Generator::Ran64() & u64::mask >> 64 - bits);
+	IntType(Generator::Ran64() & u64::mask >> (64 - bits));
     }
 
     /**
@@ -499,7 +499,7 @@ namespace RandomLib {
       // pick the high bit off a Ran() and pass the rest of the number
       // to FloatZ to use.  This saves 1/2 a call to Ran().
       const result_type x = Generator::Ran();
-      return x >> width - 1 ?	// equivalent to Boolean()
+      return x >> (width - 1) ?	// equivalent to Boolean()
 	// Float<RealType, prec, erange>()
 	FloatZ<RealType, prec, erange, false>(width - 1, x) :
 	// FloatU<RealType, prec, erange>()
@@ -524,7 +524,7 @@ namespace RandomLib {
     template<typename RealType, int prec, int erange>
     RealType FloatW() throw() {
       const result_type x = Generator::Ran();
-      const int y = int(x >> width - 2);
+      const int y = int(x >> (width - 2));
       return (1 - (y & 2)) *	// Equiv to (Boolean() ? -1 : 1) *
 	( y & 1 ?		// equivalent to Boolean()
 	  // Float<RealType, prec, erange>()
