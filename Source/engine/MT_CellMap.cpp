@@ -172,7 +172,7 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
     if (numCreatures == 0)
         return true;
 
-    size_t curIndex = startIndex;
+    long curIndex = startIndex;
     bool maxedRange = false;
     bool foundGap = false;
     address_t foundLocation = 0;
@@ -181,8 +181,8 @@ CellMap::searchForSpace(address_t& ioAddress, u_int32_t inLength, u_int32_t inMa
     {
         case kBothways:
             {
-                size_t forwardIndex = curIndex;
-                size_t backIndex = curIndex;
+                long forwardIndex = curIndex;
+                long backIndex = curIndex;
                 bool forwardWrapped = false;
                 bool backwardsWrapped = false;
                 

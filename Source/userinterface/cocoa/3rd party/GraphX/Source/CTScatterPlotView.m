@@ -307,7 +307,7 @@
         [self setCurveColor:color];
         return;
     }
-    NSString* colorKey = [NSString stringWithFormat:@"curve_%d", series];
+    NSString* colorKey = [NSString stringWithFormat:@"curve_%ld", (long)series];
     [graphColors setColor:color forKey:colorKey];
 }
 
@@ -316,7 +316,7 @@
     if (series == 0)
         return [self curveColor];
 
-    NSString* colorKey = [NSString stringWithFormat:@"curve_%d", series];
+    NSString* colorKey = [NSString stringWithFormat:@"curve_%ld", (long)series];
     return [graphColors colorWithKey:colorKey];
 }
 

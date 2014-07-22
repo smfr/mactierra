@@ -502,9 +502,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @end
 
-static const NSInteger kFirstGenotypeImageViewTag = 1001;
-static const NSInteger kSecondGenotypeImageViewTag = 1002;
-
 @implementation MTTwoGenotypesFrequencyGraphAdapter
 
 @synthesize firstGenotype;

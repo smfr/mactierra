@@ -99,7 +99,7 @@ static std::string incrementString(const std::string& inString)
     string tempString(inString);
     
     size_t len = tempString.length();
-    size_t pos = len - 1;
+    long pos = len - 1;
     while (pos >= 0)
     {
         if (tempString[pos] < 'z')
