@@ -569,7 +569,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_OPTIMIZATION_LEVEL = 0;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -577,14 +577,14 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
 		A8F75438088915AC00F072FD /* Default */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.9;
 			};
 			name = Default;
 		};

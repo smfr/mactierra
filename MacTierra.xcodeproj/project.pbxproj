@@ -2147,6 +2147,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = TestRunner;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -2162,6 +2163,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = TestRunner;
+				SDKROOT = macosx10.9;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2180,6 +2182,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = mactierra;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -2195,6 +2198,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = mactierra;
+				SDKROOT = macosx10.9;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -2204,9 +2208,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2218,7 +2220,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -2226,9 +2228,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				FRAMEWORK_SEARCH_PATHS = (
-					"\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
@@ -2238,7 +2238,7 @@
 					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
 				);
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.6;
+				SDKROOT = macosx10.9;
 			};
 			name = Release;
 		};
