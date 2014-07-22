@@ -193,9 +193,9 @@ namespace serialization {
 template<class Archive, class T>
 void serialize(Archive & ar, boost::tuple<u_int64_t, u_int64_t, T>& data, const unsigned int version)
 {
-    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("inst", data.get<0>());
-    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cycles", data.get<1>());
-    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", data.get<2>());
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("inst", get<0>(data));
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("cycles", get<1>(data));
+    ar & MT_BOOST_MEMBER_SERIALIZATION_NVP("data", get<2>(data));
 }
 
 } // namespace serialization
