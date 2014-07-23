@@ -757,10 +757,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 #pragma mark -
 
-NSString* const kGraphLabelKey      = @"graph_label";
-NSString* const kGraphTypeKey       = @"graph_type";
-NSString* const kGraphAdaptorKey    = @"graph_adaptor";
-
 @implementation MTGraphController
 
 @synthesize graphs;

@@ -38,12 +38,12 @@ namespace MacTierra {
 - (void)setWorld:(MacTierra::World*)inWorld;
 - (MacTierra::World*)world;
 
-@property (assign) BOOL zoomToFit;
-@property (assign) BOOL showCells;
-@property (assign) BOOL showInstructionPointers;
-@property (assign) BOOL showFecundity;
+@property (assign, nonatomic) BOOL zoomToFit;
+@property (assign, nonatomic) BOOL showCells;
+@property (assign, nonatomic) BOOL showInstructionPointers;
+@property (assign, nonatomic) BOOL showFecundity;
 
-@property (assign) NSString* focusedCreatureName;
+@property (assign, nonatomic) NSString* focusedCreatureName;
 
 
 @end

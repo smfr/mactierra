@@ -21,7 +21,7 @@ namespace MacTierra {
     NSMutableArray*                 mGenotypes;
 }
 
-@property (assign) MacTierra::Inventory* inventory;
+@property (assign, nonatomic) MacTierra::Inventory* inventory;
 
 - (NSArrayController*)genotypesArrayController;
 

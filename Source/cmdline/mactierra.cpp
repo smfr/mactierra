@@ -39,7 +39,6 @@ using namespace std;
 namespace io = boost::iostreams;
 
 const int32_t kDefaultSoupSize = 1024 * 256;
-const int32_t kCycleCount = 200;
 
 // cheesy ostream subclass which holds onto the streambuf
 class fileDescStream : public ostream

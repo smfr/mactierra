@@ -18,7 +18,7 @@
     MTInventoryGenotype* genotype;
 }
 
-@property (retain) MTInventoryGenotype* genotype;
-@property (assign) MTWorldController* worldController;
+@property (retain, nonatomic) MTInventoryGenotype* genotype;
+@property (assign, nonatomic) MTWorldController* worldController;
 
 @end

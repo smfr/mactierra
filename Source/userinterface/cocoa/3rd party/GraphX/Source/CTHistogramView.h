@@ -31,12 +31,12 @@
 
 - (void)drawGraph:(NSRect)rect;
 
-@property (assign) NSUInteger numberOfBuckets;
+@property (assign, nonatomic) NSUInteger numberOfBuckets;
 
-@property (assign) BOOL showBorder;
-@property (assign) BOOL showFill;
+@property (assign, nonatomic) BOOL showBorder;
+@property (assign, nonatomic) BOOL showFill;
 
-@property (retain) NSColor* borderColor;
-@property (retain) NSColor* fillColor;
+@property (retain, nonatomic) NSColor* borderColor;
+@property (retain, nonatomic) NSColor* fillColor;
 
 @end

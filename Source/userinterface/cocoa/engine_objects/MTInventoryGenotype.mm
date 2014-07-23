@@ -294,7 +294,7 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
     if (genomeData)
     {
         if (!creatureName)
-            creatureName = [NSString stringWithFormat:@"%daaaaa", [genomeData length]];
+            creatureName = [NSString stringWithFormat:@"%ldaaaaa", (long)[genomeData length]];
 
         return [[[MTSerializableGenotype alloc] initWithName:creatureName genome:genomeData] autorelease];
     }
