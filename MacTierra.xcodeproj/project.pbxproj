@@ -2296,8 +2296,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				OTHER_CFLAGS = (
 					"-fno-stack-protector",
-					"-DBOOST_ENABLE_ASSERT_HANDLER",
 					"-DNDEBUG",
+					"-DBOOST_DISABLE_ASSERTS",
 				);
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
