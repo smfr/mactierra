@@ -8,6 +8,7 @@
  */
 
 #include <stdlib.h>
+#include <algorithm>
 #include <new>
 
 #include <boost/assert.hpp>

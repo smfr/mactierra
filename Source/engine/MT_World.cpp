@@ -20,7 +20,7 @@
 
 #include <boost/serialization/serialization.hpp>
 
-#include "MT_Cellmap.h"
+#include "MT_CellMap.h"
 #include "MT_Creature.h"
 #include "MT_ExecutionUnit0.h"
 #include "MT_Genotype.h"

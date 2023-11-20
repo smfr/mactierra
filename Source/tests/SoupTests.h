@@ -8,6 +8,7 @@
  */
 
 #include "TestRunner.h"
+#include <sys/types.h>
 
 namespace MacTierra {
 class Soup;
