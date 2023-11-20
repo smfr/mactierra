@@ -16,21 +16,22 @@
 		0F13F8820E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F8830E5FCA0700D8E649 /* MT_Inventory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F8800E5FCA0700D8E649 /* MT_Inventory.cpp */; };
 		0F13F88E0E5FCA2D00D8E649 /* SerializationTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F13F88D0E5FCA2D00D8E649 /* SerializationTests.cpp */; };
-		0F186586123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
-		0F186587123C6F4B009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
-		0F186588123C6F4B009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
-		0F186589123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
-		0F18658A123C6F4B009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
-		0F18658B123C6F4B009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
-		0F186667123C7167009ED12C /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186583123C6F4B009ED12C /* libboost_iostreams.a */; };
-		0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186584123C6F4B009ED12C /* libboost_serialization.a */; };
-		0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F186585123C6F4B009ED12C /* libboost_thread.a */; };
-		0F18668C123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
-		0F18668D123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
-		0F18668E123C747E009ED12C /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F18668B123C747E009ED12C /* libboost_wserialization.a */; };
 		0F1D1A920E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A930E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
 		0F1D1A940E7A3A93008EB764 /* Assertions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F1D1A910E7A3A93008EB764 /* Assertions.cpp */; };
+		0F2C9C351D989DCE00DC621B /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C341D989DCE00DC621B /* libstdc++.dylib */; };
+		0F2C9C641D98A12500DC621B /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C601D98A12500DC621B /* libboost_iostreams.a */; };
+		0F2C9C651D98A12500DC621B /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C601D98A12500DC621B /* libboost_iostreams.a */; };
+		0F2C9C661D98A12500DC621B /* libboost_iostreams.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C601D98A12500DC621B /* libboost_iostreams.a */; };
+		0F2C9C671D98A12500DC621B /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C611D98A12500DC621B /* libboost_serialization.a */; };
+		0F2C9C681D98A12500DC621B /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C611D98A12500DC621B /* libboost_serialization.a */; };
+		0F2C9C691D98A12500DC621B /* libboost_serialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C611D98A12500DC621B /* libboost_serialization.a */; };
+		0F2C9C6A1D98A12500DC621B /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C621D98A12500DC621B /* libboost_thread.a */; };
+		0F2C9C6B1D98A12500DC621B /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C621D98A12500DC621B /* libboost_thread.a */; };
+		0F2C9C6C1D98A12500DC621B /* libboost_thread.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C621D98A12500DC621B /* libboost_thread.a */; };
+		0F2C9C6D1D98A12500DC621B /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C631D98A12500DC621B /* libboost_wserialization.a */; };
+		0F2C9C6E1D98A12500DC621B /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C631D98A12500DC621B /* libboost_wserialization.a */; };
+		0F2C9C6F1D98A12500DC621B /* libboost_wserialization.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F2C9C631D98A12500DC621B /* libboost_wserialization.a */; };
 		0F4F663C0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F4F663D0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
 		0F4F663E0E9861CC000EAA73 /* MT_WorldArchiver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */; };
@@ -252,9 +253,6 @@
 		0F13FAF20E5FD99600D8E649 /* trivial_value_traits.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = trivial_value_traits.hpp; sourceTree = "<group>"; };
 		0F13FAF30E5FD99600D8E649 /* unordered_set.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unordered_set.hpp; sourceTree = "<group>"; };
 		0F13FAF40E5FD99600D8E649 /* unordered_set_hook.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = unordered_set_hook.hpp; sourceTree = "<group>"; };
-		0F186583123C6F4B009ED12C /* libboost_iostreams.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_iostreams.a; path = "Source/boost/boost-1_44_0/lib/libboost_iostreams.a"; sourceTree = "<group>"; };
-		0F186584123C6F4B009ED12C /* libboost_serialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_serialization.a; path = "Source/boost/boost-1_44_0/lib/libboost_serialization.a"; sourceTree = "<group>"; };
-		0F186585123C6F4B009ED12C /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = "Source/boost/boost-1_44_0/lib/libboost_thread.a"; sourceTree = "<group>"; };
 		0F186593123C700D009ED12C /* add_facet.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = add_facet.hpp; sourceTree = "<group>"; };
 		0F186594123C700D009ED12C /* archive_exception.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = archive_exception.hpp; sourceTree = "<group>"; };
 		0F186595123C700D009ED12C /* basic_archive.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = basic_archive.hpp; sourceTree = "<group>"; };
@@ -434,7 +432,6 @@
 		0F18665C123C7027009ED12C /* void_cast.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = void_cast.hpp; sourceTree = "<group>"; };
 		0F18665D123C7027009ED12C /* weak_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = weak_ptr.hpp; sourceTree = "<group>"; };
 		0F18665E123C7027009ED12C /* wrapper.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = wrapper.hpp; sourceTree = "<group>"; };
-		0F18668B123C747E009ED12C /* libboost_wserialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_wserialization.a; path = "Source/boost/boost-1_44_0/lib/libboost_wserialization.a"; sourceTree = "<group>"; };
 		0F1D18FD0E7A2A50008EB764 /* smart_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = smart_ptr.hpp; sourceTree = "<group>"; };
 		0F1D19010E7A2B74008EB764 /* intrusive_ptr.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = intrusive_ptr.hpp; sourceTree = "<group>"; };
 		0F1D19C60E7A2EC1008EB764 /* noncopyable.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = noncopyable.hpp; sourceTree = "<group>"; };
@@ -446,6 +443,11 @@
 		0F1D19DC0E7A2F84008EB764 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
 		0F1D19DD0E7A2F8A008EB764 /* AlwaysInline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlwaysInline.h; sourceTree = "<group>"; };
 		0F1D1A910E7A3A93008EB764 /* Assertions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Assertions.cpp; sourceTree = "<group>"; };
+		0F2C9C341D989DCE00DC621B /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "usr/lib/libstdc++.dylib"; sourceTree = SDKROOT; };
+		0F2C9C601D98A12500DC621B /* libboost_iostreams.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_iostreams.a; path = lib/libboost_iostreams.a; sourceTree = "<group>"; };
+		0F2C9C611D98A12500DC621B /* libboost_serialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_serialization.a; path = lib/libboost_serialization.a; sourceTree = "<group>"; };
+		0F2C9C621D98A12500DC621B /* libboost_thread.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_thread.a; path = lib/libboost_thread.a; sourceTree = "<group>"; };
+		0F2C9C631D98A12500DC621B /* libboost_wserialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_wserialization.a; path = lib/libboost_wserialization.a; sourceTree = "<group>"; };
 		0F4F663A0E9861CC000EAA73 /* MT_WorldArchiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_WorldArchiver.h; sourceTree = "<group>"; };
 		0F4F663B0E9861CC000EAA73 /* MT_WorldArchiver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_WorldArchiver.cpp; sourceTree = "<group>"; };
 		0F63B1010E5E6A54005793DE /* MTDocumentController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDocumentController.h; sourceTree = "<group>"; };
@@ -785,10 +787,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F186667123C7167009ED12C /* libboost_iostreams.a in Frameworks */,
-				0F186668123C7167009ED12C /* libboost_serialization.a in Frameworks */,
-				0F18668E123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
-				0F186669123C7167009ED12C /* libboost_thread.a in Frameworks */,
+				0F2C9C681D98A12500DC621B /* libboost_serialization.a in Frameworks */,
+				0F2C9C651D98A12500DC621B /* libboost_iostreams.a in Frameworks */,
+				0F2C9C6E1D98A12500DC621B /* libboost_wserialization.a in Frameworks */,
+				0F2C9C6B1D98A12500DC621B /* libboost_thread.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -796,10 +798,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0F186589123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */,
-				0F18658A123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
-				0F18668D123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
-				0F18658B123C6F4B009ED12C /* libboost_thread.a in Frameworks */,
+				0F2C9C691D98A12500DC621B /* libboost_serialization.a in Frameworks */,
+				0F2C9C661D98A12500DC621B /* libboost_iostreams.a in Frameworks */,
+				0F2C9C6F1D98A12500DC621B /* libboost_wserialization.a in Frameworks */,
+				0F2C9C6C1D98A12500DC621B /* libboost_thread.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -807,13 +809,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0F2C9C351D989DCE00DC621B /* libstdc++.dylib in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
+				0F2C9C6D1D98A12500DC621B /* libboost_wserialization.a in Frameworks */,
 				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 				0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */,
-				0F186586123C6F4B009ED12C /* libboost_iostreams.a in Frameworks */,
-				0F186587123C6F4B009ED12C /* libboost_serialization.a in Frameworks */,
-				0F186588123C6F4B009ED12C /* libboost_thread.a in Frameworks */,
-				0F18668C123C747E009ED12C /* libboost_wserialization.a in Frameworks */,
+				0F2C9C6A1D98A12500DC621B /* libboost_thread.a in Frameworks */,
+				0F2C9C671D98A12500DC621B /* libboost_serialization.a in Frameworks */,
+				0F2C9C641D98A12500DC621B /* libboost_iostreams.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -858,7 +861,7 @@
 				0FA2911F0EABB4060087BE6F /* tuple */,
 			);
 			name = boost;
-			path = "Source/boost/boost-1_44_0/include/boost";
+			path = "Source/boost/boost-1_83_0/include/boost";
 			sourceTree = "<group>";
 		};
 		0F13F9F80E5FD98300D8E649 /* archive */ = {
@@ -1059,12 +1062,13 @@
 		0F18657E123C6F40009ED12C /* boost */ = {
 			isa = PBXGroup;
 			children = (
-				0F186583123C6F4B009ED12C /* libboost_iostreams.a */,
-				0F186584123C6F4B009ED12C /* libboost_serialization.a */,
-				0F18668B123C747E009ED12C /* libboost_wserialization.a */,
-				0F186585123C6F4B009ED12C /* libboost_thread.a */,
+				0F2C9C601D98A12500DC621B /* libboost_iostreams.a */,
+				0F2C9C611D98A12500DC621B /* libboost_serialization.a */,
+				0F2C9C621D98A12500DC621B /* libboost_thread.a */,
+				0F2C9C631D98A12500DC621B /* libboost_wserialization.a */,
 			);
 			name = boost;
+			path = "Source/boost/boost-1_83_0";
 			sourceTree = "<group>";
 		};
 		0F1865A9123C700D009ED12C /* detail */ = {
@@ -1813,6 +1817,7 @@
 		2A37F4C3FDCFA73011CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0F2C9C341D989DCE00DC621B /* libstdc++.dylib */,
 				0F18657E123C6F40009ED12C /* boost */,
 				1058C7A6FEA54F5311CA2CBB /* Linked Frameworks */,
 				1058C7A8FEA54F5311CA2CBB /* Other Frameworks */,
@@ -1884,12 +1889,18 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0420;
+				TargetAttributes = {
+					8D15AC270486D014006FF6A4 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
 			};
 			buildConfigurationList = C05733CB08A9546B00998B17 /* Build configuration list for PBXProject "MacTierra" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* MacTierra */;
@@ -2139,15 +2150,12 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
-				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
 				PRODUCT_NAME = TestRunner;
-				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -2156,15 +2164,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TestRunner;
-				SDKROOT = macosx10.9;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -2174,15 +2180,13 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
 				PRODUCT_NAME = mactierra;
-				SDKROOT = macosx10.9;
 			};
 			name = Debug;
 		};
@@ -2191,15 +2195,13 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
-				GCC_MODEL_TUNING = G5;
 				INSTALL_PATH = /usr/local/bin;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = mactierra;
-				SDKROOT = macosx10.9;
-				ZERO_LINK = NO;
 			};
 			name = Release;
 		};
@@ -2207,7 +2209,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -2217,10 +2221,11 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.9;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
@@ -2228,6 +2233,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = "\"$(SRCROOT)/Source/userinterface/cocoa/3rd\\ party/GraphX/Source/build/$(CONFIGURATION)\"";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
@@ -2235,17 +2242,18 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\"$(SRCROOT)/Source/boost/boost-1_44_0/lib\"",
+					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = MacTierra;
-				SDKROOT = macosx10.9;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};
 		C05733CC08A9546B00998B17 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2259,22 +2267,23 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					Source,
-					"Source/boost/boost-1_44_0/include",
+					"Source/boost/boost-1_83_0/include",
 				);
-				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_83_0/lib";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
 					"-fstack-protector-all",
 					"-DBOOST_ENABLE_ASSERT_HANDLER",
 				);
+				OTHER_CODE_SIGN_FLAGS = "--deep";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
 		C05733CD08A9546B00998B17 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_STRICT_ALIASING = NO;
@@ -2290,19 +2299,21 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					Source,
-					"Source/boost/boost-1_44_0/include",
+					"Source/boost/boost-1_83_0/include",
 				);
-				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_44_0/lib";
-				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_83_0/lib";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = (
 					"-fno-stack-protector",
 					"-DNDEBUG",
 					"-DBOOST_DISABLE_ASSERTS",
 				);
+				OTHER_CODE_SIGN_FLAGS = "--deep";
 				OTHER_CPLUSPLUSFLAGS = (
 					"$(OTHER_CFLAGS)",
 					"-DBOOST_DISABLE_ASSERTS",
 				);
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
