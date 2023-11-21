@@ -45,8 +45,6 @@
 		0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960A5E0E80B9270007D1D5 /* MTGenebankController.mm */; };
 		0F960B090E80C6250007D1D5 /* GenebankWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0F960B070E80C6250007D1D5 /* GenebankWindow.xib */; };
 		0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */; };
-		0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9876BB0EAAE5D300AA0738 /* GraphX.framework */; };
-		0F9876E40EAAE8F600AA0738 /* GraphX.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 0F9876BB0EAAE5D300AA0738 /* GraphX.framework */; };
 		0F992BC50E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC60E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
 		0F992BC70E65010C00EFF4D3 /* MT_InstructionSet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */; };
@@ -73,6 +71,11 @@
 		0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB044E80E5D3B990024DF67 /* MTCreature.mm */; };
 		0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */; };
 		0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */; };
+		0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A612B0C3AB6006EE71B /* DataSources.m */; };
+		0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A622B0C3AB6006EE71B /* CTGraphView.m */; };
+		0FB59A6C2B0C3AB6006EE71B /* CTHistogramView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */; };
+		0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A642B0C3AB6006EE71B /* CTCurveView.m */; };
+		0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */; };
 		0FB6C5DD0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DF0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
@@ -143,27 +146,6 @@
 			remoteGlobalIDString = 0FBEC0420E56AF7A00ABB516;
 			remoteInfo = mactierra_cmd;
 		};
-		0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = A8CF1B000923235F00E21122;
-			remoteInfo = GraphX;
-		};
-		0F9876BC0EAAE5D300AA0738 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 8D1107320486CEB800E47090;
-			remoteInfo = "Graph Suite";
-		};
-		0F9876BE0EAAE5EE00AA0738 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = A868ACA00894A1A00078843B;
-			remoteInfo = GraphX;
-		};
 		0FA527EF0E7D7CDC004D840D /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2A37F4A9FDCFA73011CA2CEA /* Project object */;
@@ -180,7 +162,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				0F9876E40EAAE8F600AA0738 /* GraphX.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -463,7 +444,6 @@
 		0F960B080E80C6250007D1D5 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = Resources/English.lproj/GenebankWindow.xib; sourceTree = "<group>"; };
 		0F960B140E80C8D50007D1D5 /* MTGenebankWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGenebankWindowController.h; sourceTree = "<group>"; };
 		0F960B150E80C8D50007D1D5 /* MTGenebankWindowController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTGenebankWindowController.mm; sourceTree = "<group>"; };
-		0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = "Graph Suite.xcodeproj"; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/Graph Suite.xcodeproj"; sourceTree = "<group>"; };
 		0F992BC40E65010C00EFF4D3 /* MT_InstructionSet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_InstructionSet.cpp; sourceTree = "<group>"; };
 		0F992C010E650BCF00EFF4D3 /* Instructions0.clr */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Instructions0.clr; sourceTree = "<group>"; };
 		0F995BC00E68FD3C00AC5089 /* MTGraphController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTGraphController.h; sourceTree = "<group>"; };
@@ -633,6 +613,16 @@
 		0FB044E80E5D3B990024DF67 /* MTCreature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTCreature.mm; sourceTree = "<group>"; };
 		0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra XML Document.icns"; sourceTree = "<group>"; };
 		0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra Binary Document.icns"; sourceTree = "<group>"; };
+		0FB59A602B0C3AB6006EE71B /* CTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGraphView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTGraphView.h"; sourceTree = SOURCE_ROOT; };
+		0FB59A612B0C3AB6006EE71B /* DataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataSources.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/DataSources.m"; sourceTree = SOURCE_ROOT; };
+		0FB59A622B0C3AB6006EE71B /* CTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTGraphView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTGraphView.m"; sourceTree = SOURCE_ROOT; };
+		0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTHistogramView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTHistogramView.m"; sourceTree = SOURCE_ROOT; };
+		0FB59A642B0C3AB6006EE71B /* CTCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTCurveView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTCurveView.m"; sourceTree = SOURCE_ROOT; };
+		0FB59A652B0C3AB6006EE71B /* CTHistogramView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTHistogramView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTHistogramView.h"; sourceTree = SOURCE_ROOT; };
+		0FB59A662B0C3AB6006EE71B /* CTScatterPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTScatterPlotView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTScatterPlotView.h"; sourceTree = SOURCE_ROOT; };
+		0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTScatterPlotView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTScatterPlotView.m"; sourceTree = SOURCE_ROOT; };
+		0FB59A682B0C3AB6006EE71B /* DataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSources.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/DataSources.h"; sourceTree = SOURCE_ROOT; };
+		0FB59A692B0C3AB6006EE71B /* CTCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTCurveView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTCurveView.h"; sourceTree = SOURCE_ROOT; };
 		0FB6C5DB0E61EAC60030536C /* MT_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Settings.h; sourceTree = "<group>"; };
 		0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MT_Settings.cpp; sourceTree = "<group>"; };
 		0FB90D310E52A72900449CC6 /* CellMapTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellMapTests.h; sourceTree = "<group>"; };
@@ -813,7 +803,6 @@
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				0F2C9C6D1D98A12500DC621B /* libboost_wserialization.a in Frameworks */,
 				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
-				0F9876E20EAAE8E200AA0738 /* GraphX.framework in Frameworks */,
 				0F2C9C6A1D98A12500DC621B /* libboost_thread.a in Frameworks */,
 				0F2C9C671D98A12500DC621B /* libboost_serialization.a in Frameworks */,
 				0F2C9C641D98A12500DC621B /* libboost_iostreams.a in Frameworks */,
@@ -1199,15 +1188,6 @@
 			path = genebank;
 			sourceTree = "<group>";
 		};
-		0F9876B60EAAE5D300AA0738 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				0F9876BD0EAAE5D300AA0738 /* Graph Suite.app */,
-				0F9876BB0EAAE5D300AA0738 /* GraphX.framework */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		0F9DE5D30E575DAD00E86DD6 /* controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1563,6 +1543,23 @@
 			path = engine_objects;
 			sourceTree = "<group>";
 		};
+		0FB59A5F2B0C3AAA006EE71B /* GraphSuite */ = {
+			isa = PBXGroup;
+			children = (
+				0FB59A692B0C3AB6006EE71B /* CTCurveView.h */,
+				0FB59A642B0C3AB6006EE71B /* CTCurveView.m */,
+				0FB59A602B0C3AB6006EE71B /* CTGraphView.h */,
+				0FB59A622B0C3AB6006EE71B /* CTGraphView.m */,
+				0FB59A652B0C3AB6006EE71B /* CTHistogramView.h */,
+				0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */,
+				0FB59A662B0C3AB6006EE71B /* CTScatterPlotView.h */,
+				0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */,
+				0FB59A682B0C3AB6006EE71B /* DataSources.h */,
+				0FB59A612B0C3AB6006EE71B /* DataSources.m */,
+			);
+			path = GraphSuite;
+			sourceTree = "<group>";
+		};
 		0FB9C4DF0E7241E700E6EBFD /* application */ = {
 			isa = PBXGroup;
 			children = (
@@ -1761,7 +1758,6 @@
 			children = (
 				0FB9C4400E72336000E6EBFD /* Readme.txt */,
 				0FB9C4480E72338500E6EBFD /* TODO.txt */,
-				0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */,
 				0F13F9F70E5FD95000D8E649 /* boost */,
 				0FA5F8010E9069730097B984 /* boost_additions */,
 				0FFF64300E4FE34C00404828 /* RandomLib */,
@@ -1780,6 +1776,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
+				0FB59A5F2B0C3AAA006EE71B /* GraphSuite */,
 				0FB9C4DF0E7241E700E6EBFD /* application */,
 				0F9DE5DB0E575DB800E86DD6 /* views */,
 				0F9DE5D30E575DAD00E86DD6 /* controllers */,
@@ -1872,7 +1869,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */,
 				0FA527F00E7D7CDC004D840D /* PBXTargetDependency */,
 				0F861E87123C998A00E6428B /* PBXTargetDependency */,
 			);
@@ -1905,12 +1901,6 @@
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* MacTierra */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = 0F9876B60EAAE5D300AA0738 /* Products */;
-					ProjectRef = 0F9876B50EAAE5D300AA0738 /* Graph Suite.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				8D15AC270486D014006FF6A4 /* MacTierra */,
@@ -1919,23 +1909,6 @@
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		0F9876BB0EAAE5D300AA0738 /* GraphX.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = GraphX.framework;
-			remoteRef = 0F9876BA0EAAE5D300AA0738 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		0F9876BD0EAAE5D300AA0738 /* Graph Suite.app */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.application;
-			path = "Graph Suite.app";
-			remoteRef = 0F9876BC0EAAE5D300AA0738 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		8D15AC2B0486D014006FF6A4 /* Resources */ = {
@@ -2042,14 +2015,18 @@
 				0FBB068B0E5A984B007F2A6B /* MT_Creature.cpp in Sources */,
 				0FBB068C0E5A984B007F2A6B /* MT_Soup.cpp in Sources */,
 				0FBB068D0E5A984B007F2A6B /* MT_ExecutionUnit.cpp in Sources */,
+				0FB59A6C2B0C3AB6006EE71B /* CTHistogramView.m in Sources */,
 				0FBB068E0E5A984B007F2A6B /* MT_Reaper.cpp in Sources */,
 				0FBB068F0E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */,
+				0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */,
 				0FBB06900E5A984B007F2A6B /* MT_Assert.cpp in Sources */,
 				0FBB06910E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */,
 				0FBB06FB0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */,
+				0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */,
 				0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 				0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */,
 				0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */,
+				0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */,
 				0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */,
 				0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */,
 				0F63B1030E5E6A54005793DE /* MTDocumentController.m in Sources */,
@@ -2069,6 +2046,7 @@
 				0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 				0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */,
 				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
+				0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */,
 				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */,
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 				0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
@@ -2085,11 +2063,6 @@
 			isa = PBXTargetDependency;
 			target = 0FBEC0420E56AF7A00ABB516 /* mactierra_cmd */;
 			targetProxy = 0F861E86123C998A00E6428B /* PBXContainerItemProxy */;
-		};
-		0F9876BF0EAAE5EE00AA0738 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = GraphX;
-			targetProxy = 0F9876BE0EAAE5EE00AA0738 /* PBXContainerItemProxy */;
 		};
 		0FA527F00E7D7CDC004D840D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
