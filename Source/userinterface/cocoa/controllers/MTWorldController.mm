@@ -198,7 +198,7 @@ using namespace MacTierra;
 
 - (void)exportInventorySavePanelDidDne:(NSSavePanel *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    if (mWorldData->world() && returnCode == NSOKButton)
+    if (mWorldData->world() && returnCode == NSModalResponseOK)
     {
         [self lockWorld];
         NSString* filePath = [sheet filename];
@@ -426,7 +426,7 @@ using namespace MacTierra;
 {
     [sheet orderOut:nil];
     
-    if (returnCode == NSOKButton)
+    if (returnCode == NSModalResponseOK)
     {
         const MacTierra::Settings* theSettings = worldSettings.settings;
         BOOST_ASSERT(theSettings);
@@ -475,12 +475,12 @@ using namespace MacTierra;
 
 - (IBAction)okSettingsPanel:(id)sender
 {
-    [NSApp endSheet:mSettingsPanel returnCode:NSOKButton];
+    [NSApp endSheet:mSettingsPanel returnCode:NSModalResponseOK];
 }
 
 - (IBAction)cancelSettingsPanel:(id)sender
 {
-    [NSApp endSheet:mSettingsPanel returnCode:NSCancelButton];
+    [NSApp endSheet:mSettingsPanel returnCode:NSModalResponseCancel];
 }
 
 #pragma mark -

@@ -31,8 +31,8 @@
     if (NO)
         return 8.0f;
 
-    *outLabel = [NSString stringWithFormat:@"%d", index];
-    
+    *outLabel = [NSString stringWithFormat:@"%lu", (unsigned long)index];
+
     //return .398942 * exp(-.5 * pow(((index / 10.0f) / 2 - 5) / 1.5, 2)) * 24;
     //return pow((upperLimit-5),2) + 50;
     return (series = 0) ? 0.9 * index : 0.6 * index;

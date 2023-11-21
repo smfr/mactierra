@@ -153,7 +153,7 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 
 - (void)exportSettingsPanelDidDne:(NSSavePanel *)sheet returnCode:(NSInteger)returnCode contextInfo:(void *)contextInfo
 {
-    if (returnCode == NSOKButton)
+    if (returnCode == NSModalResponseOK)
     {
         [worldController writeSoupConfigurationToXMLFile:[sheet URL]];
     }

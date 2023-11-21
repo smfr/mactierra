@@ -53,8 +53,8 @@
     displacement = [[NSBezierPath alloc] init];
     
     [border setLineWidth:borderLineWidth];
-    [border setLineJoinStyle:NSRoundLineJoinStyle];
-    [border setLineCapStyle :NSRoundLineCapStyle ];
+    [border setLineJoinStyle:NSLineJoinStyleRound];
+    [border setLineCapStyle :NSLineCapStyleRound ];
   }
   
   return self;

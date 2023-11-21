@@ -138,7 +138,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     if (!sLabelAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
-        [pStyle setAlignment:NSCenterTextAlignment];
+        [pStyle setAlignment:NSTextAlignmentCenter];
     
         sLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
                 [NSFont fontWithName:@"Lucida Grande" size:11], NSFontAttributeName,

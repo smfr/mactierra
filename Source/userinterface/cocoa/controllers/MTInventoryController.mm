@@ -107,14 +107,14 @@ using namespace MacTierra;
 
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
-    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSStringPboardType, nil]  owner:self];
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
     MTInventoryGenotype* curGenotype = [[mGenotypesArrayController arrangedObjects] objectAtIndex:curIndex];
 
     MTSerializableGenotype* genotype = [MTSerializableGenotype serializableGenotypeFromGenotype:curGenotype];
 
-    [pasteboard setString:[genotype stringRepresentation] forType:NSStringPboardType];
+    [pasteboard setString:[genotype stringRepresentation] forType:NSPasteboardTypeString];
     [pasteboard setData:[genotype archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     return true;

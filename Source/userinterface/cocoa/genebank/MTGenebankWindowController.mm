@@ -35,14 +35,14 @@
 - (BOOL)tableView:(NSTableView *)tableView writeRowsWithIndexes:(NSIndexSet *)rowIndexes toPasteboard:(NSPasteboard*)pasteboard
 {
     // FIXME: for some reason other applications don't want to receive the text drags
-    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSStringPboardType, nil]  owner:self];
+    [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
     MTGenebankGenotype* curGenotype = [[mGenebankArrayController arrangedObjects] objectAtIndex:curIndex];
 
     MTSerializableGenotype* genotype = [[[MTSerializableGenotype alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome] autorelease];
 
-    [pasteboard setString:[genotype stringRepresentation] forType:NSStringPboardType];
+    [pasteboard setString:[genotype stringRepresentation] forType:NSPasteboardTypeString];
     [pasteboard setData:[genotype archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     return YES;

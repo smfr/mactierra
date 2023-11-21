@@ -54,8 +54,8 @@
     displacement = [[NSBezierPath alloc] init];
     
     [curve setLineWidth:curveLineWidth];
-    [curve setLineJoinStyle:NSRoundLineJoinStyle];
-    [curve setLineCapStyle :NSRoundLineCapStyle ];
+    [curve setLineJoinStyle:NSLineJoinStyleRound];
+    [curve setLineCapStyle:NSLineCapStyleRound];
   }
   
   return self;

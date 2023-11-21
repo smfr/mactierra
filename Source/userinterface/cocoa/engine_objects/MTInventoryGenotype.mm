@@ -311,9 +311,9 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
         if (creatureData)
             creature = [NSKeyedUnarchiver unarchiveObjectWithData:creatureData];
     }
-    else if ([[inPasteboard types] containsObject:NSStringPboardType])
+    else if ([[inPasteboard types] containsObject:NSPasteboardTypeString])
     {
-        NSString* pasteboardString = [inPasteboard stringForType:NSStringPboardType];
+        NSString* pasteboardString = [inPasteboard stringForType:NSPasteboardTypeString];
         if (pasteboardString)
             creature = [MTSerializableGenotype serializableGenotypeFromString:pasteboardString];
     }

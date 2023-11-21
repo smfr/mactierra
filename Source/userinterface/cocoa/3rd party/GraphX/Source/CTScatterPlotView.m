@@ -111,8 +111,8 @@
 
         NSBezierPath*   curve = [NSBezierPath bezierPath];
         [curve setLineWidth:curveLineWidth];
-        [curve setLineJoinStyle:NSRoundLineJoinStyle];
-        [curve setLineCapStyle :NSRoundLineCapStyle ];
+        [curve setLineJoinStyle:NSLineJoinStyleRound];
+        [curve setLineCapStyle :NSLineCapStyleRound ];
     
         NSBezierPath*   displacement = [NSBezierPath bezierPath];
 

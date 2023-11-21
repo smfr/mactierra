@@ -74,13 +74,13 @@
 
     MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromGenotype:genotype];
 
-    NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+    NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSPasteboardNameDrag];
 
     [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType,
-                                                       NSStringPboardType,
+                                                       NSPasteboardTypeString,
                                                        nil]  owner:self];
 
-    [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
+    [pasteboard setString:[serCreature stringRepresentation] forType:NSPasteboardTypeString];
     [pasteboard setData:[serCreature archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     // FIXME: scale the image so that it matches the soup scaling

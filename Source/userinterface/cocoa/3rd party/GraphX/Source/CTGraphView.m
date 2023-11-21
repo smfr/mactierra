@@ -92,7 +92,7 @@ static const float kTickMarkLength = 4.0f;
     if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
-        [pStyle setAlignment:NSCenterTextAlignment];
+        [pStyle setAlignment:NSTextAlignmentCenter];
 
         sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
              [NSFont systemFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
@@ -111,7 +111,7 @@ static const float kTickMarkLength = 4.0f;
     if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
-        [pStyle setAlignment:NSRightTextAlignment];
+        [pStyle setAlignment:NSTextAlignmentRight];
 
         sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
              [NSFont systemFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
@@ -130,7 +130,7 @@ static const float kTickMarkLength = 4.0f;
     if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
-        [pStyle setAlignment:NSCenterTextAlignment];
+        [pStyle setAlignment:NSTextAlignmentCenter];
 
         sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
             [NSFont paletteFontOfSize:[NSFont smallSystemFontSize]], NSFontAttributeName,
@@ -149,7 +149,7 @@ static const float kTickMarkLength = 4.0f;
     if (!sAttributes)
     {
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
-        [pStyle setAlignment:NSCenterTextAlignment];
+        [pStyle setAlignment:NSTextAlignmentCenter];
 
         sAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
               [NSFont boldSystemFontOfSize:[NSFont systemFontSize]], NSFontAttributeName,

@@ -63,7 +63,7 @@ using namespace MacTierra;
         showInstructionPointers = NO;
         self.focusedCreatureName = @"";
 
-        [self registerForDraggedTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSStringPboardType, nil]];
+        [self registerForDraggedTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]];
     }
     return self;
 }
@@ -181,7 +181,7 @@ using namespace MacTierra;
 - (void)setScalingCTM
 {
     // set the CTM to match the zooming that GL does
-    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
     CGContextConcatCTM(cgContext, [self soupToViewTransform]);
 }
 
@@ -196,7 +196,7 @@ using namespace MacTierra;
         selectedGenotype = [[mGenotypesArrayController selectedObjects] firstObject];
     }
     
-    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
 
     NSColor* adultColor  = [[NSColor blueColor] colorWithAlphaComponent:0.5];
     NSColor* embryoColor = [[NSColor grayColor] colorWithAlphaComponent:0.5];
@@ -287,7 +287,7 @@ using namespace MacTierra;
     if (!mWorld)
         return;
 
-    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
 
     CGContextSetLineWidth(cgContext, 1.0f);
     
@@ -355,7 +355,7 @@ using namespace MacTierra;
     if (!mWorld)
         return;
 
-    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
 
     const CGFloat kInstPointerRectBorderWidth = 1.0f;
     CGContextSetLineWidth(cgContext, kInstPointerRectBorderWidth);
@@ -506,15 +506,15 @@ using namespace MacTierra;
 
         MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromCreature:creatureObj];
 
-        NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSDragPboard];
+        NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSPasteboardNameDrag];
 
         [pasteboard declareTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType,
                                                            kGenotypeDataPasteboardType,
-                                                           NSStringPboardType,
+                                                           NSPasteboardTypeString,
                                                            nil]  owner:self];
 
         [pasteboard setPropertyList:[creatureObj pasteboardData] forType:kCreatureReferencePasteboardType];
-        [pasteboard setString:[serCreature stringRepresentation] forType:NSStringPboardType];
+        [pasteboard setString:[serCreature stringRepresentation] forType:NSPasteboardTypeString];
         [pasteboard setData:[serCreature archiveRepresentation] forType:kGenotypeDataPasteboardType];
     
         // FIXME: scale the image so that it matches the soup scaling
