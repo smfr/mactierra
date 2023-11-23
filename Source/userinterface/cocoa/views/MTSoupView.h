@@ -16,7 +16,7 @@ namespace MacTierra {
 
 @class MTWorldController;
 
-@interface MTSoupView : MTCompositedGLView
+@interface MTSoupView : NSView
 {
     IBOutlet MTWorldController*     mWorldController;
     IBOutlet NSArrayController*     mGenotypesArrayController;

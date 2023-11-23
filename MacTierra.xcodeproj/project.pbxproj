@@ -58,8 +58,6 @@
 		0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D50E575DAD00E86DD6 /* MTWorldController.mm */; };
 		0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */; };
 		0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */; };
-		0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */; };
-		0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0F9DE6540E57795B00E86DD6 /* OpenGL.framework */; };
 		0F9DEE3E0E57CDCD00E86DD6 /* CPUTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0F9DEE260E57CD4600E86DD6 /* CPUTests.cpp */; };
 		0FA53E660E91E25200826FAD /* MTWorldDataCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FA53E650E91E25200826FAD /* MTWorldDataCollection.mm */; };
 		0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FA54D360E7C512F00337C19 /* NSCharacterSetAdditions.m */; };
@@ -460,8 +458,6 @@
 		0F9DE5D90E575DB300E86DD6 /* MacTierraDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MacTierraDocument.mm; sourceTree = "<group>"; };
 		0F9DE5DC0E575DB800E86DD6 /* MTSoupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTSoupView.h; sourceTree = "<group>"; };
 		0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTSoupView.mm; sourceTree = "<group>"; };
-		0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTCompositedGLView.m; sourceTree = "<group>"; };
-		0F9DE5E50E575FDB00E86DD6 /* MTCompositedGLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTCompositedGLView.h; sourceTree = "<group>"; };
 		0F9DE6540E57795B00E86DD6 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = /System/Library/Frameworks/OpenGL.framework; sourceTree = "<absolute>"; };
 		0F9DEDDF0E84A9140079EAAE /* MT_InventoryListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_InventoryListener.h; sourceTree = "<group>"; };
 		0F9DEE250E57CD4600E86DD6 /* CPUTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CPUTests.h; sourceTree = "<group>"; };
@@ -802,7 +798,6 @@
 				0F2C9C351D989DCE00DC621B /* libstdc++.dylib in Frameworks */,
 				8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */,
 				0F2C9C6D1D98A12500DC621B /* libboost_wserialization.a in Frameworks */,
-				0F9DE6550E57795B00E86DD6 /* OpenGL.framework in Frameworks */,
 				0F2C9C6A1D98A12500DC621B /* libboost_thread.a in Frameworks */,
 				0F2C9C671D98A12500DC621B /* libboost_serialization.a in Frameworks */,
 				0F2C9C641D98A12500DC621B /* libboost_iostreams.a in Frameworks */,
@@ -1217,8 +1212,6 @@
 		0F9DE5DB0E575DB800E86DD6 /* views */ = {
 			isa = PBXGroup;
 			children = (
-				0F9DE5E50E575FDB00E86DD6 /* MTCompositedGLView.h */,
-				0F9DE5E40E575FDB00E86DD6 /* MTCompositedGLView.m */,
 				0F9DE5DC0E575DB800E86DD6 /* MTSoupView.h */,
 				0F9DE5DD0E575DB800E86DD6 /* MTSoupView.mm */,
 				0FC8E6C00EB3DA5D004760EA /* MTGenotypeImageView.h */,
@@ -2006,7 +1999,6 @@
 				0F9DE5D60E575DAD00E86DD6 /* MTWorldController.mm in Sources */,
 				0F9DE5DA0E575DB300E86DD6 /* MacTierraDocument.mm in Sources */,
 				0F9DE5DE0E575DB800E86DD6 /* MTSoupView.mm in Sources */,
-				0F9DE5E60E575FDB00E86DD6 /* MTCompositedGLView.m in Sources */,
 				0FA56D370E5A8ACE0001E997 /* MTInstructionCountFormatter.m in Sources */,
 				0FBB06870E5A984B007F2A6B /* MT_TimeSlicer.cpp in Sources */,
 				0FBB06880E5A984B007F2A6B /* MT_CellMap.cpp in Sources */,

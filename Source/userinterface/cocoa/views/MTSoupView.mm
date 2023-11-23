@@ -88,8 +88,6 @@ using namespace MacTierra;
         const int kSoupWidth = 512;
         mSoupWidth = kSoupWidth;
         mSoupHeight = mWorld->soupSize() / kSoupWidth;
-        
-        [self setGLOptions];
     }
 
     [self setNeedsDisplay:YES];
@@ -403,8 +401,9 @@ using namespace MacTierra;
 
 - (CGAffineTransform)soupToViewTransform
 {
-    return zoomToFit ? CGAffineTransformMakeScale((CGFloat)mGlWidth / mSoupWidth, (CGFloat)mGlHeight / mSoupHeight)
-                     : CGAffineTransformMakeTranslation((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0);
+    NSSize viewSize = self.bounds.size;
+    return zoomToFit ? CGAffineTransformMakeScale(viewSize.width / mSoupWidth, viewSize.height / mSoupHeight)
+                     : CGAffineTransformMakeTranslation((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0);
 }
 
 - (CGAffineTransform)viewToSoupTransform
@@ -414,8 +413,9 @@ using namespace MacTierra;
 
 - (CGRect)soupRect
 {
-    CGRect soupExtent = zoomToFit ? CGRectMake(0, 0, mGlWidth, mGlHeight)
-                                  : CGRectMake((mGlWidth - (float)mSoupWidth) / 2.0, (mGlHeight - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
+    NSSize viewSize = self.bounds.size;
+    CGRect soupExtent = zoomToFit ? CGRectMake(0, 0, viewSize.width, viewSize.height)
+                                  : CGRectMake((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
     return soupExtent;
 }
 
@@ -590,120 +590,6 @@ using namespace MacTierra;
         }
     }
     return inserted;
-}
-
-#pragma mark -
-
-- (NSRect)contentsRect
-{
-	NSRect viewBounds = [self bounds];
-	NSRect imageDestRect = viewBounds;
-
-	if (mWorld && mWorld->soup())
-        imageDestRect = [self contentsRectForSize:NSMakeSize(mSoupWidth, mSoupHeight)];
-    
-	return imageDestRect;
-}
-
-- (BOOL)checkForGLError
-{
-    CGLContextObj cgl_ctx = mCGlContext;
-
-    GLenum gl_err;
-    if ((gl_err = glGetError()))
-    {
-        NSLog(@"OpenGL error %d", gl_err);
-        return true;
-    }
-    return false;
-}
-
-- (void)setGLOptions
-{
-    CGLContextObj cgl_ctx = mCGlContext;
-
-    GLint i;
-    GLfloat redMap[256];
-    GLfloat greenMap[256];
-    GLfloat blueMap[256];
-    
-    /* define accelerated bgr233 to RGBA pixelmaps.  */
-    for (i = 0; i < 256; i++)
-        redMap[i] = (i & 0x7) / 7.0;
-
-    for (i = 0; i < 256; i++)
-        greenMap[i] = ((i & 0x38) >> 3) / 7.0;
-
-    for (i = 0; i < 256; i++)
-        blueMap[i] = ((i & 0xc0) >> 6) / 3.0;
-
-
-    NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
-    NSColorList* colorList = [[[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath] autorelease];
-    NSColorSpace* rgbColorSpace = [NSColorSpace genericRGBColorSpace];
-    if (colorList)
-    {
-        NSArray*    colorKeys = [colorList allKeys];
-        NSUInteger n, numColors = [colorKeys count];
-        for (n = 0; n < numColors; ++n)
-        {
-            NSString* curKey = [colorKeys objectAtIndex:n];
-            // make sure we can get RGB
-            NSColor* curColor = [[colorList colorWithKey:curKey] colorUsingColorSpace:rgbColorSpace];
-            if (curColor)
-            {
-                CGFloat red, green, blue, alpha;
-                [curColor getRed:&red green:&green blue:&blue alpha:&alpha];
-                redMap[n] = red;
-                greenMap[n] = green;
-                blueMap[n] = blue;
-            }
-        }
-    }
-
-    glPixelTransferf(GL_ALPHA_SCALE, 0.0);
-    glPixelTransferf(GL_ALPHA_BIAS,  1.0);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_R, 256, redMap);
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_G, 256, greenMap);
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_B, 256, blueMap);
-
-    GLfloat constantAlpha = 1.0;
-    glPixelMapfv(GL_PIXEL_MAP_I_TO_A, 1, &constantAlpha);
-
-    glPixelTransferi(GL_INDEX_SHIFT, 0);
-    glPixelTransferi(GL_INDEX_OFFSET, 0);
-    glPixelTransferi(GL_MAP_COLOR, GL_TRUE);
-    glDisable(GL_DITHER);
-
-    [self checkForGLError];
-
-    glClearColor(0.3, 0.3, 0.3, 1.0);
-}
-
-- (void)render
-{
-    CGLContextObj cgl_ctx = mCGlContext;
-
-    glClear(GL_COLOR_BUFFER_BIT);
-
-    if (!mWorld || !mWorld->soup())
-        return;
-
-    if (zoomToFit)
-    {
-        glPixelZoom((GLfloat)mGlWidth / mSoupWidth, -(GLfloat)mGlHeight / mSoupHeight);
-        glRasterPos2f(0, mGlHeight);
-    }
-    else
-    {
-        glPixelZoom(1, -1);
-        glRasterPos2f((mGlWidth - (float)mSoupWidth) / 2.0, mSoupHeight - (((float)mSoupHeight - mGlHeight) / 2.0));
-    }
-    glDrawPixels(mSoupWidth, mSoupHeight, GL_COLOR_INDEX, GL_UNSIGNED_BYTE, mWorld->soup()->soup());
-
-    [self checkForGLError];
 }
 
 #pragma mark -
