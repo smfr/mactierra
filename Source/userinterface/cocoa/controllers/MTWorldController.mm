@@ -675,10 +675,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         }
 
         const NSUInteger kNumCycles = 10000;
-
-        NSLog(@"iterate start");
         [mWorldController iterate:kNumCycles];
-        NSLog(@"iterate end");
 
         [runningCondition unlock];
     }

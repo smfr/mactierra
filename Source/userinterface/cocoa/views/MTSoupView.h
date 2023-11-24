@@ -8,8 +8,6 @@
 
 #import <Cocoa/Cocoa.h>
 
-#import "MTCompositedGLView.h"
-
 namespace MacTierra {
     class World;
 };

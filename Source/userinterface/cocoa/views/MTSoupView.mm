@@ -22,10 +22,19 @@
 
 using namespace MacTierra;
 
+struct RGBSoupColor {
+    uint8_t red;
+    uint8_t green;
+    uint8_t blue;
+
+    RGBSoupColor(uint8_t r = 0, uint8_t g = 0, uint8_t b = 0)
+    : red(r), green(g), blue(b)
+    { }
+};
+
 @interface MTSoupView ()
 
 @property (nonatomic, retain) NSMutableData* soupImageBackingStore;
-@property (nonatomic, retain) NSArray<NSColor*>* colorLookupTable;
 @property (nonatomic, assign) CGContextRef soupContext;
 
 - (void)setScalingCTM;
@@ -50,7 +59,11 @@ using namespace MacTierra;
 
 #pragma mark -
 
-@implementation MTSoupView
+static constexpr size_t colorsArraySize = 256;
+
+@implementation MTSoupView {
+    std::array<RGBSoupColor, colorsArraySize> _instructionColors;
+}
 
 @synthesize zoomToFit;
 @synthesize showCells;
@@ -71,6 +84,8 @@ using namespace MacTierra;
         self.focusedCreatureName = @"";
 
         [self registerForDraggedTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]];
+
+        [self buildColorLookupTable];
     }
     return self;
 }
@@ -155,11 +170,8 @@ using namespace MacTierra;
     return YES;
 }
 
-- (void)ensureColorLookupTable
+- (void)buildColorLookupTable
 {
-    if (self.colorLookupTable)
-        return;
-
     NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
     NSColorList* colorList = [[[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath] autorelease];
     if (!colorList)
@@ -167,34 +179,28 @@ using namespace MacTierra;
 
     NSColorSpace* rgbColorSpace = [NSColorSpace sRGBColorSpace];
 
-    const size_t colorsArraySize = 256;
-    NSMutableArray<NSColor*>* colorLUT = [NSMutableArray arrayWithCapacity:colorsArraySize];
-    for (size_t i = 0; i < colorsArraySize; ++i)
-        [colorLUT addObject:[NSColor blackColor]];
-
-    NSArray*    colorKeys = [colorList allKeys];
-    NSUInteger n, numColors = [colorKeys count];
+    // FIXME: Are we getting these in the correct order?
+    NSArray*   colorKeys = [colorList allKeys];
+    NSUInteger numColors = [colorKeys count];
     if (numColors > colorsArraySize)
         numColors = colorsArraySize;
 
-    for (n = 0; n < numColors; ++n)
+    for (NSUInteger n = 0; n < numColors; ++n)
     {
         NSString* curKey = [colorKeys objectAtIndex:n];
         // make sure we can get RGB
         NSColor* curColor = [[colorList colorWithKey:curKey] colorUsingColorSpace:rgbColorSpace];
-        [colorLUT replaceObjectAtIndex:n withObject:curColor];
-    }
 
-    self.colorLookupTable = colorLUT;
+        CGFloat red = 0, green = 0, blue = 0, alpha = 1;
+        [curColor getRed:&red green:&green blue:&blue alpha:&alpha];
+        _instructionColors[n] = RGBSoupColor(red * 255, green * 255, blue * 255);
+    }
 }
 
 - (void)drawSoup
 {
     if (!mWorld)
         return;
-
-    NSLog(@"drawSoup");
-    [self ensureColorLookupTable];
 
     const size_t bytesPerPixel = 4;
     if (!soupImageBackingStore) {
@@ -213,19 +219,14 @@ using namespace MacTierra;
 
     for (u_int32_t i = 0; i < soup->soupSize(); ++i) {
         instruction_t instruction = soup->instructionAtAddress(i);
-
-        NSColor* color = [self.colorLookupTable objectAtIndex:instruction];
-
-        CGFloat red = 0, green = 0, blue = 0, alpha = 1;
-        [color getRed:&red green:&green blue:&blue alpha:&alpha];
+        auto color = _instructionColors[instruction];
 
         uint8_t* pixelPointer = dataBytes + i * bytesPerPixel;
-        pixelPointer[0] = red * 255;
-        pixelPointer[1] = green * 255;
-        pixelPointer[2] = blue * 255;
+        pixelPointer[0] = color.red;
+        pixelPointer[1] = color.green;
+        pixelPointer[2] = color.blue;
         pixelPointer[3] = 255; // Alpha
     }
-
 
     const size_t bitsPerComponent = 8;
     size_t bytesPerRow = mSoupWidth * bytesPerPixel;
