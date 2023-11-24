@@ -179,7 +179,6 @@ static constexpr size_t colorsArraySize = 256;
 
     NSColorSpace* rgbColorSpace = [NSColorSpace sRGBColorSpace];
 
-    // FIXME: Are we getting these in the correct order?
     NSArray*   colorKeys = [colorList allKeys];
     NSUInteger numColors = [colorKeys count];
     if (numColors > colorsArraySize)
