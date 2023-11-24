@@ -2116,10 +2116,7 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = TestRunner;
 			};
 			name = Debug;
@@ -2130,10 +2127,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = TestRunner;
 			};
@@ -2147,10 +2141,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				PRODUCT_NAME = mactierra;
 			};
 			name = Debug;
@@ -2161,10 +2152,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
 				INSTALL_PATH = /usr/local/bin;
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = mactierra;
 			};
@@ -2184,10 +2172,7 @@
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				PRODUCT_NAME = MacTierra;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -2205,10 +2190,7 @@
 				GCC_PREFIX_HEADER = Source/userinterface/cocoa/MacTierra_Prefix.pch;
 				INFOPLIST_FILE = Resources/Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Source/boost/boost-1_83_0/lib",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = MacTierra;
@@ -2235,6 +2217,8 @@
 					"Source/boost/boost-1_83_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_83_0/lib";
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "Source/boost/boost-1_83_0/lib/arm64";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "Source/boost/boost-1_83_0/lib/x86_64";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = (
@@ -2267,6 +2251,8 @@
 					"Source/boost/boost-1_83_0/include",
 				);
 				LIBRARY_SEARCH_PATHS = "Source/boost/boost-1_83_0/lib";
+				"LIBRARY_SEARCH_PATHS[arch=arm64]" = "Source/boost/boost-1_83_0/lib/arm64";
+				"LIBRARY_SEARCH_PATHS[arch=x86_64]" = "Source/boost/boost-1_83_0/lib/x86_64";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				OTHER_CFLAGS = (
 					"-fno-stack-protector",
