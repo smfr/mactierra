@@ -16,6 +16,7 @@
 #include <boost/serialization/serialization.hpp>
 
 #import "MTSoupView.h"
+#import "MTTimeUtils.h"
 
 #import "MT_Cellmap.h"
 #import "MT_Inventory.h"
@@ -59,22 +60,23 @@ using namespace MacTierra;
 #pragma mark -
 
 @interface MTWorldThread : NSThread
-{
-    MTWorldController*  mWorldController;       // not retained
-    NSCondition*        runningCondition;
-    BOOL                running;
-}
+
+@property (nonatomic, assign) MTWorldController* worldController;
+@property (nonatomic, retain) NSLock* worldLock;
+@property (retain) NSRunLoop* threadRunLoop;
+@property (nonatomic, retain) NSTimer* runWorldTimer;
+@property (assign) BOOL running;
+@property (assign) BOOL terminated;
 
 - (id)initWithWorldController:(MTWorldController*)inController;
-
-@property (retain) NSCondition* runningCondition;
-@property (assign) BOOL running;
 
 - (void)run;
 - (void)pause;
 
-- (void)lock;
-- (void)unlock;
+- (void)lockWorld;
+- (void)unlockWorld;
+
+- (void)wakeUp;
 
 @end
 
@@ -113,7 +115,7 @@ using namespace MacTierra;
     self.selectedCreature = nil;
     [mSoupView setWorld:NULL];
     [mSoupView release];
-    
+
     delete mWorldData;
 
     [super dealloc];
@@ -125,7 +127,7 @@ using namespace MacTierra;
 
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
     [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
-    
+
     [mDebugGenotypeImageView bind:@"genotype"
                          toObject:self
                       withKeyPath:@"selectedCreature.genotype"
@@ -147,16 +149,16 @@ using namespace MacTierra;
     if (inWorld != mWorldData->world())
     {
         [self terminateWorldThread];
-        
+
         [mSoupView setWorld:nil];
         [mInventoryController setInventory:nil];
 
         mWorldData->setWorld(inWorld, inDataCollectors);
         [mSoupView setWorld:mWorldData->world()];
-        
+
         if (mWorldData->world())
             [self createWorldThread];
-        
+
         [mInventoryController setInventory:mWorldData->world() ? mWorldData->world()->inventory() : NULL];
 
         [mGraphController worldChanged];
@@ -189,7 +191,7 @@ using namespace MacTierra;
 - (IBAction)exportInventory:(id)sender
 {
     NSSavePanel*    savePanel = [NSSavePanel savePanel];
-    
+
     [savePanel beginSheetForDirectory:nil
                                  file:@"Inventory.txt"
                        modalForWindow:[document windowForSheet]
@@ -204,7 +206,7 @@ using namespace MacTierra;
     {
         [self lockWorld];
         NSString* filePath = [sheet filename];
-        
+
         std::ofstream outFileStream([filePath fileSystemRepresentation]);
         mWorldData->writeInventory(outFileStream);
         [self unlockWorld];
@@ -258,7 +260,7 @@ using namespace MacTierra;
 - (void)clearWorld
 {
     // have to break ref cycles
-    [self setRunning:NO];    
+    [self setRunning:NO];
 
     [self setWorld:NULL dataCollectors:NULL];
     self.selectedCreature = nil;
@@ -325,21 +327,21 @@ using namespace MacTierra;
     [self willChangeValueForKey:@"totalInstructions"];
     [self willChangeValueForKey:@"slicerCycles"];
     [self willChangeValueForKey:@"numberOfCreatures"];
-    
+
     [self lockWorld];
     {
         u_int64_t curInstructions = mWorldData->instructionsExecuted();
         CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
 
         self.instructionsPerSecond = (double)(curInstructions - mLastInstructions) / (currentTime - mLastInstTime);
-        
+
         mLastInstructions = curInstructions;
         mLastSlicerCycles = mWorldData->world()->timeSlicer().cycleCount();
         mLastNumCreatures = mWorldData->world()->cellMap()->numCreatures();
         mLastFullness = mWorldData->world()->cellMap()->fullness();
-        
+
         [self updateSoup];
-        
+
         // hack to avoid slowing things down too much
         if ([mInventoryTableView window])
             [self updateGenotypes];
@@ -374,7 +376,7 @@ using namespace MacTierra;
     self.selectedCreature = nil;
     self.selectedCreature = oldSelectedCreature;
     [oldSelectedCreature release];
-    
+
     // FIXME: need to do this on setSelectedCreature too
     if (selectedCreature)
         [mCreatureSoupView setSelectedRanges:[NSArray arrayWithObject:[NSValue valueWithRange:selectedCreature.soupSelectionRange]]];
@@ -392,7 +394,7 @@ using namespace MacTierra;
     self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorldData->world()->settings()] autorelease];
     self.worldSettings.soupSize = mWorldData->world()->soupSize();
     self.worldSettings.randomSeed = mWorldData->world()->initialRandomSeed();
-    
+
     [NSApp beginSheet:mSettingsPanel
        modalForWindow:[document windowForSheet]
         modalDelegate:self
@@ -429,7 +431,7 @@ using namespace MacTierra;
 - (void)soupSettingsPanelDidEnd:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo
 {
     [sheet orderOut:nil];
-    
+
     if (returnCode == NSModalResponseOK)
     {
         const MacTierra::Settings* theSettings = worldSettings.settings;
@@ -438,14 +440,14 @@ using namespace MacTierra;
         if (self.creatingNewSoup)
         {
             BOOST_ASSERT(!mWorldData->world());
-            
+
             MacTierra::World* newWorld = new World();
             newWorld->setInitialRandomSeed(self.worldSettings.randomSeed);
             newWorld->setSettings(*worldSettings.settings);
-            
+
             newWorld->initializeSoup(worldSettings.soupSize);
             [self setWorld:newWorld dataCollectors:NULL];
-            
+
             if (worldSettings.seedWithAncestor)
                 [self seedWithAncestor];
         }
@@ -461,7 +463,7 @@ using namespace MacTierra;
             [document performSelector:@selector(close) withObject:nil afterDelay:0];
         }
     }
-    
+
     self.worldSettings = nil;
 }
 
@@ -499,10 +501,12 @@ using namespace MacTierra;
 {
     if (worldThread)
     {
-        [worldThread run];
-        [worldThread cancel];
+        worldThread.terminated = YES;
+        [worldThread performSelector:@selector(wakeUp) onThread:worldThread withObject:nil waitUntilDone:NO];
+
         while (![worldThread isFinished])
             [NSThread sleepForTimeInterval:0.001];
+
         self.worldThread = nil;
     }
 }
@@ -525,12 +529,12 @@ using namespace MacTierra;
 
 - (void)lockWorld
 {
-    [worldThread lock];
+    [worldThread lockWorld];
 }
 
 - (void)unlockWorld
 {
-    [worldThread unlock];
+    [worldThread unlockWorld];
 }
 
 #pragma mark -
@@ -569,7 +573,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
         newWorld = importer.loadWorld();
     }
-    
+
 #ifdef MEASURE_LOADING
     CFAbsoluteTime endTime = CFAbsoluteTimeGetCurrent();
     NSLog(@"Reading %@ world took %f milliseconds", (inFileFormat == WorldArchiver::kXML) ? @"XML" : @"binary", (endTime - startTime) * 1000.0);
@@ -631,7 +635,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
     std::ofstream fileStream(filePath.c_str());
 
     MacTierra:SoupConfiguration soupConfig(mWorldData->world()->soupSize(), mWorldData->world()->initialRandomSeed(), mWorldData->world()->settings());
-    
+
     ::boost::archive::xml_oarchive xmlArchive(fileStream);
     xmlArchive << MT_BOOST_MEMBER_SERIALIZATION_NVP("configuration", soupConfig);
     return YES;
@@ -641,72 +645,99 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
 @implementation MTWorldThread
 
-@synthesize runningCondition;
-@synthesize running;
-
 - (id)initWithWorldController:(MTWorldController*)inController
 {
     if ((self = [super init]))
     {
-        mWorldController = inController;
         [self setName:@"World thread"];
-        runningCondition = [[NSCondition alloc] init];
-        running = false;
+        _worldLock = [[NSLock alloc] init];
+        _worldController = inController;
+        _running = NO;
+        _terminated = NO;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.runningCondition = nil;
+    self.worldLock = nil;
+    self.threadRunLoop = nil;
     [super dealloc];
+}
+
+- (void)installTimer
+{
+    if (_runWorldTimer)
+        return;
+
+    _runWorldTimer = [[NSTimer alloc] initWithFireDate:[NSDate now] interval:0 target:self selector:@selector(runOneWorldCycle) userInfo:nil repeats:YES];
+    [_threadRunLoop addTimer:self.runWorldTimer forMode:NSDefaultRunLoopMode];
+}
+
+- (void)uninstallTimer
+{
+    [_runWorldTimer invalidate];
+    self.runWorldTimer = nil;
 }
 
 - (void)main
 {
-    // FIXME: Maygbe we need an NSRunLoop here?
-    while (1)
-    {
-        [runningCondition lock];
-        while (!running)
-            [runningCondition wait];
+    self.threadRunLoop = [NSRunLoop currentRunLoop];
 
-        if ([self isCancelled]) {
-            [runningCondition unlock];
-            break;
-        }
+    // This adds timer with a distance fire time to keep the thread running (and not immediately busylooping).
+    [NSTimer scheduledTimerWithTimeInterval:9999999999 repeats:YES block:^(NSTimer * _Nonnull timer) {
+        // nothing
+    }];
 
-        const NSUInteger kNumCycles = 10000;
-        [mWorldController iterate:kNumCycles];
-
-        [runningCondition unlock];
+    while (!_terminated && [_threadRunLoop runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]]) {
+        // All the work happens on the timer.
     }
+
+    [self uninstallTimer];
+}
+
+- (void)runOneWorldCycle
+{
+    [_worldLock lock];
+
+    constexpr CFTimeInterval maxTimeToRun = 0.02; // 20ms
+    CFTimeInterval startTime = approximateTime();
+    CFTimeInterval endTime = startTime + maxTimeToRun;
+
+    int numCycles = 0;
+    do {
+        const NSUInteger kNumCycles = 500000;
+        [_worldController iterate:kNumCycles];
+        ++numCycles;
+    } while (approximateTime() < endTime);
+
+    [_worldLock unlock];
 }
 
 - (void)run
 {
-    [runningCondition lock];
-    running = YES;
-    [runningCondition signal];
-    [runningCondition unlock];
+    self.running = YES;
+    [self performSelector:@selector(installTimer) onThread:self withObject:nil waitUntilDone:NO];
 }
 
 - (void)pause
 {
-    [runningCondition lock];
-    running = NO;
-    [runningCondition signal];
-    [runningCondition unlock];
+    self.running = NO;
+    [self performSelector:@selector(uninstallTimer) onThread:self withObject:nil waitUntilDone:NO];
 }
 
-- (void)lock
+- (void)lockWorld
 {
-    [runningCondition lock];
+    [_worldLock lock];
 }
 
-- (void)unlock
+- (void)unlockWorld
 {
-    [runningCondition unlock];
+    [_worldLock unlock];
+}
+
+- (void)wakeUp
+{
 }
 
 @end
