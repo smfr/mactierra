@@ -22,7 +22,11 @@
 
 using namespace MacTierra;
 
-@interface MTSoupView(Private)
+@interface MTSoupView ()
+
+@property (nonatomic, retain) NSMutableData* soupImageBackingStore;
+@property (nonatomic, retain) NSArray<NSColor*>* colorLookupTable;
+@property (nonatomic, assign) CGContextRef soupContext;
 
 - (void)setScalingCTM;
 - (void)drawCells:(NSRect)inDirtyRect;
@@ -53,6 +57,9 @@ using namespace MacTierra;
 @synthesize showInstructionPointers;
 @synthesize showFecundity;
 @synthesize focusedCreatureName;
+
+@synthesize soupImageBackingStore;
+@synthesize soupContext;
 
 - (id)initWithFrame:(NSRect)inFrame
 {
@@ -148,6 +155,95 @@ using namespace MacTierra;
     return YES;
 }
 
+- (void)ensureColorLookupTable
+{
+    if (self.colorLookupTable)
+        return;
+
+    NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
+    NSColorList* colorList = [[[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath] autorelease];
+    if (!colorList)
+        return;
+
+    NSColorSpace* rgbColorSpace = [NSColorSpace sRGBColorSpace];
+
+    const size_t colorsArraySize = 256;
+    NSMutableArray<NSColor*>* colorLUT = [NSMutableArray arrayWithCapacity:colorsArraySize];
+    for (size_t i = 0; i < colorsArraySize; ++i)
+        [colorLUT addObject:[NSColor blackColor]];
+
+    NSArray*    colorKeys = [colorList allKeys];
+    NSUInteger n, numColors = [colorKeys count];
+    if (numColors > colorsArraySize)
+        numColors = colorsArraySize;
+
+    for (n = 0; n < numColors; ++n)
+    {
+        NSString* curKey = [colorKeys objectAtIndex:n];
+        // make sure we can get RGB
+        NSColor* curColor = [[colorList colorWithKey:curKey] colorUsingColorSpace:rgbColorSpace];
+        [colorLUT replaceObjectAtIndex:n withObject:curColor];
+    }
+
+    self.colorLookupTable = colorLUT;
+}
+
+- (void)drawSoup
+{
+    if (!mWorld)
+        return;
+
+    NSLog(@"drawSoup");
+    [self ensureColorLookupTable];
+
+    const size_t bytesPerPixel = 4;
+    if (!soupImageBackingStore) {
+        // FIXME: Deal with size change.
+        size_t dataSize = mSoupWidth * mSoupHeight * bytesPerPixel;
+        self.soupImageBackingStore = [NSMutableData dataWithLength:dataSize];
+        if (!soupImageBackingStore)
+            return;
+    }
+
+    MacTierra::Soup* soup = mWorld->soup();
+
+    BOOST_ASSERT(soup->soupSize() * bytesPerPixel == soupImageBackingStore.length);
+
+    uint8_t* dataBytes = (uint8_t*)soupImageBackingStore.bytes;
+
+    for (u_int32_t i = 0; i < soup->soupSize(); ++i) {
+        instruction_t instruction = soup->instructionAtAddress(i);
+
+        NSColor* color = [self.colorLookupTable objectAtIndex:instruction];
+
+        CGFloat red = 0, green = 0, blue = 0, alpha = 1;
+        [color getRed:&red green:&green blue:&blue alpha:&alpha];
+
+        uint8_t* pixelPointer = dataBytes + i * bytesPerPixel;
+        pixelPointer[0] = red * 255;
+        pixelPointer[1] = green * 255;
+        pixelPointer[2] = blue * 255;
+        pixelPointer[3] = 255; // Alpha
+    }
+
+
+    const size_t bitsPerComponent = 8;
+    size_t bytesPerRow = mSoupWidth * bytesPerPixel;
+
+    CGContextRef bitmapContext = CGBitmapContextCreate(dataBytes, mSoupWidth, mSoupHeight, bitsPerComponent, bytesPerRow, [NSColorSpace sRGBColorSpace].CGColorSpace, kCGImageAlphaPremultipliedLast);
+    if (!bitmapContext)
+        return;
+
+    CGImageRef soupImage = CGBitmapContextCreateImage(bitmapContext);
+
+    CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
+
+    CGRect destRect = CGRectMake(0, 0, mSoupWidth, mSoupHeight);
+    CGContextDrawImage(cgContext, destRect, soupImage);
+
+    CFRelease(soupImage);
+}
+
 - (void)drawRect:(NSRect)inDirtyRect
 {
     [mWorldController lockWorld];
@@ -156,6 +252,8 @@ using namespace MacTierra;
     
     [NSGraphicsContext saveGraphicsState];
     [self setScalingCTM];
+
+    [self drawSoup];
 
     if (showInstructionPointers || showFecundity || showCells)
     {

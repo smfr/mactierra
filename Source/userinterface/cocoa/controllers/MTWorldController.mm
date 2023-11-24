@@ -316,7 +316,8 @@ using namespace MacTierra;
 
 - (void)updateDisplay
 {
-    if (!mWorldData->world()) return;
+    if (!mWorldData->world())
+        return;
 
     [self willChangeValueForKey:@"fullness"];
     [self willChangeValueForKey:@"totalInstructions"];
@@ -355,6 +356,7 @@ using namespace MacTierra;
 
 - (void)updateSoup
 {
+    // FIXME: This could update the soup image while we have the lock held.
     [mSoupView setNeedsDisplay:YES];
 }
 
@@ -660,6 +662,7 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
 
 - (void)main
 {
+    // FIXME: Maygbe we need an NSRunLoop here?
     while (1)
     {
         [runningCondition lock];
@@ -672,7 +675,10 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         }
 
         const NSUInteger kNumCycles = 10000;
+
+        NSLog(@"iterate start");
         [mWorldController iterate:kNumCycles];
+        NSLog(@"iterate end");
 
         [runningCondition unlock];
     }
