@@ -127,8 +127,9 @@ static constexpr size_t colorsArraySize = 256;
     {
         [self willChangeValueForKey:@"showCells"];
         showCells = inShow;
-        [self setNeedsDisplay:YES];
         [self didChangeValueForKey:@"showCells"];
+
+        [self setNeedsDisplay:YES];
     }
 }
 
@@ -138,8 +139,9 @@ static constexpr size_t colorsArraySize = 256;
     {
         [self willChangeValueForKey:@"showInstructionPointers"];
         showInstructionPointers = inShow;
-        [self setNeedsDisplay:YES];
         [self didChangeValueForKey:@"showInstructionPointers"];
+
+        [self setNeedsDisplay:YES];
     }
 }
 
@@ -149,8 +151,9 @@ static constexpr size_t colorsArraySize = 256;
     {
         [self willChangeValueForKey:@"showFecundity"];
         showFecundity = inShow;
-        [self setNeedsDisplay:YES];
         [self didChangeValueForKey:@"showFecundity"];
+
+        [self setNeedsDisplay:YES];
     }
 }
 
@@ -258,7 +261,7 @@ static constexpr size_t colorsArraySize = 256;
     if (showInstructionPointers || showFecundity || showCells)
     {
         [[NSColor colorWithCalibratedWhite:0.0f alpha:0.5f] set];
-        NSRectFill(NSMakeRect(0, 0, mSoupWidth, mSoupHeight));
+        NSRectFillUsingOperation(NSMakeRect(0, 0, mSoupWidth, mSoupHeight), NSCompositingOperationSourceOver);
     }
     
     if (showFecundity)
