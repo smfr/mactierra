@@ -20,12 +20,16 @@ NSString* const kXMLSoupDocumentType        = @"XMLSoupDocumentType";  // has to
 
 NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 
-@implementation MacTierraDocument
 
-@synthesize worldController;
-@synthesize startEmpty;
-@synthesize pendingFileURL;
-@synthesize dataIsXML;
+@interface MacTierraDocument ( )
+
+@property (nonatomic, weak) IBOutlet MTSoupView* soupView;
+
+@end
+
+#pragma mark -
+
+@implementation MacTierraDocument
 
 - (id)init
 {
@@ -47,13 +51,6 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     return self;
 }
 
-- (void)dealloc
-{
-    self.fileURL = nil;
-    [worldController release]; // ??
-    [super dealloc];
-}
-
 - (NSString *)windowNibName
 {
     return @"MacTierraDocument";
@@ -61,21 +58,21 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 
 - (void)windowControllerDidLoadNib:(NSWindowController *) aController
 {
-    if (pendingFileURL)
+    if (_pendingFileURL)
     {
-        if (dataIsXML)
-            [worldController readWorldFromXMLFile:pendingFileURL];
+        if (_dataIsXML)
+            [_worldController readWorldFromXMLFile:_pendingFileURL];
         else
-            [worldController readWorldFromBinaryFile:pendingFileURL];
+            [_worldController readWorldFromBinaryFile:_pendingFileURL];
 
         self.pendingFileURL = nil;
     }
     else
     {
         if (self.startEmpty)
-            [worldController newEmptySoup:nil];
+            [_worldController newEmptySoup:nil];
         else
-            [worldController performSelector:@selector(newSoupShowingSettings:) withObject:nil afterDelay:0];
+            [_worldController performSelector:@selector(newSoupShowingSettings:) withObject:nil afterDelay:0];
     }
     
     [super windowControllerDidLoadNib:aController];
@@ -86,9 +83,9 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     BOOL succeeded = NO;
     
     if ([typeName isEqualToString:kBinarySoupDocumentType])
-        succeeded = [worldController writeWorldToBinaryFile:absoluteURL];
+        succeeded = [_worldController writeWorldToBinaryFile:absoluteURL];
     else if ([typeName isEqualToString:kXMLSoupDocumentType])
-        succeeded = [worldController writeWorldToXMLFile:absoluteURL];
+        succeeded = [_worldController writeWorldToXMLFile:absoluteURL];
 
     if (!succeeded && outError != NULL)
         *outError = [NSError errorWithDomain:kMacTierraErrorDomain code:-1 userInfo:NULL];
@@ -114,12 +111,12 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     BOOL succeeded = NO;
     if (reverting)
     {
-        [worldController clearWorld];
+        [_worldController clearWorld];
 
         if ([typeName isEqualToString:kBinarySoupDocumentType])
-            succeeded = [worldController readWorldFromBinaryFile:self.pendingFileURL];
+            succeeded = [_worldController readWorldFromBinaryFile:self.pendingFileURL];
         else if ([typeName isEqualToString:kXMLSoupDocumentType])
-            succeeded = [worldController readWorldFromXMLFile:self.pendingFileURL];
+            succeeded = [_worldController readWorldFromXMLFile:self.pendingFileURL];
 
         self.pendingFileURL = nil;
     }
@@ -129,14 +126,14 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 
 - (void)close
 {
-    [worldController documentClosing];
-    worldController = nil;
+    [_worldController documentClosing];
+    _worldController = nil;
     [super close];
 }
 
 - (IBAction)showSettings:(id)sender
 {
-    [worldController editSoupSettings:sender];
+    [_worldController editSoupSettings:sender];
 }
 
 - (IBAction)exportSettings:(id)sender
@@ -155,33 +152,33 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
 {
     if (returnCode == NSModalResponseOK)
     {
-        [worldController writeSoupConfigurationToXMLFile:[sheet URL]];
+        [_worldController writeSoupConfigurationToXMLFile:[sheet URL]];
     }
 }
 
 - (IBAction)toggleRunning:(id)sender
 {
-    [worldController toggleRunning:sender];
+    [_worldController toggleRunning:sender];
 }
 
 - (IBAction)step:(id)sender
 {
-    [worldController step:sender];
+    [_worldController step:sender];
 }
 
 - (IBAction)toggleCellsVisibility:(id)sender
 {
-    mSoupView.showCells = !mSoupView.showCells;
+    _soupView.showCells = !_soupView.showCells;
 }
 
 - (IBAction)toggleInstructionPointersVisibility:(id)sender
 {
-    mSoupView.showInstructionPointers = !mSoupView.showInstructionPointers;
+    _soupView.showInstructionPointers = !_soupView.showInstructionPointers;
 }
 
 - (IBAction)toggleFecundityVisibility:(id)sender
 {
-    mSoupView.showFecundity = !mSoupView.showFecundity;
+    _soupView.showFecundity = !_soupView.showFecundity;
 }
 
 #pragma mark -
@@ -191,7 +188,7 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     if ([anItem action] == @selector(toggleCellsVisibility:))
     {
         if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
-            [(NSMenuItem*)anItem setTitle:mSoupView.showCells ? NSLocalizedString(@"HideCells", @"") : NSLocalizedString(@"ShowCells", @"")];
+            [(NSMenuItem*)anItem setTitle:_soupView.showCells ? NSLocalizedString(@"HideCells", @"") : NSLocalizedString(@"ShowCells", @"")];
         
         return YES;
     }
@@ -199,7 +196,7 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     if ([anItem action] == @selector(toggleInstructionPointersVisibility:))
     {
         if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
-            [(NSMenuItem*)anItem setTitle:mSoupView.showInstructionPointers ? NSLocalizedString(@"HideInstructionPointers", @"") : NSLocalizedString(@"ShowInstructionPointers", @"")];
+            [(NSMenuItem*)anItem setTitle:_soupView.showInstructionPointers ? NSLocalizedString(@"HideInstructionPointers", @"") : NSLocalizedString(@"ShowInstructionPointers", @"")];
         
         return YES;
     }
@@ -207,7 +204,7 @@ NSString* const kMacTierraErrorDomain   = @"org.smfr.mactierra.error-domain";
     if ([anItem action] == @selector(toggleFecundityVisibility:))
     {
         if ([(NSObject*)anItem isKindOfClass:[NSMenuItem self]])
-            [(NSMenuItem*)anItem setTitle:mSoupView.showFecundity ? NSLocalizedString(@"HideFecundity", @"") : NSLocalizedString(@"ShowFecundity", @"")];
+            [(NSMenuItem*)anItem setTitle:_soupView.showFecundity ? NSLocalizedString(@"HideFecundity", @"") : NSLocalizedString(@"ShowFecundity", @"")];
         
         return YES;
     }

@@ -31,7 +31,9 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
 @end
 
 
-@interface MTGenebankController(Private)
+@interface MTGenebankController ()
+
+@property (nonatomic, retain) NSTimer* synchronizeTimer;
 
 - (void)setupContext;
 - (NSString*)directoryForGenebankFile;
@@ -66,16 +68,6 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
     return self;
 }
 
-- (void)dealloc
-{
-    [mObjectContext release];
-    [mStoreCoordinator release];
-    [mObjectModel release];
-    
-    
-    [super dealloc];
-}
-
 - (NSManagedObjectContext*)managedObjectContext
 {
     return mObjectContext;
@@ -94,16 +86,15 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
 {
     [self synchronize];
 
-    [mSynchronizeTimer invalidate];
-    [mSynchronizeTimer release];
-    mSynchronizeTimer = nil;
+    [_synchronizeTimer invalidate];
+    _synchronizeTimer = nil;
 }
 
 - (MTGenebankGenotype*)entryWithGenome:(NSData*)genomeData
 {
     NSEntityDescription* entityDescription = [NSEntityDescription entityForName:@"Genotype" inManagedObjectContext:mObjectContext];
 
-    NSFetchRequest* request = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest* request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
 
     NSExpression* lhs = [NSExpression expressionForKeyPath:@"genome"];
@@ -142,7 +133,7 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
 {
     NSEntityDescription* entityDescription = [NSEntityDescription entityForName:@"Genotype" inManagedObjectContext:mObjectContext];
 
-    NSFetchRequest* request = [[[NSFetchRequest alloc] init] autorelease];
+    NSFetchRequest* request = [[NSFetchRequest alloc] init];
     [request setEntity:entityDescription];
 
     NSPredicate* predicate = [NSPredicate predicateWithFormat:@"length == %u", inSize];
@@ -241,12 +232,11 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
     mObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [mObjectContext setPersistentStoreCoordinator:mStoreCoordinator];
     
-    
-    mSynchronizeTimer = [[NSTimer scheduledTimerWithTimeInterval:kSynchronizationInterval
+    _synchronizeTimer = [NSTimer scheduledTimerWithTimeInterval:kSynchronizationInterval
                                                           target:self
                                                         selector:@selector(synchronizeTimerFired:)
                                                         userInfo:nil
-                                                         repeats:YES] retain];       // creates ref cycle
+                                                         repeats:YES];
 }
 
 - (void)synchronizeTimerFired:(NSTimer*)inTimer

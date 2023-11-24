@@ -13,17 +13,17 @@
 
 + (id)attributedString
 {
-  return [[[NSAttributedString alloc] initWithString:@""] autorelease];
+  return [[NSAttributedString alloc] initWithString:@""];
 }
 
 + (id)attributedStringWithString:(NSString*)inString
 {
-  return [[[NSAttributedString alloc] initWithString:inString] autorelease];
+  return [[NSAttributedString alloc] initWithString:inString];
 }
 
 + (id)attributedStringWithString:(NSString*)inString attributes:(NSDictionary*)inAttributes
 {
-  return [[[NSAttributedString alloc] initWithString:inString attributes:inAttributes] autorelease];
+  return [[NSAttributedString alloc] initWithString:inString attributes:inAttributes];
 }
 
 @end
@@ -33,12 +33,12 @@
 
 + (id)attributedString
 {
-  return [[[NSMutableAttributedString alloc] initWithString:@""] autorelease];
+  return [[NSMutableAttributedString alloc] initWithString:@""];
 }
 
 + (id)attributedStringWithString:(NSString*)inString attributes:(NSDictionary*)inAttributes
 {
-  return [[[NSMutableAttributedString alloc] initWithString:inString attributes:inAttributes] autorelease];
+  return [[NSMutableAttributedString alloc] initWithString:inString attributes:inAttributes];
 }
 
 - (void)appendFormatWithAttributes:(NSDictionary*)inAttributes format:(NSString*)inFormat, ...
@@ -51,15 +51,12 @@
   va_end(args);
 
   [self appendAttributedString:[NSAttributedString attributedStringWithString:formattedString attributes:inAttributes]];
-  
-  [formattedString release];
 }
 
 - (void)appendFormatListWithAttributes:(NSDictionary*)inAttributes format:(NSString*)inFormat vaList:(va_list)inArgList
 {
   NSString*   formattedString = [[NSString alloc] initWithFormat:inFormat arguments:inArgList];
   [self appendAttributedString:[NSAttributedString attributedStringWithString:formattedString attributes:inAttributes]];
-  [formattedString release];
 }
 
 - (void)appendString:(NSString*)inString attributes:(NSDictionary*)inAttributes

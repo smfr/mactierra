@@ -16,25 +16,11 @@ namespace MacTierra {
 
 @interface MTSoupView : NSView
 {
-    IBOutlet MTWorldController*     mWorldController;
-    IBOutlet NSArrayController*     mGenotypesArrayController;
-    
-    MacTierra::World*   mWorld;
-    
     int                 mSoupWidth;
     int                 mSoupHeight;
-    
-    BOOL                zoomToFit;
-    BOOL                showCells;
-    BOOL                showInstructionPointers;
-    BOOL                showFecundity;
-    
-    NSString*           focusedCreatureName;
-
 }
 
-- (void)setWorld:(MacTierra::World*)inWorld;
-- (MacTierra::World*)world;
+@property (assign, nonatomic) MacTierra::World* world;
 
 @property (assign, nonatomic) BOOL zoomToFit;
 @property (assign, nonatomic) BOOL showCells;
@@ -42,6 +28,5 @@ namespace MacTierra {
 @property (assign, nonatomic) BOOL showFecundity;
 
 @property (assign, nonatomic) NSString* focusedCreatureName;
-
 
 @end

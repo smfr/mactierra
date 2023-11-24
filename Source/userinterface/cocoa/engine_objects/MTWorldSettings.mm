@@ -48,14 +48,16 @@
 - (NSAttributedString *)attributedStringForObjectValue:(id)obj withDefaultAttributes:(NSDictionary *)attrs
 {
     NSString* string = [self stringForObjectValue:obj];
-    return [[[NSAttributedString alloc] initWithString:string] autorelease];
+    return [[NSAttributedString alloc] initWithString:string];
 }
 
 @end
 
 #pragma mark -
 
-@interface MTWorldSettings(Private)
+@interface MTWorldSettings ( )
+
+@property (nonatomic, retain) NSDictionary* mutationDefaults;
 
 - (NSString*)keyForLevel:(EMutationRate)inLevel;
 - (double)defaultRateForType:(NSString*)inType level:(EMutationRate)inLevel;
@@ -70,16 +72,6 @@
 #pragma mark -
 
 @implementation MTWorldSettings
-
-@synthesize soupSize;
-@synthesize soupSizePreset;
-@synthesize creatingNewSoup;
-@synthesize seedWithAncestor;
-@synthesize randomSeed;
-@synthesize mutationDefaults;
-@synthesize flawLevel;
-@synthesize cosmicMutationLevel;
-@synthesize copyErrorLevel;
 
 + (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
@@ -125,11 +117,8 @@
 
 - (void)dealloc
 {
-    self.mutationDefaults = nil;
     delete mSettings;
-    [super dealloc];
 }
-
 
 - (NSUInteger)soupSizeFromPreset:(ESoupSizePreset)inVal
 {
@@ -167,16 +156,16 @@
 - (void)setSoupSize:(NSUInteger)inSize
 {
     [self willChangeValueForKey:@"soupSize"];
-    soupSize = inSize;
-    mSettings->recomputeMutationIntervals(soupSize);
-    soupSizePreset = [self presetFromSoupSize:inSize];
+    _soupSize = inSize;
+    mSettings->recomputeMutationIntervals(_soupSize);
+    _soupSizePreset = [self presetFromSoupSize:inSize];
     [self didChangeValueForKey:@"soupSize"];
 }
 
 - (void)setSoupSizePreset:(ESoupSizePreset)inVal
 {
     self.soupSize = [self soupSizeFromPreset:inVal];
-    soupSizePreset = inVal;
+    _soupSizePreset = inVal;
 }
 
 - (const MacTierra::Settings*)settings
@@ -266,7 +255,7 @@
 - (void)setCosmicRate:(double)inVal
 {
     [self willChangeValueForKey:@"meanCosmicTimeInterval"];
-    mSettings->setCosmicRate(inVal, soupSize);
+    mSettings->setCosmicRate(inVal, _soupSize);
     [self didChangeValueForKey:@"meanCosmicTimeInterval"];
     [self updateCosmicMutationLevel];
 }
@@ -279,8 +268,8 @@
 - (void)setMeanCosmicTimeInterval:(double)inVal
 {
     [self willChangeValueForKey:@"cosmicRate"];
-    double cosmicRate = 1.0 / (inVal * soupSize);
-    mSettings->setCosmicRate(cosmicRate, soupSize);
+    double cosmicRate = 1.0 / (inVal * _soupSize);
+    mSettings->setCosmicRate(cosmicRate, _soupSize);
     [self didChangeValueForKey:@"cosmicRate"];
     [self updateCosmicMutationLevel];
 }
@@ -384,21 +373,21 @@
 - (void)setCosmicMutationLevel:(EMutationRate)inLevel
 {
     double rateVal = [self defaultRateForType:@"cosmic-rays" level:inLevel];
-    cosmicMutationLevel = inLevel;
+    _cosmicMutationLevel = inLevel;
     self.cosmicRate = rateVal;
 }
 
 - (void)setFlawLevel:(EMutationRate)inLevel
 {
     double rateVal = [self defaultRateForType:@"instruction-flaws" level:inLevel];
-    flawLevel = inLevel;
+    _flawLevel = inLevel;
     self.flawRate = rateVal;
 }
 
 - (void)setCopyErrorLevel:(EMutationRate)inLevel
 {
     double rateVal = [self defaultRateForType:@"copy-errors" level:inLevel];
-    copyErrorLevel = inLevel;
+    _copyErrorLevel = inLevel;
     self.copyErrorRate = rateVal;
 }
 
@@ -406,7 +395,7 @@
 
 - (void)updateCosmicMutationLevel
 {
-    NSDictionary* mutationLevelDict = [mutationDefaults objectForKey:@"cosmic-rays"];
+    NSDictionary* mutationLevelDict = [_mutationDefaults objectForKey:@"cosmic-rays"];
     int curLevel = 0;
     if (mSettings->cosmicRate() > 0.0)
     {
@@ -421,13 +410,13 @@
     
     [self willChangeValueForKey:@"cosmicMutationLevel"];
     // avoid the setter which will recurse
-    cosmicMutationLevel = (EMutationRate)curLevel;
+    _cosmicMutationLevel = (EMutationRate)curLevel;
     [self didChangeValueForKey:@"cosmicMutationLevel"];
 }
 
 - (void)updateFlawLevel
 {
-    NSDictionary* mutationLevelDict = [mutationDefaults objectForKey:@"instruction-flaws"];
+    NSDictionary* mutationLevelDict = [_mutationDefaults objectForKey:@"instruction-flaws"];
     int curLevel = 0;
     if (mSettings->flawRate() > 0.0)
     {
@@ -442,13 +431,13 @@
     
     [self willChangeValueForKey:@"flawLevel"];
     // avoid the setter which will recurse
-    flawLevel = (EMutationRate)curLevel;
+    _flawLevel = (EMutationRate)curLevel;
     [self didChangeValueForKey:@"flawLevel"];
 }
 
 - (void)updateCopyErrorLevel
 {
-    NSDictionary* mutationLevelDict = [mutationDefaults objectForKey:@"copy-errors"];
+    NSDictionary* mutationLevelDict = [_mutationDefaults objectForKey:@"copy-errors"];
     int curLevel = 0;
     if (mSettings->copyErrorRate() > 0.0)
     {
@@ -463,7 +452,7 @@
 
     [self willChangeValueForKey:@"copyErrorLevel"];
     // avoid the setter which will recurse
-    copyErrorLevel = (EMutationRate)curLevel;
+    _copyErrorLevel = (EMutationRate)curLevel;
     [self didChangeValueForKey:@"copyErrorLevel"];
 }
 
@@ -493,7 +482,7 @@
 {
     double result = 0.0;
 
-    NSDictionary* typeDict = [mutationDefaults objectForKey:inType];
+    NSDictionary* typeDict = [_mutationDefaults objectForKey:inType];
     if (typeDict)
     {
         NSNumber* value = [typeDict objectForKey:[self keyForLevel:inLevel]];

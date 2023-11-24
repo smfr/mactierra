@@ -31,51 +31,20 @@ class WorldDataCollectors;
 
 @interface MTWorldController : NSObject
 {
-    IBOutlet NSDocument*    document;
-
-    IBOutlet MTSoupView*    mSoupView;
-    IBOutlet NSTableView*   mInventoryTableView;
-
-    IBOutlet MTInventoryController*  mInventoryController;
-    IBOutlet MTGraphController*      mGraphController;
-    
-    IBOutlet NSTextView*    mCreatureSoupView;
-    
-    IBOutlet NSObjectController* mSelectedCreatureController;
-    IBOutlet MTGenotypeImageView* mDebugGenotypeImageView;
-    IBOutlet MTGenotypeImageView* mInspectGenotypeImageView;
-
-    // settings panel
-    IBOutlet NSPanel*       mSettingsPanel;
-
-    MTWorldSettings*        worldSettings;
-    BOOL                    creatingNewSoup;
-    
     WorldData*              mWorldData;
-    
-    // threading-related
-    MTWorldThread*          worldThread;
-    
-    MTCreature*             selectedCreature;
-    
-    BOOL                    worldRunning;
-    NSTimer*                mUpdateTimer;
     
     u_int64_t               mLastInstructions;
     u_int64_t               mLastSlicerCycles;
     NSInteger               mLastNumCreatures;
     CFAbsoluteTime          mLastInstTime;
     double                  mLastFullness;
-
-    double                  instructionsPerSecond;
 }
 
-@property (readonly) NSDocument* document;
-@property (readonly) MTSoupView* soupView;
+@property (nonatomic, weak) IBOutlet NSDocument* document;
+@property (nonatomic, weak) IBOutlet MTSoupView* soupView;
 
-@property (retain) MTCreature* selectedCreature;
+@property (nonatomic, retain) MTCreature* selectedCreature;
 
-// threading
 @property (retain) MTWorldThread* worldThread;
 
 @property (assign) BOOL worldRunning;
@@ -84,16 +53,16 @@ class WorldDataCollectors;
 @property (retain) MTWorldSettings* worldSettings;
 @property (assign) BOOL creatingNewSoup;
 
-@property (readonly) MacTierra::World* world;
-@property (readonly) const WorldDataCollectors* dataCollectors;
+@property (nonatomic, readonly) MacTierra::World* world;
+@property (nonatomic, readonly) const WorldDataCollectors* dataCollectors;
 
-@property (assign) double instructionsPerSecond;
-@property (readonly) double fullness;
-@property (readonly) u_int64_t totalInstructions;
-@property (readonly) u_int64_t slicerCycles;
-@property (readonly) NSInteger numberOfCreatures;
+@property (nonatomic, assign) double instructionsPerSecond;
+@property (nonatomic, readonly) double fullness;
+@property (nonatomic, readonly) u_int64_t totalInstructions;
+@property (nonatomic, readonly) u_int64_t slicerCycles;
+@property (nonatomic, readonly) NSInteger numberOfCreatures;
 
-@property (readonly) NSString* playPauseButtonTitle;
+@property (nonatomic, readonly) NSString* playPauseButtonTitle;
 
 - (void)seedWithAncestor;
 

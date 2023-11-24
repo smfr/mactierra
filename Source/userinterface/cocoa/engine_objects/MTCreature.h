@@ -21,10 +21,10 @@ class CreaturePrivateData;
 
 @interface MTCreature : NSObject
 {
-    CreaturePrivateData*    mPrivateData;
-    
-    MTInventoryGenotype*    genotype;
-    MTInventoryGenotype*    parentalGenotype;
+    CreaturePrivateData* mPrivateData;
+
+    MTInventoryGenotype* _genotype;
+    MTInventoryGenotype* _parentalGenotype;
 }
 
 + (id)creatureFromPasteboard:(NSPasteboard*)inPasteboard inWorld:(MacTierra::World*)inWorld;

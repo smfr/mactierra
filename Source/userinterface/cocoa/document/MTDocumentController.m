@@ -12,8 +12,6 @@
 
 @implementation MTDocumentController
 
-@synthesize creatingEmptySoup;
-
 - (IBAction)newEmptySoupDocument:(id)sender
 {
     self.creatingEmptySoup = YES;

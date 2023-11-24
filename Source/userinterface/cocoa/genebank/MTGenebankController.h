@@ -15,8 +15,6 @@
     NSManagedObjectModel*           mObjectModel;
     NSPersistentStoreCoordinator*   mStoreCoordinator;
     NSManagedObjectContext*         mObjectContext;
-    
-    NSTimer*                        mSynchronizeTimer;
 }
 
 + (MTGenebankController*)sharedGenebankController;

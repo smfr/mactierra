@@ -15,7 +15,7 @@
 {
     static NSCharacterSet* sHexSet = nil;
     if (!sHexSet)
-        sHexSet = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefABCDEF"] retain];
+        sHexSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789abcdefABCDEF"];
 
     return sHexSet;
 }

@@ -34,18 +34,6 @@ typedef enum EMutationRate {
 @interface MTWorldSettings : NSObject
 {
     MacTierra::Settings*    mSettings;
-    
-    NSUInteger              soupSize;
-    ESoupSizePreset         soupSizePreset;
-    BOOL                    creatingNewSoup;
-    BOOL                    seedWithAncestor;
-    NSUInteger              randomSeed;
-    
-    EMutationRate           flawLevel;
-    EMutationRate           cosmicMutationLevel;
-    EMutationRate           copyErrorLevel;
-    
-    NSDictionary*           mutationDefaults;
 }
 
 - (id)initWithSettings:(const MacTierra::Settings&)inSettings;
@@ -86,8 +74,5 @@ typedef enum EMutationRate {
 @property (nonatomic, assign) BOOL clearDaughterCells;
 @property (nonatomic, assign) BOOL clearReapedCreatures;
 @property (nonatomic, assign) BOOL selectForLeanness;
-
-// internal
-@property (nonatomic, retain) NSDictionary* mutationDefaults;
 
 @end

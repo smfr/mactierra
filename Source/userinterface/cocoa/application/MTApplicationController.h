@@ -13,12 +13,9 @@
 
 @interface MTApplicationController : NSObject
 {
-    MTGenebankController*       mGenebankController;
-    
-    MTGenebankWindowController* mGenebankWindowController;
 }
 
-- (MTGenebankController*)genebankController;
+@property (nonatomic, retain, readonly) MTGenebankController* genebankController;
 
 - (IBAction)showGenebankWindow:(id)sender;
 

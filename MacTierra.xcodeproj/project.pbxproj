@@ -69,11 +69,11 @@
 		0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */ = {isa = PBXBuildFile; fileRef = 0FB044E80E5D3B990024DF67 /* MTCreature.mm */; };
 		0FB515BE0E666C6000628D64 /* MacTierra XML Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */; };
 		0FB515BF0E666C6000628D64 /* MacTierra Binary Document.icns in Resources */ = {isa = PBXBuildFile; fileRef = 0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */; };
-		0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A612B0C3AB6006EE71B /* DataSources.m */; };
-		0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A622B0C3AB6006EE71B /* CTGraphView.m */; };
-		0FB59A6C2B0C3AB6006EE71B /* CTHistogramView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */; };
-		0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A642B0C3AB6006EE71B /* CTCurveView.m */; };
-		0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */; };
+		0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A612B0C3AB6006EE71B /* DataSources.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A622B0C3AB6006EE71B /* CTGraphView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0FB59A6C2B0C3AB6006EE71B /* CTHistogramView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A642B0C3AB6006EE71B /* CTCurveView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		0FB59A832B106EFC006EE71B /* MTTimeUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB59A822B106EFC006EE71B /* MTTimeUtils.cpp */; };
 		0FB6C5DD0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
 		0FB6C5DE0E61EAC60030536C /* MT_Settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0FB6C5DC0E61EAC60030536C /* MT_Settings.cpp */; };
@@ -610,16 +610,16 @@
 		0FB044E80E5D3B990024DF67 /* MTCreature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MTCreature.mm; sourceTree = "<group>"; };
 		0FB515BC0E666C6000628D64 /* MacTierra XML Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra XML Document.icns"; sourceTree = "<group>"; };
 		0FB515BD0E666C6000628D64 /* MacTierra Binary Document.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "MacTierra Binary Document.icns"; sourceTree = "<group>"; };
-		0FB59A602B0C3AB6006EE71B /* CTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGraphView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTGraphView.h"; sourceTree = SOURCE_ROOT; };
-		0FB59A612B0C3AB6006EE71B /* DataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataSources.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/DataSources.m"; sourceTree = SOURCE_ROOT; };
-		0FB59A622B0C3AB6006EE71B /* CTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTGraphView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTGraphView.m"; sourceTree = SOURCE_ROOT; };
-		0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTHistogramView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTHistogramView.m"; sourceTree = SOURCE_ROOT; };
-		0FB59A642B0C3AB6006EE71B /* CTCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTCurveView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTCurveView.m"; sourceTree = SOURCE_ROOT; };
-		0FB59A652B0C3AB6006EE71B /* CTHistogramView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTHistogramView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTHistogramView.h"; sourceTree = SOURCE_ROOT; };
-		0FB59A662B0C3AB6006EE71B /* CTScatterPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTScatterPlotView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTScatterPlotView.h"; sourceTree = SOURCE_ROOT; };
-		0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTScatterPlotView.m; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTScatterPlotView.m"; sourceTree = SOURCE_ROOT; };
-		0FB59A682B0C3AB6006EE71B /* DataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSources.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/DataSources.h"; sourceTree = SOURCE_ROOT; };
-		0FB59A692B0C3AB6006EE71B /* CTCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTCurveView.h; path = "Source/userinterface/cocoa/3rd party/GraphX/Source/CTCurveView.h"; sourceTree = SOURCE_ROOT; };
+		0FB59A602B0C3AB6006EE71B /* CTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTGraphView.h; path = Source/CTGraphView.h; sourceTree = "<group>"; };
+		0FB59A612B0C3AB6006EE71B /* DataSources.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DataSources.m; path = Source/DataSources.m; sourceTree = "<group>"; };
+		0FB59A622B0C3AB6006EE71B /* CTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTGraphView.m; path = Source/CTGraphView.m; sourceTree = "<group>"; };
+		0FB59A632B0C3AB6006EE71B /* CTHistogramView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTHistogramView.m; path = Source/CTHistogramView.m; sourceTree = "<group>"; };
+		0FB59A642B0C3AB6006EE71B /* CTCurveView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTCurveView.m; path = Source/CTCurveView.m; sourceTree = "<group>"; };
+		0FB59A652B0C3AB6006EE71B /* CTHistogramView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTHistogramView.h; path = Source/CTHistogramView.h; sourceTree = "<group>"; };
+		0FB59A662B0C3AB6006EE71B /* CTScatterPlotView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTScatterPlotView.h; path = Source/CTScatterPlotView.h; sourceTree = "<group>"; };
+		0FB59A672B0C3AB6006EE71B /* CTScatterPlotView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CTScatterPlotView.m; path = Source/CTScatterPlotView.m; sourceTree = "<group>"; };
+		0FB59A682B0C3AB6006EE71B /* DataSources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DataSources.h; path = Source/DataSources.h; sourceTree = "<group>"; };
+		0FB59A692B0C3AB6006EE71B /* CTCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CTCurveView.h; path = Source/CTCurveView.h; sourceTree = "<group>"; };
 		0FB59A812B106EFC006EE71B /* MTTimeUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MTTimeUtils.h; sourceTree = "<group>"; };
 		0FB59A822B106EFC006EE71B /* MTTimeUtils.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MTTimeUtils.cpp; sourceTree = "<group>"; };
 		0FB6C5DB0E61EAC60030536C /* MT_Settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MT_Settings.h; sourceTree = "<group>"; };
@@ -1541,7 +1541,7 @@
 			path = engine_objects;
 			sourceTree = "<group>";
 		};
-		0FB59A5F2B0C3AAA006EE71B /* GraphSuite */ = {
+		0FB59A5F2B0C3AAA006EE71B /* GraphX */ = {
 			isa = PBXGroup;
 			children = (
 				0FB59A692B0C3AB6006EE71B /* CTCurveView.h */,
@@ -1555,7 +1555,8 @@
 				0FB59A682B0C3AB6006EE71B /* DataSources.h */,
 				0FB59A612B0C3AB6006EE71B /* DataSources.m */,
 			);
-			path = GraphSuite;
+			name = GraphX;
+			path = "3rd party/GraphX";
 			sourceTree = "<group>";
 		};
 		0FB9C4DF0E7241E700E6EBFD /* application */ = {
@@ -1774,7 +1775,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* cocoa */ = {
 			isa = PBXGroup;
 			children = (
-				0FB59A5F2B0C3AAA006EE71B /* GraphSuite */,
+				0FB59A5F2B0C3AAA006EE71B /* GraphX */,
 				0FB9C4DF0E7241E700E6EBFD /* application */,
 				0F9DE5DB0E575DB800E86DD6 /* views */,
 				0F9DE5D30E575DAD00E86DD6 /* controllers */,
@@ -2013,17 +2014,18 @@
 				0FBB068C0E5A984B007F2A6B /* MT_Soup.cpp in Sources */,
 				0FBB068D0E5A984B007F2A6B /* MT_ExecutionUnit.cpp in Sources */,
 				0FB59A6C2B0C3AB6006EE71B /* CTHistogramView.m in Sources */,
+				0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */,
+				0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */,
+				0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */,
+				0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */,
 				0FBB068E0E5A984B007F2A6B /* MT_Reaper.cpp in Sources */,
 				0FBB068F0E5A984B007F2A6B /* MT_ExecutionUnit0.cpp in Sources */,
-				0FB59A6B2B0C3AB6006EE71B /* CTGraphView.m in Sources */,
 				0FBB06900E5A984B007F2A6B /* MT_Assert.cpp in Sources */,
 				0FBB06910E5A984B007F2A6B /* MT_Ancestor.cpp in Sources */,
 				0FBB06FB0E5A9A78007F2A6B /* MT_Genebank.cpp in Sources */,
-				0FB59A6D2B0C3AB6006EE71B /* CTCurveView.m in Sources */,
 				0FBB07120E5A9BF0007F2A6B /* MT_Genotype.cpp in Sources */,
 				0FB043FC0E5D2FCD0024DF67 /* MTInventoryGenotype.mm in Sources */,
 				0FB0442B0E5D325B0024DF67 /* MTInventoryController.mm in Sources */,
-				0FB59A6A2B0C3AB6006EE71B /* DataSources.m in Sources */,
 				0FB044E90E5D3B990024DF67 /* MTCreature.mm in Sources */,
 				0F8C67AA0E5E5A5900A72FC1 /* NSStringAdditions.m in Sources */,
 				0FB59A832B106EFC006EE71B /* MTTimeUtils.cpp in Sources */,
@@ -2044,7 +2046,6 @@
 				0FA54D390E7C512F00337C19 /* NSCharacterSetAdditions.m in Sources */,
 				0F960A510E80B8CB0007D1D5 /* Genebank.xcdatamodel in Sources */,
 				0F960A5F0E80B9270007D1D5 /* MTGenebankController.mm in Sources */,
-				0FB59A6E2B0C3AB6006EE71B /* CTScatterPlotView.m in Sources */,
 				0F960B160E80C8D50007D1D5 /* MTGenebankWindowController.mm in Sources */,
 				0FBDEA920E8155BA00B6B34E /* MTGenebankGenotype.m in Sources */,
 				0F9431B90E89F991009BBD28 /* MT_SoupConfiguration.cpp in Sources */,
@@ -2208,6 +2209,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
@@ -2217,7 +2219,7 @@
 				GCC_WARN_NON_VIRTUAL_DESTRUCTOR = YES;
 				GCC_WARN_SHADOW = NO;
 				GCC_WARN_TYPECHECK_CALLS_TO_PRINTF = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = (
 					Source,
@@ -2241,6 +2243,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_STRICT_ALIASING = NO;

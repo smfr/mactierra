@@ -32,7 +32,11 @@ static const double kMillion = 1.0e6;
 
 @class MTGraphAdapter;
 
-@interface MTGraphController(Private)
+@interface MTGraphController ( )
+
+@property (nonatomic, weak) IBOutlet NSArrayController* graphsArrayController;
+@property (nonatomic, weak) IBOutlet NSView* graphContainerView;
+@property (nonatomic, weak) IBOutlet NSView* graphAdditionsView;
 
 - (void)startObservingGraphs;
 - (void)stopObservingGraphs;
@@ -47,24 +51,18 @@ static const double kMillion = 1.0e6;
 
 @interface MTGraphAdapter : NSObject
 {
-    MTGraphController*          mController;    // not owned (it owns us)
-    MacTierra::DataLogger*      dataLogger;     // owned by the world controller
-    CTGraphView*                graphView;
-
-    NSString*                   identifier;
-    NSString*                   localizedName;
-    
-    NSViewController*           auxiliaryViewController;
 }
 
-@property (copy) NSString* identifier;
-@property (copy) NSString* localizedName;
+@property (nonatomic, readonly, weak) MTGraphController* controller;
 
-@property (retain) CTGraphView* graphView;
-@property (assign) MacTierra::DataLogger* dataLogger;
-@property (readonly) NSString* xAxisLabel;
+@property (nonatomic, copy) NSString* identifier;
+@property (nonatomic, copy) NSString* localizedName;
 
-@property (retain) NSViewController* auxiliaryViewController;
+@property (nonatomic, assign) MacTierra::DataLogger* dataLogger;
+@property (nonatomic, retain) CTGraphView* graphView;
+@property (nonatomic, readonly) NSString* xAxisLabel;
+
+@property (nonatomic, retain) NSViewController* auxiliaryViewController;
 
 + (NSDictionary*)axisLabelAttributes;
 
@@ -125,12 +123,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTGraphAdapter
 
-@synthesize dataLogger;
-@synthesize graphView;
-@synthesize identifier;
-@synthesize localizedName;
-@synthesize auxiliaryViewController;
-
 + (NSDictionary*)axisLabelAttributes
 {
     static NSDictionary* sLabelAttributes = nil;
@@ -140,11 +132,10 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
         NSMutableParagraphStyle* pStyle = [[NSMutableParagraphStyle alloc] init];
         [pStyle setAlignment:NSTextAlignmentCenter];
     
-        sLabelAttributes = [[NSDictionary dictionaryWithObjectsAndKeys:
-                [NSFont fontWithName:@"Lucida Grande" size:11], NSFontAttributeName,
-                                                        pStyle, NSParagraphStyleAttributeName,
-                                                                nil] retain];
-        [pStyle release];
+        sLabelAttributes = @{
+            NSFontAttributeName : [NSFont fontWithName:@"Lucida Grande" size:11],
+            NSParagraphStyleAttributeName : pStyle
+        };
     }
     return sLabelAttributes;
 }
@@ -167,27 +158,20 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 + (id)graphAdaptorWithGraphController:(MTGraphController*)inController
 {
-    return [[[[self class] alloc] initWithGraphController:inController] autorelease];
+    return [[[self class] alloc] initWithGraphController:inController];
 }
 
 - (id)initWithGraphController:(MTGraphController*)inController
 {
     if ((self = [super init]))
     {
-        mController = inController;
-        self.identifier = [[self class] identifier];
-        self.localizedName = [[self class] localizedName];
+        _controller = inController;
+        _identifier = [[self class] identifier];
+        _localizedName = [[self class] localizedName];
         [self setupGraphView];
         [self setupAuxiliaryView];
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.graphView = nil;
-    self.auxiliaryViewController = nil;
-    [super dealloc];
 }
 
 - (void)setupGraphView
@@ -219,8 +203,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 - (void)clear
 {
     // break retain cycle
-    graphView.dataSource = nil;
-    graphView.delegate = nil;
+    _graphView.dataSource = nil;
+    _graphView.delegate = nil;
 }
 
 // CTGraphViewDelegate methods
@@ -248,36 +232,37 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setupGraphView
 {
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    graphView.showXTickMarks = YES;
-    graphView.showTitle = NO;
-    graphView.showYLabel = NO;
-    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
-    graphView.showXLabel = YES;
+    NSAssert(!self.graphView, @"Should not have created graph view yet");
 
-    graphView.dataSource = self;        // retain cycle
-    graphView.delegate = self;
+    self.graphView = [[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)];
+    self.graphView.showXTickMarks = YES;
+    self.graphView.showTitle = NO;
+    self.graphView.showYLabel = NO;
+    self.graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+    self.graphView.showXLabel = YES;
+
+    self.graphView.dataSource = self;        // retain cycle
+    self.graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(dataLogger);
-    if (!logger) return;
-    
+    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(self.dataLogger);
+    if (!logger)
+        return;
+
     u_int32_t numDivisions;
     u_int64_t minInstructions = logger->minInstructions();
     u_int64_t maxInstructions = logger->maxInstructions();
     
-    graphView.xMin = (double)minInstructions / kMillion;
-    graphView.xMax = graphAxisMax(std::max((double)maxInstructions / kMillion, 1.0), &numDivisions);
-    graphView.xScale = [graphView xMax] / numDivisions;
-    
+    self.graphView.xMin = (double)minInstructions / kMillion;
+    self.graphView.xMax = graphAxisMax(std::max((double)maxInstructions / kMillion, 1.0), &numDivisions);
+    self.graphView.xScale = [self.graphView xMax] / numDivisions;
+
     double yMax = graphAxisMax(logger->maxDoubleValue(), &numDivisions);
-    graphView.yMax = yMax;
-    graphView.yScale = yMax / numDivisions;
-    [graphView dataChanged];
+    self.graphView.yMax = yMax;
+    self.graphView.yScale = yMax / numDivisions;
+    [self.graphView dataChanged];
 }
 
 @end
@@ -296,36 +281,36 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setupGraphView
 {
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    graphView.showXTickMarks = NO;
-    graphView.showTitle = NO;
-    graphView.showYLabel = NO;
-    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
-    graphView.showXLabel = YES;
+    NSAssert(!self.graphView, @"Should not have created graph view yet");
 
-    graphView.dataSource = self;        // retain cycle
-    graphView.delegate = self;
+    self.graphView = [[CTScatterPlotView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)];
+    self.graphView.showXTickMarks = NO;
+    self.graphView.showTitle = NO;
+    self.graphView.showYLabel = NO;
+    self.graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+    self.graphView.showXLabel = YES;
+
+    self.graphView.dataSource = self;        // retain cycle
+    self.graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(dataLogger);
+    SimpleDataLogger* logger = dynamic_cast<SimpleDataLogger*>(self.dataLogger);
     if (!logger) return;
     
     u_int32_t numDivisions;
     u_int64_t minCycles = logger->minSlicerCycles();
     u_int64_t maxCycles = logger->maxSlicerCycles();
     
-    graphView.xMin = (double)minCycles;
-    graphView.xMax = graphAxisMax(std::max((double)maxCycles, 1.0), &numDivisions);
-    graphView.xScale = [graphView xMax] / numDivisions;
-    
+    self.graphView.xMin = (double)minCycles;
+    self.graphView.xMax = graphAxisMax(std::max((double)maxCycles, 1.0), &numDivisions);
+    self.graphView.xScale = [self.graphView xMax] / numDivisions;
+
     double yMax = graphAxisMax(logger->maxDoubleValue(), &numDivisions);
-    graphView.yMax = yMax;
-    graphView.yScale = yMax / numDivisions;
-    [graphView dataChanged];
+    self.graphView.yMax = yMax;
+    self.graphView.yScale = yMax / numDivisions;
+    [self.graphView dataChanged];
 }
 
 @end
@@ -354,7 +339,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
-    PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(dataLogger);
+    PopulationSizeLogger* popSizeLogger = dynamic_cast<PopulationSizeLogger*>(self.dataLogger);
     if (popSizeLogger && index < popSizeLogger->dataCount())
     {
         PopulationSizeLogger::data_tuple curTuple = popSizeLogger->data()[index];
@@ -391,7 +376,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
-    MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(dataLogger);
+    MeanCreatureSizeLogger* creatureSizeLogger = dynamic_cast<MeanCreatureSizeLogger*>(self.dataLogger);
     if (creatureSizeLogger && index < creatureSizeLogger->dataCount())
     {
         MeanCreatureSizeLogger::data_tuple curTuple = creatureSizeLogger->data()[index];
@@ -428,7 +413,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
-    MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(dataLogger);
+    MaxFitnessDataLogger* fitnessLogger = dynamic_cast<MaxFitnessDataLogger*>(self.dataLogger);
     if (fitnessLogger && index < fitnessLogger->dataCount())
     {
         MaxFitnessDataLogger::data_tuple curTuple = fitnessLogger->data()[index];
@@ -493,19 +478,14 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @interface MTTwoGenotypesFrequencyGraphAdapter : MTCyclesGraphAdapter
 {
-    MTInventoryGenotype* firstGenotype;
-    MTInventoryGenotype* secondGenotype;
 }
 
-@property (retain) MTInventoryGenotype* firstGenotype;
-@property (retain) MTInventoryGenotype* secondGenotype;
+@property (nonatomic, retain) MTInventoryGenotype* firstGenotype;
+@property (nonatomic, retain) MTInventoryGenotype* secondGenotype;
 
 @end
 
 @implementation MTTwoGenotypesFrequencyGraphAdapter
-
-@synthesize firstGenotype;
-@synthesize secondGenotype;
 
 + (NSString*)identifier
 {
@@ -521,7 +501,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 {
     [super setupGraphView];
     
-    CTScatterPlotView* scatterPlotView = (CTScatterPlotView*)graphView;
+    CTScatterPlotView* scatterPlotView = (CTScatterPlotView*)self.graphView;
     scatterPlotView.showFill = NO;
     [scatterPlotView setCurveColor:[NSColor blueColor] forSeries:0];
     [scatterPlotView setCurveColor:[NSColor redColor ] forSeries:1];
@@ -529,8 +509,8 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)clear
 {
-    [(TwoGenotypesViewController*)auxiliaryViewController clearBindings];
-    auxiliaryViewController.representedObject = nil;
+    [(TwoGenotypesViewController*)self.auxiliaryViewController clearBindings];
+    self.auxiliaryViewController.representedObject = nil;
 
     self.firstGenotype = nil;
     self.secondGenotype = nil;
@@ -540,34 +520,34 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setupAuxiliaryView
 {
-    TwoGenotypesViewController* viewController = [[[TwoGenotypesViewController alloc] initWithNibName:@"TwoGenotypesAuxiliaryView" bundle:nil] autorelease];
+    TwoGenotypesViewController* viewController = [[TwoGenotypesViewController alloc] initWithNibName:@"TwoGenotypesAuxiliaryView" bundle:nil];
     [viewController loadView];
     self.auxiliaryViewController = viewController;
-    auxiliaryViewController.representedObject = self;
-    
+    self.auxiliaryViewController.representedObject = self;
+
     [viewController setupBindings];
-    [viewController firstGenotypeImageView].worldController = mController.worldController;
-    [viewController secondGenotypeImageView].worldController = mController.worldController;
+    [viewController firstGenotypeImageView].worldController = self.controller.worldController;
+    [viewController secondGenotypeImageView].worldController = self.controller.worldController;
 }
 
 - (void)dataLoggerChanged
 {
-    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(self.dataLogger);
     if (!genotypesLogger)
         return;
 
-    TwoGenotypesViewController* viewController = (TwoGenotypesViewController*)auxiliaryViewController;
-    
+    TwoGenotypesViewController* viewController = (TwoGenotypesViewController*)self.auxiliaryViewController;
+
     if (genotypesLogger->firstGenotype())
     {
-        self.firstGenotype = [[[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->firstGenotype()] autorelease];
+        self.firstGenotype = [[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->firstGenotype()];
         // Ideally the image views would be bound, and this would "just work". Alas, it doesn't.
         [viewController firstGenotypeImageView].genotype = self.firstGenotype;
     }
 
     if (genotypesLogger->secondGenotype())
     {
-        self.secondGenotype = [[[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->secondGenotype()] autorelease];
+        self.secondGenotype = [[MTInventoryGenotype alloc] initWithGenotype:genotypesLogger->secondGenotype()];
         // Ideally the image views would be bound, and this would "just work". Alas, it doesn't.
         [viewController secondGenotypeImageView].genotype = self.secondGenotype;
     }
@@ -575,16 +555,15 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setFirstGenotype:(MTInventoryGenotype*)inGenotype
 {
-    if (inGenotype != firstGenotype)
+    if (inGenotype != _firstGenotype)
     {
         [self willChangeValueForKey:@"firstGenotype"];
-        [firstGenotype release];
-        firstGenotype = [inGenotype retain];
-        
-        if (dataLogger)
+        _firstGenotype = inGenotype;
+
+        if (self.dataLogger)
         {
-            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
-            genotypesLogger->setFirstGenotype(firstGenotype ? firstGenotype.genotype : NULL);
+            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(self.dataLogger);
+            genotypesLogger->setFirstGenotype(_firstGenotype ? _firstGenotype.genotype : NULL);
         }
         
         [self didChangeValueForKey:@"firstGenotype"];
@@ -593,16 +572,15 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setSecondGenotype:(MTInventoryGenotype*)inGenotype
 {
-    if (inGenotype != secondGenotype)
+    if (inGenotype != _secondGenotype)
     {
         [self willChangeValueForKey:@"secondGenotype"];
-        [secondGenotype release];
-        secondGenotype = [inGenotype retain];
+        _secondGenotype = inGenotype;
 
-        if (dataLogger)
+        if (self.dataLogger)
         {
-            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
-            genotypesLogger->setSecondGenotype(secondGenotype ? secondGenotype.genotype : NULL);
+            TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(self.dataLogger);
+            genotypesLogger->setSecondGenotype(_secondGenotype ? _secondGenotype.genotype : NULL);
         }
         
         [self didChangeValueForKey:@"secondGenotype"];
@@ -616,7 +594,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)getPoint:(NSPointPointer *)point atIndex:(unsigned)index inSeries:(NSInteger)inSeries
 {
-    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(dataLogger);
+    TwoGenotypesFrequencyLogger* genotypesLogger = dynamic_cast<TwoGenotypesFrequencyLogger*>(self.dataLogger);
     if (genotypesLogger && index < genotypesLogger->dataCount())
     {
         TwoGenotypesFrequencyLogger::data_tuple curTuple = genotypesLogger->data()[index];
@@ -639,34 +617,34 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)setupGraphView
 {
-    NSAssert(!graphView, @"Should not have created graph view yet");
-    
-    self.graphView = [[[CTHistogramView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)] autorelease];
-    graphView.showXTickMarks = NO;
-    graphView.showTitle = NO;
-    graphView.showYLabel = NO;
-    graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+    NSAssert(!self.graphView, @"Should not have created graph view yet");
 
-    graphView.dataSource = self;       // retain cycle
-    graphView.delegate = self;
+    self.graphView = [[CTHistogramView alloc] initWithFrame:NSMakeRect(0, 0, 200, 200)];
+    self.graphView.showXTickMarks = NO;
+    self.graphView.showTitle = NO;
+    self.graphView.showYLabel = NO;
+    self.graphView.xLabel = [NSAttributedString attributedStringWithString:[self xAxisLabel] attributes:[MTGraphAdapter axisLabelAttributes]];
+
+    self.graphView.dataSource = self;       // retain cycle
+    self.graphView.delegate = self;
 }
 
 - (void)updateGraph:(MTWorldController*)inWorldController
 {
-    HistogramDataLogger* histogramLogger = dynamic_cast<HistogramDataLogger*>(dataLogger);
+    HistogramDataLogger* histogramLogger = dynamic_cast<HistogramDataLogger*>(self.dataLogger);
     if (!histogramLogger)
         return;
 
     MacTierra::World* theWorld = inWorldController.world;
     histogramLogger->collectData(MacTierra::DataLogger::kCollectionAdHoc, theWorld->timeSlicer().instructionsExecuted(), theWorld->timeSlicer().cycleCount(), theWorld);
     
-    [(CTHistogramView*)graphView setNumberOfBuckets:std::max(histogramLogger->dataCount(), 1U)];
+    [(CTHistogramView*)self.graphView setNumberOfBuckets:std::max(histogramLogger->dataCount(), 1U)];
 
     u_int32_t numDivisions;
     double yMax = graphAxisMax(histogramLogger->maxFrequency(), &numDivisions);
-    graphView.yMax = yMax;
-    graphView.yScale = yMax / numDivisions;
-    [graphView dataChanged];
+    self.graphView.yMax = yMax;
+    self.graphView.yScale = yMax / numDivisions;
+    [self.graphView dataChanged];
 }
 
 @end
@@ -700,7 +678,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel inSeries:(NSInteger)series
 {
-    GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(dataLogger);
+    GenotypeFrequencyDataLogger* genotypeLogger = dynamic_cast<GenotypeFrequencyDataLogger*>(self.dataLogger);
     if (!genotypeLogger) return 0.0f;
     
     if (index >= genotypeLogger->dataCount())
@@ -742,9 +720,10 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (float)frequencyForBucket:(NSUInteger)index label:(NSString**)outLabel inSeries:(NSInteger)series
 {
-    SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(dataLogger);
-    if (!sizeLogger) return 0.0f;
-    
+    SizeHistogramDataLogger* sizeLogger = dynamic_cast<SizeHistogramDataLogger*>(self.dataLogger);
+    if (!sizeLogger)
+        return 0.0f;
+
     if (index >= sizeLogger->dataCount())
         return 0.0f;
 
@@ -759,8 +738,6 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 @implementation MTGraphController
 
-@synthesize graphs;
-
 - (void)awakeFromNib
 {
     [self setupGraphAdaptors];
@@ -769,10 +746,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)dealloc
 {
-    [graphs makeObjectsPerformSelector:@selector(clear)];
-    self.graphs = nil;
-
-    [super dealloc];
+    [_graphs makeObjectsPerformSelector:@selector(clear)];
 }
 
 - (void)documentClosing
@@ -780,16 +754,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
     [self stopObservingGraphs];
 }
 
-- (MTWorldController*)worldController
-{
-    return mWorldController;
-}
-
 #pragma mark -
 
 - (void)setupGraphAdaptors
 {
-    [graphs makeObjectsPerformSelector:@selector(clear)];
+    [_graphs makeObjectsPerformSelector:@selector(clear)];
 
     NSMutableArray* adaptors = [NSMutableArray array];
     
@@ -807,7 +776,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 - (MTGraphAdapter*)adaptorWithIdentifier:(NSString*)inIdentifier
 {
     // Slow linear search. We could put them in a dict, but not worth it.
-    for (MTGraphAdapter* curAdaptor in graphs)
+    for (MTGraphAdapter* curAdaptor in _graphs)
     {
         if ([curAdaptor.identifier isEqualToString:inIdentifier])
             return curAdaptor;
@@ -818,7 +787,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)updateGraphAdaptors
 {
-    const WorldDataCollectors* dataCollectors = mWorldController.dataCollectors;
+    const WorldDataCollectors* dataCollectors = _worldController.dataCollectors;
     if (dataCollectors)
     {
         MTGraphAdapter* popSizeGrapher = [self adaptorWithIdentifier:[MTPopulationSizeGraphAdapter identifier]];
@@ -839,11 +808,11 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
         MTGraphAdapter* sizeHistogramGrapher = [self adaptorWithIdentifier:[MTSizeHistorgramGraphAdapter identifier]];
         sizeHistogramGrapher.dataLogger = dataCollectors->sizeHistogramDataLogger();
 
-        [graphs makeObjectsPerformSelector:@selector(dataLoggerChanged) withObject:nil];
+        [_graphs makeObjectsPerformSelector:@selector(dataLoggerChanged) withObject:nil];
     }
     else
     {
-        [graphs makeObjectsPerformSelector:@selector(setDataLogger:) withObject:nil];
+        [_graphs makeObjectsPerformSelector:@selector(setDataLogger:) withObject:nil];
     }
 }
 
@@ -854,33 +823,33 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (MTGraphAdapter*)selectedGraphAdaptor
 {
-    return [[mGraphsArrayController selectedObjects] firstObject];
+    return [[self.graphsArrayController selectedObjects] firstObject];
 }
 
 - (void)updateGraph
 {
-    [[self selectedGraphAdaptor] updateGraph:mWorldController];
+    [[self selectedGraphAdaptor] updateGraph:_worldController];
 }
 
 - (void)switchToAdaptor:(MTGraphAdapter*)inNewAdaptor
 {
     if (inNewAdaptor)
     {
-        [mGraphContainerView addFullSubview:inNewAdaptor.graphView replaceExisting:YES fill:YES];
-        
+        [self.graphContainerView addFullSubview:inNewAdaptor.graphView replaceExisting:YES fill:YES];
+
         NSView* adaptorAuxiliaryView = [inNewAdaptor.auxiliaryViewController view];
         if (adaptorAuxiliaryView)
-            [mGraphAdditionsView addFullSubview:adaptorAuxiliaryView replaceExisting:YES fill:YES];
+            [self.graphAdditionsView addFullSubview:adaptorAuxiliaryView replaceExisting:YES fill:YES];
         else
-            [mGraphAdditionsView removeAllSubviews];
+            [self.graphAdditionsView removeAllSubviews];
 
-        [inNewAdaptor updateGraph:mWorldController];
+        [inNewAdaptor updateGraph:_worldController];
     }
 }
 
 - (void)startObservingGraphs
 {
-    [mGraphsArrayController addObserver:self
+    [self.graphsArrayController addObserver:self
                              forKeyPath:@"selection"
                                 options:0
                                 context:NULL];
@@ -888,7 +857,7 @@ static double graphAxisMax(double inMaxValue, u_int32_t* outNumDivisions)
 
 - (void)stopObservingGraphs
 {
-    [mGraphsArrayController removeObserver:self forKeyPath:@"selection"];
+    [self.graphsArrayController removeObserver:self forKeyPath:@"selection"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

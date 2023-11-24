@@ -34,6 +34,9 @@ struct RGBSoupColor {
 
 @interface MTSoupView ()
 
+@property (nonatomic, weak) IBOutlet MTWorldController* worldController;
+@property (nonatomic, weak) IBOutlet NSArrayController* genotypesArrayController;
+
 @property (nonatomic, retain) NSMutableData* soupImageBackingStore;
 @property (nonatomic, assign) CGContextRef soupContext;
 
@@ -65,22 +68,13 @@ static constexpr size_t colorsArraySize = 256;
     std::array<RGBSoupColor, colorsArraySize> _instructionColors;
 }
 
-@synthesize zoomToFit;
-@synthesize showCells;
-@synthesize showInstructionPointers;
-@synthesize showFecundity;
-@synthesize focusedCreatureName;
-
-@synthesize soupImageBackingStore;
-@synthesize soupContext;
-
 - (id)initWithFrame:(NSRect)inFrame
 {
     if ((self = [super initWithFrame:inFrame]))
     {
-        zoomToFit = YES;
-        showCells = NO;
-        showInstructionPointers = NO;
+        _zoomToFit = YES;
+        _showCells = NO;
+        _showInstructionPointers = NO;
         self.focusedCreatureName = @"";
 
         [self registerForDraggedTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]];
@@ -90,12 +84,6 @@ static constexpr size_t colorsArraySize = 256;
     return self;
 }
 
-- (void)dealloc
-{
-    self.focusedCreatureName = nil;
-    [super dealloc];
-}
-
 - (void)awakeFromNib
 {
     [self startObservingSelectedGenotypes];
@@ -103,30 +91,25 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)setWorld:(MacTierra::World*)inWorld
 {
-    mWorld = inWorld;
-    
-    if (mWorld)
+    _world = inWorld;
+
+    if (_world)
     {
         const int kSoupWidth = 512;
         mSoupWidth = kSoupWidth;
-        mSoupHeight = mWorld->soupSize() / kSoupWidth;
+        mSoupHeight = _world->soupSize() / kSoupWidth;
     }
 
     [self setNeedsDisplay:YES];
     [[self window] invalidateCursorRectsForView:self];
 }
 
-- (MacTierra::World*)world
-{
-    return mWorld;
-}
-
 - (void)setShowCells:(BOOL)inShow
 {
-    if (inShow != showCells)
+    if (inShow != _showCells)
     {
         [self willChangeValueForKey:@"showCells"];
-        showCells = inShow;
+        _showCells = inShow;
         [self didChangeValueForKey:@"showCells"];
 
         [self setNeedsDisplay:YES];
@@ -135,10 +118,10 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)setShowInstructionPointers:(BOOL)inShow
 {
-    if (inShow != showInstructionPointers)
+    if (inShow != _showInstructionPointers)
     {
         [self willChangeValueForKey:@"showInstructionPointers"];
-        showInstructionPointers = inShow;
+        _showInstructionPointers = inShow;
         [self didChangeValueForKey:@"showInstructionPointers"];
 
         [self setNeedsDisplay:YES];
@@ -147,10 +130,10 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)setShowFecundity:(BOOL)inShow
 {
-    if (inShow != showFecundity)
+    if (inShow != _showFecundity)
     {
         [self willChangeValueForKey:@"showFecundity"];
-        showFecundity = inShow;
+        _showFecundity = inShow;
         [self didChangeValueForKey:@"showFecundity"];
 
         [self setNeedsDisplay:YES];
@@ -176,7 +159,7 @@ static constexpr size_t colorsArraySize = 256;
 - (void)buildColorLookupTable
 {
     NSString* colorListPath = [[NSBundle mainBundle] pathForResource:@"Instructions0" ofType:@"clr"];
-    NSColorList* colorList = [[[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath] autorelease];
+    NSColorList* colorList = [[NSColorList alloc] initWithName:@"Instructions" fromFile:colorListPath];
     if (!colorList)
         return;
 
@@ -201,23 +184,23 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)drawSoup
 {
-    if (!mWorld)
+    if (!_world)
         return;
 
     const size_t bytesPerPixel = 4;
-    if (!soupImageBackingStore) {
+    if (!_soupImageBackingStore) {
         // FIXME: Deal with size change.
         size_t dataSize = mSoupWidth * mSoupHeight * bytesPerPixel;
-        self.soupImageBackingStore = [NSMutableData dataWithLength:dataSize];
-        if (!soupImageBackingStore)
+        _soupImageBackingStore = [NSMutableData dataWithLength:dataSize];
+        if (!_soupImageBackingStore)
             return;
     }
 
-    MacTierra::Soup* soup = mWorld->soup();
+    MacTierra::Soup* soup = _world->soup();
 
-    BOOST_ASSERT(soup->soupSize() * bytesPerPixel == soupImageBackingStore.length);
+    BOOST_ASSERT(soup->soupSize() * bytesPerPixel == _soupImageBackingStore.length);
 
-    uint8_t* dataBytes = (uint8_t*)soupImageBackingStore.bytes;
+    uint8_t* dataBytes = (uint8_t*)_soupImageBackingStore.bytes;
 
     for (u_int32_t i = 0; i < soup->soupSize(); ++i) {
         instruction_t instruction = soup->instructionAtAddress(i);
@@ -250,7 +233,7 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)drawRect:(NSRect)inDirtyRect
 {
-    [mWorldController lockWorld];
+    [_worldController lockWorld];
 
     [super drawRect:inDirtyRect];
     
@@ -259,23 +242,23 @@ static constexpr size_t colorsArraySize = 256;
 
     [self drawSoup];
 
-    if (showInstructionPointers || showFecundity || showCells)
+    if (_showInstructionPointers || _showFecundity || _showCells)
     {
         [[NSColor colorWithCalibratedWhite:0.0f alpha:0.5f] set];
         NSRectFillUsingOperation(NSMakeRect(0, 0, mSoupWidth, mSoupHeight), NSCompositingOperationSourceOver);
     }
     
-    if (showFecundity)
+    if (_showFecundity)
         [self drawFecundity:inDirtyRect];
-    else if (showCells)
+    else if (_showCells)
         [self drawCells:inDirtyRect];
 
-    if (showInstructionPointers)
+    if (_showInstructionPointers)
         [self drawInstructionPointers:inDirtyRect];
 
     [NSGraphicsContext restoreGraphicsState];
 
-    [mWorldController unlockWorld];
+    [_worldController unlockWorld];
 }
 
 - (void)setScalingCTM
@@ -287,13 +270,13 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)drawCells:(NSRect)inDirtyRect
 {
-    if (!mWorld)
+    if (!_world)
         return;
 
     MTInventoryGenotype* selectedGenotype = nil;
-    if ([[mGenotypesArrayController selectedObjects] count] == 1)
+    if ([[_genotypesArrayController selectedObjects] count] == 1)
     {
-        selectedGenotype = [[mGenotypesArrayController selectedObjects] firstObject];
+        selectedGenotype = [[_genotypesArrayController selectedObjects] firstObject];
     }
     
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
@@ -304,8 +287,8 @@ static constexpr size_t colorsArraySize = 256;
 
     CGContextSetLineWidth(cgContext, 1.0f);
     
-    CellMap*    cellMap = mWorld->cellMap();
-    const u_int32_t soupSize = mWorld->soupSize();
+    CellMap*    cellMap = _world->cellMap();
+    const u_int32_t soupSize = _world->soupSize();
     
     CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
@@ -384,15 +367,15 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)drawFecundity:(NSRect)inDirtyRect
 {
-    if (!mWorld)
+    if (!_world)
         return;
 
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
 
     CGContextSetLineWidth(cgContext, 1.0f);
     
-    CellMap*    cellMap = mWorld->cellMap();
-    const u_int32_t soupSize = mWorld->soupSize();
+    CellMap*    cellMap = _world->cellMap();
+    const u_int32_t soupSize = _world->soupSize();
     
     CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
@@ -452,7 +435,7 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)drawInstructionPointers:(NSRect)inDirtyRect
 {
-    if (!mWorld)
+    if (!_world)
         return;
 
     CGContextRef cgContext = (CGContextRef)[[NSGraphicsContext currentContext] CGContext];
@@ -463,8 +446,8 @@ static constexpr size_t colorsArraySize = 256;
     NSColor* withinColor  = [[NSColor greenColor] colorWithAlphaComponent:0.5];
     NSColor* outsideColor = [[NSColor orangeColor] colorWithAlphaComponent:0.5];
     
-    CellMap*    cellMap = mWorld->cellMap();
-    const u_int32_t soupSize = mWorld->soupSize();
+    CellMap*    cellMap = _world->cellMap();
+    const u_int32_t soupSize = _world->soupSize();
     
     CellMap::CreatureList::const_iterator iterEnd = cellMap->cells().end();
     for (CellMap::CreatureList::const_iterator it = cellMap->cells().begin(); it != iterEnd; ++it)
@@ -504,8 +487,8 @@ static constexpr size_t colorsArraySize = 256;
 - (CGAffineTransform)soupToViewTransform
 {
     NSSize viewSize = self.bounds.size;
-    return zoomToFit ? CGAffineTransformMakeScale(viewSize.width / mSoupWidth, viewSize.height / mSoupHeight)
-                     : CGAffineTransformMakeTranslation((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0);
+    return _zoomToFit ? CGAffineTransformMakeScale(viewSize.width / mSoupWidth, viewSize.height / mSoupHeight)
+                      : CGAffineTransformMakeTranslation((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0);
 }
 
 - (CGAffineTransform)viewToSoupTransform
@@ -516,8 +499,8 @@ static constexpr size_t colorsArraySize = 256;
 - (CGRect)soupRect
 {
     NSSize viewSize = self.bounds.size;
-    CGRect soupExtent = zoomToFit ? CGRectMake(0, 0, viewSize.width, viewSize.height)
-                                  : CGRectMake((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
+    CGRect soupExtent = _zoomToFit ? CGRectMake(0, 0, viewSize.width, viewSize.height)
+                                   : CGRectMake((viewSize.width - (float)mSoupWidth) / 2.0, (viewSize.height - (float)mSoupHeight) / 2.0, mSoupWidth, mSoupHeight);
     return soupExtent;
 }
 
@@ -541,11 +524,11 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)setZoomToFit:(BOOL)inZoom
 {
-    if (inZoom != zoomToFit)
+    if (inZoom != _zoomToFit)
     {
         [[self window] invalidateCursorRectsForView:self];
         [self setNeedsDisplay:YES];
-        zoomToFit = inZoom;
+        _zoomToFit = inZoom;
     }
 }
 
@@ -554,12 +537,12 @@ static constexpr size_t colorsArraySize = 256;
 - (MacTierra::Creature*)creatureForPoint:(NSPoint)inLocalPoint
 {
     CGPoint thePoint = *(CGPoint*)&inLocalPoint;
-    if (mWorld && [self viewPointInSoup:thePoint])
+    if (_world && [self viewPointInSoup:thePoint])
     {
         CGPoint soupPoint = [self viewPointToSoupPoint:thePoint];
         address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
 
-        MacTierra::Creature* theCreature = mWorld->cellMap()->creatureAtAddress(soupAddr);
+        MacTierra::Creature* theCreature = _world->cellMap()->creatureAtAddress(soupAddr);
         return theCreature;
     }
 
@@ -587,13 +570,13 @@ static constexpr size_t colorsArraySize = 256;
     MacTierra::Creature* theCreature = [self creatureForPoint:localPoint];
     if (theCreature && !theCreature->isEmbryo())
     {
-        MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
+        MTCreature* creatureObj = [[MTCreature alloc] initWithCreature:theCreature];
 //            [creatureObj genotype]; // force the genotype to be created
-        mWorldController.selectedCreature = creatureObj;
+        _worldController.selectedCreature = creatureObj;
         return;
     }
 
-    mWorldController.selectedCreature = nil;
+    _worldController.selectedCreature = nil;
 }
 
 - (void)mouseDragged:(NSEvent*)inEvent
@@ -604,7 +587,7 @@ static constexpr size_t colorsArraySize = 256;
 
     if (theCreature && !theCreature->isEmbryo())
     {
-        MTCreature* creatureObj = [[[MTCreature alloc] initWithCreature:theCreature] autorelease];
+        MTCreature* creatureObj = [[MTCreature alloc] initWithCreature:theCreature];
 
         MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromCreature:creatureObj];
 
@@ -677,14 +660,14 @@ static constexpr size_t colorsArraySize = 256;
         NSPoint imagePoint = [self convertPoint:[sender draggingLocation] fromView:nil];
                 
         CGPoint thePoint = *(CGPoint*)&imagePoint;
-        if (mWorld && [self viewPointInSoup:thePoint])
+        if (_world && [self viewPointInSoup:thePoint])
         {
             CGPoint soupPoint = [self viewPointToSoupPoint:thePoint];
             address_t soupAddr = [self soupPointToSoupAddress:soupPoint];
 
-            if (mWorld->cellMap()->spaceAtAddress(soupAddr, creatureLen))
+            if (_world->cellMap()->spaceAtAddress(soupAddr, creatureLen))
             {
-                RefPtr<Creature> newCreature = mWorld->insertCreature(soupAddr, (const instruction_t*)[genotype.genome bytes], creatureLen);
+                RefPtr<Creature> newCreature = _world->insertCreature(soupAddr, (const instruction_t*)[genotype.genome bytes], creatureLen);
                 NSAssert(newCreature, @"Should have been able to insert");
                 inserted = YES;
                 [self setNeedsDisplay:YES];
@@ -698,7 +681,7 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)startObservingSelectedGenotypes
 {
-    [mGenotypesArrayController addObserver:self
+    [_genotypesArrayController addObserver:self
                                    forKeyPath:@"selection"
                                       options:0
                                       context:NULL];
@@ -706,7 +689,7 @@ static constexpr size_t colorsArraySize = 256;
 
 - (void)stopObservingSelectedGenotypes
 {
-    [mGenotypesArrayController removeObserver:self forKeyPath:@"selection"];
+    [_genotypesArrayController removeObserver:self forKeyPath:@"selection"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context

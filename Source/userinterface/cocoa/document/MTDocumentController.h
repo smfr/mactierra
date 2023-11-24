@@ -11,10 +11,9 @@
 
 @interface MTDocumentController : NSDocumentController
 {
-    BOOL        creatingEmptySoup;
 }
 
-@property (assign) BOOL creatingEmptySoup;
+@property (nonatomic, assign) BOOL creatingEmptySoup;
 
 - (IBAction)newEmptySoupDocument:(id)sender;
 

@@ -12,6 +12,12 @@
 #import "MTGenebankGenotype.h"
 #import "MTGenebankController.h"
 
+@interface MTGenebankWindowController ( )
+
+@property (nonatomic, weak) IBOutlet NSArrayController* genebankArrayController;
+
+@end
+
 @implementation MTGenebankWindowController
 
 - (MTGenebankController*)genebankController
@@ -38,9 +44,9 @@
     [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
-    MTGenebankGenotype* curGenotype = [[mGenebankArrayController arrangedObjects] objectAtIndex:curIndex];
+    MTGenebankGenotype* curGenotype = [[_genebankArrayController arrangedObjects] objectAtIndex:curIndex];
 
-    MTSerializableGenotype* genotype = [[[MTSerializableGenotype alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome] autorelease];
+    MTSerializableGenotype* genotype = [[MTSerializableGenotype alloc] initWithName:curGenotype.name genome:curGenotype.binaryGenome];
 
     [pasteboard setString:[genotype stringRepresentation] forType:NSPasteboardTypeString];
     [pasteboard setData:[genotype archiveRepresentation] forType:kGenotypeDataPasteboardType];

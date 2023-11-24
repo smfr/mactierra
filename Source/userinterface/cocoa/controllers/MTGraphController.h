@@ -23,22 +23,14 @@ typedef enum ESoupStatistic {
 } ESoupStatistic;
 
 
-
 @interface MTGraphController : NSObject
 {
-    IBOutlet NSArrayController* mGraphsArrayController;
-    
-    IBOutlet MTWorldController*  mWorldController;
-    IBOutlet NSView*    mGraphContainerView;
-
-    IBOutlet NSView*    mGraphAdditionsView;
-
-    NSMutableArray*     graphs;
 }
 
+@property (nonatomic, weak) IBOutlet MTWorldController*  worldController;
+
 // Available graph values: "localizedName"
-@property (retain) NSMutableArray* graphs;
-@property (readonly) MTWorldController*  worldController;
+@property (nonatomic, retain) NSMutableArray* graphs;
 
 - (void)worldChanged;
 - (void)updateGraph;

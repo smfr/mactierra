@@ -14,9 +14,6 @@
 
 @implementation MTGenotypeImageView
 
-@synthesize worldController;
-@synthesize genotype;
-
 - (id)initWithFrame:(NSRect)inFrame
 {
     if ((self = [super initWithFrame:inFrame]))
@@ -26,12 +23,6 @@
     return self;
 }
 
-- (void)dealloc
-{
-    self.genotype = nil;
-    [super dealloc];
-}
-
 - (void)awakeFromNib
 {
     [self registerForDraggedTypes:[NSArray arrayWithObjects:kCreatureReferencePasteboardType, nil]];
@@ -39,12 +30,11 @@
 
 - (void)setGenotype:(MTInventoryGenotype*)inGenotype
 {
-    if (inGenotype != genotype)
+    if (inGenotype != _genotype)
     {
         [self willChangeValueForKey:@"genotype"];
-        [genotype release];
-        genotype = [inGenotype retain];
-        [self setImage:genotype.genotypeImage];
+        _genotype = inGenotype;
+        [self setImage:_genotype.genotypeImage];
         [self didChangeValueForKey:@"genotype"];
     }
 }
@@ -67,12 +57,12 @@
 
 - (void)mouseDragged:(NSEvent*)inEvent
 {
-    if (!genotype)
+    if (!_genotype)
         return;
 
     NSPoint localPoint = [self convertPoint:[inEvent locationInWindow] fromView:nil];
 
-    MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromGenotype:genotype];
+    MTSerializableGenotype* serCreature = [MTSerializableGenotype serializableGenotypeFromGenotype:_genotype];
 
     NSPasteboard* pasteboard = [NSPasteboard pasteboardWithName:NSPasteboardNameDrag];
 
@@ -84,8 +74,8 @@
     [pasteboard setData:[serCreature archiveRepresentation] forType:kGenotypeDataPasteboardType];
 
     // FIXME: scale the image so that it matches the soup scaling
-    NSImage* theImage = genotype.genotypeImage;
-    
+    NSImage* theImage = _genotype.genotypeImage;
+
     [self dragImage:theImage
                  at:NSMakePoint(localPoint.x - [theImage size].width / 2.0, localPoint.y)
              offset:NSZeroSize
@@ -97,7 +87,7 @@
 
 - (NSDragOperation)draggingEntered:(id <NSDraggingInfo>)sender
 {
-    if (!worldController)
+    if (!_worldController)
         return NSDragOperationNone;
 
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
@@ -121,7 +111,7 @@
 {
     NSDragOperation sourceDragMask = [sender draggingSourceOperationMask];
 
-    if (worldController && sourceDragMask & (NSDragOperationCopy | NSDragOperationGeneric)) {
+    if (_worldController && sourceDragMask & (NSDragOperationCopy | NSDragOperationGeneric)) {
         return YES;
     }
     return NO;
@@ -129,7 +119,7 @@
 
 - (void)concludeDragOperation:(id <NSDraggingInfo>)sender
 {
-    if (!worldController)
+    if (!_worldController)
         return;
 
     NSPasteboard* pasteboard = [sender draggingPasteboard];
@@ -137,7 +127,7 @@
 
     if (sourceDragMask & (NSDragOperationCopy | NSDragOperationGeneric))
     {
-        MTCreature* tempCreature = [MTCreature creatureFromPasteboard:pasteboard inWorld:worldController.world];
+        MTCreature* tempCreature = [MTCreature creatureFromPasteboard:pasteboard inWorld:_worldController.world];
         self.genotype = tempCreature.genotype;
     }
 }

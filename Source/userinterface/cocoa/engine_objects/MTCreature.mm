@@ -43,7 +43,7 @@ public:
         
             const Creature* foundCreature = inWorld->creatureWithID(creatureID);
             if (foundCreature)
-                return [[[MTCreature alloc] initWithCreature:const_cast<Creature*>(foundCreature)] autorelease];
+                return [[MTCreature alloc] initWithCreature:const_cast<Creature*>(foundCreature)];
         }
     }
     return nil;
@@ -62,10 +62,6 @@ public:
 - (void)dealloc
 {
     delete mPrivateData;
-    [genotype release];
-    [parentalGenotype release];
-    
-    [super dealloc];
 }
 
 - (const MacTierra::Creature*)creature
@@ -195,18 +191,18 @@ const NSInteger kRangeBeforeIP = 8;
 - (MTInventoryGenotype*)genotype
 {
     // FIXME: this will get out of sync with the creature's genotype if that is changed
-    if (!genotype)
-        genotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->genotype()];
+    if (!_genotype)
+        _genotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->genotype()];
 
-    return genotype;
+    return _genotype;
 }
 
 - (MTInventoryGenotype*)parentalGenotype
 {
-    if (!parentalGenotype && mPrivateData->creature()->parentalGenotype())  // The first creature in a soup has no parent.
-        parentalGenotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->parentalGenotype()];
+    if (!_parentalGenotype && mPrivateData->creature()->parentalGenotype())  // The first creature in a soup has no parent.
+        _parentalGenotype = [[MTInventoryGenotype alloc] initWithGenotype:mPrivateData->creature()->parentalGenotype()];
     
-    return parentalGenotype;
+    return _parentalGenotype;
 }
 
 - (NSDictionary*)pasteboardData

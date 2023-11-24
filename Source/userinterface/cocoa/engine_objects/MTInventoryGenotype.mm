@@ -20,8 +20,6 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 
 @implementation MTInventoryGenotype
 
-@synthesize genotype;
-
 + (NSColorList*)instructionsColorList
 {
     static NSColorList* sColorList = nil;
@@ -38,64 +36,56 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype
 {
     NSAssert(inGenotype, @"initWithGenotype called with null genotype");
-    if (!inGenotype) {
-        [self release];
+    if (!inGenotype)
         return nil;
-    }
-        
+
     if ((self = [super init]))
     {
-        genotype = inGenotype;
+        _genotype = inGenotype;
     }
     return self;
 }
 
-- (void)dealloc
-{
-    [mGenotypeImage release];
-    [super dealloc];
-}
-
 - (NSString*)name
 {
-    return [NSString stringWithUTF8String:genotype->name().c_str()];
+    return [NSString stringWithUTF8String:_genotype->name().c_str()];
 }
 
 - (NSInteger)length
 {
-    return genotype->length();
+    return _genotype->length();
 }
 
 - (NSInteger)numAlive
 {
-    return genotype->numberAlive();
+    return _genotype->numberAlive();
 }
 
 - (NSInteger)numEverLived
 {
-    return genotype->numberEverLived();
+    return _genotype->numberEverLived();
 }
 
 - (u_int64_t)originInstructions
 {
-    return genotype->originInstructions();
+    return _genotype->originInstructions();
 }
 
 - (NSInteger)originGenerations
 {
-    return genotype->originGenerations();
+    return _genotype->originGenerations();
 }
 
 - (NSString*)genomeString
 {
-    return [NSString stringWithUTF8String:genotype->genome().printableGenome().c_str()];
+    return [NSString stringWithUTF8String:_genotype->genome().printableGenome().c_str()];
 }
 
 - (NSString*)prettyPrintedGenomeString
 {
     NSMutableString* genomeStr = [NSMutableString string];
     
-    const GenomeData& genomeData = genotype->genome();
+    const GenomeData& genomeData = _genotype->genome();
 
     for (u_int32_t i = 0; i < genomeData.length(); ++i)
     {
@@ -110,23 +100,23 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
 
 - (NSData*)genome
 {
-    return [NSData dataWithBytes:genotype->genome().dataString().data() length:genotype->genome().length()];
+    return [NSData dataWithBytes:_genotype->genome().dataString().data() length:_genotype->genome().length()];
 }
 
 - (NSImage*)genotypeImage
 {
-    if (mGenotypeImage)
-        return mGenotypeImage;
+    if (_genotypeImage)
+        return _genotypeImage;
 
     NSColorList* colorList = [MTInventoryGenotype instructionsColorList];
 
     NSArray*    colorKeys = [colorList allKeys];
     NSUInteger  numColors = [colorKeys count];
 
-    mGenotypeImage = [[NSImage alloc] initWithSize:NSMakeSize([self length], 1.0f)];
-    [mGenotypeImage lockFocus];
+    _genotypeImage = [[NSImage alloc] initWithSize:NSMakeSize([self length], 1.0f)];
+    [_genotypeImage lockFocus];
     
-    const std::string& genomeStr = genotype->genome().dataString();
+    const std::string& genomeStr = _genotype->genome().dataString();
     
     NSInteger len = [self length];
     for (NSInteger i = 0; i < len; ++i)
@@ -142,21 +132,16 @@ NSString* const kGenotypeDataPasteboardType         = @"org.smfr.mactierra.genot
         NSRectFill(instRect);
     }
     
-    [mGenotypeImage unlockFocus];
+    [_genotypeImage unlockFocus];
 
-    return mGenotypeImage;
+    return _genotypeImage;
 }
 
 @end
 
-
-
 #pragma mark -
 
 @implementation MTSerializableGenotype
-
-@synthesize name;
-@synthesize genome;
 
 static BOOL isValidInstructionString(NSString* inString)
 {
@@ -296,7 +281,7 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
         if (!creatureName)
             creatureName = [NSString stringWithFormat:@"%ldaaaaa", (long)[genomeData length]];
 
-        return [[[MTSerializableGenotype alloc] initWithName:creatureName genome:genomeData] autorelease];
+        return [[MTSerializableGenotype alloc] initWithName:creatureName genome:genomeData];
     }
     return nil;
 }
@@ -323,12 +308,12 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
 
 + (id)serializableGenotypeFromCreature:(MTCreature*)inCreature
 {
-    return [[[MTSerializableGenotype alloc] initWithName:inCreature.name genome:inCreature.genome] autorelease];
+    return [[MTSerializableGenotype alloc] initWithName:inCreature.name genome:inCreature.genome];
 }
 
 + (id)serializableGenotypeFromGenotype:(MTInventoryGenotype*)inGenotype
 {
-    return [[[MTSerializableGenotype alloc] initWithName:inGenotype.name genome:inGenotype.genome] autorelease];
+    return [[MTSerializableGenotype alloc] initWithName:inGenotype.name genome:inGenotype.genome];
 }
 
 - (id)initWithCoder:(NSCoder *)decoder
@@ -345,23 +330,16 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
 {
     if ((self = [super init]))
     {
-        self.name = [[inName copy] autorelease];
-        self.genome = [[inGenome copy] autorelease];
+        self.name = [inName copy];
+        self.genome = [inGenome copy];
     }
     return self;
 }
 
-- (void)dealloc
-{
-    self.name = nil;
-    self.genome = nil;
-    [super dealloc];
-}
-
 - (void)encodeWithCoder:(NSCoder *)encoder
 {
-    [encoder encodeObject:name forKey:@"name"];
-    [encoder encodeObject:genome forKey:@"genome"];
+    [encoder encodeObject:_name forKey:@"name"];
+    [encoder encodeObject:_genome forKey:@"genome"];
 }
 
 - (NSData*)archiveRepresentation
@@ -374,11 +352,11 @@ static NSData* genomeDataFromSingleLineGenomeString(NSString* inString, NSString
 {
     NSMutableString* genomeString = [NSMutableString string];
 
-    [genomeString appendFormat:@"%@\n", name];
-    
+    [genomeString appendFormat:@"%@\n", _name];
+
     const unsigned char* genomeBytes = (const unsigned char*)[self.genome bytes];
 
-    for (u_int32_t i = 0; i < [genome length]; ++i)
+    for (u_int32_t i = 0; i < [_genome length]; ++i)
     {
         unsigned char curInst = genomeBytes[i];
         const char* instructionName = MacTierra::nameForInstruction(curInst);

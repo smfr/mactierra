@@ -13,12 +13,19 @@
 #import "MTGenebankController.h"
 #import "MTGenebankWindowController.h"
 
+@interface MTApplicationController ( )
+
+@property (nonatomic, retain) MTGenebankWindowController* genebankWindowController;
+
+
+@end
+
 @implementation MTApplicationController
 
 + (void)initialize
 {
     // register our value transformers
-    MTUnsignedIntValueTransformer* unsignedIntVT = [[[MTUnsignedIntValueTransformer alloc] init] autorelease];
+    MTUnsignedIntValueTransformer* unsignedIntVT = [[MTUnsignedIntValueTransformer alloc] init];
     [NSValueTransformer setValueTransformer:unsignedIntVT
                                     forName:@"UnsignedIntValueTransformer"];
 }
@@ -26,31 +33,24 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    mGenebankController = [MTGenebankController sharedGenebankController];
+    _genebankController = [MTGenebankController sharedGenebankController];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)notification
 {
-    [mGenebankWindowController close];
-    [mGenebankWindowController release];
-    mGenebankWindowController = nil;
+    [_genebankWindowController close];
+    _genebankWindowController = nil;
 
-    [mGenebankController shutdown];
-    [mGenebankController release];
-    mGenebankController = nil;
-}
-
-- (MTGenebankController*)genebankController
-{
-    return mGenebankController;
+    [_genebankController shutdown];
+    _genebankController = nil;
 }
 
 - (IBAction)showGenebankWindow:(id)sender
 {
-    if (!mGenebankWindowController)
-        mGenebankWindowController = [[MTGenebankWindowController alloc] initWithWindowNibName:@"GenebankWindow"];
+    if (!_genebankWindowController)
+        _genebankWindowController = [[MTGenebankWindowController alloc] initWithWindowNibName:@"GenebankWindow"];
 
-    [mGenebankWindowController showWindow:sender];
+    [_genebankWindowController showWindow:sender];
 }
 
 @end

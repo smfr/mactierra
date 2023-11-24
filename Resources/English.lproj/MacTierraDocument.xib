@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MacTierraDocument">
             <connections>
-                <outlet property="mSoupView" destination="100021" id="100644"/>
+                <outlet property="soupView" destination="100021" id="RCs-kn-ZZK"/>
                 <outlet property="window" destination="5" id="18"/>
                 <outlet property="worldController" destination="100022" id="100023"/>
             </connections>
@@ -170,8 +170,8 @@
                                                 <rect key="frame" x="20" y="120" width="675" height="450"/>
                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                 <connections>
-                                                    <outlet property="mGenotypesArrayController" destination="100110" id="100588"/>
-                                                    <outlet property="mWorldController" destination="100022" id="100159"/>
+                                                    <outlet property="genotypesArrayController" destination="100110" id="IQo-AO-dA4"/>
+                                                    <outlet property="worldController" destination="100022" id="42b-Sx-4X3"/>
                                                 </connections>
                                             </customView>
                                             <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100044">
@@ -532,7 +532,7 @@
                                                                                             <binding destination="100476" name="value" keyPath="arrangedObjects.sp" id="100483"/>
                                                                                         </connections>
                                                                                     </tableColumn>
-                                                                                    <tableColumn width="80" minWidth="40" maxWidth="1000" id="100449">
+                                                                                    <tableColumn width="51" minWidth="40" maxWidth="1000" id="100449">
                                                                                         <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Stack">
                                                                                             <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                             <color key="backgroundColor" white="0.33333299" alpha="1" colorSpace="calibratedWhite"/>
@@ -732,14 +732,14 @@
                                                     <tabViewItem label="Inspect" identifier="2" id="100087">
                                                         <view key="view" id="100088">
                                                             <rect key="frame" x="10" y="33" width="284" height="540"/>
-                                                            <autoresizingMask key="autoresizingMask"/>
+                                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <subviews>
-                                                                <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100129">
+                                                                <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100129">
                                                                     <rect key="frame" x="91" y="19" width="176" height="403"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                     <clipView key="contentView" drawsBackground="NO" id="V3q-MK-rgJ">
                                                                         <rect key="frame" x="1" y="1" width="174" height="401"/>
-                                                                        <autoresizingMask key="autoresizingMask"/>
+                                                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                         <subviews>
                                                                             <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" spellingCorrection="YES" id="100132">
                                                                                 <rect key="frame" x="0.0" y="0.0" width="174" height="401"/>
@@ -877,7 +877,7 @@
                                                                         <autoresizingMask key="autoresizingMask"/>
                                                                     </scroller>
                                                                 </scrollView>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100135">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100135">
                                                                     <rect key="frame" x="14" y="496" width="72" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Organism:" id="100136">
@@ -886,7 +886,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100137">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100137">
                                                                     <rect key="frame" x="88" y="496" width="182" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="100138">
@@ -898,7 +898,7 @@
                                                                         <binding destination="100153" name="value" keyPath="selection.genotype.name" id="100155"/>
                                                                     </connections>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100139">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100139">
                                                                     <rect key="frame" x="14" y="474" width="72" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Parent:" id="100142">
@@ -907,7 +907,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100140">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100140">
                                                                     <rect key="frame" x="88" y="474" width="182" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="100141">
@@ -919,7 +919,7 @@
                                                                         <binding destination="100153" name="value" keyPath="selection.parentalGenotype.name" id="100652"/>
                                                                     </connections>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100143">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100143">
                                                                     <rect key="frame" x="14" y="452" width="72" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Generation:" id="100146">
@@ -928,7 +928,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100144">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100144">
                                                                     <rect key="frame" x="88" y="452" width="182" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="100145">
@@ -940,7 +940,7 @@
                                                                         <binding destination="100153" name="value" keyPath="selection.genotype.originGenerations" id="100156"/>
                                                                     </connections>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100147">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100147">
                                                                     <rect key="frame" x="14" y="430" width="72" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Originated:" id="100150">
@@ -949,7 +949,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100151">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100151">
                                                                     <rect key="frame" x="14" y="408" width="72" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Genotype:" id="100152">
@@ -958,7 +958,7 @@
                                                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                                                     </textFieldCell>
                                                                 </textField>
-                                                                <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100148">
+                                                                <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100148">
                                                                     <rect key="frame" x="88" y="430" width="182" height="14"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Label" id="100149">
@@ -970,7 +970,7 @@
                                                                         <binding destination="100153" name="value" keyPath="selection.genotype.originInstructions" id="100157"/>
                                                                     </connections>
                                                                 </textField>
-                                                                <imageView translatesAutoresizingMaskIntoConstraints="NO" id="100611" customClass="MTGenotypeImageView">
+                                                                <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100611" customClass="MTGenotypeImageView">
                                                                     <rect key="frame" x="14" y="519" width="256" height="13"/>
                                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                                                     <imageCell key="cell" controlSize="small" refusesFirstResponder="YES" alignment="left" imageScaling="axesIndependently" imageFrameStyle="groove" id="100612"/>
@@ -1041,12 +1041,12 @@
                                                     <rect key="frame" x="10" y="33" width="1005" height="156"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <scrollView horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100095">
+                                                        <scrollView fixedFrame="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100095">
                                                             <rect key="frame" x="2" y="28" width="1002" height="125"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <clipView key="contentView" id="qAV-wq-9zB">
                                                                 <rect key="frame" x="1" y="1" width="1000" height="123"/>
-                                                                <autoresizingMask key="autoresizingMask"/>
+                                                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <subviews>
                                                                     <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnSelection="YES" multipleSelection="NO" autosaveColumns="NO" headerView="100099" id="100098">
                                                                         <rect key="frame" x="0.0" y="0.0" width="1000" height="100"/>
@@ -1130,7 +1130,7 @@
                                                                                     <binding destination="100110" name="value" keyPath="arrangedObjects.originGenerations" id="100117"/>
                                                                                 </connections>
                                                                             </tableColumn>
-                                                                            <tableColumn identifier="genotype" editable="NO" width="567" minWidth="10" maxWidth="3.4028229999999999e+38" id="100108">
+                                                                            <tableColumn identifier="genotype" editable="NO" width="538" minWidth="10" maxWidth="3.4028229999999999e+38" id="100108">
                                                                                 <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Genotype">
                                                                                     <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                                                     <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
@@ -1160,12 +1160,12 @@
                                                                 <rect key="frame" x="985" y="24" width="16" height="100"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </scroller>
-                                                            <tableHeaderView key="headerView" id="100099">
+                                                            <tableHeaderView key="headerView" wantsLayer="YES" id="100099">
                                                                 <rect key="frame" x="0.0" y="0.0" width="1000" height="23"/>
                                                                 <autoresizingMask key="autoresizingMask"/>
                                                             </tableHeaderView>
                                                         </scrollView>
-                                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100180">
+                                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100180">
                                                             <rect key="frame" x="897" y="-2" width="96" height="28"/>
                                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                                             <buttonCell key="cell" type="push" title="Export…" bezelStyle="rounded" alignment="center" controlSize="small" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="100181">
@@ -1199,16 +1199,15 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="100022" userLabel="WorldController" customClass="MTWorldController">
             <connections>
+                <outlet property="debugGenotypeImageView" destination="100615" id="zhv-mA-4oK"/>
                 <outlet property="document" destination="-2" id="100179"/>
-                <outlet property="mCreatureSoupView" destination="100459" id="100489"/>
-                <outlet property="mDebugGenotypeImageView" destination="100615" id="100625"/>
-                <outlet property="mGraphController" destination="100570" id="100571"/>
-                <outlet property="mInspectGenotypeImageView" destination="100611" id="100626"/>
-                <outlet property="mInventoryController" destination="100184" id="100186"/>
-                <outlet property="mInventoryTableView" destination="100098" id="100119"/>
-                <outlet property="mSelectedCreatureController" destination="100153" id="100624"/>
-                <outlet property="mSettingsPanel" destination="100193" id="100522"/>
-                <outlet property="mSoupView" destination="100021" id="100024"/>
+                <outlet property="graphController" destination="100570" id="IRr-mO-sPq"/>
+                <outlet property="inspectGenotypeImageView" destination="100611" id="SNY-52-696"/>
+                <outlet property="inventoryController" destination="100184" id="Q4X-7j-uMa"/>
+                <outlet property="inventoryTableView" destination="100098" id="9cx-c6-4LW"/>
+                <outlet property="selectedCreatureController" destination="100153" id="qCn-TA-l6D"/>
+                <outlet property="settingsPanel" destination="100193" id="kId-Ae-phG"/>
+                <outlet property="soupView" destination="100021" id="M0Q-md-1BP"/>
             </connections>
         </customObject>
         <customObject id="100071" customClass="MTInstructionCountFormatter"/>
@@ -1265,7 +1264,7 @@
         </objectController>
         <customObject id="100184" customClass="MTInventoryController">
             <connections>
-                <outlet property="mGenotypesArrayController" destination="100110" id="100189"/>
+                <outlet property="genotypesArrayController" destination="100110" id="KmF-E2-FRO"/>
             </connections>
         </customObject>
         <window title="Soup Settings" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" hidesOnDeactivate="YES" visibleAtLaunch="NO" animationBehavior="default" id="100193" userLabel="Settings Panel" customClass="NSPanel">
@@ -1313,7 +1312,7 @@ Gw
                             <tabViewItem label="New Soup" identifier="new soup" id="100499">
                                 <view key="view" id="100500">
                                     <rect key="frame" x="10" y="33" width="538" height="312"/>
-                                    <autoresizingMask key="autoresizingMask"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <button fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100501">
                                             <rect key="frame" x="134" y="194" width="148" height="18"/>
@@ -1405,7 +1404,7 @@ Gw
                                     <rect key="frame" x="10" y="33" width="538" height="312"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100209">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100209">
                                             <rect key="frame" x="20" y="221" width="148" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Cosmic ray mutations:" id="100210">
@@ -1414,7 +1413,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100211">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100211">
                                             <rect key="frame" x="20" y="161" width="148" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Copy errors:" id="100212">
@@ -1423,7 +1422,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100257">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100257">
                                             <rect key="frame" x="14" y="103" width="167" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Instruction Mutation Type" id="100258">
@@ -1432,7 +1431,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100259">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100259">
                                             <rect key="frame" x="14" y="286" width="108" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="left" title="Mutation Rates" id="100260">
@@ -1441,7 +1440,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100213">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100213">
                                             <rect key="frame" x="20" y="191" width="148" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Execution flaws:" id="100214">
@@ -1450,7 +1449,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100215">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100215">
                                             <rect key="frame" x="178" y="246" width="105" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Mean interval" id="100216">
@@ -1459,7 +1458,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100217">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100217">
                                             <rect key="frame" x="285" y="246" width="99" height="17"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" title="Mutation rate" id="100218">
@@ -1468,7 +1467,7 @@ Gw
                                                 <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                             </textFieldCell>
                                         </textField>
-                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100219">
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100219">
                                             <rect key="frame" x="410" y="215" width="100" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="100222" id="100220">
@@ -1489,7 +1488,7 @@ Gw
                                                 <binding destination="100022" name="selectedIndex" keyPath="worldSettings.cosmicMutationLevel" id="100534"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100226">
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100226">
                                             <rect key="frame" x="410" y="185" width="100" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="100232" id="100227">
@@ -1510,7 +1509,7 @@ Gw
                                                 <binding destination="100022" name="selectedIndex" keyPath="worldSettings.flawLevel" id="100535"/>
                                             </connections>
                                         </popUpButton>
-                                        <popUpButton verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100233">
+                                        <popUpButton verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100233">
                                             <rect key="frame" x="410" y="155" width="100" height="26"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <popUpButtonCell key="cell" type="push" title="None" bezelStyle="rounded" alignment="left" lineBreakMode="truncatingTail" state="on" borderStyle="borderAndBezel" imageScaling="proportionallyDown" inset="2" selectedItem="100236" id="100234">
@@ -1531,7 +1530,7 @@ Gw
                                                 <binding destination="100022" name="selectedIndex" keyPath="worldSettings.copyErrorLevel" id="100536"/>
                                             </connections>
                                         </popUpButton>
-                                        <matrix verticalHuggingPriority="750" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100252">
+                                        <matrix verticalHuggingPriority="750" fixedFrame="YES" allowsEmptySelection="NO" translatesAutoresizingMaskIntoConstraints="NO" id="100252">
                                             <rect key="frame" x="181" y="19" width="171" height="64"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
@@ -1561,15 +1560,15 @@ Gw
                                                 <binding destination="100022" name="selectedIndex" keyPath="worldSettings.mutationType" id="100537"/>
                                             </connections>
                                         </matrix>
-                                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="100261">
+                                        <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="100261">
                                             <rect key="frame" x="121" y="287" width="408" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
-                                        <box verticalHuggingPriority="750" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="100262">
+                                        <box verticalHuggingPriority="750" fixedFrame="YES" boxType="separator" translatesAutoresizingMaskIntoConstraints="NO" id="100262">
                                             <rect key="frame" x="181" y="103" width="348" height="5"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         </box>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100356">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100356">
                                             <rect key="frame" x="193" y="216" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100357">
@@ -1585,7 +1584,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.meanCosmicTimeInterval" id="100548"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100358">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100358">
                                             <rect key="frame" x="294" y="216" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100359">
@@ -1601,7 +1600,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.cosmicRate" id="100531"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100362">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100362">
                                             <rect key="frame" x="193" y="189" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100366">
@@ -1617,7 +1616,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.meanFlawInterval" id="100529"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100363">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100363">
                                             <rect key="frame" x="294" y="189" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100364">
@@ -1633,7 +1632,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.flawRate" id="100532"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100368">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100368">
                                             <rect key="frame" x="193" y="159" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100372">
@@ -1649,7 +1648,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.meanCopyErrorInterval" id="100530"/>
                                             </connections>
                                         </textField>
-                                        <textField focusRingType="none" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100369">
+                                        <textField focusRingType="none" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100369">
                                             <rect key="frame" x="294" y="159" width="87" height="22"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                             <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="100370">
@@ -1665,7 +1664,7 @@ Gw
                                                 <binding destination="100022" name="value" keyPath="worldSettings.copyErrorRate" id="100533"/>
                                             </connections>
                                         </textField>
-                                        <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="100490">
+                                        <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="100490">
                                             <rect key="frame" x="189" y="132" width="95" height="19"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                             <buttonCell key="cell" type="roundRect" title="Zero All" bezelStyle="roundedRect" alignment="center" state="on" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="100491">
@@ -2218,6 +2217,7 @@ Gw
                     </tabView>
                 </subviews>
             </view>
+            <point key="canvasLocation" x="139" y="-589"/>
         </window>
         <arrayController id="100476" userLabel="Creature Stack">
             <declaredKeys>
@@ -2230,10 +2230,10 @@ Gw
         </arrayController>
         <customObject id="100570" customClass="MTGraphController">
             <connections>
-                <outlet property="mGraphAdditionsView" destination="100595" id="100596"/>
-                <outlet property="mGraphContainerView" destination="100569" id="100572"/>
-                <outlet property="mGraphsArrayController" destination="100573" id="100630"/>
-                <outlet property="mWorldController" destination="100022" id="100576"/>
+                <outlet property="graphAdditionsView" destination="100595" id="Bfg-5V-VRQ"/>
+                <outlet property="graphContainerView" destination="100569" id="f0R-jC-Ngz"/>
+                <outlet property="graphsArrayController" destination="100573" id="jgG-FP-9bR"/>
+                <outlet property="worldController" destination="100022" id="07C-12-ZLt"/>
             </connections>
         </customObject>
         <arrayController objectClassName="MTGraphAdapter" id="100573" userLabel="Graphs">

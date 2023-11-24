@@ -13,52 +13,42 @@
 #import "MTCreature.h"
 #import "MTInventoryGenotype.h"
 
-
 using namespace MacTierra;
+
+@interface MTInventoryController ( )
+
+@property (nonatomic, retain) NSMutableArray* genotypes;
+
+@end
 
 @implementation MTInventoryController
 
-@synthesize inventory;
-
-- (void)dealloc
-{
-    [mGenotypes release];
-    [super dealloc];
-}
-
-- (NSArrayController*)genotypesArrayController
-{
-    return mGenotypesArrayController;
-}
-
 - (void)setInventory:(MacTierra::Inventory*)inInventory
 {
-    if (inInventory != inventory)
+    if (inInventory != _inventory)
     {
-        [mGenotypes release];
-        mGenotypes = nil;
-        
-        inventory = inInventory;
+        _genotypes = nil;
+        _inventory = inInventory;
     }
 }
 
 - (void)updateGenotypesArray
 {
-    if (!inventory)
+    if (!_inventory)
         return;
 
     [self willChange:NSKeyValueChangeSetting valuesAtIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [mGenotypes count])] forKey:@"genotypes"];
     
-    const Inventory::InventoryMap& theInventory = inventory->inventoryMap();
+    const Inventory::InventoryMap& theInventory = _inventory->inventoryMap();
 
     if (!mGenotypes)
     {
-        mGenotypes = [[NSMutableArray alloc] initWithCapacity:theInventory.size()];
+        _genotypes = [[NSMutableArray alloc] initWithCapacity:theInventory.size()];
     }
     else
     {
         // for now, nuke everything
-        [mGenotypes removeAllObjects];
+        [_genotypes removeAllObjects];
     }
     
     Inventory::InventoryMap::const_iterator it = theInventory.begin();
@@ -71,9 +61,7 @@ using namespace MacTierra;
         if (theGenotype->numberAlive() > 0)
         {
             MTInventoryGenotype* genotypeObj = [[MTInventoryGenotype alloc] initWithGenotype:theGenotype];
-        
-            [mGenotypes addObject:genotypeObj];
-            [genotypeObj release];
+            [_genotypes addObject:genotypeObj];
         }
         ++it;
     }
@@ -83,13 +71,13 @@ using namespace MacTierra;
 
 - (NSArray*)genotypes
 {
-    if (!inventory)
+    if (!_inventory)
         return [NSArray array];
 
-    if (!mGenotypes)
+    if (!_genotypes)
         [self updateGenotypesArray];
     
-    return mGenotypes;
+    return _genotypes;
 }
 
 #pragma mark -
@@ -110,7 +98,7 @@ using namespace MacTierra;
     [pasteboard declareTypes:[NSArray arrayWithObjects:kGenotypeDataPasteboardType, NSPasteboardTypeString, nil]  owner:self];
 
     NSUInteger curIndex = [rowIndexes firstIndex];
-    MTInventoryGenotype* curGenotype = [[mGenotypesArrayController arrangedObjects] objectAtIndex:curIndex];
+    MTInventoryGenotype* curGenotype = [[_genotypesArrayController arrangedObjects] objectAtIndex:curIndex];
 
     MTSerializableGenotype* genotype = [MTSerializableGenotype serializableGenotypeFromGenotype:curGenotype];
 

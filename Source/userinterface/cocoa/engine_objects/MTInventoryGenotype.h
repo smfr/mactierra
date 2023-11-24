@@ -16,9 +16,7 @@ extern NSString* const kGenotypeDataPasteboardType;
 
 @interface MTInventoryGenotype : NSObject
 {
-    MacTierra::InventoryGenotype*       genotype;       // not owned
-    
-    NSImage*                            mGenotypeImage;
+    NSImage* _genotypeImage;
 }
 
 - (id)initWithGenotype:(MacTierra::InventoryGenotype*)inGenotype;
@@ -45,8 +43,6 @@ extern NSString* const kGenotypeDataPasteboardType;
 // Put onto the pasteboard with type kGenotypeDataPasteboardType
 @interface MTSerializableGenotype : NSObject<NSCoding>
 {
-    NSString*       name;
-    NSData*         genome;
 }
 
 @property (retain) NSString* name;

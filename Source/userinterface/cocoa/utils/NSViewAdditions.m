@@ -27,7 +27,6 @@
 // subview is sized to fill bounds
 - (void)addFullSubview:(NSView*)inSubview replaceExisting:(BOOL)inReplace fill:(BOOL)inFill
 {
-    [inSubview retain];
     if (inReplace)
         [self removeAllSubviews];
     
@@ -38,7 +37,6 @@
     }
     
     [self addSubview:inSubview];
-    [inSubview release];
 }
 
 

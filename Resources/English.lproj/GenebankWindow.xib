@@ -8,7 +8,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="MTGenebankWindowController">
             <connections>
-                <outlet property="mGenebankArrayController" destination="3" id="33"/>
+                <outlet property="genebankArrayController" destination="3" id="lKo-in-Uxe"/>
                 <outlet property="window" destination="1" id="27"/>
             </connections>
         </customObject>
@@ -93,7 +93,7 @@
                                                 <binding destination="3" name="value" keyPath="arrangedObjects.length" id="20"/>
                                             </connections>
                                         </tableColumn>
-                                        <tableColumn identifier="genome" editable="NO" width="442" minWidth="10" maxWidth="3.4028229999999999e+38" id="29">
+                                        <tableColumn identifier="genome" editable="NO" width="413" minWidth="10" maxWidth="3.4028229999999999e+38" id="29">
                                             <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Genome">
                                                 <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                 <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>

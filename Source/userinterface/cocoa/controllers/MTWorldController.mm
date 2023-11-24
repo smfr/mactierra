@@ -31,13 +31,25 @@
 
 #import "MTGraphController.h"
 #import "MTGenebankController.h"
+#import "MTGenotypeImageView.h"
 #import "MTInventoryController.h"
 #import "MTWorldDataCollection.h"
 #import "MTWorldSettings.h"
 
 using namespace MacTierra;
 
-@interface MTWorldController(Private)
+@interface MTWorldController ( )
+
+@property (nonatomic, weak) IBOutlet NSTableView* inventoryTableView;
+@property (nonatomic, weak) IBOutlet MTInventoryController* inventoryController;
+@property (nonatomic, weak) IBOutlet MTGraphController* graphController;
+@property (nonatomic, weak) IBOutlet NSTextView* creatureSoupView;
+@property (nonatomic, weak) IBOutlet NSObjectController* selectedCreatureController;
+@property (nonatomic, weak) IBOutlet MTGenotypeImageView* debugGenotypeImageView;
+@property (nonatomic, weak) IBOutlet MTGenotypeImageView* inspectGenotypeImageView;
+@property (nonatomic, weak) IBOutlet NSPanel* settingsPanel;
+
+@property (retain) NSTimer* updateTimer;
 
 - (void)startUpdateTimer;
 - (void)stopUpdateTimer;
@@ -84,15 +96,6 @@ using namespace MacTierra;
 
 @implementation MTWorldController
 
-@synthesize document;
-@synthesize worldRunning;
-@synthesize instructionsPerSecond;
-@synthesize selectedCreature;
-
-@synthesize worldSettings;
-@synthesize creatingNewSoup;
-@synthesize worldThread;
-
 + (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
     if ([key isEqualToString:@"playPauseButtonTitle"])
@@ -112,36 +115,26 @@ using namespace MacTierra;
 
 - (void)dealloc
 {
-    self.selectedCreature = nil;
-    [mSoupView setWorld:NULL];
-    [mSoupView release];
+    _selectedCreature = nil;
+    [_soupView setWorld:NULL];
 
     delete mWorldData;
-
-    [super dealloc];
 }
 
 - (void)awakeFromNib
 {
-    [mSoupView retain];
+    [self.inventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
+    [self.inventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
 
-    [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:YES];
-    [mInventoryTableView setDraggingSourceOperationMask:NSDragOperationCopy forLocal:NO];
-
-    [mDebugGenotypeImageView bind:@"genotype"
+    [self.debugGenotypeImageView bind:@"genotype"
                          toObject:self
                       withKeyPath:@"selectedCreature.genotype"
                           options:0];
 
-    [mInspectGenotypeImageView bind:@"genotype"
+    [self.inspectGenotypeImageView bind:@"genotype"
                          toObject:self
                       withKeyPath:@"selectedCreature.genotype"
                           options:0];
-}
-
-- (MTSoupView*)soupView
-{
-    return mSoupView;
 }
 
 - (void)setWorld:(World*)inWorld dataCollectors:(WorldDataCollectors*)inDataCollectors
@@ -150,18 +143,18 @@ using namespace MacTierra;
     {
         [self terminateWorldThread];
 
-        [mSoupView setWorld:nil];
-        [mInventoryController setInventory:nil];
+        [_soupView setWorld:nil];
+        [self.inventoryController setInventory:nil];
 
         mWorldData->setWorld(inWorld, inDataCollectors);
-        [mSoupView setWorld:mWorldData->world()];
+        [_soupView setWorld:mWorldData->world()];
 
         if (mWorldData->world())
             [self createWorldThread];
 
-        [mInventoryController setInventory:mWorldData->world() ? mWorldData->world()->inventory() : NULL];
+        [self.inventoryController setInventory:mWorldData->world() ? mWorldData->world()->inventory() : NULL];
 
-        [mGraphController worldChanged];
+        [self.graphController worldChanged];
         [self updateGenotypes];
         [self updateDisplay];
     }
@@ -174,17 +167,17 @@ using namespace MacTierra;
 
 - (IBAction)toggleRunning:(id)sender
 {
-    [self setRunning:!worldRunning];
+    [self setRunning:!_worldRunning];
 }
 
 - (IBAction)step:(id)sender
 {
-    if (self.selectedCreature)
+    if (_selectedCreature)
     {
-        mWorldData->stepCreature(selectedCreature.creature);
+        mWorldData->stepCreature(_selectedCreature.creature);
         [self updateSoup];
         [self updateDebugPanel];
-        [document updateChangeCount:NSChangeDone];
+        [self.document updateChangeCount:NSChangeDone];
     }
 }
 
@@ -194,7 +187,7 @@ using namespace MacTierra;
 
     [savePanel beginSheetForDirectory:nil
                                  file:@"Inventory.txt"
-                       modalForWindow:[document windowForSheet]
+                       modalForWindow:[self.document windowForSheet]
                         modalDelegate:self
                        didEndSelector:@selector(exportInventorySavePanelDidDne:returnCode:contextInfo:)
                           contextInfo:NULL];
@@ -215,7 +208,7 @@ using namespace MacTierra;
 
 - (NSString*)playPauseButtonTitle
 {
-    return worldRunning ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
+    return _worldRunning ? NSLocalizedString(@"RunningButtonTitle", @"Pause") : NSLocalizedString(@"PausedButtonTitle", @"Continue");
 }
 
 - (MacTierra::World*)world
@@ -252,9 +245,9 @@ using namespace MacTierra;
 {
     [self clearWorld];
 
-    [mGraphController documentClosing];
-    [mDebugGenotypeImageView unbind:@"genotype"];
-    [mInspectGenotypeImageView unbind:@"genotype"];
+    [self.graphController documentClosing];
+    [self.debugGenotypeImageView unbind:@"genotype"];
+    [self.inspectGenotypeImageView unbind:@"genotype"];
 }
 
 - (void)clearWorld
@@ -270,7 +263,7 @@ using namespace MacTierra;
 
 - (void)setRunning:(BOOL)inRunning
 {
-    if (inRunning == worldRunning)
+    if (inRunning == _worldRunning)
         return;
 
     if (inRunning)
@@ -294,11 +287,11 @@ using namespace MacTierra;
 - (void)startUpdateTimer
 {
     const NSTimeInterval kUpdateInterval = 0.25;
-    mUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:kUpdateInterval
-                                                  target:self
-                                                selector:@selector(updateTimerFired:)
-                                                userInfo:nil
-                                                 repeats:YES] retain];       // retain cycle
+    self.updateTimer = [NSTimer scheduledTimerWithTimeInterval:kUpdateInterval
+                                                    target:self
+                                                  selector:@selector(updateTimerFired:)
+                                                  userInfo:nil
+                                                   repeats:YES];
 
     mLastInstTime = CFAbsoluteTimeGetCurrent();
     mLastInstructions = mWorldData->instructionsExecuted();
@@ -307,15 +300,14 @@ using namespace MacTierra;
 
 - (void)stopUpdateTimer
 {
-    [mUpdateTimer invalidate];
-    [mUpdateTimer release];
-    mUpdateTimer = nil;
+    [self.updateTimer invalidate];
+    self.updateTimer = nil;
 }
 
 - (void)updateTimerFired:(NSTimer*)inTimer
 {
     [self updateDisplay];
-    [document updateChangeCount:NSChangeDone];
+    [self.document updateChangeCount:NSChangeDone];
 }
 
 - (void)updateDisplay
@@ -343,10 +335,10 @@ using namespace MacTierra;
         [self updateSoup];
 
         // hack to avoid slowing things down too much
-        if ([mInventoryTableView window])
+        if ([self.inventoryTableView window])
             [self updateGenotypes];
 
-        [mGraphController updateGraph];
+        [self.graphController updateGraph];
 
         mLastInstTime = CFAbsoluteTimeGetCurrent();
     }
@@ -361,25 +353,24 @@ using namespace MacTierra;
 - (void)updateSoup
 {
     // FIXME: This could update the soup image while we have the lock held.
-    [mSoupView setNeedsDisplay:YES];
+    [self.soupView setNeedsDisplay:YES];
 }
 
 - (void)updateGenotypes
 {
-    [mInventoryController updateGenotypesArray];
+    [self.inventoryController updateGenotypesArray];
 }
 
 - (void)updateDebugPanel
 {
     // hack
-    MTCreature* oldSelectedCreature = [self.selectedCreature retain];
+    MTCreature* oldSelectedCreature = self.selectedCreature;
     self.selectedCreature = nil;
     self.selectedCreature = oldSelectedCreature;
-    [oldSelectedCreature release];
 
     // FIXME: need to do this on setSelectedCreature too
-    if (selectedCreature)
-        [mCreatureSoupView setSelectedRanges:[NSArray arrayWithObject:[NSValue valueWithRange:selectedCreature.soupSelectionRange]]];
+    if (self.selectedCreature)
+        [_creatureSoupView setSelectedRanges:[NSArray arrayWithObject:[NSValue valueWithRange:_selectedCreature.soupSelectionRange]]];
 }
 
 #pragma mark -
@@ -391,12 +382,12 @@ using namespace MacTierra;
 
     self.creatingNewSoup = NO;
 
-    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:mWorldData->world()->settings()] autorelease];
+    self.worldSettings = [[MTWorldSettings alloc] initWithSettings:mWorldData->world()->settings()];
     self.worldSettings.soupSize = mWorldData->world()->soupSize();
     self.worldSettings.randomSeed = mWorldData->world()->initialRandomSeed();
 
-    [NSApp beginSheet:mSettingsPanel
-       modalForWindow:[document windowForSheet]
+    [NSApp beginSheet:self.settingsPanel
+       modalForWindow:[self.document windowForSheet]
         modalDelegate:self
        didEndSelector:@selector(soupSettingsPanelDidEnd:returnCode:contextInfo:)
           contextInfo:NULL];
@@ -416,13 +407,13 @@ using namespace MacTierra;
 {
     self.creatingNewSoup = YES;
 
-    self.worldSettings = [[[MTWorldSettings alloc] initWithSettings:MacTierra::Settings::mediumMutationSettings(256 * 1024)] autorelease];
+    self.worldSettings = [[MTWorldSettings alloc] initWithSettings:MacTierra::Settings::mediumMutationSettings(256 * 1024)];
     self.worldSettings.creatingNewSoup = YES;
     self.worldSettings.soupSizePreset = k256K;
     self.worldSettings.seedWithAncestor = YES;
 
-    [NSApp beginSheet:mSettingsPanel
-       modalForWindow:[document windowForSheet]
+    [NSApp beginSheet:self.settingsPanel
+       modalForWindow:[self.document windowForSheet]
         modalDelegate:self
        didEndSelector:@selector(soupSettingsPanelDidEnd:returnCode:contextInfo:)
           contextInfo:NULL];
@@ -434,7 +425,7 @@ using namespace MacTierra;
 
     if (returnCode == NSModalResponseOK)
     {
-        const MacTierra::Settings* theSettings = worldSettings.settings;
+        const MacTierra::Settings* theSettings = self.worldSettings.settings;
         BOOST_ASSERT(theSettings);
 
         if (self.creatingNewSoup)
@@ -442,13 +433,13 @@ using namespace MacTierra;
             BOOST_ASSERT(!mWorldData->world());
 
             MacTierra::World* newWorld = new World();
-            newWorld->setInitialRandomSeed(self.worldSettings.randomSeed);
-            newWorld->setSettings(*worldSettings.settings);
+            newWorld->setInitialRandomSeed(_worldSettings.randomSeed);
+            newWorld->setSettings(*_worldSettings.settings);
 
-            newWorld->initializeSoup(worldSettings.soupSize);
+            newWorld->initializeSoup(_worldSettings.soupSize);
             [self setWorld:newWorld dataCollectors:NULL];
 
-            if (worldSettings.seedWithAncestor)
+            if (_worldSettings.seedWithAncestor)
                 [self seedWithAncestor];
         }
         else
@@ -460,7 +451,7 @@ using namespace MacTierra;
     {
         if (self.creatingNewSoup)
         {
-            [document performSelector:@selector(close) withObject:nil afterDelay:0];
+            [self.document performSelector:@selector(close) withObject:nil afterDelay:0];
         }
     }
 
@@ -469,9 +460,9 @@ using namespace MacTierra;
 
 - (IBAction)zeroMutationRates:(id)sender
 {
-    worldSettings.cosmicRate = 0.0;
-    worldSettings.flawRate = 0.0;
-    worldSettings.copyErrorRate = 0.0;
+    _worldSettings.cosmicRate = 0.0;
+    _worldSettings.flawRate = 0.0;
+    _worldSettings.copyErrorRate = 0.0;
 }
 
 - (IBAction)initializeRandomSeed:(id)sender
@@ -481,44 +472,44 @@ using namespace MacTierra;
 
 - (IBAction)okSettingsPanel:(id)sender
 {
-    [NSApp endSheet:mSettingsPanel returnCode:NSModalResponseOK];
+    [NSApp endSheet:self.settingsPanel returnCode:NSModalResponseOK];
 }
 
 - (IBAction)cancelSettingsPanel:(id)sender
 {
-    [NSApp endSheet:mSettingsPanel returnCode:NSModalResponseCancel];
+    [NSApp endSheet:self.settingsPanel returnCode:NSModalResponseCancel];
 }
 
 #pragma mark -
 
 - (void)createWorldThread
 {
-    self.worldThread = [[[MTWorldThread alloc] initWithWorldController:self] autorelease];
-    [worldThread start];
+    self.worldThread = [[MTWorldThread alloc] initWithWorldController:self];
+    [_worldThread start];
 }
 
 - (void)terminateWorldThread
 {
-    if (worldThread)
-    {
-        worldThread.terminated = YES;
-        [worldThread performSelector:@selector(wakeUp) onThread:worldThread withObject:nil waitUntilDone:NO];
+    if (!_worldThread)
+        return;
 
-        while (![worldThread isFinished])
-            [NSThread sleepForTimeInterval:0.001];
+    _worldThread.terminated = YES;
+    [_worldThread performSelector:@selector(wakeUp) onThread:_worldThread withObject:nil waitUntilDone:NO];
 
-        self.worldThread = nil;
-    }
+    while (![_worldThread isFinished])
+        [NSThread sleepForTimeInterval:0.001];
+
+    self.worldThread = nil;
 }
 
 - (void)runWorld
 {
-    [worldThread run];
+    [_worldThread run];
 }
 
 - (void)pauseWorld
 {
-    [worldThread pause];
+    [_worldThread pause];
 }
 
 - (void)iterate:(NSUInteger)inNumCycles
@@ -529,12 +520,12 @@ using namespace MacTierra;
 
 - (void)lockWorld
 {
-    [worldThread lockWorld];
+    [_worldThread lockWorld];
 }
 
 - (void)unlockWorld
 {
-    [worldThread unlockWorld];
+    [_worldThread unlockWorld];
 }
 
 #pragma mark -
@@ -656,13 +647,6 @@ static BOOL filePathFromURL(NSURL* inURL, std::string& outPath)
         _terminated = NO;
     }
     return self;
-}
-
-- (void)dealloc
-{
-    self.worldLock = nil;
-    self.threadRunLoop = nil;
-    [super dealloc];
 }
 
 - (void)installTimer

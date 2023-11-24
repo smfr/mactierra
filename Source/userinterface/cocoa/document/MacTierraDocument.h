@@ -13,23 +13,15 @@ extern NSString* const kBinarySoupDocumentType;
 extern NSString* const kXMLSoupDocumentType;
 
 @class MTWorldController;
-@class MTSoupView;
 
 @interface MacTierraDocument : NSDocument
 {
-    IBOutlet MTWorldController* worldController;
-    IBOutlet MTSoupView*        mSoupView;
-
-    BOOL                        startEmpty;
-    
-    NSURL*                      pendingFileURL;
-    BOOL                        dataIsXML;
 }
 
-@property (retain) MTWorldController*   worldController;
-@property (retain) NSURL*   pendingFileURL;
-@property (assign) BOOL dataIsXML;
-@property (assign) BOOL startEmpty;
+@property (nonatomic, weak) IBOutlet MTWorldController* worldController;
+@property (nonatomic, retain) NSURL* pendingFileURL;
+@property (nonatomic, assign) BOOL dataIsXML;
+@property (nonatomic, assign) BOOL startEmpty;
 
 
 - (IBAction)showSettings:(id)sender;

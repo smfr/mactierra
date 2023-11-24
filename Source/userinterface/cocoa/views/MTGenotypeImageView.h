@@ -13,12 +13,9 @@
 
 @interface MTGenotypeImageView : NSImageView
 {
-    IBOutlet MTWorldController* worldController;
-    
-    MTInventoryGenotype* genotype;
 }
 
-@property (retain, nonatomic) MTInventoryGenotype* genotype;
-@property (assign, nonatomic) MTWorldController* worldController;
+@property (nonatomic, retain) MTInventoryGenotype* genotype;
+@property (nonatomic, weak) IBOutlet MTWorldController* worldController;
 
 @end

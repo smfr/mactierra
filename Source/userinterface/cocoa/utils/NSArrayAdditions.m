@@ -18,14 +18,14 @@
 
 - (NSArray*)arrayByRemovingObjectsInArray:(NSArray*)inOtherArray
 {
-	NSMutableArray* trimmedArray = [[self mutableCopy] autorelease];
+	NSMutableArray* trimmedArray = [self mutableCopy];
 	[trimmedArray removeObjectsInArray:inOtherArray];
 	return trimmedArray;
 }
 
 - (NSArray*)arrayByRemovingObjectsNotInArray:(NSArray*)inOtherArray
 {
-	NSMutableArray* trimmedArray = [[self mutableCopy] autorelease];
+	NSMutableArray* trimmedArray = [self mutableCopy];
 
 	// is there a more efficient way?
 	for (id curObject in self)

@@ -13,19 +13,15 @@ namespace MacTierra {
     class Inventory;
 };
 
-
 @interface MTInventoryController : NSObject
 {
-    IBOutlet NSArrayController*     mGenotypesArrayController;
-    MacTierra::Inventory*           inventory;
     NSMutableArray*                 mGenotypes;
 }
 
-@property (assign, nonatomic) MacTierra::Inventory* inventory;
-
-- (NSArrayController*)genotypesArrayController;
+@property (nonatomic, weak) IBOutlet NSArrayController* genotypesArrayController;
+@property (nonatomic, assign) MacTierra::Inventory* inventory;
+@property (nonatomic, readonly) NSArray* genotypes;
 
 - (void)updateGenotypesArray;
-- (NSArray*)genotypes;
 
 @end

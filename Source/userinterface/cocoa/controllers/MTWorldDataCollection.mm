@@ -23,14 +23,12 @@ public:
 
     virtual void noteGenotype(const MacTierra::InventoryGenotype* inGenotype)
     {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-        
-        NSData* genomeData = [NSData dataWithBytes:inGenotype->genome().dataString().data() length:inGenotype->genome().length()];
-        
-        MTGenebankController* genebankController = [MTGenebankController sharedGenebankController];
-        [genebankController performSelectorOnMainThread:@selector(findOrEnterGenome:) withObject:genomeData waitUntilDone:NO];
-        
-        [pool release];
+        @autoreleasepool {
+            NSData* genomeData = [NSData dataWithBytes:inGenotype->genome().dataString().data() length:inGenotype->genome().length()];
+
+            MTGenebankController* genebankController = [MTGenebankController sharedGenebankController];
+            [genebankController performSelectorOnMainThread:@selector(findOrEnterGenome:) withObject:genomeData waitUntilDone:NO];
+        }
     }
 };
 
