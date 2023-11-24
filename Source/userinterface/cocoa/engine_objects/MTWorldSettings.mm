@@ -81,18 +81,22 @@
 @synthesize cosmicMutationLevel;
 @synthesize copyErrorLevel;
 
-+ (void)initialize
++ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
-    [self setKeys:[NSArray arrayWithObject:@"flawRate"]
-                                triggerChangeNotificationsForDependentKey:@"meanFlawInterval"];
+    if ([key isEqualToString:@"meanFlawInterval"])
+        return [NSSet setWithObjects:@"flawRate", nil];
 
-    [self setKeys:[NSArray arrayWithObject:@"copyErrorRate"]
-                                triggerChangeNotificationsForDependentKey:@"meanCopyErrorInterval"];
+    if ([key isEqualToString:@"meanCopyErrorInterval"])
+        return [NSSet setWithObjects:@"copyErrorRate", nil];
 
-    [self setKeys:[NSArray arrayWithObject:@"soupSizePreset"]
-                                triggerChangeNotificationsForDependentKey:@"soupSize"];
-    [self setKeys:[NSArray arrayWithObject:@"soupSize"]
-                                triggerChangeNotificationsForDependentKey:@"soupSizePreset"];
+    if ([key isEqualToString:@"soupSize"])
+        return [NSSet setWithObjects:@"soupSizePreset", nil];
+
+    if ([key isEqualToString:@"soupSizePreset"])
+        return [NSSet setWithObjects:@"soupSize", nil];
+
+    if ([key isEqualToString:@"meanCosmicTimeInterval"])
+        return [NSSet setWithObjects:@"soupSize", nil];
 
 /*
     [self setKeys:[NSArray arrayWithObject:@"cosmicRate"]
@@ -100,8 +104,8 @@
     [self setKeys:[NSArray arrayWithObject:@"meanCosmicTimeInterval"]
                                 triggerChangeNotificationsForDependentKey:@"cosmicRate"];
 */
-    [self setKeys:[NSArray arrayWithObject:@"soupSize"]
-                                triggerChangeNotificationsForDependentKey:@"meanCosmicTimeInterval"];
+
+    return [NSSet set];
 }
 
 

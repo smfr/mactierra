@@ -238,7 +238,7 @@ static const NSTimeInterval kSynchronizationInterval = 5 * 60;      // every 5 m
     if (error)
         NSLog(@"Error %@ opening persistent store at %@", error, databaseURL);
 
-    mObjectContext = [[NSManagedObjectContext alloc] init];
+    mObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
     [mObjectContext setPersistentStoreCoordinator:mStoreCoordinator];
     
     

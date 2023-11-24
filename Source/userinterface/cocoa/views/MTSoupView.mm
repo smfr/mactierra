@@ -245,6 +245,7 @@ static constexpr size_t colorsArraySize = 256;
     CGContextDrawImage(cgContext, destRect, soupImage);
 
     CFRelease(soupImage);
+    CFRelease(bitmapContext);
 }
 
 - (void)drawRect:(NSRect)inDirtyRect

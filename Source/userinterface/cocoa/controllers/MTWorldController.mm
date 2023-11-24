@@ -91,10 +91,12 @@ using namespace MacTierra;
 @synthesize creatingNewSoup;
 @synthesize worldThread;
 
-+ (void)initialize
++ (NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key
 {
-    [self setKeys:[NSArray arrayWithObject:@"worldRunning"]
-                                triggerChangeNotificationsForDependentKey:@"playPauseButtonTitle"];
+    if ([key isEqualToString:@"playPauseButtonTitle"])
+        return [NSSet setWithObjects:@"worldRunning", nil];
+
+    return [NSSet set];
 }
 
 - (id)init
